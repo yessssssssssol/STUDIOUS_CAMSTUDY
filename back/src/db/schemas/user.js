@@ -3,7 +3,8 @@ import dayjs from 'dayjs'
 
 const date = dayjs()
 // console.log(date.format("YYYY-MM-DD HH:mm:ss"))
-
+// console.log(dayjs(new Date()).getTime())
+// console.log(date.getTime())
 const UserSchema = new Schema(
   {
     id: {
@@ -28,11 +29,11 @@ const UserSchema = new Schema(
       default: "설명이 아직 없습니다. 추가해 주세요.",
     },
     // 하루 공부할 목표 시간 / 분단위로 들어오게
-    timeGoalADay: {
-      type: Number,
-      default: 0,
-      required: false,
-    },
+    // timeGoalADay: {
+    //   type: Number,
+    //   default: 0,
+    //   required: false,
+    // },
     createdAt: {
       type: String,
       required: true,
