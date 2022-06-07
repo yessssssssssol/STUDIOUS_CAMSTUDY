@@ -30,4 +30,19 @@ timeLogRouter.post('/timelog/:id', login_required, async function (req, res, nex
     }
 });
 
+timeLogRouter.get('/timelogs/:id', login_required, async function (req, res, next) {
+    try {
+        const user_id = req.params.id;
+        const logList = await timeLogService.getTimeLogs({ user_id });
+
+        if (logList.errorMessage) {
+            throw new Error(logList.errorMessage);
+        }
+
+        res.status(200).json(logList);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { timeLogRouter };

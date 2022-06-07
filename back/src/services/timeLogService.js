@@ -1,7 +1,6 @@
 import { TimeLog } from '../db/models/TimeLog';
 import { User } from '../db';
-import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
+import { ChangeDate } from '../utils/date';
 import dayjs from 'dayjs';
 
 const str = '321322';
@@ -13,32 +12,8 @@ class timeLogService {
             const errorMessage = '회원이 아닙니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
-        // YYYY-MM-DD HH:mm:ss
-        // 0123456789012345678
 
-        // console.log(typeof startTime, typeof endTime);
-        // console.log('슬라이스', startTime.slice(0, 4));
-        const convertStartTime = new Date(`${startTime.slice(0, 4)}/${startTime.slice(5, 7)}/${startTime.slice(8, 10)}/${startTime.slice(11, 13)}:${startTime.slice(14, 16)}:${startTime.slice(17)}`);
-        const convertEndTime = new Date(`${endTime.slice(0, 4)}/${endTime.slice(5, 7)}/${endTime.slice(8, 10)}/${endTime.slice(11, 13)}:${endTime.slice(14, 16)}:${endTime.slice(17)}`);
-
-        // console.log(convertStartTime, convertEndTime);
-
-        const startTimeNum = convertStartTime.getTime();
-        const endTimeNum = convertEndTime.getTime();
-        const studyTimeNum = endTimeNum - startTimeNum;
-        // console.log(startTimeNum, endTimeNum);
-
-        // 공부한 시간 보기 HH:MM:SS
-        // const div1000remainder = studyTimeNum % 1000;
-        const div1000quotient = parseInt(studyTimeNum / 1000);
-        const div60remainderS = div1000quotient % 60;
-        const div60quotientS = parseInt(div1000quotient / 60);
-        const div60remainderM = div60quotientS % 60;
-        const div60quotientM = parseInt(div60quotientS / 60);
-        const div12remainderH = div60quotientM % 12;
-        // const div12quotientH = parseInt(div60quotientM / 12);
-
-        const studyTimeStr = `${div12remainderH}:${div60remainderM}:${div60remainderS} `;
+        const { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr } = ChangeDate.findDate(startTime, endTime);
 
         const newLog = {
             id: user_id,
@@ -64,7 +39,7 @@ class timeLogService {
         }
 
         const studyLogADay = await TimeLog.findAllADay({ user_id });
-        if (!studyLogADay) {
+        if (!studyLogADay || studyLogADay.length === 0) {
             const errorMessage = '금일 공부한 이력이 없습니다.';
             return { errorMessage };
         }
