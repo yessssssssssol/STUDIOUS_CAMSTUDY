@@ -1,18 +1,30 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
+import * as Api from '../../api';
 import Modal from '../Modal';
 
 const RegisterModal = () => {
+  const router = useRouter();
   const modalTitle = '회원가입';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [buttonAct, setButtonAct] = useState(false);
+  const [buttonAct, setButtonAct] = useState(true);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const userData = { email, password, name };
-    props.onAddUser(userData);
+    try {
+      const newUser = await Api.post('user/register', {
+        email,
+        password,
+        name,
+      });
+      router.push('/');
+      console.log('회원가입 성공!');
+    } catch (err) {
+      console.log('회원가입에 실패', err);
+    }
   };
 
   const validateEmail = (email) => {
@@ -29,9 +41,6 @@ const RegisterModal = () => {
   const isPasswordValid = password.length >= 4;
   const isNameValid = name.length > 0;
   const isFormValid = isEmailValid && isPasswordValid && isNameValid;
-  if (isFormValid) {
-    setButtonAct(false);
-  }
 
   return (
     <Modal title={modalTitle}>
@@ -47,7 +56,8 @@ const RegisterModal = () => {
             type='email'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
             placeholder='name@email.com'
-            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           {!isEmailValid && (
             <p className='text-red-500 text-xs italic px-2.5'>
@@ -66,7 +76,8 @@ const RegisterModal = () => {
             type='password'
             placeholder='••••••••'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
-            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           {!isPasswordValid && (
             <p className='text-red-500 text-xs px-2.5 italic'>
@@ -85,7 +96,8 @@ const RegisterModal = () => {
             type='text'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
             placeholder='name'
-            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           {!isNameValid && (
             <p className='text-red-500 text-xs px-2.5 italic'>
