@@ -1,7 +1,23 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+import * as Api from '../../api';
 import Modal from '../Modal';
 
 const LoginModal = () => {
   const title = '로그인';
+  const submitHandler = async () => {
+    e.preventDefault();
+    try {
+      const res = await Api.post('user/login', {
+        email,
+        password,
+      });
+    } catch (err) {
+      console.log('로그인 실패', err);
+    }
+  };
+
   return (
     <Modal title={title}>
       <form className='space-y-6 w-80' action='#'>
