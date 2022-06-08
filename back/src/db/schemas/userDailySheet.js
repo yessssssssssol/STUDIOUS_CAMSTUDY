@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const UserTimeADaySchema = new Schema({
+const UserDailySheetSchema = new Schema({
     id: {
         type: String,
         required: true,
@@ -36,6 +36,6 @@ const UserTimeADaySchema = new Schema({
     },
 });
 
-const UserTimeADayModel = model('UserTimeADay', UserTimeADaySchema);
+const UserDailySheetModel = model('UserDailySheet', UserDailySheetSchema);
 
-export { UserTimeADayModel };
+export { UserDailySheetModel };
