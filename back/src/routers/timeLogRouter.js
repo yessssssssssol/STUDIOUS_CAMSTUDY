@@ -4,10 +4,10 @@ import { timeLogService } from '../services/timeLogService';
 
 const timeLogRouter = Router();
 
-timeLogRouter.post('/timelog/:id', login_required, async function (req, res, next) {
+timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
-        const user_id = req.params.id;
+        const user_id = req.body.id;
         const startTime = req.body.startTime;
         const endTime = req.body.endTime;
         console.log(user_id, startTime, endTime);
