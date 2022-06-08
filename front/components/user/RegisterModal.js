@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 
-import * as Api from '../../api';
-import Modal from '../Modal';
-import { registerModalState } from '../../atoms/modalState';
+import * as Api from '../../pages/api/api';
+import Modal from '../common/Modal';
+import { registerModalState } from '../../core/atoms/modalState';
 
 const RegisterModal = () => {
   const router = useRouter();

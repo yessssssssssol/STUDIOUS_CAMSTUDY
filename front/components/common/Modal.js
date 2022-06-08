@@ -1,6 +1,9 @@
 // import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { loginModalState, registerModalState } from '../atoms/modalState';
+import {
+  loginModalState,
+  registerModalState,
+} from '../../core/atoms/modalState';
 
 export default function Modal(props) {
   const setLoginModal = useSetRecoilState(loginModalState);

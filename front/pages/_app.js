@@ -1,7 +1,6 @@
 import { RecoilRoot } from 'recoil';
 import '../styles/globals.css';
-import NavBar from '../components/NavBar';
-import Button from '../components/Button';
+import NavBar from '../components/layout/NavBar';
 function MyApp({ Component, pageProps }) {
   return (
     <div>

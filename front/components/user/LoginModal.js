@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { tokenAtom } from '../../atoms/userState';
-import { loginModalState } from '../../atoms/modalState';
+import { tokenAtom } from '../../core/atoms/userState';
+import { loginModalState } from '../../core/atoms/modalState';
 
-import Modal from '../Modal';
-import { useUserActions } from '../../atoms/useUserAction';
+import Modal from '../common/Modal';
+import { useUserActions } from '../../utils/hooks/useUserAction';
 
 const LoginModal = () => {
   const title = '로그인';

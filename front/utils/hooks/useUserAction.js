@@ -1,8 +1,8 @@
 import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 
-import * as Api from '../api';
-import { tokenAtom, userAtom } from './userState';
+import * as Api from '../../pages/api/api';
+import { tokenAtom, userAtom } from '../../core/atoms/userState';
 
 export function useUserActions() {
   const router = useRouter();
