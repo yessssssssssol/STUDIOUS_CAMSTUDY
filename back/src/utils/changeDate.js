@@ -5,6 +5,7 @@ class ChangeDate {
 
         // console.log(typeof startTime, typeof endTime);
         // console.log('슬라이스', startTime.slice(0, 4));
+
         const convertStartTime = new Date(`${startTime.slice(0, 4)}/${startTime.slice(5, 7)}/${startTime.slice(8, 10)}/${startTime.slice(11, 13)}:${startTime.slice(14, 16)}:${startTime.slice(17)}`);
         const convertEndTime = new Date(`${endTime.slice(0, 4)}/${endTime.slice(5, 7)}/${endTime.slice(8, 10)}/${endTime.slice(11, 13)}:${endTime.slice(14, 16)}:${endTime.slice(17)}`);
 
