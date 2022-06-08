@@ -4,7 +4,7 @@ export default function NavBar(){
 
     const items=["스터디 모집","마이페이지","추가 메뉴", "프롤로그"]
     
-    function NavItem({item,index}){
+    function NavItem(item,index){
         return(
             <li key={index}>
           <Link href="/"><a class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">{item}</a></Link>
