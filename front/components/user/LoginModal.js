@@ -1,44 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { userState, tokenState } from '../../atoms/userState';
+import { tokenAtom } from '../../atoms/userState';
 import { loginModalState } from '../../atoms/modalState';
 
-import * as Api from '../../api';
 import Modal from '../Modal';
+import { useUserActions } from '../../atoms/useUserAction';
 
 const LoginModal = () => {
   const title = '로그인';
-  // const router = useRouter();
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useRecoilState(loginModalState);
+  const token = useRecoilValue(tokenAtom);
+  const userActions = useUserActions();
 
-  const setToken = useSetRecoilState(tokenState);
-  const setUser = useSetRecoilState(userState);
+  useEffect(() => {
+    if (token) {
+      // router.push('/');
+    }
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const res = await Api.post('user/login', {
-        email,
-        password,
-      });
-      const user = res.data;
-      const jwtToken = user.token;
-      sessionStorage.setItem('userToken', jwtToken);
-
-      setToken(jwtToken);
-      setUser(user);
-
-      console.log('로그인 성공', err);
-
-      // 로그인 시 메인 페이지로
-      // router.push('/');
-    } catch (err) {
-      console.log('로그인 실패', err);
-    }
+    return userActions.login(email, password).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
