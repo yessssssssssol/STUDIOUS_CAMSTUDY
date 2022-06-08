@@ -11,6 +11,7 @@ import { useUserActions } from '../../atoms/useUserAction';
 const LoginModal = () => {
   const title = '로그인';
   const router = useRouter();
+  const { returnUrl } = router.query;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +21,9 @@ const LoginModal = () => {
 
   useEffect(() => {
     if (token) {
-      // router.push('/');
+      if (router.query.returnUrl) {
+        router.push(returnUrl);
+      }
     }
   }, []);
 

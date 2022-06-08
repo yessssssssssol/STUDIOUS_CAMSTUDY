@@ -8,6 +8,8 @@ export function useUserActions() {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenAtom);
   const setUser = useSetRecoilState(userAtom);
+  // history 필요할 때
+  const currentURL = router.asPath;
 
   return {
     login,
@@ -25,7 +27,8 @@ export function useUserActions() {
       setToken(jwtToken);
       console.log('로그인 성공');
 
-      // 로그인 시 메인 페이지로
+      // 일단 로그인 시 메인 페이지로 가게 해 놓음
+      // 추후 변경 예정
       router.push('/');
     });
   }
