@@ -9,7 +9,7 @@ import Modal from '../common/Modal';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 
 const LoginModal = () => {
-  const title = '로그인';
+  const title = 'Login';
   const router = useRouter();
   const { returnUrl } = router.query;
 
@@ -29,15 +29,17 @@ const LoginModal = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    return userActions.login(email, password).catch((err) => {
+
+    userActions.login(email, password).catch((err) => {
       console.log(err);
     });
+    setShowModal(false);
   };
 
   return (
     <>
       <button
-        className='bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+        className='bg-transparent text-gray-600 active:bg-gray-300 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150 border'
         type='button'
         onClick={() => setShowModal(true)}
       >

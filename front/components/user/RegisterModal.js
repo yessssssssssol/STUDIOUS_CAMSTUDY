@@ -10,7 +10,7 @@ const RegisterModal = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useRecoilState(registerModalState);
 
-  const modalTitle = '회원가입';
+  const modalTitle = 'Register';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -19,11 +19,12 @@ const RegisterModal = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const newUser = await Api.post('user/register', {
+      await Api.post('user/register', {
         email,
         password,
         name,
       });
+      setShowModal(false);
       router.push('/');
       console.log('회원가입 성공!');
     } catch (err) {
@@ -49,7 +50,7 @@ const RegisterModal = () => {
   return (
     <>
       <button
-        className='bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+        className='bg-gray-400 text-white active:bg-gray-600 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150'
         type='button'
         onClick={() => setShowModal(true)}
       >

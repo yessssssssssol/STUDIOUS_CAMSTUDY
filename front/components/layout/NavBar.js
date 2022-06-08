@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import LoginModal from '../user/LoginModal';
+import RegisterModal from '../user/RegisterModal';
 
 export default function NavBar() {
   const items = ['스터디 모집', '마이페이지', '추가 메뉴', '프롤로그'];
@@ -31,6 +33,13 @@ export default function NavBar() {
           <ul className='flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium'>
             {items.map((item, index) => NavItem(item, index))}
           </ul>
+        </div>
+        <div
+          className='hidden justify-between w-full md:flex md:w-auto md:order-1'
+          id='mobile-menu-2'
+        >
+          <LoginModal />
+          <RegisterModal />
         </div>
       </div>
     </nav>
