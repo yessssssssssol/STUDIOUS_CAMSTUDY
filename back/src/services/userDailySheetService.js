@@ -80,8 +80,8 @@ class UserDailySheetService {
         return updatedSheet;
     }
 
-    static async updateTimeGoal({ id, date, timeGoal }) {
-        this.updateTimeGoal.date = ChangeDate.getCurrentDate(date);
+    static async updateTimeGoal({ id, timeGoal }) {
+        const date = ChangeDate.getCurrentDate();
         const getSheet = await UserDailySheet.getSheet({ id, date });
         if (!getSheet) {
             const errorMessage = '해당 유저의 데일리 시트를 가져오지 못했습니다.';
