@@ -24,10 +24,16 @@ class timeLogService {
         };
 
         const timeLog = await TimeLog.create({ newLog });
-        timeLog.errorMessage = null;
+        if (!timeLog) {
+            const errorMessage = '로그를 제대로 저장하지 못했습니다.';
+            return { errorMessage };
+        }
 
         const updatedSheet = await UserDailySheetService.updateSheet({ newLog });
-        updatedSheet.errorMessage = null;
+        if (!updatedSheet) {
+            const errorMessage = '데일리 시트를 제대로 업데이트 하지 못했습니다.';
+            return { errorMessage };
+        }
 
         return { timeLog, updatedSheet };
     }

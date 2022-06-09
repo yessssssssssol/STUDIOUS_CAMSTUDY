@@ -41,7 +41,7 @@ class ChangeDate {
         //시 * 60 * 60 * 1000
         //분 * 60 * 1000
         //초 * 1000
-        const studyTimeADayNum = Number(studyTimeADay.slice(0, 2)) + 60 * 60 * 1000 + (Number(studyTimeADay.slice(3, 5)) + 60 * 1000) + (Number(studyTimeADay.slice(6)) + 1000);
+        const studyTimeADayNum = Number(studyTimeADay.slice(0, 2)) * 60 * 60 * 1000 + Number(studyTimeADay.slice(3, 5)) * 60 * 1000 + Number(studyTimeADay.slice(6)) * 1000;
         return studyTimeADayNum;
     }
 
@@ -52,12 +52,12 @@ class ChangeDate {
         const div60remainderS = div1000quotient % 60;
         const div60quotientS = parseInt(div1000quotient / 60);
         const div60remainderM = div60quotientS % 60;
-        const div60quotientM = parseInt(div60quotientS / 60);
-        const div12remainderH = div60quotientM % 12;
+        const div60quotientH = parseInt(div60quotientS / 60);
+        // const div12remainderH = div60quotientM % 12;
         // const div12quotientH = parseInt(div60quotientM / 12);
         const ss = div60remainderS < 10 ? '0' + div60remainderS : div60remainderS;
         const mm = div60remainderM < 10 ? '0' + div60remainderM : div60remainderM;
-        const hh = div12remainderH < 10 ? '0' + div12remainderH : div12remainderH;
+        const hh = div60quotientH < 10 ? '0' + div60quotientH : div60quotientH;
 
         const studyTimeStr = `${hh}:${mm}:${ss}`;
 

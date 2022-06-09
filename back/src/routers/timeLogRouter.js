@@ -17,12 +17,6 @@ timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
             endTime,
         });
 
-        if (newLog.timeLog.errorMessage) {
-            throw new Error(newLog.timeLog.errorMessage);
-        } else if (newLog.updatedSheet.errorMessage) {
-            throw new Error(newLog.updatedSheet.errorMessage);
-        }
-
         res.status(201).json(newLog);
     } catch (error) {
         next(error);

@@ -7,20 +7,17 @@ const userDailySheetRouter = Router();
 userDailySheetRouter.put('/dailysheet', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
-        const user_id = req.body.id;
+        const id = req.body.id;
+        const date = req.body.date;
         const timeGoal = req.body.timeGoal;
 
-        const newLog = await timeLogService.addTimeLog({
-            user_id,
+        const updatedGoal = await UserDailySheetService.updateTimeGoal({
+            id,
+            date,
+            timeGoal,
         });
 
-        if (newLog.timeLog.errorMessage) {
-            throw new Error(newLog.timeLog.errorMessage);
-        } else if (newLog.updatedSheet.errorMessage) {
-            throw new Error(newLog.updatedSheet.errorMessage);
-        }
-
-        res.status(201).json(newLog);
+        res.status(201).json(updatedGoal);
     } catch (error) {
         next(error);
     }

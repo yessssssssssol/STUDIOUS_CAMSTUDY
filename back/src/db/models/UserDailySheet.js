@@ -37,12 +37,21 @@ class UserDailySheet {
     }
 
     // 데일리 시트 업데이트 하기
-    static async updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime }) {
+    static async updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime }) {
+        const condition = { id, date };
         const update = { beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime };
         const option = { returnOriginal: false };
 
-        const updatedSheet = await UserDailySheetModel.findOneAndUpdate(id, update, option);
+        const updatedSheet = await UserDailySheetModel.findOneAndUpdate(condition, update, option);
         return updatedSheet;
+    }
+
+    static async updateTimeGoal({ id, date, timeGoal, achievementRate }) {
+        const condition = { id, date };
+        const update = { timeGoal, achievementRate };
+        const updatedGoal = await UserDailySheetModel.findOneAndUpdate(condition, update, { returnOriginal: false });
+
+        return updatedGoal;
     }
 }
 
