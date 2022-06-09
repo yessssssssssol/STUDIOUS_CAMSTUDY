@@ -5,10 +5,6 @@ const UserDailySheetSchema = new Schema({
         type: String,
         required: true,
     },
-    idx: {
-        type: Number,
-        required: true,
-    },
     date: {
         type: String,
         required: true,
