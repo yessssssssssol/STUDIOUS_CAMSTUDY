@@ -1,4 +1,4 @@
-import { User } from '../db'; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
+import { User, UserDailySheet } from '../db'; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -6,8 +6,6 @@ import dayjs from 'dayjs';
 
 const now = dayjs();
 const nowDate = now.format('YYYY-MM-DD');
-const yesterday = now.add(-1, 'day').format().slice(0, 10);
-console.log(nowDate, yesterday);
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -28,6 +26,17 @@ class userAuthService {
         // db에 저장
         const createdNewUser = await User.create({ newUser });
         createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+
+        //날짜 생성
+        const now = dayjs();
+        let date = now.format('YYYY-MM-DD');
+        if (now.get('hour') < 5) {
+            date = now.add(-1, 'day');
+        }
+
+        const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
+        createdNewUserSheet.errorMessage = null;
+        console.log(`${id}의 sheet가 성공적으로 생성되었습니다.`);
 
         return createdNewUser;
     }

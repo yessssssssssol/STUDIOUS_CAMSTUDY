@@ -2,12 +2,18 @@ import { UserDailySheetModel } from '../schemas/userDailySheet';
 
 class UserDailySheet {
     // 회원가입할 때 최초로 처음 시트를 만들어야 함
-    static async addSheet({ id }) {
+    static async addSheet({ id, date }) {
         const newSheet = {
             id,
             date,
+            timeGoal: 0,
+            studyTimeADay: '',
+            bestStudyTime: '',
+            beginStudyTime: '',
+            finishStudyTime: '',
         };
-        const addSheet = await UserDailySheetModel.create({});
+        const addSheet = await UserDailySheetModel.create({ newSheet });
+        return addSheet;
     }
 
     static async addSheets({ newSheets }) {
