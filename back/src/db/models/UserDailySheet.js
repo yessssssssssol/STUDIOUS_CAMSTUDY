@@ -7,6 +7,7 @@ class UserDailySheet {
             id,
             date,
             timeGoal: '아직 목표 공부시간을 설정하지 않았습니다.',
+            achievementRate: 0,
             studyTimeADay: ' ',
             bestStudyTime: ' ',
             beginStudyTime: ' ',

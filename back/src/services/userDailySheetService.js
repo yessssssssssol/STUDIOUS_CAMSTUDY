@@ -21,6 +21,7 @@ class UserDailySheetService {
                 id,
                 date: today,
                 timeGoal,
+                achievementRate: 0,
                 studyTimeADay: ' ',
                 bestStudyTime: ' ',
                 beginStudyTime: ' ',
@@ -39,7 +40,7 @@ class UserDailySheetService {
         const date = ChangeDate.getCurrentDate(startTime);
 
         const getSheet = await UserDailySheet.getSheet({ id, date });
-        const { beginStudyTime } = getSheet;
+        const { timeGoal, beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
         if (beginStudyTime === ' ') {
@@ -47,8 +48,9 @@ class UserDailySheetService {
             const finishStudyTime = endTime;
             const studyTimeADay = studyTimeStr;
             const bestStudyTime = studyTimeStr;
+            const achievementRate = 0;
 
-            const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime });
+            const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
             return updatedSheet;
         }
 
@@ -60,7 +62,15 @@ class UserDailySheetService {
         const studyTimeADay = ChangeDate.toStringTime(studyTimeNum + studyTimeADayNum);
         const bestStudyTime = ChangeDate.toStringTime(Math.max(studyTimeNum, bestStudyTimeNum));
 
-        const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime });
+        const achievementRate = undefined;
+        if (timeGoal === '아직 목표 공부시간을 설정하지 않았습니다.') {
+            this.updateSheet.achievementRate = 0;
+        } else {
+            const timeGoalNum = ChangeDate.toMilliseconds(timeGoal);
+            this.updateSheet.achievementRate = Number((studyTimeADay / timeGoalNum) * 100).toFixed(2);
+        }
+
+        const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
         return updatedSheet;
     }
 }

@@ -13,6 +13,10 @@ const UserDailySheetSchema = new Schema({
         type: String,
         required: true,
     },
+    achievementRate: {
+        type: Number,
+        required: true,
+    },
     studyTimeADay: {
         type: String,
         required: true,
