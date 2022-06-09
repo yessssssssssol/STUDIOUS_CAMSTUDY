@@ -1,6 +1,9 @@
 import { User, UserDailySheet } from '../db';
 import dayjs from 'dayjs';
 import { ChangeDate } from '../utils/changeDate';
+import { scheduleJob } from 'node-schedule';
+
+const job = scheduleJob('10 * * * * * ', () => UserDailySheetService.createSheets());
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기
@@ -28,8 +31,7 @@ class UserDailySheetService {
                 finishStudyTime: ' ',
             };
         });
-
-        await UserDailySheet.addSheets({ newSheets });
+        await UserDailySheet.addSheets(newSheets);
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
     }
 

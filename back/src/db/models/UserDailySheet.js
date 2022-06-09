@@ -17,11 +17,15 @@ class UserDailySheet {
         return addSheet;
     }
     // 오전 5시마다 유저들의 새로운 데일리 시트를 생성
-    static async addSheets({ newSheets }) {
-        const addSheets = await UserDailySheetModel.insertMany({ newSheets });
-        addSheets.errorMessage = null;
-
-        return addSheets;
+    static async addSheets(newSheets) {
+        // const addSheets = await UserDailySheetModel.insertMany(newSheets);
+        // addSheets.errorMessage = null;
+        newSheets.map(async (newSheet) => {
+            await UserDailySheetModel.create(newSheet);
+            console.log(`${newSheet.id} 데일리 시트 생성 성공! ${new Date()}`);
+            return;
+        });
+        return;
     }
 
     // 오전 5시 마다 새로운 데일리 시트를 만들기 위해 전날 목표 공부시간을 가져와야함

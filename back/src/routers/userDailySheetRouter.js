@@ -21,4 +21,15 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
     }
 });
 
+// 새벽 5시 업데이트 확인용
+userDailySheetRouter.post('/dailysheet', login_required, async function (req, res, next) {
+    try {
+        const madeSheets = await UserDailySheetService.createSheets();
+
+        res.status(201).json(madeSheets);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userDailySheetRouter };
