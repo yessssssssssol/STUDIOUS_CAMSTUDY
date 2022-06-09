@@ -39,48 +39,30 @@ class UserDailySheetService {
         const date = ChangeDate.getCurrentDate(startTime);
 
         const getSheet = await UserDailySheet.getSheet({ id, date });
-        const { timeGoal, studyTimeADay, bestStudyTime, beginStudyTime, finishStudyTime } = getSheet;
+        const { beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
         if (beginStudyTime === ' ') {
-            beginStudyTime = startTime;
-            finishStudyTime = endTime;
-            studyTimeADay = studyTimeStr;
-            bestStudyTime = studyTimeStr;
+            const beginStudyTime = startTime;
+            const finishStudyTime = endTime;
+            const studyTimeADay = studyTimeStr;
+            const bestStudyTime = studyTimeStr;
 
             const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime });
             return updatedSheet;
         }
 
         // 금일 데일리 시트에 정보가 있는 경우
-        const studyTimeADayNum = ChangeDate.toMilliseconds(studyTimeADay);
-        const bestStudyTimeNum = ChangeDate.toMilliseconds(bestStudyTime);
+        const studyTimeADayNum = ChangeDate.toMilliseconds(getSheet.studyTimeADay);
+        const bestStudyTimeNum = ChangeDate.toMilliseconds(getSheet.bestStudyTime);
 
-        finishStudyTime = endTime;
-        studyTimeADay = ChangeDate.toStringTime(studyTimeNum + studyTimeADayNum);
-        bestStudyTime = ChangeDate.toStringTime(Math.max(studyTimeNum, bestStudyTimeNum));
+        const finishStudyTime = endTime;
+        const studyTimeADay = ChangeDate.toStringTime(studyTimeNum + studyTimeADayNum);
+        const bestStudyTime = ChangeDate.toStringTime(Math.max(studyTimeNum, bestStudyTimeNum));
 
         const updatedSheet = UserDailySheet.updateSheet({ id, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime });
         return updatedSheet;
     }
-    // static async getTimeLogs({ user_id, date }) {
-    //     const userId = await User.findById({ user_id });
-    //     if (!userId) {
-    //         const errorMessage = '회원이 아닙니다. 다시 한 번 확인해 주세요.';
-    //         return { errorMessage };
-    //     }
-
-    //     const beginTime = new Date(`${date.slice(0, 4)}/${date.slice(5, 7)}/${date.slice(8)}/05:00:00`).getTime();
-    //     const finishTime = beginTime + 86400000;
-
-    //     const studyLogADay = await TimeLog.findAllADay({ user_id, beginTime, finishTime });
-    //     if (!studyLogADay || studyLogADay.length === 0) {
-    //         const errorMessage = '금일 공부한 이력이 없습니다.';
-    //         return { errorMessage };
-    //     }
-
-    //     return studyLogADay;
-    // }
 }
 
 export { UserDailySheetService };

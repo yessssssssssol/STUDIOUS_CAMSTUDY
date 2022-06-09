@@ -21,7 +21,7 @@ class ChangeDate {
         const studyTimeNum = endTimeNum - startTimeNum;
         // console.log(startTimeNum, endTimeNum);
 
-        studyTimeStr = this.toStringTime(studyTimeNum);
+        const studyTimeStr = this.toStringTime(studyTimeNum);
 
         return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr };
     }
@@ -55,11 +55,11 @@ class ChangeDate {
         const div60quotientM = parseInt(div60quotientS / 60);
         const div12remainderH = div60quotientM % 12;
         // const div12quotientH = parseInt(div60quotientM / 12);
-        div60remainderS = div60remainderS < 10 ? '0' + div60remainderS : div60remainderS;
-        div60remainderM = div60remainderM < 10 ? '0' + div60remainderM : div60remainderM;
-        div12remainderH = div12remainderH < 10 ? '0' + div12remainderH : div12remainderH;
+        const ss = div60remainderS < 10 ? '0' + div60remainderS : div60remainderS;
+        const mm = div60remainderM < 10 ? '0' + div60remainderM : div60remainderM;
+        const hh = div12remainderH < 10 ? '0' + div12remainderH : div12remainderH;
 
-        const studyTimeStr = `${div12remainderH}:${div60remainderM}:${div60remainderS} `;
+        const studyTimeStr = `${hh}:${mm}:${ss} `;
 
         return studyTimeStr;
     }
