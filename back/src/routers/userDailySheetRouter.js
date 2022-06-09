@@ -15,7 +15,7 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
             timeGoal,
         });
 
-        res.status(201).json(updatedGoal);
+        res.status(200).json(updatedGoal);
     } catch (error) {
         next(error);
     }

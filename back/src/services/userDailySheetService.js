@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { ChangeDate } from '../utils/changeDate';
 import { scheduleJob } from 'node-schedule';
 
-const job = scheduleJob('10 * * * * * ', () => UserDailySheetService.createSheets());
+const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets());
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기
