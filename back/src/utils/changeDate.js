@@ -59,7 +59,7 @@ class ChangeDate {
         const mm = div60remainderM < 10 ? '0' + div60remainderM : div60remainderM;
         const hh = div12remainderH < 10 ? '0' + div12remainderH : div12remainderH;
 
-        const studyTimeStr = `${hh}:${mm}:${ss} `;
+        const studyTimeStr = `${hh}:${mm}:${ss}`;
 
         return studyTimeStr;
     }
