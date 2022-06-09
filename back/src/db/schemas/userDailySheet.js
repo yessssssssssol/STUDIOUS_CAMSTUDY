@@ -8,7 +8,6 @@ const UserDailySheetSchema = new Schema({
     idx: {
         type: Number,
         required: true,
-        default: 1,
     },
     date: {
         type: String,
