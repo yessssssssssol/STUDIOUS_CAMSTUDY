@@ -5,7 +5,7 @@ import RegisterModal from '../user/RegisterModal';
 export default function NavBar(){
 
     const [showOptions, setShowOptions] = useState(false)
-    const [Islogin,setIslogin]=useState(false)
+    const [Islogin,setIslogin]=useState(true)
     const handleShow = () => {
         setShowOptions(!showOptions)
     }  
@@ -15,7 +15,7 @@ export default function NavBar(){
     function NavItem(item,index){
         return(
         <li key={index}>
-          <Link href="/"><a href="#" class="block py-2 pr-4 pl-3  mx-20 font-semibold text-gray-700 border-b border-gray-500 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">{item}</a></Link>
+          <Link href="/"><a href="#" class="block py-2 px-5 pr-4 pl-3 mx-20 font-semibold text-gray-700 border-b border-gray-500 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">{item}</a></Link>
         </li>
         )
     }
@@ -45,13 +45,13 @@ export default function NavBar(){
     }
     </ul>
     {
-        Islogin===true ? (<div class="flex items-center md:order-2">
-        <button onClick={handleShow} type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
+        Islogin===true ? (<div class="relative flex items-center md:order-2">
+        <button onClick={handleShow} type="button" class="inline-flex justify-center w-full mx-20 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
               <img class="w-8 h-8 rounded-full" src="favicon.ico" alt="user photo"/>
             </button>
             {showOptions && (
-            <div class="z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown">
+            <div class="absolute top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow" id="dropdown">
               <div class="py-3 px-4" >
                 <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
                 <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
