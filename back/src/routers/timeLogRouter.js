@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import { timeLogService } from '../services/timeLogService';
+import { UserDailySheetService } from '../services/userDailySheetService';
 
 const timeLogRouter = Router();
 
@@ -10,17 +11,17 @@ timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
         const user_id = req.body.id;
         const startTime = req.body.startTime;
         const endTime = req.body.endTime;
-        console.log(user_id, startTime, endTime);
 
-        // 위 데이터를 유저 db에 추가하기
         const newLog = await timeLogService.addTimeLog({
             user_id,
             startTime,
             endTime,
         });
 
-        if (newLog.errorMessage) {
-            throw new Error(newLog.errorMessage);
+        if (newLog.timeLog.errorMessage) {
+            throw new Error(newLog.timeLog.errorMessage);
+        } else if (newLog.updatedSheet.errorMessage) {
+            throw new Error(newLog.updatedSheet.errorMessage);
         }
 
         res.status(201).json(newLog);
@@ -45,7 +46,6 @@ timeLogRouter.get('/timelogs', login_required, async function (req, res, next) {
         }
 
         const logList = await timeLogService.getTimeLogs({ user_id, date });
-
         if (logList.errorMessage) {
             throw new Error(logList.errorMessage);
         }

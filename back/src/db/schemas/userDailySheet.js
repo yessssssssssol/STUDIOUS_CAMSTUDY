@@ -10,7 +10,7 @@ const UserDailySheetSchema = new Schema({
         required: true,
     },
     timeGoal: {
-        type: String,
+        type: ing,
         required: true,
     },
     studyTimeADay: {

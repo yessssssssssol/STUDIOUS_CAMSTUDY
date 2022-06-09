@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+
+const d = dayjs('2022-03-02 14:14:33');
+console.log(d.format());
+
 class ChangeDate {
     static findDate(startTime, endTime) {
         // YYYY-MM-DD HH:mm:ss
@@ -16,6 +21,31 @@ class ChangeDate {
         const studyTimeNum = endTimeNum - startTimeNum;
         // console.log(startTimeNum, endTimeNum);
 
+        studyTimeStr = this.toStringTime(studyTimeNum);
+
+        return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr };
+    }
+
+    static getCurrentDate(time = undefined) {
+        const now = dayjs(time);
+        let date = now.format('YYYY-MM-DD');
+        if (now.get('hour') < 5) {
+            date = now.add(-1, 'day').format().slice(0, 10);
+            return date;
+        }
+        return date;
+    }
+
+    static toMilliseconds(studyTimeADay) {
+        //HH:MM:SS
+        //시 * 60 * 60 * 1000
+        //분 * 60 * 1000
+        //초 * 1000
+        const studyTimeADayNum = Number(studyTimeADay.slice(0, 2)) + 60 * 60 * 1000 + (Number(studyTimeADay.slice(3, 5)) + 60 * 1000) + (Number(studyTimeADay.slice(6)) + 1000);
+        return studyTimeADayNum;
+    }
+
+    static toStringTime(studyTimeNum) {
         // 공부한 시간 보기 HH:MM:SS
         // const div1000remainder = studyTimeNum % 1000;
         const div1000quotient = parseInt(studyTimeNum / 1000);
@@ -25,11 +55,26 @@ class ChangeDate {
         const div60quotientM = parseInt(div60quotientS / 60);
         const div12remainderH = div60quotientM % 12;
         // const div12quotientH = parseInt(div60quotientM / 12);
+        div60remainderS = div60remainderS < 10 ? '0' + div60remainderS : div60remainderS;
+        div60remainderM = div60remainderM < 10 ? '0' + div60remainderM : div60remainderM;
+        div12remainderH = div12remainderH < 10 ? '0' + div12remainderH : div12remainderH;
 
         const studyTimeStr = `${div12remainderH}:${div60remainderM}:${div60remainderS} `;
 
-        return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr };
+        return studyTimeStr;
     }
+
+    // static getCurrentDate() {
+    //     var date = new Date();
+    //     var year = date.getFullYear();
+    //     var month = date.getMonth();
+    //     var today = date.getDate();
+    //     var hours = date.getHours();
+    //     var minutes = date.getMinutes();
+    //     var seconds = date.getSeconds();
+    //     var milliseconds = date.getMilliseconds();
+    //     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
+    // }
 }
 
 export { ChangeDate };

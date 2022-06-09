@@ -1,6 +1,7 @@
 import { TimeLog } from '../db/models/TimeLog';
 import { User } from '../db';
 import { ChangeDate } from '../utils/changeDate';
+import { UserDailySheetService } from './userDailySheetService';
 
 class timeLogService {
     static async addTimeLog({ user_id, startTime, endTime }) {
@@ -23,9 +24,12 @@ class timeLogService {
         };
 
         const timeLog = await TimeLog.create({ newLog });
-        timeLog.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+        timeLog.errorMessage = null;
 
-        return timeLog;
+        const updatedSheet = await UserDailySheetService.updateSheet({ newLog });
+        updatedSheet.errorMessage = null;
+
+        return { timeLog, updatedSheet };
     }
 
     static async getTimeLogs({ user_id, date }) {
