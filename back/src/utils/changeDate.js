@@ -1,8 +1,5 @@
 import dayjs from 'dayjs';
 
-const d = dayjs('2022-03-02 14:14:33');
-console.log(d.format());
-
 class ChangeDate {
     static findDate(startTime, endTime) {
         // YYYY-MM-DD HH:mm:ss
@@ -26,6 +23,8 @@ class ChangeDate {
         return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr };
     }
 
+    // 오전 5시를 기준으로 오늘과 내일을 구분한다.
+    // ex) 다음날 새벽 2시는 아직 오늘이다.
     static getCurrentDate(time = undefined) {
         const now = dayjs(time);
         let date = now.format('YYYY-MM-DD');

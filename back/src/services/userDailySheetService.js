@@ -43,9 +43,6 @@ class UserDailySheetService {
 
         const getSheet = await UserDailySheet.getSheet({ id, date });
         const { timeGoal, beginStudyTime } = getSheet;
-        console.log(getSheet);
-        console.log(getSheet.studyTimeADay);
-        console.log(studyTimeNum, studyTimeStr);
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
         if (beginStudyTime === ' ') {
