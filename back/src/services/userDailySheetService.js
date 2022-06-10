@@ -21,16 +21,30 @@ class UserDailySheetService {
         }
         const newSheets = userSheets.map((sheet) => {
             const { id, timeGoal } = sheet;
-            return {
-                id,
-                date: today,
-                timeGoal,
-                achievementRate: 0,
-                studyTimeADay: ' ',
-                bestStudyTime: ' ',
-                beginStudyTime: ' ',
-                finishStudyTime: ' ',
-            };
+
+            if (timeGoal === '00:00:00') {
+                return {
+                    id,
+                    date: today,
+                    timeGoal,
+                    achievementRate: 100,
+                    studyTimeADay: ' ',
+                    bestStudyTime: ' ',
+                    beginStudyTime: ' ',
+                    finishStudyTime: ' ',
+                };
+            } else {
+                return {
+                    id,
+                    date: today,
+                    timeGoal,
+                    achievementRate: 0,
+                    studyTimeADay: ' ',
+                    bestStudyTime: ' ',
+                    beginStudyTime: ' ',
+                    finishStudyTime: ' ',
+                };
+            }
         });
         await UserDailySheet.addSheets(newSheets);
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
