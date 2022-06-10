@@ -23,10 +23,10 @@ timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     }
 });
 
-timeLogRouter.get('/timelogs', login_required, async function (req, res, next) {
+timeLogRouter.get('/timelogs/:id/:date', login_required, async function (req, res, next) {
     try {
-        const user_id = req.body.id;
-        const date = req.body.date;
+        const user_id = req.params.id;
+        const date = req.params.date;
         // YYYY-MM-DD
         // 0123456789
         if (!user_id) {

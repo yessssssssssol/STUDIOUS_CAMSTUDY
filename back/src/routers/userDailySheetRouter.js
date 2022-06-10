@@ -16,9 +16,9 @@ userDailySheetRouter.post('/dailysheet', login_required, async function (req, re
 });
 
 // 유저 데일리 시트 전체 가져오기
-userDailySheetRouter.get('/dailysheets', login_required, async function (req, res, next) {
+userDailySheetRouter.get('/dailysheets/:id', login_required, async function (req, res, next) {
     try {
-        const id = req.body.id;
+        const id = req.params.id;
 
         const getSheets = await UserDailySheetService.getSheets({ id });
 
