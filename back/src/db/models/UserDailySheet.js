@@ -47,9 +47,9 @@ class UserDailySheet {
     }
 
     // 데일리 시트 업데이트 하기
-    static async updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime }) {
+    static async updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate }) {
         const condition = { id, date };
-        const update = { beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime };
+        const update = { beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate };
         const option = { returnOriginal: false };
 
         const updatedSheet = await UserDailySheetModel.findOneAndUpdate(condition, update, option);

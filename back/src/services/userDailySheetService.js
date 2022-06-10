@@ -2,6 +2,7 @@ import { User, UserDailySheet } from '../db';
 import dayjs from 'dayjs';
 import { ChangeDate } from '../utils/changeDate';
 import { scheduleJob } from 'node-schedule';
+import { analyzeDate } from '../utils/analyzeDate';
 
 const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets());
 
@@ -52,36 +53,53 @@ class UserDailySheetService {
             const bestStudyTime = studyTimeStr;
             const achievementRate = 0;
 
-            const updatedSheet = UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
+            const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
             return updatedSheet;
         }
 
         // 금일 데일리 시트에 정보가 있는 경우
-        const studyTimeADayNum = ChangeDate.toMilliseconds(getSheet.studyTimeADay);
+        const prevStudyTimeNum = ChangeDate.toMilliseconds(getSheet.studyTimeADay);
         const bestStudyTimeNum = ChangeDate.toMilliseconds(getSheet.bestStudyTime);
-        console.log(studyTimeADayNum);
-        console.log(ChangeDate.toStringTime(studyTimeADayNum));
 
         const finishStudyTime = endTime;
-        const studyTimeADay = ChangeDate.toStringTime(studyTimeNum + studyTimeADayNum);
+        const studyTimeADayNum = prevStudyTimeNum + studyTimeNum;
+        const studyTimeADay = ChangeDate.toStringTime(studyTimeADayNum);
         const bestStudyTime = ChangeDate.toStringTime(Math.max(studyTimeNum, bestStudyTimeNum));
 
-        const achievementRate = undefined;
+        let achievementRate = undefined;
         if (timeGoal === '아직 목표 공부시간을 설정하지 않았습니다.') {
-            this.updateSheet.achievementRate = 0;
+            achievementRate = 0;
+        } else if (timeGoal === '00:00:00') {
+            achievementRate = 100;
         } else {
             const timeGoalNum = ChangeDate.toMilliseconds(timeGoal);
-            this.updateSheet.achievementRate = Number((studyTimeADay / timeGoalNum) * 100).toFixed(2);
+            achievementRate = Number((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
         }
 
-        // console.log(id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate);
-        const updatedSheet = UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
+        const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
         return updatedSheet;
     }
 
     static async getSheets({ id }) {
-        const getSheets = UserDailySheet.getSheets({ id });
+        const getSheets = await UserDailySheet.getSheets({ id });
         return getSheets;
+    }
+
+    static async getSheetsForCal({ id }) {
+        const getSheets = await UserDailySheet.getSheets({ id });
+
+        const total = analyzeDate.avgAndSum(getSheets);
+        const totalAchievementRate = total.rate;
+        const totalStudyTime = total.time;
+
+        const weekSheets = analyzeDate.weekPeriod(getSheets);
+        const week = analyzeDate.avgAndSum(weekSheets);
+        const weekAchievementRate = week.rate;
+        const weekStudyTime = week.time;
+
+        // console.log(total, week);
+
+        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
@@ -96,7 +114,11 @@ class UserDailySheetService {
         // 목표 달성률 계산
         const timeGoalNum = ChangeDate.toMilliseconds(timeGoal);
         const studyTimeADayNum = ChangeDate.toMilliseconds(studyTimeADay);
-        const achievementRate = ((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
+        let achievementRate = ((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
+
+        if (timeGoal === '00:00:00') {
+            achievementRate = 100;
+        }
 
         const updatedGoal = await UserDailySheet.updateTimeGoal({ id, date, timeGoal, achievementRate });
 

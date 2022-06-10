@@ -29,6 +29,25 @@ userDailySheetRouter.get('/dailysheets/:id', login_required, async function (req
     }
 });
 
+// 유저 데일리 시트 전체 가져 총 공부시간, 이번주 공부 시간 등 계산해서 가져오기
+userDailySheetRouter.get('/totaltitme/:id', login_required, async function (req, res, next) {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            const errorMessage = '아이디가 제대로 넘어오지 않았습니다.';
+            return errorMessage;
+        }
+
+        const getSheetsForCal = await UserDailySheetService.getSheetsForCal({ id });
+
+        res.status(200).json(getSheetsForCal);
+        return;
+    } catch (error) {
+        next(error);
+    }
+});
+
 // 목표 공부 시간 변경
 userDailySheetRouter.put('/dailysheet', login_required, async function (req, res, next) {
     try {
