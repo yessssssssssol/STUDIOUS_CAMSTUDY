@@ -7,7 +7,7 @@ const timeLogRouter = Router();
 timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
-        const user_id = req.body.id;
+        const user_id = req.currentUserId;
         const startTime = req.body.startTime;
         const endTime = req.body.endTime;
 

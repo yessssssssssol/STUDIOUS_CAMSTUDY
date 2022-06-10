@@ -7,7 +7,7 @@ const userDailySheetRouter = Router();
 userDailySheetRouter.put('/dailysheet', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
-        const id = req.body.id;
+        const id = req.currentUserId;
         const timeGoal = req.body.timeGoal;
 
         const updatedGoal = await UserDailySheetService.updateTimeGoal({
