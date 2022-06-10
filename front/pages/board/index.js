@@ -21,7 +21,7 @@ export default function board() {
                 aria-label='Article'
                 className='inline-block mb-3 text-black transition-colors duration-200 hover:text-deep-purple-accent-700'
               >
-                <p className='text-2xl font-bold leading-5'>Diving to the deep</p>
+                <p className='text-2xl font-bold leading-5'>공부 같이 하실 분</p>
               </a>
               <p className='mb-4 text-gray-700'>
                 Sed ut perspiciatis unde omnis iste natus error sit sed quia consequuntur magni voluptatem doloremque.
@@ -101,7 +101,7 @@ export default function board() {
                 aria-label='Article'
                 className='inline-block mb-3 text-black transition-colors duration-200 hover:text-deep-purple-accent-700'
               >
-                <p className='text-2xl font-bold leading-5'>Conquer the World</p>
+                <p className='text-2xl font-bold leading-5'>오전 스터디 모집합니다.</p>
               </a>
               <p className='mb-4 text-gray-700'>
                 Sed ut perspiciatis unde omnis iste natus error sit sed quia consequuntur magni voluptatem doloremque.
@@ -181,7 +181,7 @@ export default function board() {
                 aria-label='Article'
                 className='inline-block mb-3 text-black transition-colors duration-200 hover:text-deep-purple-accent-700'
               >
-                <p className='text-2xl font-bold leading-5'>Explore the beautiful</p>
+                <p className='text-2xl font-bold leading-5'>저녁 스터디 모집</p>
               </a>
               <p className='mb-4 text-gray-700'>
                 Sed ut perspiciatis unde omnis iste natus error sit sed quia consequuntur magni voluptatem doloremque.
