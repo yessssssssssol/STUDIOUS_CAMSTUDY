@@ -3,11 +3,13 @@ import { useSetRecoilState } from 'recoil';
 import {
   loginModalState,
   registerModalState,
+  editProfileModalState,
 } from '../../core/atoms/modalState';
 
 export default function Modal(props) {
   const setLoginModal = useSetRecoilState(loginModalState);
   const setRegisterModal = useSetRecoilState(registerModalState);
+  const setProfileModal = useSetRecoilState(editProfileModalState);
 
   return (
     <>
@@ -18,13 +20,14 @@ export default function Modal(props) {
             <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
               {/*header*/}
               <div className='flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t'>
-                <h3 className='text-3xl font-semibold'>{props.title}</h3>
+                <h3 className='text-xl font-semibold'>{props.title}</h3>
                 <button
                   type='button'
                   className='absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white'
                   onClick={() => {
                     setLoginModal(false);
                     setRegisterModal(false);
+                    setProfileModal(false);
                   }}
                 >
                   <svg

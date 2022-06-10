@@ -4,7 +4,7 @@ import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 export default function NavBar() {
   const [showOptions, setShowOptions] = useState(false);
-  const [Islogin, setIslogin] = useState(false);
+  const [Islogin, setIslogin] = useState(true);
   const handleShow = () => {
     setShowOptions(!showOptions);
   };
@@ -46,11 +46,16 @@ export default function NavBar() {
       <div class='container flex flex-wrap justify-between items-center mx-auto'>
         <Link href='/'>
           <a class='flex items-center'>
-            <span class='self-center text-xl font-semibold whitespace-nowrap dark:text-white'>의자왕</span>
+            <span class='self-center text-xl font-semibold whitespace-nowrap dark:text-white'>
+              의자왕
+            </span>
           </a>
         </Link>
 
-        <div class='hidden justify-between items-center w-full md:flex md:w-auto md:order-1' id='mobile-menu-2'>
+        <div
+          class='hidden justify-between items-center w-full md:flex md:w-auto md:order-1'
+          id='mobile-menu-2'
+        >
           <ul class='flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium'>
             <li>
               <a
@@ -74,7 +79,11 @@ export default function NavBar() {
                 aria-haspopup='true'
               >
                 <span class='sr-only'>Open user menu</span>
-                <img class='w-8 h-8 rounded-full' src='favicon.ico' alt='user photo' />
+                <img
+                  class='w-8 h-8 rounded-full'
+                  src='favicon.ico'
+                  alt='user photo'
+                />
               </button>
               {showOptions && (
                 <div
@@ -82,7 +91,9 @@ export default function NavBar() {
                   id='dropdown'
                 >
                   <div class='py-3 px-4'>
-                    <span class='block text-sm text-gray-900 dark:text-white'>Bonnie Green</span>
+                    <span class='block text-sm text-gray-900 dark:text-white'>
+                      Bonnie Green
+                    </span>
                     <span class='block text-sm font-medium text-gray-500 truncate dark:text-gray-400'>
                       name@flowbite.com
                     </span>

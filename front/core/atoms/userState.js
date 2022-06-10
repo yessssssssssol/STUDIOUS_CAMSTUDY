@@ -15,8 +15,14 @@ export const tokenAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const currentUserState = atom({
-  key: 'currentUserState',
-  default: { user: null },
+// export const currentUserState = atom({
+//   key: 'currentUserState',
+//   default: { user: null },
+//   effects_UNSTABLE: [persistAtom],
+// });
+
+export const profileUrlAtom = atom({
+  key: 'profileUrl',
+  default: { profileUrl: null },
   effects_UNSTABLE: [persistAtom],
 });
