@@ -24,13 +24,13 @@ const ProfileEditModal = () => {
       console.log('이미지 전송에 실패했습니다.', err);
     }
 
-    const res = await Api.put(`users/:${user.id}`, {
-      name,
-      email,
-      description,
-    });
-    const updatedUser = res.data;
-    setUser(updatedUser);
+    // const res = await Api.put(`users/:${user.id}`, {
+    //   name,
+    //   email,
+    //   description,
+    // });
+    // const updatedUser = res.data;
+    // setUser(updatedUser);
 
     setShowModal(false);
   };
@@ -54,7 +54,7 @@ const ProfileEditModal = () => {
             <button
               type='submit'
               className='text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200'
-              onClick={submitHandler}
+              // onClick={submitHandler}
             >
               수정
             </button>

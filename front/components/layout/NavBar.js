@@ -4,7 +4,7 @@ import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 export default function NavBar() {
   const [showOptions, setShowOptions] = useState(false);
-  const [Islogin, setIslogin] = useState(true);
+  const [Islogin, setIslogin] = useState(false);
   const handleShow = () => {
     setShowOptions(!showOptions);
   };
