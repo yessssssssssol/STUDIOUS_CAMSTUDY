@@ -40,6 +40,12 @@ class UserDailySheet {
         return getSheet;
     }
 
+    // 해당 id의 전체 데일리 시트 가져오기
+    static async getSheets({ id }) {
+        const getSheets = UserDailySheetModel.find({ id });
+        return getSheets;
+    }
+
     // 데일리 시트 업데이트 하기
     static async updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime }) {
         const condition = { id, date };

@@ -79,6 +79,11 @@ class UserDailySheetService {
         return updatedSheet;
     }
 
+    static async getSheets({ id }) {
+        const getSheets = UserDailySheet.getSheets({ id });
+        return getSheets;
+    }
+
     static async updateTimeGoal({ id, timeGoal }) {
         const date = ChangeDate.getCurrentDate();
         const getSheet = await UserDailySheet.getSheet({ id, date });
