@@ -22,23 +22,23 @@ export default function NavBar(){
     function NavDropItem(item,index){
         return(
             <li key={index}>
-          <Link href="/"><a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{item}</a></Link>
+          <Link href="/"><a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">{item}</a></Link>
         </li>
         )
     }
     return (
-<nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
-  <div class="container flex flex-wrap justify-between items-center mx-auto">
+<nav class="bg-white border-gray-200 px-2 py-2.5 rounded">
+  <div class="container flex flex-wrap justify-between items-center mx-auto min-w-[1550px]">
   <Link href="/">
   <a class="flex items-center">
-      <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">의자왕</span>
+      <span class="self-center text-xl font-semibold whitespace-nowrap">의자왕</span>
   </a>
   </Link>
   
-  <div class="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
+  <div class="justify-between items-center w-full md:flex md:w-auto md:order-1">
     <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
       <li>
-        <a href="#" class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white" aria-current="page">Home</a>
+        <a href="#" class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" aria-current="page">Home</a>
       </li>
       {
             items.map((item,index)=>NavItem(item,index))

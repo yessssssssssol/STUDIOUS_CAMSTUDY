@@ -1,7 +1,17 @@
 import {PieChart} from "react-minimal-pie-chart"
-import { Fragment } from "react";
+import {useState } from "react";
 
 export default function Pie({chart}){
+    
+
+    
+    const label_Style = {
+            fontSize:"7px",
+            paddingTop:"50px",
+            fontWeight:"500",
+            whiteSpace: "pre-line"
+    }
+    
     return(
         <PieChart
             data={[
@@ -19,13 +29,12 @@ export default function Pie({chart}){
         animate
         startAngle={270}
         animationDuration={1500}
-        label={({dataEntry}) => chart[0]+dataEntry.value+"%"}
+        label={({dataEntry}) => `${chart[0]} \n  ${dataEntry.value}%`}
         labelStyle={{
-            whiteSpace: 'pre',
-            maxWidth:"200",
-            fontSize:"10px",
+            ...label_Style,
         }}
+        center={[50,50]}
         labelPosition={0}
-        />
+        />    
     )
 }
