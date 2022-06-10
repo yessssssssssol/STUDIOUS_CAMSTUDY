@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { profileUrlAtom, tokenAtom } from '../../core/atoms/userState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  profileUrlAtom,
+  tokenAtom,
+  userAtom,
+} from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 
 const EditProfileImg = () => {
+  const user = useRecoilValue(userAtom);
   const [file, setFile] = useState(null);
   const [profileUrl, setProfileUrl] = useRecoilState(profileUrlAtom);
 
@@ -14,7 +19,6 @@ const EditProfileImg = () => {
     //Put request to update edited user data
     const formD = new FormData();
     formD.append('img', file);
-    console.log(formD);
 
     try {
       await Api.postImg('user/img', formD);
