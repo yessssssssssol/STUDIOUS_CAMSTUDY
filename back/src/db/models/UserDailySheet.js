@@ -29,7 +29,8 @@ class UserDailySheet {
     }
 
     // 오전 5시 마다 새로운 데일리 시트를 만들기 위해 전날 목표 공부시간을 가져와야함
-    static async getSheets({ yesterday }) {
+    static async getSheetsFromDate({ yesterday }) {
+        console.log(yesterday);
         const getSheets = await UserDailySheetModel.find({ date: yesterday });
         return getSheets;
     }

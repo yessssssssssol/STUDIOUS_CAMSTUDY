@@ -13,15 +13,17 @@ class UserDailySheetService {
         const now = dayjs();
         const today = now.format('YYYY-MM-DD');
         const yesterday = now.add(-1, 'day').format().slice(0, 10);
+        console.log(typeof yesterday);
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
-        const userSheets = await UserDailySheet.getSheets({ yesterday });
+        const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
         if (userSheets === []) {
             const errorMessage = '새로 데일리 시트를 만들 때 필요한 전날 데일리 시트 데이터가 없습니다.';
             return { errorMessage };
         }
+
         const newSheets = userSheets.map((sheet) => {
             const { id, timeGoal } = sheet;
-
+            console.log(timeGoal);
             if (timeGoal === '00:00:00') {
                 return {
                     id,
