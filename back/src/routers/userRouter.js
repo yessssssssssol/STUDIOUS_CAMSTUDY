@@ -148,6 +148,7 @@ userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), as
     }
 });
 
+// 이메일 인증
 userAuthRouter.get('/user/email/:email', rateLimit({ windowMs: 30000, max: 1 }), async function (req, res, next) {
     try {
         const { email } = req.params;
@@ -161,6 +162,19 @@ userAuthRouter.get('/user/email/:email', rateLimit({ windowMs: 30000, max: 1 }),
         );
 
         return res.status(200).send(code);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 임시 비밀번호 발급하기
+userAuthRouter.put('/password/init', async (req, res, next) => {
+    try {
+        const { email } = req.body;
+
+        await userAuthService.sendNewpassword({ email });
+
+        return res.sendStatus(200);
     } catch (error) {
         next(error);
     }
