@@ -3,8 +3,29 @@ import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import { userAuthService } from '../services/userService';
 import { uploadHandler } from '../utils/multer';
+import rateLimit from 'express-rate-limit';
+import { v4 as uuidv4 } from 'uuid';
+import sendMail from '../utils/sendMail';
 
 const userAuthRouter = Router();
+
+// 회원가입 인증 이메일 발송
+userAuthRouter.get('/user/:email', rateLimit({ windowMs: 30000, max: 1 }), async (req, res, next) => {
+    try {
+        const { email } = req.params;
+
+        const code = uuidv4().split('-')[0];
+        await sendMail(
+            email, //
+            '[의자왕] 안녕하세요 의자왕 웹 캠스터디입니다.',
+            `이메일 인증 코드는 [${code}] 입니다.\n`,
+        );
+
+        return res.status(200).send(code);
+    } catch (error) {
+        next(error);
+    }
+});
 
 userAuthRouter.post('/user/register', async function (req, res, next) {
     try {
@@ -81,7 +102,7 @@ userAuthRouter.get('/user/current', login_required, async function (req, res, ne
     }
 });
 
-userAuthRouter.put('/users/:id', login_required, async function (req, res, next) {
+userAuthRouter.put('/user/:id', login_required, async function (req, res, next) {
     try {
         // URI로부터 사용자 id를 추출함.
         const user_id = req.params.id;
@@ -106,7 +127,7 @@ userAuthRouter.put('/users/:id', login_required, async function (req, res, next)
     }
 });
 
-userAuthRouter.get('/users/:id', login_required, async function (req, res, next) {
+userAuthRouter.get('/user/:id', login_required, async function (req, res, next) {
     try {
         const user_id = req.params.id;
         const currentUserInfo = await userAuthService.getUserInfo({ user_id });
