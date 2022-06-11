@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { tokenAtom, userAtom } from '../../core/atoms/userState';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import LoginModal from '../user/LoginModal';
-import ProfileEditModal from '../user/ProfileEditModal';
+import UserEditModal from '../user/UserEditModal';
 import RegisterModal from '../user/RegisterModal';
 import NavMenu from './NavMenu';
 export default function NavBar() {
@@ -72,7 +72,7 @@ export default function NavBar() {
                     </div>
                     <ul className='py-1' aria-labelledby='dropdown'>
                       <li>
-                        <ProfileEditModal />
+                        <UserEditModal />
                       </li>
                       <li>
                         <Link href='/'>

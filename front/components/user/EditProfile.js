@@ -1,4 +1,11 @@
+import { useRecoilState } from 'recoil';
+import { userDescriptionAtom, userNameAtom } from '../../core/atoms/userState';
+
 const EditProfile = () => {
+  const [userName, setUserName] = useRecoilState(userNameAtom);
+  const [userDescription, setUserDescription] =
+    useRecoilState(userDescriptionAtom);
+
   return (
     <div>
       <div className='my-2'>
@@ -8,6 +15,8 @@ const EditProfile = () => {
         <input
           className='bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           placeholder='이름을 입력해주세요'
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
         />
         <p
           id='helper-text-explanation'
@@ -28,6 +37,8 @@ const EditProfile = () => {
           rows='4'
           class='block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           placeholder='Leave a comment...'
+          value={userDescription}
+          onChange={(e) => setUserDescription(e.target.value)}
         ></textarea>
       </div>
       <div>

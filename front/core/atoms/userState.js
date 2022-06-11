@@ -26,3 +26,15 @@ export const profileUrlAtom = atom({
   default: { profileUrl: null },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const userNameAtom = atom({
+  key: 'userName',
+  default: { userName: null },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const userDescriptionAtom = atom({
+  key: 'userDescription',
+  default: { userDescription: null },
+  effects_UNSTABLE: [persistAtom],
+});

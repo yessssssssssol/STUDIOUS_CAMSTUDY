@@ -5,32 +5,26 @@ import * as Api from '../../pages/api/api';
 import EditProfileImg from './EditProfileImg';
 import EditProfile from './EditProfile';
 import Modal from '../common/Modal';
-import { profileUrlAtom, userAtom } from '../../core/atoms/userState';
+import {
+  userAtom,
+  userDescriptionAtom,
+  userNameAtom,
+} from '../../core/atoms/userState';
 
-const ProfileEditModal = () => {
+const UserEditModal = () => {
   const [showModal, setShowModal] = useRecoilState(editProfileModalState);
   const [user, setUser] = useRecoilState(userAtom);
-  const profileUrl = useRecoilValue(profileUrlAtom);
+  const userName = useRecoilValue(userNameAtom);
+  const userDescription = useRecoilValue(userDescriptionAtom);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formD = new FormData();
-    formD.append('img', profileUrl);
-
-    try {
-      await Api.postImg('user/img', formD);
-      console.log('이미지 전송에 성공했습니다.');
-    } catch (err) {
-      console.log('이미지 전송에 실패했습니다.', err);
-    }
-
-    // const res = await Api.put(`users/:${user.id}`, {
-    //   name,
-    //   email,
-    //   description,
-    // });
-    // const updatedUser = res.data;
-    // setUser(updatedUser);
+    const res = await Api.put(`users/${user.id}`, {
+      name: userName,
+      descriptiion: userDescription,
+    });
+    const updatedUser = res.data;
+    setUser(updatedUser);
 
     setShowModal(false);
   };
@@ -53,7 +47,7 @@ const ProfileEditModal = () => {
             <button
               type='submit'
               className='text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200'
-              // onClick={submitHandler}
+              onClick={submitHandler}
             >
               수정
             </button>
@@ -70,4 +64,4 @@ const ProfileEditModal = () => {
   );
 };
 
-export default ProfileEditModal;
+export default UserEditModal;

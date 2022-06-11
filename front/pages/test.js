@@ -1,9 +1,9 @@
-import ProfileEditModal from '../components/user/ProfileEditModal';
+import UserEditModal from '../components/user/UserEditModal';
 
 export default function Test() {
   return (
     <div className='mx-10 my-10'>
-      <ProfileEditModal />
+      <UserEditModal />
     </div>
   );
 }
