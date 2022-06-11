@@ -5,17 +5,16 @@ const UserDailySheetSchema = new Schema({
         type: String,
         required: true,
     },
-    idx: {
-        type: Number,
-        required: true,
-        default: 1,
-    },
     date: {
         type: String,
         required: true,
     },
     timeGoal: {
         type: String,
+        required: true,
+    },
+    achievementRate: {
+        type: Number,
         required: true,
     },
     studyTimeADay: {

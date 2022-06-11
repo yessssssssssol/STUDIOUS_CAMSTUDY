@@ -1,9 +1,10 @@
-import { User } from '../db'; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
+import { User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
 import { gcsBucket } from '../utils/multer';
+import { ChangeDate } from '../utils/changeDate';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -13,7 +14,6 @@ class userAuthService {
             const errorMessage = '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
             return { errorMessage };
         }
-
         // 비밀번호 해쉬화
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -24,6 +24,13 @@ class userAuthService {
         // db에 저장
         const createdNewUser = await User.create({ newUser });
         createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+
+        //날짜 생성
+        const date = ChangeDate.getCurrentDate();
+
+        const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
+        createdNewUserSheet.errorMessage = null;
+        console.log(`${id}의 sheet가 성공적으로 생성되었습니다.`);
 
         return createdNewUser;
     }
@@ -122,7 +129,7 @@ class userAuthService {
 
         // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+            const errorMessage = '해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
 
