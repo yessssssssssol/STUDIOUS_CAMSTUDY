@@ -5,13 +5,11 @@ import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 function MyApp({ Component, pageProps }) {
   return (
-    <div>
-      <RecoilRoot>
-        <NavBar />
-        <Component {...pageProps} />
-        <Footer />
-      </RecoilRoot>
-    </div>
+    <RecoilRoot>
+      <NavBar />
+      <Component {...pageProps} />
+      <Footer />
+    </RecoilRoot>
   );
 }
 

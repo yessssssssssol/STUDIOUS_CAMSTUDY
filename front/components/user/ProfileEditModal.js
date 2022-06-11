@@ -38,8 +38,7 @@ const ProfileEditModal = () => {
   return (
     <>
       <button
-        className='bg-transparent text-gray-600 active:bg-gray-300 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150 border'
-        type='button'
+        className='w-full block py-2 px-4 text-sm text-left text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
         onClick={() => setShowModal(true)}
       >
         회원정보 수정
