@@ -12,6 +12,7 @@
     "axios": "^0.27.2",
     "next": "12.1.6",
     "react": "18.1.0",
+    "react-calendar-heatmap": "^1.8.1",
     "react-dom": "18.1.0",
     "react-minimal-pie-chart": "^8.3.0",
     "react-tooltip": "^4.2.21",
