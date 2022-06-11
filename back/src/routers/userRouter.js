@@ -10,22 +10,6 @@ import sendMail from '../utils/sendMail';
 const userAuthRouter = Router();
 
 // 회원가입 인증 이메일 발송
-userAuthRouter.get('/user/:email', rateLimit({ windowMs: 30000, max: 1 }), async (req, res, next) => {
-    try {
-        const { email } = req.params;
-
-        const code = uuidv4().split('-')[0];
-        await sendMail(
-            email, //
-            '[의자왕] 안녕하세요 의자왕 웹 캠스터디입니다.',
-            `이메일 인증 코드는 [${code}] 입니다.\n`,
-        );
-
-        return res.status(200).send(code);
-    } catch (error) {
-        next(error);
-    }
-});
 
 userAuthRouter.post('/user/register', async function (req, res, next) {
     try {
@@ -159,6 +143,24 @@ userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), as
         }
 
         res.status(200).send({ url: url });
+    } catch (error) {
+        next(error);
+    }
+});
+
+userAuthRouter.get('/user/email/:email', rateLimit({ windowMs: 30000, max: 1 }), async function (req, res, next) {
+    try {
+        const { email } = req.params;
+        console.log(email);
+
+        const code = uuidv4().split('-')[0];
+        await sendMail(
+            email, //
+            '[의자왕] 안녕하세요 의자왕 웹 캠스터디입니다.',
+            `이메일 인증 코드는 [${code}] 입니다.\n`,
+        );
+
+        return res.status(200).send(code);
     } catch (error) {
         next(error);
     }
