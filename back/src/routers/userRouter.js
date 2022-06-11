@@ -1,14 +1,15 @@
-import is from "@sindresorhus/is";
-import { Router } from "express";
-import { login_required } from "../middlewares/login_required";
-import { userAuthService } from "../services/userService";
+import is from '@sindresorhus/is';
+import { Router } from 'express';
+import { login_required } from '../middlewares/login_required';
+import { userAuthService } from '../services/userService';
+import { uploadHandler } from '../utils/multer';
 
 const userAuthRouter = Router();
 
-userAuthRouter.post("/user/register", async function (req, res, next) {
+userAuthRouter.post('/user/register', async function (req, res, next) {
     try {
         if (is.emptyObject(req.body)) {
-            throw new Error("headers의 Content-Type을 application/json으로 설정해주세요");
+            throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
         }
 
         // req (request) 에서 데이터 가져오기
@@ -33,7 +34,7 @@ userAuthRouter.post("/user/register", async function (req, res, next) {
     }
 });
 
-userAuthRouter.post("/user/login", async function (req, res, next) {
+userAuthRouter.post('/user/login', async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
         const email = req.body.email;
@@ -52,7 +53,7 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
     }
 });
 
-userAuthRouter.get("/userlist", login_required, async function (req, res, next) {
+userAuthRouter.get('/userlist', login_required, async function (req, res, next) {
     try {
         // 전체 사용자 목록을 얻음
         const users = await userAuthService.getUsers();
@@ -62,7 +63,7 @@ userAuthRouter.get("/userlist", login_required, async function (req, res, next) 
     }
 });
 
-userAuthRouter.get("/user/current", login_required, async function (req, res, next) {
+userAuthRouter.get('/user/current', login_required, async function (req, res, next) {
     try {
         // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
         const user_id = req.currentUserId;
@@ -80,7 +81,7 @@ userAuthRouter.get("/user/current", login_required, async function (req, res, ne
     }
 });
 
-userAuthRouter.put("/users/:id", login_required, async function (req, res, next) {
+userAuthRouter.put('/users/:id', login_required, async function (req, res, next) {
     try {
         // URI로부터 사용자 id를 추출함.
         const user_id = req.params.id;
@@ -105,7 +106,7 @@ userAuthRouter.put("/users/:id", login_required, async function (req, res, next)
     }
 });
 
-userAuthRouter.get("/users/:id", login_required, async function (req, res, next) {
+userAuthRouter.get('/users/:id', login_required, async function (req, res, next) {
     try {
         const user_id = req.params.id;
         const currentUserInfo = await userAuthService.getUserInfo({ user_id });
@@ -120,8 +121,30 @@ userAuthRouter.get("/users/:id", login_required, async function (req, res, next)
     }
 });
 
+userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), async function (req, res, next) {
+    try {
+        if (!req.file) {
+            res.status(400).json({ message: '업로드할 이미지가 없습니다' });
+            return;
+        }
+
+        const user_id = req.currentUserId;
+        console.log(user_id);
+        const url = req.file.path;
+        const updatedUser = await userAuthService.updateImg({ user_id, url });
+
+        if (updatedUser.errorMessage) {
+            throw new Error(updatedUser.errorMessage);
+        }
+
+        res.status(200).send({ url: url });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // jwt 토큰 기능 확인용, 삭제해도 되는 라우터임.
-userAuthRouter.get("/afterlogin", login_required, function (req, res, next) {
+userAuthRouter.get('/afterlogin', login_required, function (req, res, next) {
     res.status(200).send(`안녕하세요 ${req.currentUserId}님, jwt 웹 토큰 기능 정상 작동 중입니다.`);
 });
 
