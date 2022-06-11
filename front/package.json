@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "d3": "^7.4.4",
+    "moment": "^2.29.3",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-calendar-heatmap": "^1.8.1",
     "react-dom": "18.1.0",
     "react-minimal-pie-chart": "^8.3.0",
     "react-tooltip": "^4.2.21",
+    "reactjs-calendar-heatmap": "^0.2.1",
     "recoil": "^0.7.3",
     "recoil-persist": "^4.2.0"
   },
