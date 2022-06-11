@@ -1,10 +1,19 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import {
+  tokenAtom,
+  profileUrlAtom,
+  userAtom,
+} from '../../core/atoms/userState';
 import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 export default function NavBar() {
   const [showOptions, setShowOptions] = useState(false);
-  const [Islogin, setIslogin] = useState(false);
+  const user = useRecoilValue(userAtom);
+  const profileUrl = user.profileUrl;
+  const token = useRecoilValue(tokenAtom);
+
   const handleShow = () => {
     setShowOptions(!showOptions);
   };
@@ -68,8 +77,8 @@ export default function NavBar() {
             </li>
             {items.map((item, index) => NavItem(item, index))}
           </ul>
-          {Islogin === true ? (
-            <div class='flex items-center md:order-2'>
+          {token ? (
+            <div class='relative inline-block'>
               <button
                 onClick={handleShow}
                 type='button'
@@ -81,13 +90,13 @@ export default function NavBar() {
                 <span class='sr-only'>Open user menu</span>
                 <img
                   class='w-8 h-8 rounded-full'
-                  src='favicon.ico'
+                  src={profileUrl}
                   alt='user photo'
                 />
               </button>
               {showOptions && (
                 <div
-                  class='z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'
+                  class='absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800'
                   id='dropdown'
                 >
                   <div class='py-3 px-4'>

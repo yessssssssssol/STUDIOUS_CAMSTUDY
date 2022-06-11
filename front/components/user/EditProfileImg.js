@@ -14,6 +14,21 @@ const EditProfileImg = () => {
 
   const fileInput = useRef(null);
 
+  useEffect(() => {
+    try {
+      const getUserProfileUrl = async () => {
+        const res = await Api.get('users', user.id);
+        const data = res.data;
+        setProfileUrl(data.profileUrl);
+      };
+      getUserProfileUrl();
+    } catch (err) {
+      console.log('프로필이 없습니다.', err);
+    }
+    console.log(user);
+    console.log(profileUrl);
+  }, []);
+
   const saveEdit = async (e) => {
     e.preventDefault();
     //Put request to update edited user data
@@ -75,7 +90,7 @@ const EditProfileImg = () => {
           className='w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200'
           onClick={saveEdit}
         >
-          프로필 삭제
+          프로필 저장
         </button>
       </div>
     </div>
