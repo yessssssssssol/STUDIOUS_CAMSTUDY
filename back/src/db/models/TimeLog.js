@@ -1,22 +1,19 @@
 import { TimeLogModel } from '../schemas/timeLog';
 
 class TimeLog {
-    static async create({ newLog }) {
-        const createdNewLog = await TimeLogModel.create(newLog);
-        return createdNewLog;
+    static create({ newLog }) {
+        return TimeLogModel.create(newLog);
     }
 
-    static async findAll({ user_id }) {
-        const logs = await TimeLogModel.find({ id: user_id });
-        return logs;
+    staticfindAll({ user_id }) {
+        return TimeLogModel.find({ id: user_id });
     }
 
-    static async findAllADay({ user_id, beginTime, finishTime }) {
-        const logsADay = await TimeLogModel.find({
+    static findAllADay({ user_id, beginTime, finishTime }) {
+        return TimeLogModel.find({
             id: user_id,
             $or: [{ startTimeNum: { $gte: beginTime, $lte: finishTime } }, { endTimeNum: { $gte: beginTime, $lte: finishTime } }],
         });
-        return logsADay;
     }
 
     static deleteUser({ id }) {
