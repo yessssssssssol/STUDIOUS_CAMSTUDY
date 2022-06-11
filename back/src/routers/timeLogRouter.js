@@ -7,21 +7,15 @@ const timeLogRouter = Router();
 timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기
-        const user_id = req.body.id;
+        const user_id = req.currentUserId;
         const startTime = req.body.startTime;
         const endTime = req.body.endTime;
-        console.log(user_id, startTime, endTime);
 
-        // 위 데이터를 유저 db에 추가하기
         const newLog = await timeLogService.addTimeLog({
             user_id,
             startTime,
             endTime,
         });
-
-        if (newLog.errorMessage) {
-            throw new Error(newLog.errorMessage);
-        }
 
         res.status(201).json(newLog);
     } catch (error) {
@@ -29,10 +23,10 @@ timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     }
 });
 
-timeLogRouter.get('/timelogs', login_required, async function (req, res, next) {
+timeLogRouter.get('/timelogs/:date/:id', login_required, async function (req, res, next) {
     try {
-        const user_id = req.body.id;
-        const date = req.body.date;
+        const user_id = req.params.id;
+        const date = req.params.date;
         // YYYY-MM-DD
         // 0123456789
         if (!user_id) {
@@ -45,7 +39,6 @@ timeLogRouter.get('/timelogs', login_required, async function (req, res, next) {
         }
 
         const logList = await timeLogService.getTimeLogs({ user_id, date });
-
         if (logList.errorMessage) {
             throw new Error(logList.errorMessage);
         }

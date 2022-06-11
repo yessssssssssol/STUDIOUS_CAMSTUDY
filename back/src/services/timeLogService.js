@@ -1,6 +1,7 @@
 import { TimeLog } from '../db/models/TimeLog';
 import { User } from '../db';
 import { ChangeDate } from '../utils/changeDate';
+import { UserDailySheetService } from './userDailySheetService';
 
 class timeLogService {
     static async addTimeLog({ user_id, startTime, endTime }) {
@@ -23,9 +24,18 @@ class timeLogService {
         };
 
         const timeLog = await TimeLog.create({ newLog });
-        timeLog.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+        if (!timeLog) {
+            const errorMessage = '로그를 제대로 저장하지 못했습니다.';
+            return { errorMessage };
+        }
 
-        return timeLog;
+        const updatedSheet = await UserDailySheetService.updateSheet({ newLog });
+        if (!updatedSheet) {
+            const errorMessage = '데일리 시트를 제대로 업데이트 하지 못했습니다.';
+            return { errorMessage };
+        }
+
+        return { timeLog, updatedSheet };
     }
 
     static async getTimeLogs({ user_id, date }) {
