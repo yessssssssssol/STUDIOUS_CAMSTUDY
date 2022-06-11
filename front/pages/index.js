@@ -1,5 +1,6 @@
 import Helmet from '../components/layout/Helmet';
 
+
 export default function Home() {
   return (
     <div>
