@@ -1,12 +1,12 @@
 export default function ProfileCard() {
   return (
     <div class="max-w-md flex m-4 rounded overflow-hidden shadow-lg">
-      <img class="h-32 w-32 m-2 rounded-full content-center" src="img.jpeg" alt="Sunset in the mountains" />
+      <img class="h-32 w-32 m-2 rounded-full content-center" src="img.jpeg" alt="프로필사진" />
       <div class='flex-col'>
         <div class="px-6 py-4 ">
           <div class="font-bold text-xl mb-2">Hailey</div>
           <p class="text-gray-700 text-base">
-            반갑습니다!!!!
+            안녕하세요😄
           </p>
         </div>
         <div class="px-6  pt-4 pb-2">
