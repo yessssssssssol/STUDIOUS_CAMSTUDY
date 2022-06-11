@@ -4,6 +4,7 @@ import { timeLogService } from '../services/timeLogService';
 
 const timeLogRouter = Router();
 
+// 공부시간 저장(타임로그 생성)
 timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
     try {
         // req (request) 에서 데이터 가져오기

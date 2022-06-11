@@ -1,10 +1,11 @@
-import { User, UserDailySheet } from '../db';
+import { TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
+import sendMail from '../utils/sendMail';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -111,7 +112,8 @@ class userAuthService {
 
         if (toUpdate.password) {
             const fieldToUpdate = 'password';
-            const newValue = toUpdate.password;
+            const password = toUpdate.password;
+            const newValue = await bcrypt.hash(password, 10);
             user = await User.update({ user_id, fieldToUpdate, newValue });
         }
 
@@ -152,6 +154,26 @@ class userAuthService {
         }
 
         return updatedUser;
+    }
+
+    static async sendNewpassword({ email }) {
+        const temp_pw = uuidv4().split('-')[0];
+        await sendMail(
+            email,
+            '[의자왕] 임시비밀번호 보내드립니다.',
+            `임시비밀번호는 [${temp_pw}]입니다.\n 
+            로그인 이후 꼭 비밀번호를 변경해주세요!`,
+        );
+
+        const user_id = await User.findByEmail({ email }).then((data) => data.id);
+        const fieldToUpdate = 'password';
+        const newValue = await bcrypt.hash(temp_pw, 10);
+        const user = await User.update({ user_id, fieldToUpdate, newValue });
+        return user;
+    }
+
+    static async deleteUser({ id }) {
+        return Promise.all([User.deleteUser({ id }), TimeLog.deleteUser({ id }), UserDailySheet.deleteUser({ id })]);
     }
 }
 
