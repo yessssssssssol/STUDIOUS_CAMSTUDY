@@ -1,5 +1,4 @@
 import Helmet from '../components/layout/Helmet';
-import NavBar from '../components/layout/NavBar';
 
 export default function Home() {
   return (
