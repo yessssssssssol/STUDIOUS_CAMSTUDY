@@ -30,7 +30,7 @@ export default function mypage()
         <BoldText Text={"주완님의 공부기록"}/>    
         <div class="pt-[10px]">
 
-        <NoSSR ></NoSSR>
+        <NoSSR />
         </div>
         </div>
 
