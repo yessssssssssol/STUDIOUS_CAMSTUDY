@@ -127,7 +127,7 @@ class userAuthService {
 
         // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
-            const errorMessage = '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+            const errorMessage = '해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
 
