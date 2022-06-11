@@ -38,6 +38,10 @@ class User {
 
         return await UserModel.findOneAndUpdate(filter, update, option);
     }
+
+    static deleteUser({ id }) {
+        return UserModel.findOneAndDelete({ id });
+    }
 }
 
 export { User };

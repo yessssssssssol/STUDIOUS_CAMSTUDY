@@ -1,4 +1,4 @@
-import { User, UserDailySheet } from '../db';
+import { TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -166,14 +166,14 @@ class userAuthService {
         );
 
         const user_id = await User.findByEmail({ email }).then((data) => data.id);
-
         const fieldToUpdate = 'password';
         const newValue = await bcrypt.hash(temp_pw, 10);
-        console.log(newValue);
-
         const user = await User.update({ user_id, fieldToUpdate, newValue });
-        console.log(user);
         return user;
+    }
+
+    static async deleteUser({ id }) {
+        return Promise.all([User.deleteUser({ id }), TimeLog.deleteUser({ id }), UserDailySheet.deleteUser({ id })]);
     }
 }
 

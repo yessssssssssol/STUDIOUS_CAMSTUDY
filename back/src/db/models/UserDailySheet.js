@@ -64,6 +64,10 @@ class UserDailySheet {
 
         return updatedGoal;
     }
+
+    static deleteUser({ id }) {
+        return UserDailySheetModel.deleteMany({ id });
+    }
 }
 
 export { UserDailySheet };
