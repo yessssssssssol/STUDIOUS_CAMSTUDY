@@ -122,7 +122,6 @@ userAuthRouter.get('/users/:id', login_required, async function (req, res, next)
 });
 
 userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), async function (req, res, next) {
-    console.log('start');
     try {
         if (!req.file) {
             res.status(400).json({ message: '업로드할 이미지가 없습니다' });

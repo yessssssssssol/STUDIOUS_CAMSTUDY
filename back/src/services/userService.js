@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
+import { gcsBucket } from '../utils/multer';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
