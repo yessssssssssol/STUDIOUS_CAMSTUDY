@@ -3,19 +3,47 @@ import TimeBox from '../components/common/TimeBox'
 import dynamic from "next/dynamic";
 import Pie from '../components/common/Pie'
 import CategoryBox from '../components/common/CategoryBox';
-export default function mypage()
+import {useEffect, useState} from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+    userAtom,
+    userDescriptionAtom,
+    userNameAtom,
+  } from '../core/atoms/userState';
+  import * as API from '../pages/api/api';
+  export default function mypage()
 {
     const charts_data=[["출석율","#ffefd5"],["목표 달성률","#8ee69a"],["일일 최다 공부시간","#b999f3"]]
     const Title_time=["오늘 공부 시간","이번주 공부 시간","전체 공부 시간"]
     const category_time=[["수학","13:10:03"],["과학","5:31:21"],["경찰학개론","10:31:22"],["헌법","3:03:52"]]
     const randomColor=["red","blue","green"]
+    const userName = useRecoilValue(userNameAtom);
+    const [TimeData,setTimeData]=useState(null)
+    const [user, setUser] = useRecoilState(userAtom);
+
     const NoSSR = dynamic(
-        () =>import("../components/common/Heatmap"),
+        () => import("../components/common/Heatmap"),
         {
           ssr: false,
         }
       );
+
+      useEffect(() =>  {
+        try {
+            const getTimeData = async () => {
+              const res = await API.get(`totaltime`,user.id);
+              const data = res.data;
+              console.log(data)
+
+              setTimeData(data);
+            };
+            getTimeData();
+          } catch (err) {
+            console.log('프로필이 없습니다.', err);
+          }
+      }, []);
     return(
+    
     <div class="flex-col px-[300px] py-[50px]">
         <div class="min-w-[350px]">
         <BoldText Text={"주완님의 최근 공부시간"}/>

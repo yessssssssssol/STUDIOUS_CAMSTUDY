@@ -3,19 +3,41 @@ import { useEffect,useState } from "react";
 import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 import {useRouter} from 'next/router'
+import { tokenAtom } from "../../core/atoms/userState";
+import { useRecoilState, useRecoilValue } from 'recoil';
+
 export default function NavBar(){
 
     const router = useRouter();
     const currentRoute = router.pathname;
 
     const [showOptions, setShowOptions] = useState(false)
-    const [Islogin,setIslogin]=useState(true)
+    const [isLogin,setIsLogin]=useState(true)
+    const [token, setToken] = useRecoilState(tokenAtom);
+
     const handleShow = () => {
         setShowOptions(!showOptions)
     }  
     useEffect( ()=>{console.log(currentRoute)},[currentRoute])
     const items=[["스터디 모집","/board" ],["마이페이지","/mypage"],["AboutUs","/aboutus"],["프롤로그","/prologue"]]
-    const drop_item=["Dashboard","Settings","Earnings","Sign out"]
+    const drop_item=["Dashboard","Settings","Earnings"]
+    
+    
+
+
+    const handleLogout = () => {
+		setIsLogin(false);
+		setUserId('');
+		sessionStorage.removeItem('userToken');
+		sessionStorage.removeItem('userId');
+		navigate('/');
+		alert('로그아웃');
+	};
+
+
+
+    
+    
     function NavItem(item,index){
         return(
         <li key={index}>
@@ -25,7 +47,7 @@ export default function NavBar(){
     }
     function NavDropItem(item,index){
         return(
-            <li key={index}>
+            <li key={index} class="text-center">
           <Link href="/"><a class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">{item}</a></Link>
         </li>
         )
@@ -46,7 +68,7 @@ export default function NavBar(){
     }
     </ul>
     {
-        Islogin===true ? (<div class="relative flex items-center md:order-2">
+        token ? (<div class="relative flex items-center md:order-2">
         <button onClick={handleShow} type="button" class="inline-flex justify-center w-full mx-20 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
               <img class="w-8 h-8 rounded-full" src="favicon.ico" alt="user photo"/>
@@ -61,6 +83,9 @@ export default function NavBar(){
               {
                   drop_item.map((item,index)=>NavDropItem(item,index))
               }
+              <li>
+            <button onClick={handleLogout} class="w-full"><a class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Sign out</a></button>
+            </li>
               </ul>
             </div>)}
         </div>) : ( <><LoginModal /><RegisterModal /></>)
