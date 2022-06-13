@@ -1,7 +1,7 @@
 import {PieChart} from "react-minimal-pie-chart"
 import {useState } from "react";
 
-export default function Pie({chart}){
+export default function Pie({title,color}){
     
 
     
@@ -17,7 +17,7 @@ export default function Pie({chart}){
             data={[
                 {
                     value:70,
-                    color:chart[1],
+                    color:color,
                     name:"name1",
                 },
             ]}
@@ -29,7 +29,7 @@ export default function Pie({chart}){
         animate
         startAngle={270}
         animationDuration={1500}
-        label={({dataEntry}) => `${chart[0]} \n  ${dataEntry.value}%`}
+        label={({dataEntry}) => `${title} \n  ${dataEntry.value}%`}
         labelStyle={{
             ...label_Style,
         }}

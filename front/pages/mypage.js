@@ -10,15 +10,13 @@ import {
     userDescriptionAtom,
     userNameAtom,
   } from '../core/atoms/userState';
-  import * as API from '../pages/api/api';
+import * as API from '../pages/api/api';
+import {randomColor,charts_data,charts_color} from "../components/common/UseData"
   export default function mypage()
 {
-    const charts_data=[["출석율","#ffefd5"],["목표 달성률","#8ee69a"],["일일 최다 공부시간","#b999f3"]]
-    const Title_time=["오늘 공부 시간","이번주 공부 시간","전체 공부 시간"]
-    const category_time=[["수학","13:10:03"],["과학","5:31:21"],["경찰학개론","10:31:22"],["헌법","3:03:52"]]
-    const randomColor=["red","blue","green"]
+    // const category_time=[["수학","13:10:03"],["과학","5:31:21"],["경찰학개론","10:31:22"],["헌법","3:03:52"]]
     const userName = useRecoilValue(userNameAtom);
-    const [TimeData,setTimeData]=useState(null)
+    const [timeDatas,setTimeData]=useState(null)
     const [user, setUser] = useRecoilState(userAtom);
 
     const NoSSR = dynamic(
@@ -33,13 +31,14 @@ import {
             const getTimeData = async () => {
               const res = await API.get(`totaltime`,user.id);
               const data = res.data;
-              console.log(data)
+              const data2=[data.studyTimeADay,data.totalStudyTime,data.weekStudyTime]
 
-              setTimeData(data);
+              setTimeData(data2);
             };
+
             getTimeData();
           } catch (err) {
-            console.log('프로필이 없습니다.', err);
+            console.log('시간을 가져오는데 실패하였습니다.', err);
           }
       }, []);
     return(
@@ -50,7 +49,7 @@ import {
         </div>
         <div class="flex justify-between min-w-[1000px]">
         {
-            Title_time.map((title,index)=> <TimeBox title={title} color={randomColor[index]}/>)
+            timeDatas?.map((time,index)=> <TimeBox index={index} color={randomColor[Math.round((Math.random()*15)%14)]} timeData={time}/>)
         }
         
         </div>
@@ -66,20 +65,20 @@ import {
         <BoldText Text={"주완님의 공부 기록 통계"}/>
             <div class="flex justify-between mt-[30px] min-w-[1000px]">
                 {
-                    charts_data.map((chart)=>(
+                    charts_data.map((title,index)=>(
                     <div class="mr-[30px]">
-                    <Pie chart={chart} />
+                    <Pie title={title} color={charts_color[Math.ceil(Math.random()*10)+1]}/>
                     </div>
                     ))
                 }
             </div>
-            <div class="my-[100px] min-w-[1000px]">
+            {/* <div class="my-[100px] min-w-[1000px]">
                 
                     {
                         category_time.map((category)=>(<CategoryBox category={category} />))
                     }
                     
-            </div>
+            </div> */}
         </div>
     </div>)
 }
