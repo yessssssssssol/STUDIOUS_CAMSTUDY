@@ -1,13 +1,27 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
-import { createRoot } from 'react-dom/client';
 
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import '@tensorflow/tfjs';
+import AlertModal from '../common/AlertModal';
 
 class AI extends React.Component {
   videoRef = React.createRef();
   canvasRef = React.createRef();
+
+  state = {
+    userIsHear: false,
+  };
+  handleUserIsHear = () => {
+    this.setState(() => ({
+      userIsHear: true,
+    }));
+  };
+
+  handleUserIsNotHear = () => {
+    this.setState(() => ({
+      userIsHear: false,
+    }));
+  };
 
   componentDidMount() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -48,39 +62,22 @@ class AI extends React.Component {
   };
 
   renderPredictions = (predictions) => {
-    const ctx = this.canvasRef.current.getContext('2d');
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // Font options.
-    const font = '16px sans-serif';
-    ctx.font = font;
-    ctx.textBaseline = 'top';
     predictions.forEach((prediction) => {
-      const x = prediction.bbox[0];
-      const y = prediction.bbox[1];
-      const width = prediction.bbox[2];
-      const height = prediction.bbox[3];
-      // Draw the bounding box.
-      ctx.strokeStyle = '#00FFFF';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(x, y, width, height);
-      // Draw the label background.
-      ctx.fillStyle = '#00FFFF';
-      const textWidth = ctx.measureText(prediction.class).width;
-      const textHeight = parseInt(font, 10); // base 10
-      ctx.fillRect(x, y, textWidth + 4, textHeight + 4);
-    });
-
-    predictions.forEach((prediction) => {
-      const x = prediction.bbox[0];
-      const y = prediction.bbox[1];
-      // Draw the text last to ensure it's on top.
-      ctx.fillStyle = '#000000';
-      ctx.fillText(prediction.class, x, y);
-      // 웹캠에서 person을 인식할 경우
       if (prediction.class === 'person') {
         console.log('person');
+        this.handleUserIsHear();
+        console.log(this.state);
+      } else {
+        console.log('Not person!');
+        this.handleUserIsNotHear();
+        console.log(this.state);
       }
     });
+    if (predictions.length === 0) {
+      console.log('No class');
+      this.handleUserIsNotHear();
+      console.log(this.state);
+    }
   };
 
   render() {
@@ -102,6 +99,7 @@ class AI extends React.Component {
             height="500"
           />
         </video>
+        <AlertModal userState={this.state.userIsHear} />
       </div>
     );
   }
