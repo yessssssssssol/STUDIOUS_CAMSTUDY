@@ -113,9 +113,20 @@ class UserDailySheetService {
         const weekAchievementRate = week.rate;
         const weekStudyTime = week.time;
 
+        const now = ChangeDate.getCurrentDate();
+        const todaySheet = getSheets.filter((sheet) => sheet.date === now);
+        let studyTimeADay = todaySheet[0].studyTimeADay;
+        console.log(todaySheet, now);
+        if (!studyTimeADay) {
+            const errorMessage = '금일 시트를 찾을 수 없습니다.';
+            return errorMessage;
+        } else if (studyTimeADay === ' ') {
+            studyTimeADay = '00:00:00';
+        }
+
         // console.log(total, week);
 
-        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime };
+        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
