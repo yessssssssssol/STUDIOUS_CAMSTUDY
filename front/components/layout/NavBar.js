@@ -5,15 +5,15 @@ import RegisterModal from '../user/RegisterModal';
 import {useRouter} from 'next/router'
 import { tokenAtom } from "../../core/atoms/userState";
 import { useRecoilState, useRecoilValue } from 'recoil';
-
+import {useUserActions} from "../../utils/hooks/useUserAction"
 export default function NavBar(){
 
     const router = useRouter();
     const currentRoute = router.pathname;
 
     const [showOptions, setShowOptions] = useState(false)
-    const [isLogin,setIsLogin]=useState(true)
     const [token, setToken] = useRecoilState(tokenAtom);
+    const userActions = useUserActions();
 
     const handleShow = () => {
         setShowOptions(!showOptions)
@@ -21,17 +21,11 @@ export default function NavBar(){
     useEffect( ()=>{console.log(currentRoute)},[currentRoute])
     const items=[["스터디 모집","/board" ],["마이페이지","/mypage"],["AboutUs","/aboutus"],["프롤로그","/prologue"]]
     const drop_item=["Dashboard","Settings","Earnings"]
-    
-    
-
 
     const handleLogout = () => {
-		setIsLogin(false);
-		setUserId('');
-		sessionStorage.removeItem('userToken');
-		sessionStorage.removeItem('userId');
-		navigate('/');
-		alert('로그아웃');
+		userActions.logout().catch((err) => {
+            console.log(err);
+          });
 	};
 
 

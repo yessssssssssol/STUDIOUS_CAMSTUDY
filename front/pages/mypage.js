@@ -50,7 +50,7 @@ import {
         </div>
         <div class="flex justify-between min-w-[1000px]">
         {
-            Title_time.map((title,index)=> <TimeBox Title={title} color={randomColor[index]}/>)
+            Title_time.map((title,index)=> <TimeBox title={title} color={randomColor[index]}/>)
         }
         
         </div>
