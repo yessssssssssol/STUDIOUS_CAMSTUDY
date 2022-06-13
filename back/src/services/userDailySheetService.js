@@ -23,7 +23,7 @@ class UserDailySheetService {
 
         const newSheets = userSheets.map((sheet) => {
             const { id, timeGoal } = sheet;
-            console.log(timeGoal);
+            // console.log(timeGoal);
             if (timeGoal === '00:00:00') {
                 return {
                     id,
