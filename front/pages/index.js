@@ -1,3 +1,11 @@
+import Helmet from '../components/layout/Helmet';
+
+
 export default function Home() {
-  return <h1 className='text-3xl font-bold underline'>Hello world!</h1>;
+  return (
+    <div>
+      <Helmet title='HOME' />
+      <h1 className='text-3xl font-bold underline'>Hello world!</h1>
+    </div>
+  );
 }
