@@ -6,24 +6,28 @@ import {useRouter} from 'next/router'
 import { tokenAtom } from "../../core/atoms/userState";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {useUserActions} from "../../utils/hooks/useUserAction"
-
+import {
+    userAtom,
+  } from '../../core/atoms/userState';
+import { dropboxModalState } from '../../core/atoms/modalState';
+import {items,drop_item} from "../common/UseData"
 export default function NavBar(){
 
     const router = useRouter();
     const currentRoute = router.pathname;
     const ref = useRef(null)
-    const [showOptions, setShowOptions] = useState(false)
+    const [showOptions, setShowOptions] = useRecoilState(dropboxModalState)
     const [token, setToken] = useRecoilState(tokenAtom);
     const userActions = useUserActions();
+    const userName = useRecoilValue(userAtom);
 
     const handleShow = () => {
-        setShowOptions(!showOptions)
+        setShowOptions(true)
     }  
     useEffect(() => {
         // Bind the event listener
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-          // Unbind the event listener on clean up
           document.removeEventListener("mousedown", handleClickOutside);
         };
       });
@@ -33,8 +37,7 @@ export default function NavBar(){
             setShowOptions(false)
         }
     }
-    const items=[["스터디 모집","/board" ],["마이페이지","/mypage"],["AboutUs","/aboutus"],["프롤로그","/prologue"]]
-    const drop_item=["Dashboard","Settings","Earnings"]
+    
 
     const handleLogout = () => {
 		userActions.logout().catch((err) => {
@@ -43,9 +46,14 @@ export default function NavBar(){
 	};
 
     function NavItem(item,index){
+
+        function make_link(){
+            return <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}} class={`block py-2 px-5 pr-4 pl-3 mx-20 border-b  hover:bg-gray-50  border-0  p-0`}>{item[0]}</a></Link>
+        }
         return(
         <li key={index}>
-          <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}}class={`block py-2 px-5 pr-4 pl-3 mx-20 border-b  hover:bg-gray-50  border-0  p-0`}>{item[0]}</a></Link>
+            {item[0]==="마이페이지" ?token && make_link()  : make_link()}
+          
         </li>
         )
     }
@@ -61,7 +69,7 @@ export default function NavBar(){
   <div class="container flex flex-wrap justify-between items-center mx-auto min-w-[1550px]">
   <Link href="/">
   <a class="flex items-center">
-      <span class="self-center text-xl font-semibold whitespace-nowrap">의자왕👑</span>
+      <span class="self-center text-xl font-bold whitespace-nowrap">의자왕👑</span>
   </a>
   </Link>
   
@@ -80,8 +88,8 @@ export default function NavBar(){
             {showOptions && (
             <div class="absolute top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow" id="dropdown">
               <div class="py-3 px-4" >
-                <span class="block text-sm text-gray-900">Bonnie Green</span>
-                <span class="block text-sm font-medium text-gray-500 truncate">name@flowbite.com</span>
+                <span class="block text-sm text-gray-900">{userName.name}</span>
+                <span class="block text-sm font-medium text-gray-500 truncate">{userName.email}</span>
               </div>
               <ul class="py-1" aria-labelledby="dropdown" >
               {

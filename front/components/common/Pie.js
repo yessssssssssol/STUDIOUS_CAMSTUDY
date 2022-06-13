@@ -28,7 +28,7 @@ export default function Pie({title,color}){
         rounded
         animate
         startAngle={270}
-        animationDuration={1500}
+        animationDuration={2000}
         label={({dataEntry}) => `${title} \n  ${dataEntry.value}%`}
         labelStyle={{
             ...label_Style,

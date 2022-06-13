@@ -14,8 +14,7 @@ import * as API from '../pages/api/api';
 import {randomColor,charts_data,charts_color} from "../components/common/UseData"
   export default function mypage()
 {
-    // const category_time=[["수학","13:10:03"],["과학","5:31:21"],["경찰학개론","10:31:22"],["헌법","3:03:52"]]
-    const userName = useRecoilValue(userNameAtom);
+    const userName = useRecoilValue(userAtom);
     const [timeDatas,setTimeData]=useState(null)
     const [user, setUser] = useRecoilState(userAtom);
 
@@ -25,14 +24,24 @@ import {randomColor,charts_data,charts_color} from "../components/common/UseData
           ssr: false,
         }
       );
-
+      function toMilliseconds(studyTimeADay) {
+        //HH:MM:SS
+        //시 * 60 * 60 * 1000
+        //분 * 60 * 1000
+        //초 * 1000
+        const studyTimeADayNum = Number(studyTimeADay.slice(0, 2)) * 60 * 60 * 1000 + Number(studyTimeADay.slice(3, 5)) * 60 * 1000 + Number(studyTimeADay.slice(6)) * 1000;
+        
+        return studyTimeADayNum/1000;
+    }
       useEffect(() =>  {
+        console.log(userName.name)
         try {
             const getTimeData = async () => {
               const res = await API.get(`totaltime`,user.id);
               const data = res.data;
               const data2=[data.studyTimeADay,data.totalStudyTime,data.weekStudyTime]
-
+              const gitTime=toMilliseconds(data.studyTimeADay)
+              console.log(gitTime)
               setTimeData(data2);
             };
 
