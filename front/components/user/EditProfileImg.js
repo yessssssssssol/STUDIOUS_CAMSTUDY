@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  profileUrlAtom,
-  tokenAtom,
-  userAtom,
-} from '../../core/atoms/userState';
-import * as Api from '../../pages/api/api';
+import { profileUrlAtom, userAtom } from '../../core/atoms/userState';
+import * as API from '../../pages/api/api';
 
 const EditProfileImg = () => {
   const user = useRecoilValue(userAtom);
@@ -17,7 +13,7 @@ const EditProfileImg = () => {
   useEffect(() => {
     try {
       const getUserProfileUrl = async () => {
-        const res = await Api.get('users', user.id);
+        const res = await API.get('users', user.id);
         const data = res.data;
         setProfileUrl(data.profileUrl);
       };
@@ -36,7 +32,7 @@ const EditProfileImg = () => {
     formD.append('img', file);
 
     try {
-      await Api.postImg('user/img', formD);
+      await API.postImg('user/img', formD);
       console.log('이미지 전송에 성공했습니다.');
     } catch (err) {
       console.log('이미지 전송에 실패했습니다.', err);
@@ -50,25 +46,25 @@ const EditProfileImg = () => {
     }
   };
   return (
-    <div className='flex flex-col items-center pb-10'>
-      <div className='my-6'>
+    <div className="flex flex-col items-center pb-10">
+      <div className="my-6">
         <img
-          className='h-40 w-40 rounded-full'
+          className="h-40 w-40 rounded-full"
           src={profileUrl}
-          alt='Rounded avatar'
+          alt="Rounded avatar"
         />
       </div>
       <input
-        type='file'
+        type="file"
         style={{ display: 'none' }}
-        accept='image/jpg,impge/png,image/jpeg'
-        name='profile_img'
+        accept="image/jpg,impge/png,image/jpeg"
+        name="profile_img"
         onChange={handleUpload}
         ref={fileInput}
       />
-      <div className='w-40'>
+      <div className="w-40">
         <button
-          className='w-full text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200'
+          className="w-full text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={() => {
             fileInput.current.click();
             console.log(fileInput);
@@ -77,7 +73,7 @@ const EditProfileImg = () => {
           프로필 업로드
         </button>
         <button
-          className='w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200'
+          className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={() => {
             setProfileUrl(
               'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
@@ -87,7 +83,7 @@ const EditProfileImg = () => {
           프로필 삭제
         </button>
         <button
-          className='w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200'
+          className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={saveEdit}
         >
           프로필 저장
