@@ -57,8 +57,11 @@ class UserDailySheetService {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
         const date = ChangeDate.getCurrentDate(startTime);
+        console.log(id);
+        console.log(date);
 
         const getSheet = await UserDailySheet.getSheet({ id, date });
+        console.log(getSheet);
         const { timeGoal, beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
@@ -90,6 +93,10 @@ class UserDailySheetService {
         } else {
             const timeGoalNum = ChangeDate.toMilliseconds(timeGoal);
             achievementRate = Number((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
+        }
+
+        if (achievementRate > 100) {
+            achievementRate = 100;
         }
 
         const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
@@ -143,6 +150,9 @@ class UserDailySheetService {
         const studyTimeADayNum = ChangeDate.toMilliseconds(studyTimeADay);
         let achievementRate = ((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
 
+        if (achievementRate > 100) {
+            achievementRate = 100;
+        }
         if (timeGoal === '00:00:00') {
             achievementRate = 100;
         }
