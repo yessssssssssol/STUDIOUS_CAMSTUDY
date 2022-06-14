@@ -1,11 +1,12 @@
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import '@tensorflow/tfjs';
 import AlertModal from '../common/AlertModal';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
 const AIFunc = () => {
+  const userRef = useRef(false);
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
   const canvasRef = useRef();
@@ -51,23 +52,34 @@ const AIFunc = () => {
   const renderPredictions = (predictions) => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
-        setUserIsHear(true);
-        console.log('person', userIsHear);
+        // setUserIsHear(true);
+        userRef = true;
+        console.log(userRef);
+        // console.log('person', userIsHear);
       } else {
-        setUserIsHear(false);
-        console.log('Not person!', userIsHear);
+        userRef = false;
+        // setUserIsHear(false);
+        // console.log('Not person!', userIsHear);
       }
     });
     if (predictions.length === 0) {
-      setUserIsHear(false);
-      console.log('No class', userIsHear);
+      userRef = false;
+      console.log(userRef);
+      // setUserIsHear(false);
+      // console.log('No class', userIsHear);
     }
+    // console.log(userIsHear);
   };
 
+  useEffect(() => {
+    setUserIsHear(useRef.current);
+    console.log(userIsHear);
+  }, [userRef]);
+
   return (
-    <div>
+    <div className="w-full py-10 flex justify-center ">
       <video
-        className="size"
+        // className="w-screen h-full"
         autoPlay
         playsInline
         muted
@@ -75,9 +87,14 @@ const AIFunc = () => {
         width="600"
         height="500"
       >
-        <canvas className="size" ref={canvasRef} width="600" height="500" />
+        <canvas
+          // className="w-screen h-full"
+          ref={canvasRef}
+          width="600"
+          height="500"
+        />
       </video>
-      <AlertModal />
+      <AlertModal userRef={userRef} />
     </div>
   );
 };

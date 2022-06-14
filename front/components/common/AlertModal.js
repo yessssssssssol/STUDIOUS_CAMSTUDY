@@ -1,26 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AlertModal = (props) => {
-  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+const AlertModal = (userRef) => {
+  // const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+  let userIsHear = userRef.current;
   const [show, setShow] = useState(false);
   const onClick = () => {
     setShow(!show);
-    console.log(show);
-    console.log('IsHear!', props.userState);
   };
+
+  useEffect(() => {
+    // 자리에 없을 때 모달을 띄운다.
+    if (userIsHear === false) {
+      setShow(true);
+    }
+  }, [userIsHear]);
+
   return (
-    <div>
-      <button
-        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        type="button"
-        onClick={onClick}
-      >
-        Toggle modal
-      </button>
+    <div className="mx-10 my-10 flex justify-center">
       {show && (
-        <div className=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative p-4 w-full max-w-md h-full md:h-auto">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <button
@@ -43,7 +43,8 @@ const AlertModal = (props) => {
                 </h3>
                 <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
                   공부 중이시라면 아래 확인 버튼을 눌러주세요.
-                  <br /> 30초 이내로 누르지 않으시면 타이머가 멈춥니다.
+                  <br /> 30초 이내로 누르지 않으시면 타이머가 멈춥니다. <br />
+                  눈, 코, 입이 모두 화면에 나오게 카메라를 조정해주세요!
                 </p>
                 <button
                   type="button"
