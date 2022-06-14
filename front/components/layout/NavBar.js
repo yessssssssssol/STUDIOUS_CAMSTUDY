@@ -48,37 +48,36 @@ export default function NavBar(){
     function NavItem(item,index){
 
         function make_link(){
-            return <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}} class={`block py-2 px-5 pr-4 pl-3 mx-20 border-b  hover:bg-gray-50  border-0  p-0`}>{item[0]}</a></Link>
+            return <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}} class={`block border-b`}>{item[0]}</a></Link>
         }
         return(
-        <li key={index}>
-            {item[0]==="마이페이지" ?token && make_link()  : make_link()}
-          
+            <ul class="list-none">
+        <li key={index} >
+            {item[0]==="마이페이지" ?token && make_link(item[0])  : make_link(item[0])}
         </li>
+        </ul>
         )
     }
     function NavDropItem(item,index){
         return(
+            
             <li key={index} class="text-center">
-          <Link href="/"><a class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">{item}</a></Link>
+          <Link href="/"><a class="block py-2 px-4 text-sm text-gray-700">{item}</a></Link>
         </li>
         )
     }
     return (
-<nav class="bg-white border-gray-200 px-2 py-5 rounded min-w-[1000px]">
-  <div class="container flex flex-wrap justify-between items-center mx-auto min-w-[1550px]">
+<nav class="bg-white   border-gray-200 px-2 py-5 rounded min-w-[500px]">
+  <div class="items-center flex justify-between mx-auto min-w-[500px]">
   <Link href="/">
-  <a class="flex items-center">
-      <span class="self-center text-xl font-bold whitespace-nowrap">의자왕👑</span>
+  <a>
+      <span class="center text-xl font-bold whitespace-nowrap">의자왕👑</span>
   </a>
   </Link>
-  
-  <div class="items-center flex w-auto order-1">
-    <ul class="flex  mt-4 flex-row space-x-8 mt-0 text-sm font-medium">
+
       {
             items.map((item,index)=>NavItem(item,index))
     }
-    </ul>
     {
         token ? (<div class="relative flex items-center md:order-2" ref={ref}>
         <button onClick={handleShow} type="button"  class="inline-flex justify-center w-full mx-20 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
@@ -100,10 +99,9 @@ export default function NavBar(){
             </li>
               </ul>
             </div>)}
-        </div>) : ( <><LoginModal /><RegisterModal /></>)
+        </div>) : ( <span class="flex"><LoginModal /><RegisterModal /></span>)
     }
          
-  </div>
   </div>
 </nav>
     )

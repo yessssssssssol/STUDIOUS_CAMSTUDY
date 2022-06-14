@@ -25,6 +25,6 @@ export default function Heatmap () {
     }]
     
     return(
-         <CalendarHeatmap data={data} overview={"day"}></CalendarHeatmap>
+         <CalendarHeatmap data={data} overview={"week"}></CalendarHeatmap>
     )
 }
