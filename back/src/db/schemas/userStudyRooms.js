@@ -12,7 +12,7 @@ const userStudyRoomsSchema = new Schema({
         required: true,
     },
     //방 사진
-    roomPhoto: {
+    roomImg: {
         type: String,
         required: true,
     },
@@ -31,18 +31,33 @@ const userStudyRoomsSchema = new Schema({
         type: String,
         required: true,
     },
+    //방 멤버수
+    membersNum: {
+        type: Number,
+        required: true,
+    },
     //방 멤버
     members: {
         type: Array,
         required: true,
     },
     //스터디 기간: 시작
-    startStudyTime: {
+    startStudyDay: {
         type: String,
         required: true,
     },
     //스터디 기간: 끝
-    endStudyTime: {
+    endStudyDay: {
+        type: String,
+        required: true,
+    },
+    // 스터디 집중시간 시작
+    focusTimeStart: {
+        type: String,
+        required: true,
+    },
+    // 스터디 집중시간 끝
+    focusTimeEnd: {
         type: String,
         required: true,
     },
@@ -63,6 +78,6 @@ const userStudyRoomsSchema = new Schema({
     },
 });
 
-const TuserStudyRoomsModel = model('userStudyRooms', userStudyRoomsSchema);
+const UserStudyRoomsModel = model('userStudyRooms', userStudyRoomsSchema);
 
-export { TuserStudyRoomsModel };
+export { UserStudyRoomsModel };
