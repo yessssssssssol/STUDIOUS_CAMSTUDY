@@ -1,33 +1,32 @@
+import { useEffect } from 'react'
 import CalendarHeatmap from 'reactjs-calendar-heatmap'
 
-export default function Heatmap () {
-    var data = [{
-        "date": "2022-01-15",
-        "total": 5640,
-        "details": [ {
-          "name": "공부시간 ",
-          "value": 3500
-        },
-        {
+export default function Heatmap ({gittimes}) {
+    
+    var result=[]
+
+    gittimes.length==0?(result.push({
+        "date": "2021-05-15",
+        "total": 0,
+        "details": [{
             "name": "공부시간 ",
-            "value": 2140
-        }
-    ]},
-    {
-        "date": "2022-01-20",
-        "total": 5640,
-        "details": [ {
-          "name": "수학 ",
-          "value": 2500
-        },
-        {
-            "name": "과학 ",
-            "value": 2140
-        }
-    ]}
-]
+            "value": 0
+          }]
+    }))
+    :(gittimes.map((gittime)=>{(result.push({
+        "date": gittime[0],
+        "total": gittime[1],
+        "details": [{
+            "name": "공부시간 ",
+            "value": gittime[1]
+          }]
+    }))
+}))
+
+    
+    var data=result
     
     return(
-         <CalendarHeatmap data={data}></CalendarHeatmap>
+         <CalendarHeatmap data={data} overview={"year"}></CalendarHeatmap>
     )
 }

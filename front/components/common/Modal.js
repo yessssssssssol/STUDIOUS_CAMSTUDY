@@ -1,21 +1,40 @@
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState,useRecoilState } from 'recoil';
 import {
   loginModalState,
   registerModalState,
   editProfileModalState,
 } from '../../core/atoms/modalState';
-
+import { useEffect,useRef } from 'react';
 export default function Modal(props) {
   const setLoginModal = useSetRecoilState(loginModalState);
   const setRegisterModal = useSetRecoilState(registerModalState);
   const setProfileModal = useSetRecoilState(editProfileModalState);
+  const [showModalRegister, setShowModalRegister] = useRecoilState(registerModalState);
+  const [showModalLogin, setShowModalLogin] = useRecoilState(loginModalState);
 
+  const ref = useRef(null);
+  useEffect(() => {
+    console.log(ref)
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
+  function handleClickOutside(event){
+    if(ref.current && !ref.current.contains(event.target)){
+        setShowModalRegister(false)
+        setShowModalLogin(false)
+    }
+}
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-auto my-6 mx-auto max-w-3xl'>
           {/*content*/}
-          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
+          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none' ref={ref}>
             {/*header*/}
             <div className='flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t'>
               <h3 className='text-xl font-semibold'>{props.title}</h3>
