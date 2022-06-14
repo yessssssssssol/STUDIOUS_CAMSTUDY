@@ -4,13 +4,7 @@ import {useState } from "react";
 export default function Pie({title,color}){
     
 
-    
-    const label_Style = {
-            fontSize:"7px",
-            paddingTop:"50px",
-            fontWeight:"500",
-            whiteSpace: "pre-line"
-    }
+
     
     return(
         <PieChart
@@ -28,10 +22,11 @@ export default function Pie({title,color}){
         rounded
         animate
         startAngle={270}
-        animationDuration={2000}
+        animationDuration={3000}
         label={({dataEntry}) => `${title} \n  ${dataEntry.value}%`}
         labelStyle={{
-            ...label_Style,
+            fontSize:"7px",      
+            fontWeight:"500",
         }}
         center={[50,50]}
         labelPosition={0}

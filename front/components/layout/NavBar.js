@@ -14,7 +14,6 @@ import {items,drop_item} from "../common/UseData"
 export default function NavBar(){
 
     const router = useRouter();
-    const currentRoute = router.pathname;
     const ref = useRef(null)
     const [showOptions, setShowOptions] = useRecoilState(dropboxModalState)
     const [token, setToken] = useRecoilState(tokenAtom);
@@ -47,31 +46,35 @@ export default function NavBar(){
 
     function NavItem(item,index){
 
-        function make_link(){
-            return <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}} class={`block border-b`}>{item[0]}</a></Link>
+        function make_link(invisible)
+        {
+            return <Link href={item[1]}><a style={{color : router.pathname===item[1] ? "blue": "black"}} class={`${invisible} block border-b`}>{item[0]}</a></Link>
         }
+
+        const invisible="invisible"
+
         return(
-            <ul class="list-none">
-        <li key={index} >
-            {item[0]==="마이페이지" ?token && make_link(item[0])  : make_link(item[0])}
-        </li>
+        <ul class="list-none">
+            <li key={index} >
+                {item[0]==="마이페이지"?(token ? make_link(): make_link(invisible))
+                :make_link()}
+            </li>
         </ul>
         )
     }
     function NavDropItem(item,index){
         return(
-            
             <li key={index} class="text-center">
           <Link href="/"><a class="block py-2 px-4 text-sm text-gray-700">{item}</a></Link>
         </li>
         )
     }
     return (
-<nav class="bg-white   border-gray-200 px-2 py-5 rounded min-w-[500px]">
+<nav class="bg-white   border-gray-200 px-2 py-5 rounded min-w-[690px]">
   <div class="items-center flex justify-between mx-auto min-w-[500px]">
   <Link href="/">
-  <a>
-      <span class="center text-xl font-bold whitespace-nowrap">의자왕👑</span>
+  <a class="ml-[15px]">
+      <span class="center text-3xl font-bold whitespace-nowrap">의자왕👑</span>
   </a>
   </Link>
 
@@ -80,7 +83,7 @@ export default function NavBar(){
     }
     {
         token ? (<div class="relative flex items-center md:order-2" ref={ref}>
-        <button onClick={handleShow} type="button"  class="inline-flex justify-center w-full mx-20 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
+        <button onClick={handleShow} type="button"  class="inline-flex justify-center w-full mx-10 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="menu-button" aria-expanded="true" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
               <img class="w-8 h-8 rounded-full" src="favicon.ico" alt="user photo"/>
             </button>
@@ -99,7 +102,7 @@ export default function NavBar(){
             </li>
               </ul>
             </div>)}
-        </div>) : ( <span class="flex"><LoginModal /><RegisterModal /></span>)
+        </div>) : ( <span class="flex mr-[15px]"><LoginModal /><RegisterModal /></span>)
     }
          
   </div>
