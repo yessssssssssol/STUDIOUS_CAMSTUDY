@@ -43,18 +43,25 @@ export default function NavBar() {
   function NavItem(item, index) {
     function make_link(invisible) {
       return (
-        <Link href={item[1]}>
-          <a
-            style={{ color: router.pathname === item[1] ? 'blue' : 'black' }}
-            class={`${invisible} block border-b`}
-          >
-            {item[0]}
-          </a>
-        </Link>
+        <>
+          {router.pathname === item[1] ? (
+            <Link href={item[1]}>
+              <a
+                class={`${invisible} font-bold text-orange-300 contrast-50 block sm:text-sm md:text-xl  `}
+              >
+                {item[0]}👑
+              </a>
+            </Link>
+          ) : (
+            <Link href={item[1]}>
+              <a class={`${invisible} block sm:text-sm md:text-xl `}>
+                {item[0]}
+              </a>
+            </Link>
+          )}
+        </>
       );
     }
-
-    const invisible = 'invisible';
 
     return (
       <ul class="list-none">
@@ -67,6 +74,7 @@ export default function NavBar() {
         </li>
       </ul>
     );
+    const invisible = 'invisible';
   }
   function NavDropItem(item, index) {
     return (
@@ -78,8 +86,8 @@ export default function NavBar() {
     );
   }
   return (
-    <nav class="bg-white   border-gray-200 px-2 py-5 rounded min-w-[690px]">
-      <div class="items-center flex justify-between mx-auto min-w-[500px]">
+    <nav class="bg-white border-gray-200 px-2 py-5 rounded">
+      <div class="items-center flex justify-between mx-auto">
         <Link href="/">
           <a class="ml-[15px]">
             <span class="center text-3xl font-bold whitespace-nowrap">

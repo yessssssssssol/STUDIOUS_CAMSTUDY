@@ -39,7 +39,7 @@ export const category_time = [
 ];
 export const items = [
   ['스터디 모집', '/board'],
-  ['프롤로그', '/prologue '],
+  ['프롤로그', '/prologue'],
   ['AboutUs', '/aboutus'],
   ['마이페이지', '/mypage'],
 ];
