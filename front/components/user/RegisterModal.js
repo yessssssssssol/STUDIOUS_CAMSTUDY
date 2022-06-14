@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState , useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 
@@ -9,8 +9,8 @@ import { registerModalState } from '../../core/atoms/modalState';
 const RegisterModal = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useRecoilState(registerModalState);
-
   const modalTitle = 'Register';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -47,8 +47,12 @@ const RegisterModal = () => {
   const isNameValid = name.length > 0;
   const isFormValid = isEmailValid && isPasswordValid && isNameValid;
 
+
+  
+
+
   return (
-    <>
+    <div >
       <button
         className='bg-gray-400 text-white active:bg-gray-600 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150'
         type='button'
@@ -57,8 +61,9 @@ const RegisterModal = () => {
         {modalTitle}
       </button>
       {showModal && (
-        <Modal title={modalTitle}>
-          <form className='space-y-6 w-80' onSubmit={submitHandler}>
+        <Modal title={modalTitle} >
+        <div >
+          <form className='space-y-6 w-80' onSubmit={submitHandler} >
             <div className='w-full'>
               <label
                 htmlFor='email'
@@ -127,9 +132,11 @@ const RegisterModal = () => {
               회원가입
             </button>
           </form>
+          </div>
         </Modal>
       )}
-    </>
+          </div>
+
   );
 };
 
