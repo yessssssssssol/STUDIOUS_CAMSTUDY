@@ -1,23 +1,17 @@
 import {PieChart} from "react-minimal-pie-chart"
 import {useState } from "react";
 
-export default function Pie({chart}){
+export default function Pie({title,color}){
     
 
-    
-    const label_Style = {
-            fontSize:"7px",
-            paddingTop:"50px",
-            fontWeight:"500",
-            whiteSpace: "pre-line"
-    }
+
     
     return(
         <PieChart
             data={[
                 {
                     value:70,
-                    color:chart[1],
+                    color:color,
                     name:"name1",
                 },
             ]}
@@ -28,10 +22,11 @@ export default function Pie({chart}){
         rounded
         animate
         startAngle={270}
-        animationDuration={1500}
-        label={({dataEntry}) => `${chart[0]} \n  ${dataEntry.value}%`}
+        animationDuration={3000}
+        label={({dataEntry}) => `${title} \n  ${dataEntry.value}%`}
         labelStyle={{
-            ...label_Style,
+            fontSize:"7px",      
+            fontWeight:"500",
         }}
         center={[50,50]}
         labelPosition={0}

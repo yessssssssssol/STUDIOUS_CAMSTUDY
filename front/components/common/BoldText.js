@@ -1,9 +1,10 @@
-export default function BoldText({Text}){
+export default function BoldText({text}){
+
 
     return(
         <div>
             <div class="font-bold text-3xl">
-            {Text}
+            {text}
             </div>
         </div>
     )
