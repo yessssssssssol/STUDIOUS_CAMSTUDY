@@ -5,11 +5,10 @@ import { aiAtom } from '../../core/atoms/aiState';
 const AlertModal = (props) => {
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const [show, setShow] = useState(false);
-  //   setUserIsHear(userState);
   const onClick = () => {
     setShow(!show);
     console.log(show);
-    console.log(props);
+    console.log('IsHear!', props.userState);
   };
   return (
     <div>
