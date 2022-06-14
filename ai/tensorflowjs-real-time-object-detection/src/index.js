@@ -80,28 +80,34 @@ class App extends React.Component {
       // 웹캠에서 person을 인식할 경우
       if (prediction.class === 'person') {
         console.log('person');
+      } else {
+        console.log('Not person!');
       }
     });
+    if (predictions.length === 0) {
+      console.log('No class');
+    }
   };
 
   render() {
     return (
       <div>
         <video
-          className="size"
+          className='size'
           autoPlay
           playsInline
           muted
           ref={this.videoRef}
-          width="600"
-          height="500"
-        />
-        <canvas
-          className="size"
-          ref={this.canvasRef}
-          width="600"
-          height="500"
-        />
+          width='600'
+          height='500'
+        >
+          <canvas
+            className='size'
+            ref={this.canvasRef}
+            width='600'
+            height='500'
+          />
+        </video>
       </div>
     );
   }
