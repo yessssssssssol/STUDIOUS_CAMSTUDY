@@ -14,3 +14,12 @@ export const editProfileModalState = atom({
   key: 'profileModalState',
   default: false,
 });
+
+export const dropboxModalState = atom({
+  key: 'dropboxModalState',
+  default: false,
+});
+export const menuModalState = atom({
+  key: 'menuModalState',
+  default: false,
+});
