@@ -64,11 +64,11 @@ export default function mypage() {
   }, []);
 
   return (
-    <div class="flex-col mx-[350px] py-[50px]">
-      <div class="min-w-[350px]">
+    <div class="flex-col  py-[50px]">
+      <div class="">
         <BoldText text={`${userName?.name}님의 최근 공부시간`} />
       </div>
-      <div class="flex justify-between">
+      <div class="flex flex-col items-center  lg:flex-row justify-evenly">
         {timeDatas?.map((time, index) => (
           <TimeBox
             index={index}
@@ -77,18 +77,18 @@ export default function mypage() {
           />
         ))}
       </div>
-      <div class="min-w-[350px] pt-[50px]">
+      <div class="pt-[50px] ">
         <BoldText text={`${userName?.name}님의 공부기록`} />
         <div class="pt-[10px]">
           <NoSSR gittimes={gittime} />
         </div>
       </div>
 
-      <div class="min-w-[350px] pt-[50px]">
+      <div class=" pt-[50px]">
         <BoldText text={`${userName?.name}의 공부 기록 통계`} />
-        <div class="flex justify-between mt-[30px] min-w-[700px]">
+        <div class="flex flex-col items-center  lg:flex-row justify-evenly">
           {charts_data.map((title) => (
-            <div class="mr-[30px]">
+            <div class="py-8 lg:mr-[30px]">
               <Pie
                 title={title}
                 color={charts_color[Math.ceil(Math.random() * 10) + 1]}

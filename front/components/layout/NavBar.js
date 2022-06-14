@@ -7,12 +7,13 @@ import { tokenAtom } from '../../core/atoms/userState';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
-import { dropboxModalState } from '../../core/atoms/modalState';
+import { dropboxModalState, menuModalState } from '../../core/atoms/modalState';
 import { items, drop_item } from '../common/UseData';
 export default function NavBar() {
   const router = useRouter();
   const ref = useRef(null);
   const [showOptions, setShowOptions] = useRecoilState(dropboxModalState);
+  const [menuBar, setMenuBar] = useRecoilState(menuModalState);
   const [token, setToken] = useRecoilState(tokenAtom);
   const userActions = useUserActions();
   const userName = useRecoilValue(userAtom);
@@ -20,8 +21,12 @@ export default function NavBar() {
   const handleShow = () => {
     setShowOptions(true);
   };
+  const handleMenuBar = () => {
+    setMenuBar(true);
+  };
   useEffect(() => {
     // Bind the event listener
+    console.log(menuBar);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -31,6 +36,7 @@ export default function NavBar() {
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowOptions(false);
+      setMenuBar(false);
     }
   }
 
@@ -47,14 +53,16 @@ export default function NavBar() {
           {router.pathname === item[1] ? (
             <Link href={item[1]}>
               <a
-                class={`${invisible} font-bold text-orange-300 contrast-50 block sm:text-sm md:text-xl  `}
+                class={`${invisible} hidden md:block font-bold rounded-lg  text-orange-300 px-2  `}
               >
                 {item[0]}👑
               </a>
             </Link>
           ) : (
             <Link href={item[1]}>
-              <a class={`${invisible} block sm:text-sm md:text-xl `}>
+              <a
+                class={`${invisible} hidden md:block px-2 rounded-lg hover:bg-sky-100 contrast-100`}
+              >
                 {item[0]}
               </a>
             </Link>
@@ -62,6 +70,7 @@ export default function NavBar() {
         </>
       );
     }
+    const invisible = 'invisible';
 
     return (
       <ul class="list-none">
@@ -74,20 +83,29 @@ export default function NavBar() {
         </li>
       </ul>
     );
-    const invisible = 'invisible';
   }
   function NavDropItem(item, index) {
     return (
-      <li key={index} class="text-center">
-        <Link href="/">
-          <a class="block py-2 px-4 text-sm text-gray-700">{item}</a>
-        </Link>
-      </li>
+      <>
+        {index === undefined ? (
+          <li key={index} class="text-center">
+            <Link href="/">
+              <a class="block py-2 px-4 text-sm text-gray-700">{item}</a>
+            </Link>
+          </li>
+        ) : (
+          <li key={index} class="text-center">
+            <Link href={item[1]}>
+              <a class="block py-2 px-4 text-sm text-gray-700">{item[0]}</a>
+            </Link>
+          </li>
+        )}
+      </>
     );
   }
   return (
     <nav class="bg-white border-gray-200 px-2 py-5 rounded">
-      <div class="items-center flex justify-between mx-auto">
+      <div class=" items-center flex justify-between mx-auto ">
         <Link href="/">
           <a class="ml-[15px]">
             <span class="center text-3xl font-bold whitespace-nowrap">
@@ -99,6 +117,37 @@ export default function NavBar() {
         {items.map((item, index) => NavItem(item, index))}
         {token ? (
           <div class="relative flex items-center md:order-2" ref={ref}>
+            <button
+              onClick={handleMenuBar}
+              type="button"
+              class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <svg
+                class="hidden w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
             <button
               onClick={handleShow}
               type="button"
@@ -114,6 +163,7 @@ export default function NavBar() {
                 alt="user photo"
               />
             </button>
+
             {showOptions && (
               <div
                 class="absolute top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow"
@@ -128,7 +178,7 @@ export default function NavBar() {
                   </span>
                 </div>
                 <ul class="py-1" aria-labelledby="dropdown">
-                  {drop_item.map((item, index) => NavDropItem(item, index))}
+                  {drop_item.map((item) => NavDropItem(item))}
                   <li>
                     <button onClick={handleLogout} class="w-full">
                       <a class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">
@@ -137,6 +187,11 @@ export default function NavBar() {
                     </button>
                   </li>
                 </ul>
+              </div>
+            )}
+            {menuBar && (
+              <div class="absolute top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow">
+                {items.map((item, index) => NavDropItem(item, index))}
               </div>
             )}
           </div>

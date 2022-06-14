@@ -16,6 +16,10 @@ export const editProfileModalState = atom({
 });
 
 export const dropboxModalState = atom({
-    key : 'dropboxModalState',
-    default : false
-})
+  key: 'dropboxModalState',
+  default: false,
+});
+export const menuModalState = atom({
+  key: 'menuModalState',
+  default: false,
+});
