@@ -20,17 +20,23 @@ const CreateStudyRoom = () => {
   const [number, setNumber] = useState(0);
 
   return (
-    <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-      <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
+    <div className="mx-20 my-6">
+      {/* <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
         Feedback
       </h2>
       <p className="leading-relaxed mb-5 text-gray-600">
         Post-ironic portland shabby chic echo park, banjo fashion axe
-      </p>
+      </p> */}
       <div className="relative mb-4">
-        <label htmlFor="name" className="leading-7 text-sm text-gray-600">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
           스터디 이름
         </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 이름을 입력하세요.
+        </p>
         <input
           type="text"
           id="name"
@@ -38,20 +44,106 @@ const CreateStudyRoom = () => {
         />
       </div>
       <div className="relative mb-4">
-        <label className="leading-7 text-sm text-gray-600">Email</label>
-        <input className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          해시태그
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디를 대표하는 해시태그를 입력해주세요.
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
       </div>
       <div className="relative mb-4">
-        <label className="leading-7 text-sm text-gray-600">Message</label>
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          스터디 규칙
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 규칙을 입력해주세요.
+        </p>
         <textarea className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
       </div>
+
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          스터디 종류
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 종류를 선택해주세요.
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
+      </div>
+
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          스터디 인원
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 참여 인원을 입력해주세요(최대 4명까지 참여가능합니다.)
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
+      </div>
+
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          스터디 기간
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 기간을 입력해주세요. 스터디 기간이 지나면 자동으로 방이
+          사라집니다.
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
+      </div>
+
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          집중시간
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 집중시간을 입력해주세요.(스터디 모집시 사용됩니다.)
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
+      </div>
+
       <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-        Button
+        생성
       </button>
-      <p className="text-xs text-gray-500 mt-3">
-        Chicharrones blog helvetica normcore iceland tousled brook viral
-        artisan.
-      </p>
     </div>
   );
 };
