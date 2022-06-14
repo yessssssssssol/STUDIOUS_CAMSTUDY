@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import { uploadHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
+import { userStudyRoomsService } from '../services/userStudyRoomsService';
 
 const userStudyRoomsRouter = Router();
 
@@ -28,7 +29,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, uploadHandler.single('ro
         const { roomName, roomDesc, open, membersNum, members, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, hashTags } = req.body;
         const roomId = uuid().replace(/-/g, '');
 
-        if (roomImg === undefined) roomImg = null;
+        if (roomImg === undefined) roomImg = '사진 정보가 없습니다.';
         if (roomName && roomDesc && membersNum && members && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
             return '방 정보를 제대로 입력해주세요';
         }

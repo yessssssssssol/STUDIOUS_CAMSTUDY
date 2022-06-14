@@ -1,8 +1,8 @@
 import { UserStudyRoomsModel } from '../schemas/userStudyRooms';
 
 class UserStudyRooms {
-    static create({ newLog }) {
-        return UserStudyRoomsModel.create(newLog);
+    static create({ newRoomInfo }) {
+        return UserStudyRoomsModel.create(newRoomInfo);
     }
 
     staticfindAll({ user_id }) {
