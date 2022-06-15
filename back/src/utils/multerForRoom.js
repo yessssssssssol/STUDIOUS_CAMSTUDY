@@ -6,7 +6,7 @@ const bucket = process.env.GCS_BUCKET;
 const projectId = process.env.GCLOUD_PROJECT;
 const keyFilename = process.env.GCS_KEYFILE;
 
-const uploadHandler = multer({
+const uploadRoomImgHandler = multer({
     storage: multerGoogleStorage.storageEngine({
         autoRetry: true,
         maxRetries: 3,
@@ -14,7 +14,7 @@ const uploadHandler = multer({
         projectId: projectId,
         keyFilename: keyFilename,
         filename: (req, file, cb) => {
-            cb(null, `images/${Date.now()}_${req.currentUserId}`);
+            cb(null, `roomImg/${Date.now()}_${req.currentUserId}`);
         },
     }),
     limits: { fileSize: 2 * 1024 * 1024 },
@@ -27,4 +27,4 @@ const gcs = new Storage({
 
 const gcsBucket = gcs.bucket(bucket);
 
-export { uploadHandler, gcsBucket };
+export { uploadRoomImgHandler, gcsBucket };
