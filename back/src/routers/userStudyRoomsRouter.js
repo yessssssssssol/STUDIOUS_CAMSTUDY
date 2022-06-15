@@ -7,6 +7,7 @@ import { userStudyRoomsService } from '../services/userStudyRoomsService';
 
 const userStudyRoomsRouter = Router();
 
+// 스터디룸/게시글 생성
 userStudyRoomsRouter.post('/studyroom', login_required, uploadRoomImgHandler.single('roomImg'), async function (req, res, next) {
     try {
         const id = req.currentUserId;
@@ -98,6 +99,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, uploadRoomImgHandler.sin
     }
 });
 
+// 스터디룸/게시글 수정
 userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.single('roomImg'), async function (req, res, next) {
     try {
         let updateChange = {};
@@ -125,10 +127,23 @@ userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.sing
     }
 });
 
+// 스터디룸 하나 가저오기(roomId를 통해)
 userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
     try {
         const roomId = req.params.roomId;
         const getInfo = await userStudyRoomsService.getRoom({ roomId });
+
+        res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 스터디룸 가저오기(내가 생성한 스터디룸, id를 통해)
+userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        const getInfo = await userStudyRoomsService.getRooms({ id });
 
         res.status(200).json(getInfo);
     } catch (error) {

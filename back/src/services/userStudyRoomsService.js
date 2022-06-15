@@ -2,7 +2,6 @@ import { UserStudyRooms } from '../db';
 
 class userStudyRoomsService {
     static createRoom({ newRoomInfo }) {
-        console.log('service단');
         return UserStudyRooms.create({ newRoomInfo });
     }
 
@@ -11,7 +10,11 @@ class userStudyRoomsService {
     }
 
     static getRoom({ roomId }) {
-        return UserStudyRooms.get({ roomId });
+        return UserStudyRooms.find({ roomId });
+    }
+
+    static getRooms({ id }) {
+        return UserStudyRooms.findAllMine({ id });
     }
 }
 

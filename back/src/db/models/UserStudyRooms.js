@@ -10,24 +10,28 @@ class UserStudyRooms {
         return UserStudyRoomsModel.findOneAndUpdate({ roomId }, updateChange, option);
     }
 
-    static get({ roomId }) {
+    static find({ roomId }) {
         return UserStudyRoomsModel.findOne({ roomId });
     }
 
-    static findAll({ user_id }) {
-        return UserStudyRoomsModel.find({ id: user_id });
+    static findAllMine({ id }) {
+        return UserStudyRoomsModel.find({ id });
     }
 
-    static findAllADay({ user_id, beginTime, finishTime }) {
-        return UserStudyRoomsModel.find({
-            id: user_id,
-            $or: [{ startTimeNum: { $gte: beginTime, $lte: finishTime } }, { endTimeNum: { $gte: beginTime, $lte: finishTime } }],
-        });
-    }
+    // static findAll({ user_id }) {
+    //     return UserStudyRoomsModel.find({ id: user_id });
+    // }
 
-    static deleteUser({ id }) {
-        return UserStudyRoomsModel.deleteMany({ id });
-    }
+    // static findAllADay({ user_id, beginTime, finishTime }) {
+    //     return UserStudyRoomsModel.find({
+    //         id: user_id,
+    //         $or: [{ startTimeNum: { $gte: beginTime, $lte: finishTime } }, { endTimeNum: { $gte: beginTime, $lte: finishTime } }],
+    //     });
+    // }
+
+    // static deleteUser({ id }) {
+    //     return UserStudyRoomsModel.deleteMany({ id });
+    // }
 }
 
 export { UserStudyRooms };
