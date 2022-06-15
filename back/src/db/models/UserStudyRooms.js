@@ -22,6 +22,10 @@ class UserStudyRooms {
         return UserStudyRoomsModel.find({ group, membersOnly }).sort({ views: -1 });
     }
 
+    static deleteRoom({ id, roomId }) {
+        return UserStudyRoomsModel.findOneAndDelete({ id, roomId });
+    }
+
     // static findAll({ user_id }) {
     //     return UserStudyRoomsModel.find({ id: user_id });
     // }

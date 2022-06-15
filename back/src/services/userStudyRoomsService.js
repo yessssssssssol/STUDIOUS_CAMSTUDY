@@ -20,6 +20,10 @@ class userStudyRoomsService {
     static getOpenRooms({ group, membersOnly }) {
         return UserStudyRooms.findAll({ group, membersOnly });
     }
+
+    static delRoom({ id, roomId }) {
+        return UserStudyRooms.deleteRoom({ id, roomId });
+    }
 }
 
 export { userStudyRoomsService };

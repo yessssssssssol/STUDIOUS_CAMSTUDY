@@ -184,6 +184,18 @@ userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async functio
     }
 });
 
+// 스터디룸 삭제(roomId를 통해)
+userStudyRoomsRouter.delete('/deleteroom/:roomId', login_required, async function (req, res, next) {
+    try {
+        const roomId = req.params.roomId;
+        const id = req.currentUserId;
+        await userStudyRoomsService.delRoom({ id, roomId });
+        return res.status(200).json({ result: 'success' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // 모든 스터디룸 배열 가져오기
 
 export { userStudyRoomsRouter };
