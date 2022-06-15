@@ -2,16 +2,15 @@ import { useSetRecoilState, useRecoilState } from 'recoil';
 import {
   loginModalState,
   registerModalState,
-  editProfileModalState,
+  editUserModalAtom,
+  editProfileModalAtom,
 } from '../../core/atoms/modalState';
 import { useEffect, useRef } from 'react';
 export default function Modal(props) {
   const setLoginModal = useSetRecoilState(loginModalState);
   const setRegisterModal = useSetRecoilState(registerModalState);
-  const setProfileModal = useSetRecoilState(editProfileModalState);
-  const [showModalRegister, setShowModalRegister] =
-    useRecoilState(registerModalState);
-  const [showModalLogin, setShowModalLogin] = useRecoilState(loginModalState);
+  const setUserEditModal = useSetRecoilState(editUserModalAtom);
+  const setProfileEditModal = useSetRecoilState(editProfileModalAtom);
 
   const ref = useRef(null);
   useEffect(() => {
@@ -26,8 +25,10 @@ export default function Modal(props) {
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
-      setShowModalRegister(false);
-      setShowModalLogin(false);
+      setLoginModal(false);
+      setRegisterModal(false);
+      setUserEditModal(false);
+      setProfileEditModal(false);
     }
   }
   return (
@@ -48,7 +49,8 @@ export default function Modal(props) {
                 onClick={() => {
                   setLoginModal(false);
                   setRegisterModal(false);
-                  setProfileModal(false);
+                  setUserEditModal(false);
+                  setProfileEditModal(false);
                 }}
               >
                 <svg

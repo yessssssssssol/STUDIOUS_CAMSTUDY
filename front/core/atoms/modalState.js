@@ -10,8 +10,13 @@ export const registerModalState = atom({
   default: false,
 });
 
-export const editProfileModalState = atom({
-  key: 'profileModalState',
+export const editUserModalAtom = atom({
+  key: 'editUserModalState',
+  default: false,
+});
+
+export const editProfileModalAtom = atom({
+  key: 'editProfileModalState',
   default: false,
 });
 
