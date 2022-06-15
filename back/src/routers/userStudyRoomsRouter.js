@@ -125,4 +125,15 @@ userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.sing
     }
 });
 
+userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
+    try {
+        const roomId = req.params.roomId;
+        const getInfo = await userStudyRoomsService.getRoom({ roomId });
+
+        res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userStudyRoomsRouter };

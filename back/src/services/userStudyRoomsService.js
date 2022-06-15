@@ -9,6 +9,10 @@ class userStudyRoomsService {
     static updateRoom({ roomId, updateChange }) {
         return UserStudyRooms.update({ roomId, updateChange });
     }
+
+    static getRoom({ roomId }) {
+        return UserStudyRooms.get({ roomId });
+    }
 }
 
 export { userStudyRoomsService };
