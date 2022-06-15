@@ -131,8 +131,15 @@ userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.sing
 userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
     try {
         const roomId = req.params.roomId;
-        const getInfo = await userStudyRoomsService.getRoom({ roomId });
 
+        const getInfo = await userStudyRoomsService.getRoom({ roomId });
+        if (typeof getInfo.views === 'number') {
+            const views = Number(getInfo.views + 1);
+            const updateChange = { views };
+            const updateViews = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+            res.status(200).json(updateViews);
+            return;
+        }
         res.status(200).json(getInfo);
     } catch (error) {
         next(error);
@@ -176,5 +183,7 @@ userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async functio
         next(error);
     }
 });
+
+// 모든 스터디룸 배열 가져오기
 
 export { userStudyRoomsRouter };
