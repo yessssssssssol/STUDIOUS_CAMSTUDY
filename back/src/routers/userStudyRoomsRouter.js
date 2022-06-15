@@ -139,11 +139,25 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
     }
 });
 
-// 스터디룸 가저오기(내가 생성한 스터디룸, id를 통해)
+// 내가 생성한 스터디룸 가저오기(id를 통해)
 userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req, res, next) {
     try {
         const id = req.params.id;
         const getInfo = await userStudyRoomsService.getRooms({ id });
+
+        res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 오픈 스터디룸 가저오기
+userStudyRoomsRouter.get('/openstudyrooms', login_required, async function (req, res, next) {
+    try {
+        const group = true;
+        const membersOnly = false;
+        console.log(group, membersOnly);
+        const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
         res.status(200).json(getInfo);
     } catch (error) {

@@ -18,6 +18,10 @@ class UserStudyRooms {
         return UserStudyRoomsModel.find({ id });
     }
 
+    static findAllOpen({ group, membersOnly }) {
+        return UserStudyRoomsModel.find({ group, membersOnly });
+    }
+
     // static findAll({ user_id }) {
     //     return UserStudyRoomsModel.find({ id: user_id });
     // }

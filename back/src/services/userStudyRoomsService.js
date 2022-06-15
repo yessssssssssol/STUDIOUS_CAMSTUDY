@@ -16,6 +16,10 @@ class userStudyRoomsService {
     static getRooms({ id }) {
         return UserStudyRooms.findAllMine({ id });
     }
+
+    static getOpenRooms({ group, membersOnly }) {
+        return UserStudyRooms.findAllOpen({ group, membersOnly });
+    }
 }
 
 export { userStudyRoomsService };
