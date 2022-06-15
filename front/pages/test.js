@@ -1,5 +1,6 @@
 import AlertModal from '../components/common/AlertModal';
 import AI from '../components/studyroon/AI';
+import Ready from '../components/studyroon/Ready';
 import StopWatch from '../components/studyroon/StopWatch';
 
 /**
@@ -18,8 +19,9 @@ export default function Test() {
         <StopWatch />
       </div>
       <div>
-        <AI />
+        {/* <AI /> */}
         <AlertModal />
+        <Ready />
       </div>
     </div>
   );

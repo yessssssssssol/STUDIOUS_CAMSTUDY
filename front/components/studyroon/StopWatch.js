@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 

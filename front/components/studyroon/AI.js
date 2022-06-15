@@ -1,3 +1,4 @@
+import useInterval from 'use-interval';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import '@tensorflow/tfjs';
 import AlertModal from '../common/AlertModal';
