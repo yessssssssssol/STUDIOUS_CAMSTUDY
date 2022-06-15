@@ -15,7 +15,7 @@ export default function NavBar() {
   const ref = useRef(null);
   const [showOptions, setShowOptions] = useRecoilState(dropboxModalState);
   const [menuBar, setMenuBar] = useRecoilState(menuModalState);
-  const [token, setToken] = useRecoilState(tokenAtom);
+  const token = useRecoilValue(tokenAtom);
   const userActions = useUserActions();
   const user = useRecoilValue(userAtom);
 
@@ -170,7 +170,7 @@ export default function NavBar() {
                   </span>
                 </div>
                 <ul className="py-1">
-                  {drop_item.map((item, index) => NavDropItem(item, index))}
+                  {drop_item.map((item) => NavDropItem(item))}
                   <li>
                     <UserEditModal />
                   </li>
