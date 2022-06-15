@@ -5,7 +5,13 @@ class UserStudyRooms {
         return UserStudyRoomsModel.create(newRoomInfo);
     }
 
-    staticfindAll({ user_id }) {
+    static update({ roomId, updateChange }) {
+        const option = { returnOriginal: false };
+        console.log('model단', roomId, updateChange);
+        return UserStudyRoomsModel.findOneAndUpdate({ roomId }, updateChange, option);
+    }
+
+    static findAll({ user_id }) {
         return UserStudyRoomsModel.find({ id: user_id });
     }
 

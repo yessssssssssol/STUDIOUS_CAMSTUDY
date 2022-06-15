@@ -74,6 +74,16 @@ const userStudyRoomsSchema = new Schema({
     views: {
         type: Number,
     },
+    //방 생성시간
+    createdAt: {
+        type: String,
+        required: true,
+    },
+    //방 정보 업데이트 시간
+    updatedAt: {
+        type: String,
+        required: true,
+    },
 });
 
 const UserStudyRoomsModel = model('userStudyRooms', userStudyRoomsSchema);
