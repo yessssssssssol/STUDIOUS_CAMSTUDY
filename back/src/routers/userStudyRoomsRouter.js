@@ -152,11 +152,23 @@ userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req,
 });
 
 // 오픈 스터디룸 가저오기
-userStudyRoomsRouter.get('/openstudyrooms', login_required, async function (req, res, next) {
+userStudyRoomsRouter.get('/open/studyrooms', login_required, async function (req, res, next) {
     try {
         const group = true;
         const membersOnly = false;
-        console.log(group, membersOnly);
+        const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
+
+        res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 멤버온니 스터디룸 가져오기
+userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async function (req, res, next) {
+    try {
+        const group = true;
+        const membersOnly = true;
         const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
         res.status(200).json(getInfo);
