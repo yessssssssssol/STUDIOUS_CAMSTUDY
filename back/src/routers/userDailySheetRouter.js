@@ -29,8 +29,8 @@ userDailySheetRouter.get('/dailysheets/:id', login_required, async function (req
     }
 });
 
-// 유저 데일리 시트 전체 가져 총 공부시간, 이번주 공부 시간 등 계산해서 가져오기
-userDailySheetRouter.get('/totaltitme/:id', login_required, async function (req, res, next) {
+// 유저 데일리 시트 전체 가져 총 공부시간, 이번주 공부 시간 금일 공부시간 계산해서 가져오기
+userDailySheetRouter.get('/totaltime/:id', login_required, async function (req, res, next) {
     try {
         const id = req.params.id;
 
