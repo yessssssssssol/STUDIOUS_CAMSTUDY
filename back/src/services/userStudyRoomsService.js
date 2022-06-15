@@ -18,7 +18,7 @@ class userStudyRoomsService {
     }
 
     static getOpenRooms({ group, membersOnly }) {
-        return UserStudyRooms.findAllOpen({ group, membersOnly });
+        return UserStudyRooms.findAll({ group, membersOnly });
     }
 }
 
