@@ -1,6 +1,11 @@
+/**
+ * isPersonal이 true일 때는 공개스터디 선택 창이 보이지 않고
+ * isPersonal이 false일 때만 공개 비공개 선택 창이 뜨게 하기
+ *
+ */
 import { useState } from 'react';
 
-const CreateStudyRoom = () => {
+const CreateStudyContent = () => {
   // 스터디 이름
   const [studyName, setStudyName] = useState('');
   // 스터디 해쉬태그
@@ -148,4 +153,4 @@ const CreateStudyRoom = () => {
   );
 };
 
-export default CreateStudyRoom;
+export default CreateStudyContent;

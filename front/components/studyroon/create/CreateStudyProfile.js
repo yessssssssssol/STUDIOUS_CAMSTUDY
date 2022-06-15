@@ -1,4 +1,4 @@
-const CreateStudyRoomProfile = () => {
+const CreateStudyProfile = () => {
   return (
     <div className="mx-20">
       <div className="my-6">
@@ -47,4 +47,4 @@ const CreateStudyRoomProfile = () => {
   );
 };
 
-export default CreateStudyRoomProfile;
+export default CreateStudyProfile;
