@@ -18,7 +18,7 @@ export default function Test() {
         <StopWatch />
       </div>
       <div>
-        {/* <AI /> */}
+        <AI />
         <AlertModal />
       </div>
     </div>

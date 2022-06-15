@@ -52,29 +52,29 @@ const AIFunc = () => {
   const renderPredictions = (predictions) => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
-        // setUserIsHear(true);
         userRef = true;
         console.log(userRef);
-        // console.log('person', userIsHear);
       } else {
         userRef = false;
-        // setUserIsHear(false);
-        // console.log('Not person!', userIsHear);
       }
     });
     if (predictions.length === 0) {
       userRef = false;
       console.log(userRef);
-      // setUserIsHear(false);
-      // console.log('No class', userIsHear);
     }
-    // console.log(userIsHear);
   };
 
-  useEffect(() => {
-    setUserIsHear(useRef.current);
-    console.log(userIsHear);
-  }, [userRef]);
+  const delay = 30000; // 30초
+
+  useInterval(() => {
+    if (userRef === true) {
+      setUserIsHear(true);
+      console.log('공부중', userIsHear);
+    } else {
+      setUserIsHear(false);
+      console.log('자리비움', userIsHear);
+    }
+  }, [delay]);
 
   return (
     <div className="w-full py-10 flex justify-center ">

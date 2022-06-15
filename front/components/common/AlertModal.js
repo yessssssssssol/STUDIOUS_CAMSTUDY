@@ -2,20 +2,14 @@ import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AlertModal = (userRef) => {
-  // const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-  let userIsHear = userRef.current;
+const AlertModal = ({ userRef }) => {
+
   const [show, setShow] = useState(false);
   const onClick = () => {
     setShow(!show);
   };
 
-  useEffect(() => {
-    // 자리에 없을 때 모달을 띄운다.
-    if (userIsHear === false) {
-      setShow(true);
-    }
-  }, [userIsHear]);
+
 
   return (
     <div className="mx-10 my-10 flex justify-center">
