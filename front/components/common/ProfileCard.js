@@ -1,4 +1,4 @@
-export default function ProfileCard({ profileUrl, name }) {
+export default function ProfileCard({ profileUrl, userName, userDescription }) {
   return (
     <div class="max-w-md flex m-4 rounded overflow-hidden shadow-lg">
       <img
@@ -8,8 +8,8 @@ export default function ProfileCard({ profileUrl, name }) {
       />
       <div class="flex-col">
         <div class="px-6 py-4 ">
-          <div class="font-bold text-xl mb-2">{name}</div>
-          <p class="text-gray-700 text-base">안녕하세요😄</p>
+          <div class="font-bold text-xl mb-2">{userName}</div>
+          <p class="text-gray-700 text-base">{userDescription}</p>
         </div>
         <div class="px-6  pt-4 pb-2">
           <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">

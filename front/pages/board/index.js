@@ -1,6 +1,6 @@
 import Helmet from '../../components/layout/Helmet';
 
-export default function board(profileURL) {
+export default function board({ profileURL }) {
   return (
     <div>
       <Helmet title="board" />
