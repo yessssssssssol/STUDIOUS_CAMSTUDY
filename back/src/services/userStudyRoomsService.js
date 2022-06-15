@@ -7,7 +7,6 @@ class userStudyRoomsService {
     }
 
     static updateRoom({ roomId, updateChange }) {
-        console.log('service단', roomId, updateChange);
         return UserStudyRooms.update({ roomId, updateChange });
     }
 }

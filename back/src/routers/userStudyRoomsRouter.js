@@ -117,7 +117,6 @@ userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.sing
         if (roomDesc) updateChange.roomDesc = roomDesc;
         if (hashTags) updateChange.hashTags = hashTags;
 
-        console.log('router단', roomId, updateChange);
         const udatedInfo = await userStudyRoomsService.updateRoom({ roomId, updateChange });
 
         res.status(200).json(udatedInfo);

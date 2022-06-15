@@ -7,7 +7,6 @@ class UserStudyRooms {
 
     static update({ roomId, updateChange }) {
         const option = { returnOriginal: false };
-        console.log('model단', roomId, updateChange);
         return UserStudyRoomsModel.findOneAndUpdate({ roomId }, updateChange, option);
     }
 
