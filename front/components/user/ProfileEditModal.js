@@ -1,26 +1,25 @@
 import { useRecoilState } from 'recoil';
-import { editUserModalAtom } from '../../core/atoms/modalState';
-
-import EditUser from './EditUser';
+import EditProfileImg from './EditProfileImg';
 import Modal from '../common/Modal';
+import { editProfileModalAtom } from '../../core/atoms/modalState';
 
-const UserEditModal = () => {
-  const [showModal, setShowModal] = useRecoilState(editUserModalAtom);
+const ProfileEditModal = () => {
+  const [showModal, setShowModal] = useRecoilState(editProfileModalAtom);
   return (
     <>
       <button
         className="w-full block py-2 px-4 text-sm text-left text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
         onClick={() => setShowModal(true)}
       >
-        회원정보 수정
+        프로필 변경
       </button>
       {showModal && (
-        <Modal title="회원 정보 수정">
-          <EditUser />
+        <Modal title="프로필 변경">
+          <EditProfileImg />
         </Modal>
       )}
     </>
   );
 };
 
-export default UserEditModal;
+export default ProfileEditModal;

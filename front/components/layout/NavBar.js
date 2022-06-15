@@ -10,14 +10,15 @@ import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
 import { dropboxModalState, menuModalState } from '../../core/atoms/modalState';
 import { items, drop_item } from '../common/UseData';
+import ProfileEditModal from '../user/ProfileEditModal';
 export default function NavBar() {
   const router = useRouter();
   const ref = useRef(null);
   const [showOptions, setShowOptions] = useRecoilState(dropboxModalState);
   const [menuBar, setMenuBar] = useRecoilState(menuModalState);
   const token = useRecoilValue(tokenAtom);
-  const userActions = useUserActions();
   const user = useRecoilValue(userAtom);
+  const userActions = useUserActions();
 
   const handleShow = () => {
     setShowOptions(true);
@@ -27,9 +28,7 @@ export default function NavBar() {
   };
   useEffect(() => {
     // Bind the event listener
-    console.log(menuBar);
     document.addEventListener('mousedown', handleClickOutside);
-    console.log(user.profileUrl);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -173,6 +172,9 @@ export default function NavBar() {
                   {drop_item.map((item) => NavDropItem(item))}
                   <li>
                     <UserEditModal />
+                  </li>
+                  <li>
+                    <ProfileEditModal />
                   </li>
                   <li>
                     <button onClick={handleLogout} className="w-full">
