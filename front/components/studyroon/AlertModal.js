@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AlertModal = ({ userRef }) => {
+const AlertModal = () => {
+  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
 
-  const [show, setShow] = useState(false);
   const onClick = () => {
-    setShow(!show);
+    setUserIsHear(true);
   };
-
-
 
   return (
     <div className="mx-10 my-10 flex justify-center">
-      {show && (
+      {!userIsHear && (
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative p-4 w-full max-w-md h-full md:h-auto">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">

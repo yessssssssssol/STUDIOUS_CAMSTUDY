@@ -5,6 +5,11 @@ const { persistAtom } = recoilPersist();
 
 export const aiAtom = atom({
   key: 'userIsHear',
-  default: false,
+  default: true,
   effects_UNSTABLE: [persistAtom],
+});
+
+export const readyAtom = atom({
+  key: 'getReady',
+  default: false,
 });
