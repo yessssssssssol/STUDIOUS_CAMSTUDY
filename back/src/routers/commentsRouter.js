@@ -100,4 +100,30 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
     }
 });
 
+commentsRouter.delete('/comment/:_id', login_required, async function (req, res, next) {
+    try {
+        const writerId = req.currentUserId;
+        const { _id } = req.params;
+        if (!_id) {
+            res.status(400).json('_id가 넘어오지 않았습니다.');
+            return;
+        }
+
+        const writerIdValid = await commentsService.getOne({ _id }).then((data) => data.writerId);
+        if (writerId !== writerIdValid) {
+            res.status(400).json('자신의 댓글만 삭제할 수 있습니다.');
+            return;
+        }
+
+        const deletedComment = await commentsService.delete({ _id });
+        if (!deletedComment) {
+            res.status(400).json('댓글 삭제에 실패했습니다.');
+            return;
+        }
+        res.status(200).json({ result: 'success' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { commentsRouter };

@@ -20,7 +20,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         if (group === false) {
             // 개인 룸
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                res.status(400).json('방 정보를 제대로 입력해주세요');
+                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
                 return;
             }
             newRoomInfo = {
@@ -40,7 +40,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         } else if (group === true && membersOnly === false) {
             // 공개 룸
             if (roomName && membersNum && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                res.status(400).json('방 정보를 제대로 입력해주세요');
+                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
                 return;
             }
             newRoomInfo = {
@@ -62,7 +62,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             console.log('오픈룸 생성');
         } else if (group === true && membersOnly === true) {
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd && roomTitle && roomDesc && hashTags === undefined) {
-                res.status(400).json('방 정보를 제대로 입력해주세요');
+                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
                 return;
             }
             // 멤버 온니 룸
@@ -111,14 +111,12 @@ userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomIm
 
         const { roomId } = req.params;
         const url = req.file.path;
-        console.log(roomId, url);
         const updateChange = { roomImg: url, updatedAt: now.format('YYYY-MM-DD HH:mm:ss') };
         const createImg = await userStudyRoomsService.updateRoom({ roomId, updateChange });
 
         if (!createImg.roomImg || createImg.roomImg === '사진 정보가 없습니다.') {
-            const errorMessage = '이미지가 제대로 저장되지 않았습니다.';
-            console.log(errorMessage);
-            return errorMessage;
+            res.status(400).json({ message: '이미지가 제대로 저장되지 않았습니다.' });
+            return;
         }
 
         res.status(200).send({ url: url });
