@@ -26,6 +26,12 @@ class Comments {
         return CommentsModel.deleteMany({ roomId });
     }
 
+    static changeWithdrawalComments({ id }) {
+        const toChangeWithdrawal = { writerId: '탈퇴한 계정', content: '탈퇴한 계정의 댓글은 볼 수 없습니다.' };
+        const option = { returnOriginal: false };
+        return CommentsModel.updateMany({ writerId: id }, toChangeWithdrawal, option);
+    }
+
     // static find({ roomId }) {
     //     return CommentsModel.findOne({ roomId });
     // }

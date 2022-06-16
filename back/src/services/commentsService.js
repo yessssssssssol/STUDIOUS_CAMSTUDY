@@ -20,10 +20,6 @@ class commentsService {
     static delete({ _id }) {
         return Comments.delete({ _id });
     }
-
-    static deleteComments({ roomId }) {
-        return Comments.deleteComments({ roomId });
-    }
 }
 
 export { commentsService };

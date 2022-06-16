@@ -46,7 +46,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             newRoomInfo = {
                 id,
                 roomId,
-                roomImg,
+                roomImg: '사진 정보가 없습니다.',
                 roomName,
                 group,
                 membersOnly, // 개인룸과 다른 점
@@ -69,7 +69,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             newRoomInfo = {
                 id,
                 roomId,
-                roomImg,
+                roomImg: '사진 정보가 없습니다.',
                 roomName,
                 group,
                 membersOnly,
