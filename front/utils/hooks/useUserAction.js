@@ -36,6 +36,7 @@ export function useUserActions() {
   async function logout() {
     sessionStorage.removeItem('userToken');
     setToken(null);
+    setUser(null)
     router.push('/');
   }
 }
