@@ -99,6 +99,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
 // 스터디룸 사진 저장
 userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomImg'), async function (req, res, next) {
     try {
+        const now = dayjs();
         if (!req.file) {
             res.status(400).json({ message: '업로드할 이미지가 없습니다.' });
             return;
@@ -107,7 +108,7 @@ userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomIm
         const { roomId } = req.params;
         const url = req.file.path;
         console.log(roomId, url);
-        const updateChange = { roomImg: url };
+        const updateChange = { roomImg: url, updatedAt: now.format('YYYY-MM-DD HH:mm:ss') };
         const createImg = await userStudyRoomsService.updateRoom({ roomId, updateChange });
 
         if (!createImg.roomImg || createImg.roomImg === '사진 정보가 없습니다.') {
