@@ -81,8 +81,24 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
             res.status(500).json('댓글 목록을 가져오는데 실패했습니다.');
             return;
         }
+        // 댓글 정보에 맞는 이름 가져오기
+        const commentListWithName = await Promise.all(
+            commentList.map(async (comment) => {
+                // 댓글 쓴 사람 이름 가져오기
+                let user_id = comment.writerId;
+                const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                // 댓글 타겟이 된 사람 이름 적어오기
+                user_id = comment.targetId;
+                let targetName = null;
+                if (user_id) {
+                    targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                }
 
-        res.status(200).json(commentList);
+                return { userName, targetName, comment };
+            }),
+        );
+
+        res.status(200).json(commentListWithName);
     } catch (error) {
         next(error);
     }
@@ -93,8 +109,19 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
     try {
         const { _id } = req.params;
         const comment = await commentsService.getOne({ _id });
+        let user_id = comment.writerId;
+        const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+        user_id = comment.targetId;
+        let targetName = null;
+        if (user_id) {
+            targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+        }
+        // console.log('comment 타입입니다.\n', typeof comment);
+        // console.log('comment 로그입니다.\n', comment);
+        // const commentWithName = { name: userName, ...comment };
+        // console.log('commentWithName 로그입니다.\n', commentWithName);
 
-        res.status(200).json(comment);
+        res.status(200).json({ userName, targetName, comment });
     } catch (error) {
         next(error);
     }
