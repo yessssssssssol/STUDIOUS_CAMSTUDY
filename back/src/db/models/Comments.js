@@ -22,6 +22,10 @@ class Comments {
         return CommentsModel.findOneAndDelete({ _id });
     }
 
+    static deleteComments({ roomId }) {
+        return CommentsModel.deleteMany({ roomId });
+    }
+
     // static find({ roomId }) {
     //     return CommentsModel.findOne({ roomId });
     // }

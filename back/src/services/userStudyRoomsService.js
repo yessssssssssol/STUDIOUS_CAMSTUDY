@@ -1,4 +1,5 @@
 import { UserStudyRooms } from '../db';
+import { commentsService } from './commentsService';
 
 class userStudyRoomsService {
     static createRoom({ newRoomInfo }) {
@@ -22,7 +23,7 @@ class userStudyRoomsService {
     }
 
     static delRoom({ id, roomId }) {
-        return UserStudyRooms.deleteRoom({ id, roomId });
+        return Promise.all([UserStudyRooms.deleteRoom({ id, roomId }), commentsService.deleteComments({ roomId })]);
     }
 }
 
