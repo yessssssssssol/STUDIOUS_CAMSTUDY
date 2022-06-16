@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "0.1.1",
+    "@tensorflow/tfjs": "0.14.0",
     "axios": "^0.27.2",
     "d3": "^7.4.4",
     "moment": "^2.29.3",
@@ -16,15 +18,14 @@
     "react": "18.1.0",
     "react-calendar-heatmap": "^1.8.1",
     "react-dom": "18.1.0",
+    "react-magic-dropzone": "1.0.1",
     "react-minimal-pie-chart": "^8.3.0",
     "react-no-ssr": "^1.1.0",
     "react-tooltip": "^4.2.21",
     "reactjs-calendar-heatmap": "^0.2.1",
     "recoil": "^0.7.3",
     "recoil-persist": "^4.2.0",
-    "@tensorflow-models/coco-ssd": "0.1.1",
-    "@tensorflow/tfjs": "0.14.0",
-    "react-magic-dropzone": "1.0.1"
+    "use-interval": "^1.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
