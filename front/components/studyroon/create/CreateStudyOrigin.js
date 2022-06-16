@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 
-const CreateStudyContent = () => {
+const CreateStudyOrigin = () => {
   // 스터디 이름
   const [studyName, setStudyName] = useState('');
   // 스터디 해쉬태그
@@ -27,11 +27,11 @@ const CreateStudyContent = () => {
   return (
     <div className="mx-20 my-6">
       {/* <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
-        Feedback
-      </h2>
-      <p className="leading-relaxed mb-5 text-gray-600">
-        Post-ironic portland shabby chic echo park, banjo fashion axe
-      </p> */}
+         Feedback
+       </h2>
+       <p className="leading-relaxed mb-5 text-gray-600">
+         Post-ironic portland shabby chic echo park, banjo fashion axe
+       </p> */}
       <div className="relative mb-4">
         <label
           htmlFor="name"
@@ -48,7 +48,36 @@ const CreateStudyContent = () => {
           className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
         />
       </div>
-      <div className="flex relative mt-2 mb-2">
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          해시태그
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디를 대표하는 해시태그를 입력해주세요.
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
+      </div>
+      <div className="relative mb-4">
+        <label
+          htmlFor="name"
+          className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
+        >
+          스터디 규칙
+        </label>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 규칙을 입력해주세요.
+        </p>
+        <textarea className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+      </div>
+
+      <div className="relative mb-4">
         <label
           htmlFor="name"
           className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
@@ -56,62 +85,30 @@ const CreateStudyContent = () => {
           스터디 종류
         </label>
         <p className="leading-relaxed text-sm mb-1 text-gray-600">
-          스터디를 대표하는 해시태그를 입력해주세요.
+          스터디 종류를 선택해주세요.
         </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
       </div>
 
-      <div class="flex mb-3">
-        <div>
-          <input
-            type="radio"
-            id="개인 스터디"
-            name="drone"
-            value="개인 스터디"
-          />
-          <label for="개인 스터디">개인 스터디</label>
-        </div>
-
-        <div class="ml-4">
-          <input
-            type="radio"
-            id="그룹 스터디"
-            name="drone"
-            value="그룹 스터디"
-          />
-          <label for="그룹 스터디">그룹 스터디</label>
-        </div>
-      </div>
-
-      <div class="flex">
-        <div>
-          <input
-            type="radio"
-            id="공개 스터디"
-            name="private"
-            value="공개 스터디"
-          />
-          <label for="공개 스터디">공개 스터디</label>
-        </div>
-
-        <div class="ml-4">
-          <input
-            type="radio"
-            id="비공개 스터디"
-            name="private"
-            value="비공개 스터디"
-          />
-          <label for="비공개 스터디">비공개 스터디</label>
-        </div>
-      </div>
-
-      <div class="flex relative mb-4">
+      <div className="relative mb-4">
         <label
           htmlFor="name"
           className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
         >
-          스터디인원
+          스터디 인원
         </label>
-        <input class="board-solid" type="number"></input>
+        <p className="leading-relaxed text-sm mb-1 text-gray-600">
+          스터디 참여 인원을 입력해주세요(최대 4명까지 참여가능합니다.)
+        </p>
+        <input
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
       </div>
 
       <div className="relative mb-4">
@@ -126,10 +123,10 @@ const CreateStudyContent = () => {
           사라집니다.
         </p>
         <input
-          type="date"
-          value={new Date().toISOString().substring(0, 10)}
-        ></input>
-        ~<input type="date"></input>
+          type="text"
+          id="name"
+          className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        />
       </div>
 
       <div className="relative mb-4">
@@ -156,4 +153,4 @@ const CreateStudyContent = () => {
   );
 };
 
-export default CreateStudyContent;
+export default CreateStudyOrigin;
