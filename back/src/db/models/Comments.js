@@ -2,8 +2,11 @@ import { CommentsModel } from '../schemas/comments';
 
 class Comments {
     static create({ newComment }) {
-        console.log(newComment);
         return CommentsModel.create(newComment);
+    }
+
+    static getAll({ roomId }) {
+        return CommentsModel.find({ roomId });
     }
 
     // static update({ roomId, updateChange }) {

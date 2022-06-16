@@ -7,6 +7,7 @@ import { userAuthService } from '../services/userService';
 
 const commentsRouter = Router();
 
+// 댓글 생성
 commentsRouter.post('/comment', login_required, async function (req, res, next) {
     try {
         if (is.emptyObject(req.body)) {
@@ -32,6 +33,28 @@ commentsRouter.post('/comment', login_required, async function (req, res, next) 
         const Comment = await commentsService.create({ newComment });
 
         res.status(201).json(Comment);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// // 댓글 수정
+// commentsRouter.put('/comment', login_required, async function (req, res, next) {
+//     try {
+
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
+// 댓글 리스트 가져오기
+commentsRouter.get('/comments/:roomId', login_required, async function (req, res, next) {
+    try {
+        const { roomId } = req.params;
+        const commentList = await commentsService.getAll({ roomId });
+        if (!commentList) return '댓글 목록을 가져오는데 실패했습니다.';
+
+        res.status(200).json(commentList);
     } catch (error) {
         next(error);
     }
