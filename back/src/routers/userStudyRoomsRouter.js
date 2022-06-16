@@ -20,7 +20,8 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         if (group === false) {
             // 개인 룸
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                return '방 정보를 제대로 입력해주세요';
+                res.status(400).json('방 정보를 제대로 입력해주세요');
+                return;
             }
             newRoomInfo = {
                 id,
@@ -39,7 +40,8 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         } else if (group === true && membersOnly === false) {
             // 공개 룸
             if (roomName && membersNum && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                return '방 정보를 제대로 입력해주세요';
+                res.status(400).json('방 정보를 제대로 입력해주세요');
+                return;
             }
             newRoomInfo = {
                 id,
@@ -60,7 +62,8 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             console.log('오픈룸 생성');
         } else if (group === true && membersOnly === true) {
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd && roomTitle && roomDesc && hashTags === undefined) {
-                return '방 정보를 제대로 입력해주세요';
+                res.status(400).json('방 정보를 제대로 입력해주세요');
+                return;
             }
             // 멤버 온니 룸
             newRoomInfo = {
@@ -85,7 +88,8 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             };
             console.log('멤버룸 생성');
         } else {
-            return '방 정보를 제대로 입력해주세요';
+            res.status(400).json('방 정보를 제대로 입력해주세요');
+            return;
         }
 
         const roomInfo = await userStudyRoomsService.createRoom({ newRoomInfo });

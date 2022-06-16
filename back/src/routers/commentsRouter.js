@@ -2,8 +2,8 @@ import is from '@sindresorhus/is';
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import { commentsService } from '../services/commentsService';
-import dayjs from 'dayjs';
 import { userAuthService } from '../services/userService';
+import dayjs from 'dayjs';
 
 const commentsRouter = Router();
 
@@ -38,21 +38,49 @@ commentsRouter.post('/comment', login_required, async function (req, res, next) 
     }
 });
 
-// // 댓글 수정
-// commentsRouter.put('/comment', login_required, async function (req, res, next) {
-//     try {
+// 댓글 수정
+commentsRouter.put('/comment', login_required, async function (req, res, next) {
+    try {
+        const now = dayjs();
+        const writerId = req.currentUserId;
+        const { _id, content } = req.body;
+        if (!_id || !content) {
+            res.status(400).json('_id혹은 content가 넘어오지 않았습니다.');
+            return;
+        }
 
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+        const writerIdValid = await commentsService.getOne({ _id }).then((data) => data.writerId);
+        if (writerId !== writerIdValid) {
+            res.status(400).json('자신의 댓글만 수정할 수 있습니다.');
+            return;
+        }
+
+        const updateChange = {
+            content,
+            updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
+        };
+
+        const updatedComment = await commentsService.update({ _id, updateChange });
+        if (!updateChange) {
+            res.status(400).json('댓글 수정에 실패했습니다.');
+            return;
+        }
+
+        res.status(200).json(updatedComment);
+    } catch (error) {
+        next(error);
+    }
+});
 
 //게시글 댓글 리스트 가져오기
 commentsRouter.get('/comments/:roomId', login_required, async function (req, res, next) {
     try {
         const { roomId } = req.params;
         const commentList = await commentsService.getAll({ roomId });
-        if (!commentList) return '댓글 목록을 가져오는데 실패했습니다.';
+        if (!commentList) {
+            res.status(500).json('댓글 목록을 가져오는데 실패했습니다.');
+            return;
+        }
 
         res.status(200).json(commentList);
     } catch (error) {

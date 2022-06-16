@@ -5,6 +5,10 @@ class commentsService {
         return Comments.create({ newComment });
     }
 
+    static update({ _id, updateChange }) {
+        return Comments.update({ _id, updateChange });
+    }
+
     static getAll({ roomId }) {
         return Comments.getAll({ roomId });
     }

@@ -5,6 +5,11 @@ class Comments {
         return CommentsModel.create(newComment);
     }
 
+    static update({ _id, updateChange }) {
+        const option = { returnOriginal: false };
+        return CommentsModel.findOneAndUpdate({ _id }, updateChange, option);
+    }
+
     static getAll({ roomId }) {
         return CommentsModel.find({ roomId });
     }
@@ -12,11 +17,6 @@ class Comments {
     static getOne({ _id }) {
         return CommentsModel.findById({ _id });
     }
-
-    // static update({ roomId, updateChange }) {
-    //     const option = { returnOriginal: false };
-    //     return CommentsModel.findOneAndUpdate({ roomId }, updateChange, option);
-    // }
 
     // static find({ roomId }) {
     //     return CommentsModel.findOne({ roomId });
