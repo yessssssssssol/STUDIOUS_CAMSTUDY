@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const userStudyRoomsSchema = new Schema({
+const UserStudyRoomsSchema = new Schema({
     //방 만든 사람 아이디
     id: {
         type: String,
@@ -86,6 +86,6 @@ const userStudyRoomsSchema = new Schema({
     },
 });
 
-const UserStudyRoomsModel = model('userStudyRooms', userStudyRoomsSchema);
+const UserStudyRoomsModel = model('UserStudyRooms', UserStudyRoomsSchema);
 
 export { UserStudyRoomsModel };

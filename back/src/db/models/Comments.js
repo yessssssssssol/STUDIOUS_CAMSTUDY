@@ -1,30 +1,31 @@
-import { CommentsModel } from '../schemas/userStudyRooms';
+import { CommentsModel } from '../schemas/comments';
 
 class Comments {
-    static create({ newRoomInfo }) {
-        return CommentsModel.create(newRoomInfo);
+    static create({ newComment }) {
+        console.log(newComment);
+        return CommentsModel.create(newComment);
     }
 
-    static update({ roomId, updateChange }) {
-        const option = { returnOriginal: false };
-        return CommentsModel.findOneAndUpdate({ roomId }, updateChange, option);
-    }
+    // static update({ roomId, updateChange }) {
+    //     const option = { returnOriginal: false };
+    //     return CommentsModel.findOneAndUpdate({ roomId }, updateChange, option);
+    // }
 
-    static find({ roomId }) {
-        return CommentsModel.findOne({ roomId });
-    }
+    // static find({ roomId }) {
+    //     return CommentsModel.findOne({ roomId });
+    // }
 
-    static findAllMine({ id }) {
-        return CommentsModel.find({ id });
-    }
+    // static findAllMine({ id }) {
+    //     return CommentsModel.find({ id });
+    // }
 
-    static findAll({ group, membersOnly }) {
-        return CommentsModel.find({ group, membersOnly }).sort({ views: -1 });
-    }
+    // static findAll({ group, membersOnly }) {
+    //     return CommentsModel.find({ group, membersOnly }).sort({ views: -1 });
+    // }
 
-    static deleteRoom({ id, roomId }) {
-        return CommentsModel.findOneAndDelete({ id, roomId });
-    }
+    // static deleteRoom({ id, roomId }) {
+    //     return CommentsModel.findOneAndDelete({ id, roomId });
+    // }
 }
 
 export { Comments };

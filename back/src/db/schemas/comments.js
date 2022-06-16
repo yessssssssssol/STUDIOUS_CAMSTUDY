@@ -1,10 +1,9 @@
 import { Schema, model } from 'mongoose';
 
-const commentsSchema = new Schema({
+const CommentsSchema = new Schema({
     //방 만든 사람 아이디
     targetId: {
         type: String,
-        required: true,
     },
     // 댓글 쓴 사람 아이디
     writerId: {
@@ -30,6 +29,6 @@ const commentsSchema = new Schema({
     },
 });
 
-const commentsModel = model('comments', commentsSchema);
+const CommentsModel = model('Comments', CommentsSchema);
 
-export { commentsModel };
+export { CommentsModel };
