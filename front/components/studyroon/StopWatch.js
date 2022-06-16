@@ -88,43 +88,12 @@ const StopWatch = () => {
               나가기
             </button>
           </div>
-          {/* <div>
-            {!isActive && !isPaused ? (
-              <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                onClick={handleStart}
-              >
-                시작
-              </button>
-            ) : isPaused ? (
-              <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                onClick={handlePause}
-              >
-                멈춤
-              </button>
-            ) : (
-              <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                onClick={handleRestart}
-              >
-                재시작
-              </button>
-            )}
-            <button
-              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              onClick={handleReset}
-              disabled={!isActive}
-            >
-              초기화
-            </button>
-          </div> */}
         </div>
       </div>
       <div>
         {minutes === 0 && seconds === 0 ? null : (
           <div className="justify-center items-center text-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mx-10">
               <img
                 className="rounded-t-lg"
                 src="/sampleImg.jpg"
@@ -136,7 +105,7 @@ const StopWatch = () => {
                 </h5>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                   10초 뒤에 타이머가 시작됩니다.
-                  <br /> 웹캠에 사진과 같이 눈, 코, 입이 잘 보이게 설정해주세요.
+                  <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                 </p>
                 <svg
                   role="status"
