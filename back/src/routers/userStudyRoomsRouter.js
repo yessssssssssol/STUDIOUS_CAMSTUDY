@@ -123,16 +123,14 @@ userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomIm
 });
 
 // 스터디룸/게시글 수정
-userStudyRoomsRouter.put('/studyroom', login_required, uploadRoomImgHandler.single('roomImg'), async function (req, res, next) {
+userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res, next) {
     try {
         let updateChange = {};
-        let roomImg = req.file;
         const now = dayjs();
         const { roomId, roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
 
         updateChange.updateAt = now.format('YYYY-MM-DD HH:mm:ss');
         if (roomName) updateChange.roomName = roomName;
-        if (roomImg) updateChange.roomImg = roomImg;
         if (membersNum) updateChange.membersNum = membersNum;
         if (startStudyDay) updateChange.startStudyDay = startStudyDay;
         if (endStudyDay) updateChange.endStudyDay = endStudyDay;
