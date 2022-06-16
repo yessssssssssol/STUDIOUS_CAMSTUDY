@@ -3,50 +3,60 @@
  * isPersonal이 false일 때만 공개 비공개 선택 창이 뜨게 하기
  *
  */
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useEffect, useState } from 'react';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 const CreateStudyContent = () => {
+  const [room, setRoom] = useRecoilState(createroomAtom);
+
   // 스터디 이름
-  const [roomName, setRoomName] = useState('');
+  const [roomName, setRoomName] = useState(room.roomName || '');
   // 스터디 해쉬태그
   // 개인 스터디 true, 그룹 스터디 false
-  const [group, setGroup] = useState();
+  const [group, setGroup] = useState(room.group || '');
   // 공개 스터디 true 비공개 스터디 false
-  const [memberOnly, setMemberOnly] = useState();
+  const [membersOnly, setMemberOnly] = useState(room.membersOnly || '');
   // 스터디 기간
   const [startStudyDay, setStartStudyDay] = useState(
     new Date().toISOString().substring(0, 10)
   );
-  const [endStudyDay, setEndStudyDay] = useState();
+  const [endStudyDay, setEndStudyDay] = useState(room.endStudyDay || '');
   // 스터디 집중시간
-  const [focusTimeStart, setFocusTimeStart] = useState();
+  const [focusTimeStart, setFocusTimeStart] = useState(
+    room.focusTimeStart || ''
+  );
   // rule
-  const [focusTimeEnd, setFocusTimeEnd] = useState();
-  const setRoom = useSetRecoilState(createroomAtom);
+  const [focusTimeEnd, setFocusTimeEnd] = useState(room.focusTimeEnd || '');
 
   const [rule, setRule] = useState('');
   // 스터디 멤버 수
-  const [membersNum, setMembersNum] = useState(0);
+  const [membersNum, setMembersNum] = useState(room.membersNum || 0);
+  useEffect(() => {});
+
   function handleClick() {
     // group === 'only' ? setGroup(false) : setGroup(true);
     // memberOnly === 'public' ? setMemberOnly(false) : setMemberOnly(true);
+    function changeData() {
+      console.log(membersOnly);
+      console.log(group);
+    }
 
-    const room = {
-      roomName,
-      group,
-      memberOnly,
-      membersNum,
-      startStudyDay,
-      endStudyDay,
-      focusTimeStart,
-      focusTimeEnd,
-    };
-    setRoom(room);
-    console.log(room);
+    function passData() {
+      setRoom({
+        roomName,
+        group,
+        membersOnly,
+        membersNum,
+        startStudyDay,
+        endStudyDay,
+        focusTimeStart,
+        focusTimeEnd,
+      });
+      window.location.replace('/board/create');
+    }
 
-    window.location.replace('/board/create');
+    changeData();
+    passData();
   }
   return (
     <div className="mx-20 my-6">
@@ -92,7 +102,8 @@ const CreateStudyContent = () => {
             type="radio"
             id="개인 스터디"
             name="drone"
-            value="only"
+            value="false"
+            checked={group === 'false'}
             onChange={(e) => setGroup(e.target.value)}
           />
           <label for="개인 스터디">개인 스터디</label>
@@ -103,7 +114,8 @@ const CreateStudyContent = () => {
             type="radio"
             id="그룹 스터디"
             name="drone"
-            value="group"
+            value="true"
+            checked={group === 'true'}
             onChange={(e) => setGroup(e.target.value)}
           />
           <label for="그룹 스터디">그룹 스터디</label>
@@ -116,7 +128,8 @@ const CreateStudyContent = () => {
             type="radio"
             id="공개 스터디"
             name="public or private"
-            value="public"
+            value="false"
+            checked={membersOnly === 'false'}
             onChange={(e) => setMemberOnly(e.target.value)}
           />
           <label for="공개 스터디">공개 스터디</label>
@@ -127,7 +140,8 @@ const CreateStudyContent = () => {
             type="radio"
             id="비공개 스터디"
             name="public or private"
-            value="private"
+            value="true"
+            checked={membersOnly === 'true'}
             onChange={(e) => setMemberOnly(e.target.value)}
           />
           <label for="비공개 스터디">비공개 스터디</label>
@@ -137,8 +151,6 @@ const CreateStudyContent = () => {
       <div class="relative mb-4">
         <span class="flex">
           <label
-            value={membersNum}
-            onChange={(e) => setMembersNum(e.target.value)}
             htmlFor="name"
             className="leading-7 text-base mb-1 font-bold title-font text-gray-900 "
           >
@@ -146,6 +158,8 @@ const CreateStudyContent = () => {
           </label>
         </span>
         <input
+          value={membersNum}
+          onChange={(e) => setMembersNum(e.target.value)}
           class="border-2 rounded-md w-[40px]"
           min="0"
           type="number"
@@ -188,7 +202,7 @@ const CreateStudyContent = () => {
         </span>
         <input
           value={focusTimeStart}
-          onChange={(e) => setFocusTimeStart(e.target.value)}
+          onChange={(e) => setFocusTimeStart(e.target.value + ':00')}
           type="time"
           id="name"
           className="bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
@@ -196,7 +210,7 @@ const CreateStudyContent = () => {
         ~
         <input
           value={focusTimeEnd}
-          onChange={(e) => setFocusTimeEnd(e.target.value)}
+          onChange={(e) => setFocusTimeEnd(e.target.value + ':00')}
           type="time"
           id="name"
           className="bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
