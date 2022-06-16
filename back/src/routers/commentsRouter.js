@@ -94,7 +94,7 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
                     targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
                 }
 
-                return { userName, targetName, comment };
+                return { userName, targetName, ...comment.toObject() };
             }),
         );
 
@@ -121,7 +121,7 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
         // const commentWithName = { name: userName, ...comment };
         // console.log('commentWithName 로그입니다.\n', commentWithName);
 
-        res.status(200).json({ userName, targetName, comment });
+        res.status(200).json({ userName, targetName, ...comment.toObject() });
     } catch (error) {
         next(error);
     }
