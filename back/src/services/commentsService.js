@@ -8,6 +8,10 @@ class commentsService {
     static getAll({ roomId }) {
         return Comments.getAll({ roomId });
     }
+
+    static getOne({ _id }) {
+        return Comments.getOne({ _id });
+    }
 }
 
 export { commentsService };

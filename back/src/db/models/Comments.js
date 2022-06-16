@@ -9,6 +9,10 @@ class Comments {
         return CommentsModel.find({ roomId });
     }
 
+    static getOne({ _id }) {
+        return CommentsModel.findById({ _id });
+    }
+
     // static update({ roomId, updateChange }) {
     //     const option = { returnOriginal: false };
     //     return CommentsModel.findOneAndUpdate({ roomId }, updateChange, option);

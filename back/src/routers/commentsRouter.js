@@ -47,7 +47,7 @@ commentsRouter.post('/comment', login_required, async function (req, res, next) 
 //     }
 // });
 
-// 댓글 리스트 가져오기
+//게시글 댓글 리스트 가져오기
 commentsRouter.get('/comments/:roomId', login_required, async function (req, res, next) {
     try {
         const { roomId } = req.params;
@@ -55,6 +55,18 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
         if (!commentList) return '댓글 목록을 가져오는데 실패했습니다.';
 
         res.status(200).json(commentList);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 댓글 하나 가져오기
+commentsRouter.get('/comment/:_id', login_required, async function (req, res, next) {
+    try {
+        const { _id } = req.params;
+        const comment = await commentsService.getOne({ _id });
+
+        res.status(200).json(comment);
     } catch (error) {
         next(error);
     }
