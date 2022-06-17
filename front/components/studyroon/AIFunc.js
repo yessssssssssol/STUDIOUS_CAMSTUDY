@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
 const AIFunc = () => {
-  const userRef = useRef(false);
+  let person = false;
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
   const canvasRef = useRef();
@@ -52,40 +52,27 @@ const AIFunc = () => {
   const renderPredictions = (predictions) => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
-        userRef = true;
-        console.log(userRef);
+        person = true;
+        console.log(person);
       } else {
-        userRef = false;
+        person = false;
       }
     });
     if (predictions.length === 0) {
-      userRef = false;
-      console.log(userRef);
+      person = false;
+      console.log(person);
     }
   };
 
   let studylist = [];
   const delay = 10000; // 30초
 
-  // useInterval(() => {
-  //   if (userRef === true) {
-  //     console.log('공부중', userIsHear);
-  //     studylist = [];
-  //   } else {
-  //     studylist.push(false);
-  //     console.log('자리비움', userIsHear);
-  //     console.log(studylist);
-  //     if (studylist.length === 5) {
-  //       setUserIsHear(false);
-  //       console.log(userIsHear);
-  //       console.log('안녕');
-  //       studylist = [];
-  //     }
-  //   }
-  // }, [delay]);
-
   useInterval(() => {
-    if (userRef === false) {
+    if (person === true) {
+      console.log('공부중', userIsHear);
+      studylist = [];
+      console.log(studylist);
+    } else {
       studylist.push(false);
       console.log('자리비움', userIsHear);
       console.log(studylist);
@@ -95,10 +82,6 @@ const AIFunc = () => {
         console.log('안녕');
         studylist = [];
       }
-    } else {
-      console.log('공부중', userIsHear);
-      studylist = [];
-      console.log(studylist);
     }
   }, [delay]);
 
