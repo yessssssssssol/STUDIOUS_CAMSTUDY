@@ -2,7 +2,7 @@ import BoldText from '../components/common/BoldText';
 import TimeBox from '../components/common/TimeBox';
 import dynamic from 'next/dynamic';
 import Pie from '../components/common/Pie';
-import CategoryBox from '../components/common/CategoryBox';
+import Button from '../components/common/Button';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -21,6 +21,7 @@ export default function mypage() {
   const [timeDatas, setTimeData] = useState(null);
   const [user, setUser] = useRecoilState(userAtom);
   const [gittime, setGitTime] = useState([]);
+  const [goaltime, setGoaltime] = useState();
 
   const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
     ssr: false,
@@ -62,11 +63,21 @@ export default function mypage() {
     getGitTimeData();
     setGitTime(gittime);
   }, []);
-
+  function clickHandler() {
+    console.log(goaltime);
+  }
   return (
     <div class="flex-col  py-[50px]">
-      <div class="">
+      <div class="flex flex-row justify-between">
         <BoldText text={`${userName?.name}님의 최근 공부시간`} />
+        <span>
+          <input
+            class="text-center w-[70px] border-2 rounded-xl border-orange-300"
+            value={goaltime}
+          ></input>
+          <span class=" mr-3">시간</span>
+          <Button text={'목표 시간 설정'} onClick={clickHandler}></Button>
+        </span>
       </div>
       <div class="flex flex-col items-center  lg:flex-row justify-evenly">
         {timeDatas?.map((time, index) => (

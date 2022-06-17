@@ -34,7 +34,7 @@ const EditUser = () => {
         <input
           className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="이름을 입력해주세요"
-          value={userName}
+          value={userName.name}
           onChange={(e) => setUserName(e.target.value)}
         />
         <p
@@ -56,7 +56,7 @@ const EditUser = () => {
           rows="4"
           class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Leave a comment..."
-          value={userDescription}
+          value={userDescription.descriptiion}
           onChange={(e) => setUserDescription(e.target.value)}
         ></textarea>
       </div>
