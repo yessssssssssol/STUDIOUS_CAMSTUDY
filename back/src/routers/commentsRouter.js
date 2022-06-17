@@ -45,7 +45,7 @@ commentsRouter.put('/comment', login_required, async function (req, res, next) {
         const writerId = req.currentUserId;
         const { _id, content } = req.body;
         if (!_id || !content) {
-            res.status(400).json('_id혹은 content가 넘어오지 않았습니다.');
+            res.status(400).json({ message: '_id혹은 content가 넘어오지 않았습니다.' });
             return;
         }
 

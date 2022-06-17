@@ -190,6 +190,11 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
     try {
         const roomId = req.params.roomId;
 
+        if (!roomId) {
+            res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
+            return;
+        }
+
         const getInfo = await userStudyRoomsService.getRoom({ roomId });
         if (typeof getInfo.views === 'number') {
             const views = Number(getInfo.views + 1);
@@ -208,6 +213,12 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
 userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req, res, next) {
     try {
         const id = req.params.id;
+
+        if (!roomId) {
+            res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
+            return;
+        }
+
         const getInfo = await userStudyRoomsService.getRooms({ id });
 
         res.status(200).json(getInfo);
@@ -247,6 +258,12 @@ userStudyRoomsRouter.delete('/deleteroom/:roomId', login_required, async functio
     try {
         const roomId = req.params.roomId;
         const id = req.currentUserId;
+
+        if (!roomId || !id) {
+            res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
+            return;
+        }
+
         await userStudyRoomsService.delRoom({ id, roomId });
         return res.status(200).json({ result: 'success' });
     } catch (error) {
