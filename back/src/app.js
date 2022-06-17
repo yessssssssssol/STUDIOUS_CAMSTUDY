@@ -4,6 +4,8 @@ import { userAuthRouter } from './routers/userRouter';
 import { timeLogRouter } from './routers/timeLogRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import { userDailySheetRouter } from './routers/userDailySheetRouter';
+import { userStudyRoomsRouter } from './routers/userStudyRoomsRouter';
+import { commentsRouter } from './routers/commentsRouter';
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.get('/', (req, res) => {
 app.use(userAuthRouter);
 app.use(timeLogRouter);
 app.use(userDailySheetRouter);
+app.use(userStudyRoomsRouter);
+app.use(commentsRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
