@@ -19,11 +19,11 @@ const boardCreate = () => {
           ...room,
           roomTitle,
           roomDesc,
-
           roomPhoto,
           members,
           hashTags,
         });
+        setRoom(null);
       } catch (err) {
         console.log(err);
       }
