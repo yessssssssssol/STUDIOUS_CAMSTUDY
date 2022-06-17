@@ -5,6 +5,7 @@ import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
 
+import { RiTimerLine } from 'react-icons/ri';
 // userIsHear가 true일 때 start
 // false가 되면 pause
 // 아예 창을 나가면 stop하고 reset
@@ -77,6 +78,7 @@ const StopWatch = () => {
           </div>
           <div>
             <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-300">
+              <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
           </div>
