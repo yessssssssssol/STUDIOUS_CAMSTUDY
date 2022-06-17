@@ -18,6 +18,10 @@ class Comments {
         return CommentsModel.findById({ _id });
     }
 
+    static getOneByRoomId({ roomId }) {
+        return CommentsModel.findOne({ roomId });
+    }
+
     static delete({ _id }) {
         return CommentsModel.findOneAndDelete({ _id });
     }

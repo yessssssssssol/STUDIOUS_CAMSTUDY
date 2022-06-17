@@ -4,6 +4,7 @@ import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
+import { commentsService } from '../services/commentsService';
 
 const userStudyRoomsRouter = Router();
 
@@ -15,7 +16,26 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         let newRoomInfo = {};
         const now = dayjs();
 
-        const { roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
+        let { roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
+
+        // group 형변환
+        if ((group === 'False', group === 'false' || group === false)) {
+            group = false;
+        } else if (group === 'true' || group === 'true' || group === true) {
+            group = true;
+        } else {
+            res.status(400).json({ message: 'group 값을 제대로 입력해주세요.' });
+            return;
+        }
+        // membersOnly 형변환
+        if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
+            membersOnly = false;
+        } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
+            membersOnly = true;
+        } else {
+            res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
+            return;
+        }
 
         if (group === false) {
             // 개인 룸
@@ -132,9 +152,23 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
         const now = dayjs();
         const { roomId, roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
 
+        // 오류처리
+        if (!roomId) {
+            res.status(400).json({ message: 'roomId값은 필수입니다.' });
+            return;
+        }
+        const validRoomId = await commentsService.getOneByRoomId({ roomId });
+        if (!validRoomId) {
+            res.status(400).json({ message: '존재하지 않는 스터디방입니다.' });
+            return;
+        }
+        if (group || membersOnly || membersNum) {
+            res.status(400).json({ message: 'group, membersOnly, membersNum값은 변경할 수 없습니다.' });
+            return;
+        }
+
         updateChange.updateAt = now.format('YYYY-MM-DD HH:mm:ss');
         if (roomName) updateChange.roomName = roomName;
-        if (membersNum) updateChange.membersNum = membersNum;
         if (startStudyDay) updateChange.startStudyDay = startStudyDay;
         if (endStudyDay) updateChange.endStudyDay = endStudyDay;
         if (focusTimeStart) updateChange.focusTimeStart = focusTimeStart;
