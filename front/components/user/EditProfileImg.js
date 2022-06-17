@@ -1,29 +1,31 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { editProfileModalAtom } from '../../core/atoms/modalState';
 import { profileUrlAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 
 const EditProfileImg = () => {
+  const [show, setShowModal] = useRecoilState(editProfileModalAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const [file, setFile] = useState(null);
   const [profileUrl, setProfileUrl] = useRecoilState(profileUrlAtom);
 
   const fileInput = useRef(null);
-  useEffect(() => {
-    try {
-      const getUserProfileUrl = async () => {
-        const res = await API.get('user', user.id);
-        const curUser = await res.data;
-        setProfileUrl(curUser.profileUrl);
-        setUser(curUser);
-      };
-      getUserProfileUrl();
-    } catch (err) {
-      console.log('프로필이 없습니다.', err);
-    }
-    console.log(user);
-    console.log(profileUrl);
-  }, [profileUrl]);
+  // useEffect(() => {
+  //   try {
+  //     const getUserProfileUrl = async () => {
+  //       const res = await API.get('user', user.id);
+  //       const curUser = await res.data;
+  //       setProfileUrl(curUser.profileUrl);
+  //       setUser(curUser);
+  //     };
+  //     getUserProfileUrl();
+  //   } catch (err) {
+  //     console.log('프로필이 없습니다.', err);
+  //   }
+  //   console.log(user);
+  //   console.log(profileUrl);
+  // }, [profileUrl]);
 
   const saveEdit = async (e) => {
     e.preventDefault();
@@ -36,6 +38,8 @@ const EditProfileImg = () => {
       const updatedUrl = res.data.url;
       setProfileUrl(updatedUrl);
       console.log('이미지 전송에 성공했습니다.');
+      console.log(profileUrl);
+      setShowModal(false);
     } catch (err) {
       console.log('이미지 전송에 실패했습니다.', err);
     }
@@ -45,6 +49,7 @@ const EditProfileImg = () => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
       setProfileUrl(URL.createObjectURL(e.target.files[0]));
+      console.log(profileUrl);
     }
   };
   return (
