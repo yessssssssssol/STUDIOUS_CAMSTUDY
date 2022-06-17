@@ -4,7 +4,7 @@ import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 import UserEditModal from '../user/UserEditModal';
 import { useRouter } from 'next/router';
-import { tokenAtom } from '../../core/atoms/userState';
+import { profileUrlAtom, tokenAtom } from '../../core/atoms/userState';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
@@ -18,6 +18,7 @@ export default function NavBar() {
   const [menuBar, setMenuBar] = useRecoilState(menuModalState);
   const token = useRecoilValue(tokenAtom);
   const user = useRecoilValue(userAtom);
+  const profileUrl = useRecoilValue(profileUrlAtom);
   const userActions = useUserActions();
 
   const handleShow = () => {
@@ -150,7 +151,7 @@ export default function NavBar() {
               <span className="sr-only">Open user menu</span>
               <img
                 className="w-8 h-8 rounded-full"
-                src={user.profileUrl}
+                src={profileUrl}
                 alt="user photo"
               />
             </button>
