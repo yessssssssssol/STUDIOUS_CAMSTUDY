@@ -17,13 +17,19 @@ class User {
         return UserModel.find({});
     }
 
-    static update({ user_id, fieldToUpdate, newValue }) {
+    static update({ user_id, changeUpdate }) {
         const filter = { id: user_id };
-        const update = { [fieldToUpdate]: newValue };
         const option = { returnOriginal: false };
-
-        return UserModel.findOneAndUpdate(filter, update, option);
+        return UserModel.findOneAndUpdate(filter, changeUpdate, option);
     }
+
+    // static update({ user_id, fieldToUpdate, newValue }) {
+    //     const filter = { id: user_id };
+    //     const update = { [fieldToUpdate]: newValue };
+    //     const option = { returnOriginal: false };
+
+    //     return UserModel.findOneAndUpdate(filter, update, option);
+    // }
 
     static updateImg({ user_id, toUpdate }) {
         const filter = { id: user_id };
