@@ -25,35 +25,35 @@ const CommentAddForm = () => {
   };
 
   return (
-    <div class="flex justify-center items-center">
-      <div class=" bg-white p-2 pt-4 rounded shadow-lg">
-        <div class="flex ml-3">
-          <div class="mr-3">
-            <img src={profileUrl} alt="" class="h-16 w-16 m-2 rounded-full" />
-          </div>
+    <div class="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
+      <div class="mt-2">
+        <img src={profileUrl} alt="" class="h-16 w-16 m-2 rounded-full" />
+      </div>
+      <div class="flex">
+        <div class="flex flex-row items-center justify-between py-1 pr-2">
           <div>
-            <BoldText text={name} />
+            <a href="#" class="text-blue-400 hover:underline">
+              {name}
+            </a>
           </div>
-        </div>
-
-        <div class="mt-3 p-3 w-full">
-          <textarea
-            rows="3"
-            class="border p-2 rounded w-full"
-            placeholder="Write something..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
-
-        <div class="flex justify-between mx-3">
-          <div>
-            <button
-              class="px-4 py-1 bg-gray-800 text-white rounded font-light hover:bg-gray-700"
-              type="submit"
-            >
-              Submit
-            </button>
+          <div class="p-1">
+            <textarea
+              rows="3"
+              class="border p-2 rounded w-full"
+              placeholder="Write something..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
+          </div>
+          <div class="flex justify-between mx-3">
+            <div>
+              <button
+                class="px-4 py-1 bg-gray-800 text-white rounded font-light hover:bg-gray-700"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

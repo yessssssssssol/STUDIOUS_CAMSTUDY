@@ -1,6 +1,6 @@
 export default function Temporary() {
   return (
-    <div class="my-2 mx-1 max-w-lg flex gap-3 rounded-md bg-white p-2 text-black shadow">
+    <div class="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div class="mt-2">
         <img
           class="w-16 rounded-full shadow"

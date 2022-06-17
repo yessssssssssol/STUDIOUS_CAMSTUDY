@@ -40,16 +40,10 @@ export default function detail() {
                 latter he should thirty whence. Steepest speaking up attended it
                 as. Made neat an on be gave show snug tore.
               </div>
-              <div class="w-full grid grid-rows-3 grid-flow-col gap-4">
-                <div class="row-span-3">
-                  <CommentAddForm />
-                </div>
-                <div class="col-span-2">
-                  <Temporary />
-                </div>
-                <div class="crow-span-2 col-span-2">
-                  <Temporary />
-                </div>
+              <div class="flex-col w-full">
+                <CommentAddForm />
+                <Temporary />
+                <Temporary />
               </div>
             </div>
 
