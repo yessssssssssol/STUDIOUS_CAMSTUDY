@@ -18,7 +18,7 @@ const EditUser = () => {
     e.preventDefault();
     const res = await Api.put(`user/${user.id}`, {
       name: userName,
-      descriptiion: userDescription,
+      description: userDescription,
     });
     const updatedUser = await res.data;
     setUser(updatedUser);

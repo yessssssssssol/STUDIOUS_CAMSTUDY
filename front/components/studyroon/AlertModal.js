@@ -33,8 +33,8 @@ const AlertModal = () => {
                   정말 자리에 없으신가요?
                 </h3>
                 <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                  공부 중이시라면 아래 확인 버튼을 눌러주세요.
-                  <br /> 30초 이내로 누르지 않으시면 타이머가 멈춥니다. <br />
+                  AI가 유저를 확인하지 못해 타이머가 멈췄습니다.
+                  <br />
                   눈, 코, 입이 모두 화면에 나오게 카메라를 조정해주세요!
                 </p>
                 <button
