@@ -9,7 +9,7 @@ export default function Private() {
         <StopWatch />
       </div>
       <div>
-        {/* <AIFunc /> */}
+        <AIFunc />
         <AlertModal />
       </div>
     </div>
