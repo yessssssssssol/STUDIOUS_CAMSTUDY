@@ -23,7 +23,7 @@ class UserDailySheetService {
 
         const newSheets = userSheets.map((sheet) => {
             const { id, timeGoal } = sheet;
-            console.log(timeGoal);
+            // console.log(timeGoal);
             if (timeGoal === '00:00:00') {
                 return {
                     id,
@@ -57,8 +57,11 @@ class UserDailySheetService {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
         const date = ChangeDate.getCurrentDate(startTime);
+        console.log(id);
+        console.log(date);
 
         const getSheet = await UserDailySheet.getSheet({ id, date });
+        console.log(getSheet);
         const { timeGoal, beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
@@ -92,6 +95,10 @@ class UserDailySheetService {
             achievementRate = Number((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
         }
 
+        if (achievementRate > 100) {
+            achievementRate = 100;
+        }
+
         const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
         return updatedSheet;
     }
@@ -113,9 +120,20 @@ class UserDailySheetService {
         const weekAchievementRate = week.rate;
         const weekStudyTime = week.time;
 
+        const now = ChangeDate.getCurrentDate();
+        const todaySheet = getSheets.filter((sheet) => sheet.date === now);
+        let studyTimeADay = todaySheet[0].studyTimeADay;
+        console.log(todaySheet, now);
+        if (!studyTimeADay) {
+            const errorMessage = '금일 시트를 찾을 수 없습니다.';
+            return errorMessage;
+        } else if (studyTimeADay === ' ') {
+            studyTimeADay = '00:00:00';
+        }
+
         // console.log(total, week);
 
-        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime };
+        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
@@ -132,6 +150,9 @@ class UserDailySheetService {
         const studyTimeADayNum = ChangeDate.toMilliseconds(studyTimeADay);
         let achievementRate = ((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
 
+        if (achievementRate > 100) {
+            achievementRate = 100;
+        }
         if (timeGoal === '00:00:00') {
             achievementRate = 100;
         }
