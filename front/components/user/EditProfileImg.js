@@ -4,18 +4,18 @@ import { profileUrlAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 
 const EditProfileImg = () => {
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const [file, setFile] = useState(null);
   const [profileUrl, setProfileUrl] = useRecoilState(profileUrlAtom);
 
   const fileInput = useRef(null);
-
   useEffect(() => {
     try {
       const getUserProfileUrl = async () => {
-        const res = await API.get('users', user.id);
-        const data = res.data;
-        setProfileUrl(data.profileUrl);
+        const res = await API.get('user', user.id);
+        const curUser = await res.data;
+        setProfileUrl(curUser.profileUrl);
+        setUser(curUser);
       };
       getUserProfileUrl();
     } catch (err) {
@@ -23,7 +23,7 @@ const EditProfileImg = () => {
     }
     console.log(user);
     console.log(profileUrl);
-  }, []);
+  }, [profileUrl]);
 
   const saveEdit = async (e) => {
     e.preventDefault();
@@ -32,7 +32,9 @@ const EditProfileImg = () => {
     formD.append('img', file);
 
     try {
-      await API.postImg('user/img', formD);
+      const res = await API.postImg('user/img', formD);
+      const updatedUrl = res.data.url;
+      setProfileUrl(updatedUrl);
       console.log('이미지 전송에 성공했습니다.');
     } catch (err) {
       console.log('이미지 전송에 실패했습니다.', err);
@@ -46,7 +48,7 @@ const EditProfileImg = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center pb-10">
+    <div className="flex flex-col items-center pb-10 mx-20">
       <div className="my-6">
         <img
           className="h-40 w-40 rounded-full"
@@ -62,31 +64,33 @@ const EditProfileImg = () => {
         onChange={handleUpload}
         ref={fileInput}
       />
-      <div className="w-40">
+      <div className="my-5">
+        <div className="flex justify-center">
+          <button
+            className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            onClick={() => {
+              fileInput.current.click();
+              console.log(fileInput);
+            }}
+          >
+            프로필 업로드
+          </button>
+          <button
+            className="py-2.5 px-5  mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            onClick={() => {
+              setProfileUrl(
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+              );
+            }}
+          >
+            프로필 삭제
+          </button>
+        </div>
         <button
-          className="w-full text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
-          onClick={() => {
-            fileInput.current.click();
-            console.log(fileInput);
-          }}
-        >
-          프로필 업로드
-        </button>
-        <button
-          className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
-          onClick={() => {
-            setProfileUrl(
-              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-            );
-          }}
-        >
-          프로필 삭제
-        </button>
-        <button
-          className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
+          className="w-full text-white py-2.5 px-5 mr-2 mb-2 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={saveEdit}
         >
-          프로필 저장
+          저장
         </button>
       </div>
     </div>

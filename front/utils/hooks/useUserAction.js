@@ -1,13 +1,15 @@
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 
 import * as Api from '../../pages/api/api';
 import { tokenAtom, userAtom } from '../../core/atoms/userState';
+import { createroomAtom } from '../../core/atoms/createroomState';
 
 export function useUserActions() {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenAtom);
   const setUser = useSetRecoilState(userAtom);
+  const setRoom = useResetRecoilState(createroomAtom)
   // history 필요할 때
   const currentURL = router.asPath;
 
@@ -37,6 +39,7 @@ export function useUserActions() {
     sessionStorage.removeItem('userToken');
     setToken(null);
     setUser(null)
+    setRoom(null)
     router.push('/');
   }
 }

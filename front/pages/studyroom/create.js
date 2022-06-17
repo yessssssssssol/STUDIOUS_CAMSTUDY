@@ -1,5 +1,5 @@
-import CreateStudyRoom from '../../components/studyroon/CreateStudyRoom';
-import CreateStudyRoomProfile from '../../components/studyroon/CreateStudyRoomProfile';
+import CreateStudyRoom from '../../components/studyroon/create/CreateStudyContent';
+import CreateStudyRoomProfile from '../../components/studyroon/create/CreateStudyProfile';
 
 export default function Create() {
   return (

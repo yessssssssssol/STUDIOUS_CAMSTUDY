@@ -1,14 +1,20 @@
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userAtom } from '../../core/atoms/userState';
+import * as Api from '../../pages/api/api';
 import { useState } from 'react';
+import BoldText from '../common/BoldText';
 
-const CommentAddForm = ({ userName }) => {
+const CommentAddForm = () => {
   const [content, setContent] = useState('');
-
+  const [user, setUser] = useRecoilState(userAtom);
+  const { name, profileUrl } = user;
+  console.log(user);
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     // Id를 user_id 변수에 할당함.
-    const userId = Id;
+    // const userId = Id;
 
     await Api.post('comment', {
       hostId: userId,
@@ -23,10 +29,10 @@ const CommentAddForm = ({ userName }) => {
       <div class=" bg-white p-2 pt-4 rounded shadow-lg">
         <div class="flex ml-3">
           <div class="mr-3">
-            <img src="http://picsum.photos/50" alt="" class="rounded-full" />
+            <img src={profileUrl} alt="" class="h-16 w-16 m-2 rounded-full" />
           </div>
           <div>
-            <h1 class="font-semibold">Hailey{userName}</h1>
+            <BoldText text={name} />
           </div>
         </div>
 

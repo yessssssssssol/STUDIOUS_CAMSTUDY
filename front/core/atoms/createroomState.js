@@ -3,13 +3,8 @@ import { recoilPersist } from 'recoil-persist';
 
 const { persistAtom } = recoilPersist();
 
-export const aiAtom = atom({
-  key: 'userIsHear',
-  default: true,
+export const createroomAtom = atom({
+  key: 'room',
+  default: { room: null },
   effects_UNSTABLE: [persistAtom],
-});
-
-export const readyAtom = atom({
-  key: 'getReady',
-  default: false,
 });
