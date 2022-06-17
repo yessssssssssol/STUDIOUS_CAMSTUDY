@@ -1,4 +1,3 @@
-import useInterval from 'use-interval';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import '@tensorflow/tfjs';
 import { useEffect, useRef } from 'react';
@@ -7,9 +6,27 @@ import { aiAtom } from '../../core/atoms/aiState';
 
 const AIFunc = () => {
   let person = false;
+  let falseList = [];
+  let trueList = [];
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
   const canvasRef = useRef();
+
+  // trueList에 true가 연속으로 50번 찍히면 타이머 자동 재시작
+  const trueCheck = () => {
+    if (trueList.length === 50) {
+      setUserIsHear(true);
+      console.log('사람있음', userIsHear);
+    }
+  };
+
+  //falseList에 false가 연속으로 100번 찍히면 타이머 자동 멈춤
+  const falseCheck = () => {
+    if (falseList.length === 100) {
+      setUserIsHear(false);
+      console.log('사람없음', userIsHear);
+    }
+  };
 
   useEffect(() => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -49,41 +66,34 @@ const AIFunc = () => {
     });
   };
 
+  /**
+   * 사람이 있을 때는 trueList에 true를 push, falseList reset
+   * 사람이 없을 때는 falseList에 false를 push, trueList reset
+   */
   const renderPredictions = (predictions) => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
         person = true;
-        console.log(person);
+        console.log('ai true', person);
+        trueList.push(true);
+        falseList = [];
+        trueCheck();
       } else {
         person = false;
+        console.log('ai false', person);
+        falseList.push(false);
+        trueList = [];
+        falseCheck();
       }
     });
     if (predictions.length === 0) {
       person = false;
-      console.log(person);
+      console.log('ai false', person);
+      falseList.push(false);
+      trueList = [];
+      falseCheck();
     }
   };
-
-  let studylist = [];
-  const delay = 10000; // 30초
-
-  useInterval(() => {
-    if (person === true) {
-      console.log('공부중', userIsHear);
-      studylist = [];
-      console.log(studylist);
-    } else {
-      studylist.push(false);
-      console.log('자리비움', userIsHear);
-      console.log(studylist);
-      if (studylist.length === 5) {
-        setUserIsHear(false);
-        console.log(userIsHear);
-        console.log('안녕');
-        studylist = [];
-      }
-    }
-  }, [delay]);
 
   return (
     <div className="w-full py-10 flex justify-center ">

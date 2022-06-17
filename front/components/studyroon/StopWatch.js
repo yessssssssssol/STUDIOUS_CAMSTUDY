@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { aiAtom, readyAtom } from '../../core/atoms/aiState';
+import { useRecoilValue } from 'recoil';
+import { aiAtom } from '../../core/atoms/aiState';
 import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
 
+import dayjs from 'dayjs';
 import { RiTimerLine } from 'react-icons/ri';
+
+import * as API from '../../pages/api/api';
 // userIsHear가 true일 때 start
 // false가 되면 pause
 // 아예 창을 나가면 stop하고 reset
@@ -13,25 +16,26 @@ import { RiTimerLine } from 'react-icons/ri';
 // 저장한 데이터를 백엔드로 넘기기
 
 const StopWatch = () => {
-  const {
-    timer,
-    isActive,
-    isPaused,
-    handleStart,
-    handlePause,
-    handleRestart,
-    handleReset,
-  } = useTimer(0);
+  const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
 
+  // 카운트다운 시간 설정: 10초
   const initialMinute = 0;
   const initialSeconds = 10;
   const [minutes, setMinutes] = useState(initialMinute);
   const [seconds, setSeconds] = useState(initialSeconds);
-  const [getReady, setGetReady] = useRecoilState(readyAtom);
-  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+  const [getReady, setGetReady] = useState(false);
+  const userIsHear = useRecoilValue(aiAtom);
+
+  // timelog 찍을 때 사용
+  const [startTime, setStartTime] = useState('yyyy-mm-dd HH:MM:SS');
+  const [endTime, setEndTime] = useState('yyyy-mm-dd HH:MM:SS');
 
   const router = useRouter();
 
+  // dayjs 한국 시간 설정
+  dayjs.locale('ko');
+
+  // 처음 카운트다운 할 때 쓰는 코드
   useEffect(() => {
     let myInterval = setInterval(() => {
       if (seconds > 0) {
@@ -52,22 +56,56 @@ const StopWatch = () => {
     };
   });
 
+  // startTime, endTime 기록
   useEffect(() => {
-    if (getReady === true && userIsHear === true) {
+    if (getReady && userIsHear) {
       handleRestart();
-      console.log('userIsHear가 true');
-    } else if (getReady === true && userIsHear === false) {
+      console.log('userIsHear', userIsHear);
+      setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+    } else if (getReady && !userIsHear) {
       handlePause();
-      console.log('userIsHear가 false');
+      console.log('userIsHear', userIsHear);
+      setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     }
   }, [getReady, userIsHear]);
 
+  //카운트다운 끝나고 타이머 start 시작 시간을 기록
   useEffect(() => {
-    if (getReady === true) {
+    if (getReady) {
       handleStart();
       console.log('getReady가 true');
+      setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     }
   }, []);
+
+  // endTime이 변경될 때마다 timelog
+  useEffect(() => {
+    if (getReady) {
+      timelogFunc();
+    }
+  }, [endTime]);
+
+  // timelog 함수
+  const timelogFunc = async () => {
+    try {
+      const res = await API.post('timelog', {
+        startTime,
+        endTime,
+      });
+      const updatedTimelog = await res.data;
+      console.log('timelog 성공');
+      console.log(updatedTimelog);
+    } catch (err) {
+      console.log('timelog 실패', err);
+    }
+  };
+
+  // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
+  const handleClick = () => {
+    setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+    timelogFunc();
+    router.back();
+  };
 
   return (
     <div>
@@ -85,7 +123,7 @@ const StopWatch = () => {
           <div>
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              onClick={() => router.back()}
+              onClick={handleClick}
             >
               나가기
             </button>
