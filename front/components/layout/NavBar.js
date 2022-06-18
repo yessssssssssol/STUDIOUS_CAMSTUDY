@@ -72,6 +72,7 @@ export default function NavBar() {
         </>
       );
     }
+
     const invisible = 'invisible';
 
     return (
@@ -171,13 +172,13 @@ export default function NavBar() {
                 </div>
                 <ul className="py-1">
                   {drop_item.map((item) => NavDropItem(item))}
-                  <li>
+                  <li key={1}>
                     <UserEditModal />
                   </li>
-                  <li>
+                  <li key={2}>
                     <ProfileEditModal />
                   </li>
-                  <li>
+                  <li key={3}>
                     <button onClick={handleLogout} className="w-full">
                       <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">
                         Sign out

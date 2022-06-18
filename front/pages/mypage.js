@@ -21,7 +21,8 @@ export default function mypage() {
   const [timeDatas, setTimeData] = useState(null);
   const [user, setUser] = useRecoilState(userAtom);
   const [gittime, setGitTime] = useState([]);
-  const [goaltime, setGoaltime] = useState();
+  const [timeGoal, setTimeGoal] = useState();
+  const [getTimeGoal, setGetTimeGoal] = useState();
 
   const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
     ssr: false,
@@ -51,7 +52,10 @@ export default function mypage() {
     };
     const getGitTimeData = async () => {
       const res = await API.get('dailysheets', user.id);
+      console.log(res);
       const datas = res.data;
+      console.log(datas[0].timeGoal);
+      setGetTimeGoal(datas[0].timeGoal);
       datas.length == 0
         ? console.log('Git데이터', gittime)
         : datas.map((data) =>
@@ -63,29 +67,33 @@ export default function mypage() {
     getGitTimeData();
     setGitTime(gittime);
   }, []);
-  function clickHandler() {
-    console.log(goaltime);
+  async function clickHandler(e) {
+    {
+      e.type === 'change'
+        ? setTimeGoal(e.target.value)
+        : await API.put('dailysheet', { timeGoal: timeGoal + ':00:00' });
+    }
   }
   return (
-    <div class="flex-col  py-[50px]">
+    <div class="flex-col py-[50px] lg:px-[200px]">
       <div class="flex flex-row justify-between">
         <BoldText text={`${userName?.name}님의 최근 공부시간`} />
-        <span>
+        <span class="hidden sm:block">
+          <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
+            일일 목표
+          </span>
           <input
             class="text-center w-[70px] border-2 rounded-xl border-orange-300"
-            value={goaltime}
+            value={timeGoal}
+            onChange={(e) => clickHandler(e)}
           ></input>
           <span class=" mr-3">시간</span>
-          <Button text={'목표 시간 설정'} onClick={clickHandler}></Button>
+          <Button text={'설정'} onClick={clickHandler}></Button>
         </span>
       </div>
       <div class="flex flex-col items-center  lg:flex-row justify-evenly">
         {timeDatas?.map((time, index) => (
-          <TimeBox
-            index={index}
-            color={randomColor[Math.round((Math.random() * 15) % 14)]}
-            timeData={time}
-          />
+          <TimeBox index={index} timeData={time} timeGoal={getTimeGoal} />
         ))}
       </div>
       <div class="pt-[50px] ">
