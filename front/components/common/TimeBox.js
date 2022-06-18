@@ -10,6 +10,11 @@ export default function TimeBox({ timeData, index, timeGoal }) {
       <div class="font-bold pt-[10px] text-center">{title[index]}</div>
       <div class="text-center text-5xl pt-[10px]">{timeData}</div>
       {index === 0 ? (
+        timeGoal==="아직 목표 공부시간을 설정하지 않았습니다."?
+        <span class="block text-center text-slate-500 text-lg mt-[5px]">
+          목표 공부 시간:00:00:00
+        </span>
+        :
         <span class="block text-center text-slate-500 text-lg mt-[5px]">
           목표 공부 시간:{timeGoal}
         </span>
