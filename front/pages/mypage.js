@@ -68,10 +68,20 @@ export default function mypage() {
     setGitTime(gittime);
   }, []);
   async function clickHandler(e) {
+    var res = '';
     {
       e.type === 'change'
         ? setTimeGoal(e.target.value)
-        : await API.put('dailysheet', { timeGoal: timeGoal + ':00:00' });
+        : Number(timeGoal) < '10'
+        ? (res = await API.put('dailysheet', {
+            timeGoal: '0' + timeGoal + ':00:00',
+          }))
+        : Number(timeGoal) > '24'
+        ? alert('목표공부시간 최대는 24시간 입니다.')
+        : (res = await API.put('dailysheet', {
+            timeGoal: timeGoal + ':00:00',
+          }));
+      setGetTimeGoal(res.data.timeGoal);
     }
   }
   return (
