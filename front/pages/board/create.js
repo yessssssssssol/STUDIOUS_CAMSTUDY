@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { createroomAtom } from '../../core/atoms/createroomState';
+import {
+  createroomAtom,
+  studyroomImgAtom,
+} from '../../core/atoms/createroomState';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import * as API from '../../pages/api/api';
 
@@ -9,26 +12,47 @@ const boardCreate = () => {
   const [roomDesc, setRoomDesc] = useState('');
   const [hashTag, setHashTag] = useState('');
   const [members, setMemers] = useState([]);
-  const [roomPhoto, setRoomPhoto] = useState(null);
+  const [file, setFile] = useRecoilState(studyroomImgAtom);
 
-  function onclickHandler() {
+  const saveImg = async () => {
+    const formD = new FormData();
+    formD.append('img', file);
+
+    try {
+      const res = await API.postImg(`roomimg/${room.roomId}`, formD);
+      console.log(res);
+      console.log(room);
+      setRoom(null);
+      console.log('이미지 전송에 성공했습니다.');
+    } catch (err) {
+      console.log('이미지 전송에 실패했습니다.', err);
+    }
+  };
+
+  async function onclickHandler() {
     const hashTags = hashTag.split(' ');
+    const formD = new FormData();
+    const file = room.roomImg;
+    formD.append('img', file);
+
     const sendRoomData = async () => {
       try {
-        API.post('studyroom', {
+        const res = await API.post('studyroom', {
           ...room,
           roomTitle,
           roomDesc,
-          roomPhoto,
           members,
           hashTags,
         });
+        console.log(formD);
+        await API.putImg(`roomimg/${res.data.roomId}`, formD);
         setRoom(null);
       } catch (err) {
         console.log(err);
       }
     };
-    sendRoomData();
+    await sendRoomData();
+    // await saveImg();
   }
   return (
     <div>

@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 
 import { useRecoilState } from 'recoil';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import {
+  createroomAtom,
+  studyroomImgAtom,
+} from '../../../core/atoms/createroomState';
 
 const CreateStudyProfile = () => {
-  const [room, setRoom] = useRecoilState(createroomAtom);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useRecoilState(studyroomImgAtom);
   const [tempUrl, setTempURL] = useState(
     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
   );
@@ -20,13 +22,12 @@ const CreateStudyProfile = () => {
   };
 
   const handleResetProfileChange = (e) => {
-    setRoom((prev) => {
-      return {
-        ...prev,
-        profileUrl:
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-      };
-    });
+    setTempURL(
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    );
+    setFile(
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    );
   };
 
   const saveEdit = async (e) => {

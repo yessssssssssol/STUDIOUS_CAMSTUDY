@@ -8,3 +8,9 @@ export const createroomAtom = atom({
   default: { room: null },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const studyroomImgAtom = atom({
+  key: 'studyroomImg',
+  default: { roomImg: null },
+  effects_UNSTABLE: [persistAtom],
+});
