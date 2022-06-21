@@ -1,31 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { editProfileModalAtom } from '../../core/atoms/modalState';
-import { profileUrlAtom, userAtom } from '../../core/atoms/userState';
+import { userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 
 const EditProfileImg = () => {
   const [show, setShowModal] = useRecoilState(editProfileModalAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const [file, setFile] = useState(null);
-  const [profileUrl, setProfileUrl] = useRecoilState(profileUrlAtom);
+
+  const [tempURL, setTempURL] = useState(user.profileUrl);
 
   const fileInput = useRef(null);
-  // useEffect(() => {
-  //   try {
-  //     const getUserProfileUrl = async () => {
-  //       const res = await API.get('user', user.id);
-  //       const curUser = await res.data;
-  //       setProfileUrl(curUser.profileUrl);
-  //       setUser(curUser);
-  //     };
-  //     getUserProfileUrl();
-  //   } catch (err) {
-  //     console.log('프로필이 없습니다.', err);
-  //   }
-  //   console.log(user);
-  //   console.log(profileUrl);
-  // }, [profileUrl]);
+
+  const handleResetProfileChange = (e) => {
+    setUser((prev) => {
+      return {
+        ...prev,
+        profileUrl:
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+      };
+    });
+  };
 
   const saveEdit = async (e) => {
     e.preventDefault();
@@ -36,9 +32,10 @@ const EditProfileImg = () => {
     try {
       const res = await API.postImg('user/img', formD);
       const updatedUrl = res.data.url;
-      setProfileUrl(updatedUrl);
+      setUser((prev) => {
+        return { ...prev, profileUrl: updatedUrl };
+      });
       console.log('이미지 전송에 성공했습니다.');
-      console.log(profileUrl);
       setShowModal(false);
     } catch (err) {
       console.log('이미지 전송에 실패했습니다.', err);
@@ -48,8 +45,7 @@ const EditProfileImg = () => {
   const handleUpload = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
-      setProfileUrl(URL.createObjectURL(e.target.files[0]));
-      console.log(profileUrl);
+      setTempURL(URL.createObjectURL(e.target.files[0]));
     }
   };
   return (
@@ -57,7 +53,7 @@ const EditProfileImg = () => {
       <div className="my-6">
         <img
           className="h-40 w-40 rounded-full"
-          src={profileUrl}
+          src={tempURL}
           alt="Rounded avatar"
         />
       </div>
@@ -75,18 +71,13 @@ const EditProfileImg = () => {
             className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             onClick={() => {
               fileInput.current.click();
-              console.log(fileInput);
             }}
           >
             프로필 업로드
           </button>
           <button
             className="py-2.5 px-5  mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            onClick={() => {
-              setProfileUrl(
-                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-              );
-            }}
+            onClick={handleResetProfileChange}
           >
             프로필 삭제
           </button>
