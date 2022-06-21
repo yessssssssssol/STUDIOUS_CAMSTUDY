@@ -5,8 +5,8 @@ class Applicants {
         return ApplicantsModel.create(application);
     }
 
-    static checkOverlapping({ roomId }) {
-        return ApplicantsModel.findOne({ roomId });
+    static checkOverlapping({ applicantId, roomId }) {
+        return ApplicantsModel.findOne({ applicantId, roomId });
     }
 
     static delete({ applicantId, roomId }) {

@@ -21,7 +21,7 @@ applicantsRouter.post('/apply', login_required, async function (req, res, next) 
 
         if (!checkRoomId.membersOnly) return res.status(400).json({ message: '멤버 온니 스터디방이 아닙니다. 멤버 온니 스터디 방만 신청할 수 있습니다.' });
 
-        const checkOverlapping = await applicantsService.checkOverlapping({ roomId });
+        const checkOverlapping = await applicantsService.checkOverlapping({ applicantId, roomId });
         if (checkOverlapping) return res.status(400).json({ message: '이미 신청했습니다.' });
 
         // 멤버 중복 확인
@@ -93,6 +93,21 @@ applicantsRouter.get('/applicants/:roomId', login_required, async function (req,
         return res.status(200).json(applicantsList);
     } catch (error) {
         next(error);
+    }
+});
+
+//신청자 거절(방장권한)
+applicantsRouter.delete('/apply/:roomId/:applicantId', login_required, async function (req, res, next) {
+    try {
+        const { roomId, applicantId } = req.params;
+        if (!applicantId) return res.status(400).json({ message: 'applicantId를 파라미터를 통해 보내주세요.' });
+
+        const deletedApplication = await applicantsService.delete({ applicantId, roomId });
+        if (!deletedApplication) return res.status(400).json({ message: '삭제가 정상적으로 되지 않았습니다.' });
+
+        return res.status(200).json({ message: '성공적으로 신청자 리스트에서 삭제되었습니다.', deletedApplication });
+    } catch (error) {
+        next();
     }
 });
 

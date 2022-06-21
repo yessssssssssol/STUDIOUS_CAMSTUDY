@@ -5,8 +5,8 @@ class applicantsService {
         return Applicants.create({ application });
     }
 
-    static checkOverlapping({ roomId }) {
-        return Applicants.checkOverlapping({ roomId });
+    static checkOverlapping({ applicantId, roomId }) {
+        return Applicants.checkOverlapping({ applicantId, roomId });
     }
 
     static delete({ applicantId, roomId }) {
