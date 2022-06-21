@@ -1,5 +1,6 @@
-import { atom } from 'recoil';
+import { atom, selectorFamily } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import * as API from '../../pages/api/api';
 
 const { persistAtom } = recoilPersist();
 
@@ -8,6 +9,23 @@ export const userAtom = atom({
   default: { user: null },
   effects_UNSTABLE: [persistAtom],
 });
+
+// export const getUserSelector = selectorFamily({
+//   key: 'user/get',
+//   get:
+//     (id) =>
+//     async () => {
+//       try {
+//         const { user } = await API.get(`user/${id}`);
+//         return user.data;
+//       } catch (err) {
+//         throw err;
+//       }
+//     },
+//   // set: ({ set }, newValue) => {
+//   //   set(userTestAtom, newValue);
+//   // },
+// });
 
 export const tokenAtom = atom({
   key: 'token',

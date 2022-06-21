@@ -1,28 +1,33 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
-import {
-  userAtom,
-  userDescriptionAtom,
-  userNameAtom,
-} from '../../core/atoms/userState';
-import * as Api from '../../pages/api/api';
+import { userAtom } from '../../core/atoms/userState';
+import * as API from '../../pages/api/api';
 
 const EditUser = () => {
   const setShowModal = useSetRecoilState(editUserModalAtom);
   const [user, setUser] = useRecoilState(userAtom);
-  const [userName, setUserName] = useRecoilState(userNameAtom);
-  const [userDescription, setUserDescription] =
-    useRecoilState(userDescriptionAtom);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const res = await Api.put(`user/${user.id}`, {
-      name: userName,
-      description: userDescription,
+    const res = await API.put(`user/${user.id}`, {
+      name: user.name,
+      description: user.description,
     });
     const updatedUser = await res.data;
     setUser(updatedUser);
     setShowModal(false);
+  };
+
+  const handleNameChange = (e) => {
+    setUser((prev) => {
+      return { ...prev, name: e.target.value };
+    });
+  };
+
+  const handleDescriptionChange = (e) => {
+    setUser((prev) => {
+      return { ...prev, description: e.target.value };
+    });
   };
 
   return (
@@ -34,8 +39,8 @@ const EditUser = () => {
         <input
           className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="이름을 입력해주세요"
-          value={userName.name}
-          onChange={(e) => setUserName(e.target.value)}
+          value={user.name}
+          onChange={handleNameChange}
         />
         <p
           id="helper-text-explanation"
@@ -56,8 +61,8 @@ const EditUser = () => {
           rows="4"
           class="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Leave a comment..."
-          value={userDescription.descriptiion}
-          onChange={(e) => setUserDescription(e.target.value)}
+          value={user.descriptiion}
+          onChange={handleDescriptionChange}
         ></textarea>
       </div>
       <div>
