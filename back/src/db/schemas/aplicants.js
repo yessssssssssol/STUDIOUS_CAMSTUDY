@@ -10,11 +10,11 @@ const ApplicantsSchema = new Schema({
         type: String,
         required: true,
     },
-    // 신청 상태
-    status: {
-        type: Boolean,
-        required: true,
-    },
+    // // 신청 상태
+    // status: {
+    //     type: Boolean,
+    //     required: true,
+    // },
     // 지원 시간
     createdAt: {
         type: String,

@@ -24,6 +24,10 @@ class userStudyRoomsService {
     static delRoom({ id, roomId }) {
         return Promise.all([UserStudyRooms.deleteRoom({ id, roomId }), Comments.deleteComments({ roomId })]);
     }
+
+    static addMember({ roomId, updateChange }) {
+        return UserStudyRooms.update({ roomId, updateChange });
+    }
 }
 
 export { userStudyRoomsService };

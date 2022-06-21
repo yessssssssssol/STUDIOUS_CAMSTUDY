@@ -9,6 +9,15 @@ class Applicants {
         return ApplicantsModel.findOne({ roomId });
     }
 
+    static delete({ applicantId, roomId }) {
+        return ApplicantsModel.findOneAndDelete({ applicantId, roomId });
+    }
+
+    // static changeStatus({ applicantId, roomId, updateThing }) {
+    //     const option = { returnOriginal: false };
+    //     return ApplicantsModel.findOneAndUpdate({ applicantId, roomId }, updateThing, option);
+    // }
+
     // static create({ newLog }) {
     //     return TimeLogModel.create(newLog);
     // }

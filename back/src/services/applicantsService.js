@@ -9,6 +9,14 @@ class applicantsService {
         return Applicants.checkOverlapping({ roomId });
     }
 
+    static delete({ applicantId, roomId }) {
+        return Applicants.delete({ applicantId, roomId });
+    }
+
+    // static changeStatus({ ApplicantId, roomId, updateThing }) {
+    //     return Applicants.changeStatus({ ApplicantId, roomId, updateThing });
+    // }
+
     // static create({ newComment }) {
     //     return Comments.create({ newComment });
     // }

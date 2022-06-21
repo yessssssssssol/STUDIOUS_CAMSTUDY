@@ -6,7 +6,7 @@ import { userStudyRoomsService } from '../services/userStudyRoomsService';
 
 const applicantsRouter = Router();
 
-// 댓글 생성
+// 맴버온니 스터디룸 신청
 applicantsRouter.post('/apply', login_required, async function (req, res, next) {
     try {
         const now = dayjs();
@@ -14,33 +14,58 @@ applicantsRouter.post('/apply', login_required, async function (req, res, next) 
         const applicantId = req.currentUserId;
         const { roomId } = req.body;
 
-        if (!roomId) {
-            return res.status(400).json({ message: 'roomId를 입력해주세요.' });
-        }
+        if (!roomId) return res.status(400).json({ message: 'roomId를 입력해주세요.' });
 
         const checkRoomId = await userStudyRoomsService.getRoom({ roomId });
-        if (!checkRoomId) {
-            return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
-        }
+        if (!checkRoomId) return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
 
-        if (!checkRoomId.membersOnly) {
-            return res.status(400).json({ message: '멤버 온니 스터디방이 아닙니다. 멤버 온니 스터디 방만 신청할 수 있습니다.' });
-        }
+        if (!checkRoomId.membersOnly) return res.status(400).json({ message: '멤버 온니 스터디방이 아닙니다. 멤버 온니 스터디 방만 신청할 수 있습니다.' });
 
         const checkOverlapping = await applicantsService.checkOverlapping({ roomId });
-        if (checkOverlapping) {
-            return res.status(400).json({ message: '이미 신청했습니다.' });
-        }
+        if (checkOverlapping) return res.status(400).json({ message: '이미 신청했습니다.' });
 
         const application = {
             roomId,
             applicantId,
-            status: false,
             createdAt,
         };
 
         const applicants = await applicantsService.create({ application });
         return res.status(201).json(applicants);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 신청자 승인(방장권한)
+applicantsRouter.put('/apply/check', login_required, async function (req, res, next) {
+    try {
+        const id = req.currentUserId;
+        const { roomId, applicantId } = req.body;
+
+        if (!applicantId || !roomId) return res.status.json({ message: 'appicantIds나 roomId가 넘어오지 않았습니다.' });
+
+        // 이 방의 방장인가?
+        const checkRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!checkRoom) return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
+        if (checkRoom.id !== id) return res.status(400).json({ message: '이 방의 방장이 아닙니다. 신청자 승인 권한이 없습니다.' });
+
+        // 멤버 중복 확인
+        let findOverLap = false;
+        checkRoom.members.map((user) => {
+            if (user === applicantId) {
+                findOverLap = true;
+                return;
+            }
+        });
+        if (findOverLap) return res.status(400).json({ message: '이미 멤버입니다.' });
+
+        //방 멤버에 추가 후 신청 삭제
+        const updateChange = { members: [...checkRoom.members, applicantId] };
+        let addmember = undefined;
+        await Promise.all([applicantsService.delete({ applicantId, roomId }), userStudyRoomsService.addMember({ roomId, updateChange })]).then((result) => (addmember = result[1].members));
+
+        return res.status(200).json({ message: '성공적으로 스터디룸 멤버에 추가되었습니다.', roomMembers: addmember });
     } catch (error) {
         next(error);
     }
