@@ -20,7 +20,9 @@ applicantsRouter.post('/apply', login_required, async function (req, res, next) 
         const checkRoomId = await userStudyRoomsService.getRoom({ roomId });
         if (!checkRoomId) return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
 
-        if (!checkRoomId.membersOnly) return res.status(400).json({ message: '멤버 온니 스터디방이 아닙니다. 멤버 온니 스터디 방만 신청할 수 있습니다.' });
+        if (!checkRoomId.membersOnly) return res.status(400).json({ message: '멤버 온니 스터디방이 아닙니다. 멤버 온니 스터디 방만 신청할 수 없습니다.' });
+
+        if (checkRoomId.id === applicantId) return res.status(400).json({ message: '자신이 만든 방에 참가 신청 요청을 할 수 없습니다.' });
 
         const checkOverlapping = await applicantsService.checkOverlapping({ applicantId, roomId });
         if (checkOverlapping) return res.status(400).json({ message: '이미 신청했습니다.' });
