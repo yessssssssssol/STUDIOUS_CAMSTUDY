@@ -221,7 +221,6 @@ userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req,
         if (!id) return res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
 
         const getInfo = await Promise.all([userStudyRoomsService.getRooms({ id }), userStudyRoomsService.getOtherRooms({ id })]).then((result) => [...result[0], ...result[1]]);
-        console.log(getInfo);
 
         return res.status(200).json(getInfo);
     } catch (error) {

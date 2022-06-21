@@ -132,7 +132,6 @@ userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), as
         }
 
         const user_id = req.currentUserId;
-        console.log(user_id);
         const url = req.file.path;
         const updatedUser = await userAuthService.updateImg({ user_id, url });
 

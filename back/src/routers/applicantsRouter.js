@@ -138,7 +138,6 @@ applicantsRouter.delete('/appliant/:roomId/:applicantId', login_required, async 
 
         const members = checkRoom.members.filter((user) => user !== applicantId);
         const updateChange = { members };
-        console.log(updateChange);
         const delMember = await userStudyRoomsService.delMember({ roomId, updateChange }).then((result) => result.members);
         if (!delMember) return res.status(500).json({ message: ' 해당 멤버를 퇴장시키지 못했습니다.' });
 
