@@ -199,13 +199,12 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
 // 내가 생성한 스터디룸 가저오기(id를 통해)
 userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req, res, next) {
     try {
-        const id = req.params.id;
+        const { id } = req.params;
 
-        if (!roomId) {
-            return res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
-        }
+        if (!id) return res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
 
-        const getInfo = await userStudyRoomsService.getRooms({ id });
+        const getInfo = await Promise.all([userStudyRoomsService.getRooms({ id }), userStudyRoomsService.getOtherRooms({ id })]).then((result) => [...result[0], ...result[1]]);
+        console.log(getInfo);
 
         return res.status(200).json(getInfo);
     } catch (error) {

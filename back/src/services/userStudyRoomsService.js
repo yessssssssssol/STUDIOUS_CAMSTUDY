@@ -17,6 +17,10 @@ class userStudyRoomsService {
         return UserStudyRooms.findAllMine({ id });
     }
 
+    static getOtherRooms({ id }) {
+        return UserStudyRooms.findAllotherMine({ id });
+    }
+
     static getOpenRooms({ group, membersOnly }) {
         return UserStudyRooms.findAll({ group, membersOnly });
     }
