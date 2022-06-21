@@ -13,6 +13,10 @@ class Applicants {
         return ApplicantsModel.findOneAndDelete({ applicantId, roomId });
     }
 
+    static getLists({ roomId }) {
+        return ApplicantsModel.find({ roomId });
+    }
+
     // static changeStatus({ applicantId, roomId, updateThing }) {
     //     const option = { returnOriginal: false };
     //     return ApplicantsModel.findOneAndUpdate({ applicantId, roomId }, updateThing, option);

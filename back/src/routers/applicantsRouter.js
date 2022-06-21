@@ -71,4 +71,19 @@ applicantsRouter.put('/apply/check', login_required, async function (req, res, n
     }
 });
 
+// 신청자 리스트 가져오기
+applicantsRouter.get('/applicants/:roomId', login_required, async function (req, res, next) {
+    try {
+        const { roomId } = req.params;
+        if (!roomId) return res.status(400).json({ message: 'roomId 를 파라미터를 통해 보내주세요.' });
+
+        const applicantsList = await applicantsService.getLists({ roomId });
+        if (!applicantsList) return res.status(400).json({ message: '리스트를 불러오지 못했습니다.' });
+
+        return res.status(200).json(applicantsList);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { applicantsRouter };

@@ -13,6 +13,10 @@ class applicantsService {
         return Applicants.delete({ applicantId, roomId });
     }
 
+    static getLists({ roomId }) {
+        return Applicants.getLists({ roomId });
+    }
+
     // static changeStatus({ ApplicantId, roomId, updateThing }) {
     //     return Applicants.changeStatus({ ApplicantId, roomId, updateThing });
     // }
