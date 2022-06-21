@@ -19,8 +19,6 @@ export function useUserActions() {
   const setDescription = useSetRecoilState(userDescriptionAtom);
   const setProfileUrl = useSetRecoilState(profileUrlAtom);
   const setRoom = useResetRecoilState(createroomAtom);
-  // history 필요할 때
-  const currentURL = router.asPath;
 
   return {
     login,
@@ -38,7 +36,7 @@ export function useUserActions() {
       setUser(user);
       setToken(jwtToken);
       setName(name);
-      setDescription(userDescriptionAtom);
+      setDescription(description);
       setProfileUrl(profileUrl);
       console.log('로그인 성공');
 

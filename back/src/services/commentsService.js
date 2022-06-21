@@ -16,6 +16,11 @@ class commentsService {
     static getOne({ _id }) {
         return Comments.getOne({ _id });
     }
+
+    static getOneByRoomId({ roomId }) {
+        return Comments.getOneByRoomId({ roomId });
+    }
+
     static delete({ _id }) {
         return Comments.delete({ _id });
     }

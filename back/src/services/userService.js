@@ -1,4 +1,4 @@
-import { TimeLog, User, UserDailySheet } from '../db';
+import { Comments, TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
+import { userStudyRoomsService } from './userStudyRoomsService';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -192,7 +193,19 @@ class userAuthService {
     }
 
     static async deleteUser({ id }) {
-        return Promise.all([User.deleteUser({ id }), TimeLog.deleteUser({ id }), UserDailySheet.deleteUser({ id })]);
+        const roomAr = userStudyRoomsService.getRooms({ id });
+
+        Promise.all([
+            User.deleteUser({ id }),
+            TimeLog.deleteUser({ id }),
+            UserDailySheet.deleteUser({ id }),
+            (await roomAr).map((room) => {
+                const { roomId, id } = room;
+                userStudyRoomsService.delRoom({ id, roomId });
+            }),
+        ]);
+        await Comments.changeWithdrawalComments({ id });
+        return;
     }
 }
 

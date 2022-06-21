@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const CommentsSchema = new Schema({
-    //방 만든 사람 아이디
+    // 댓글 타겟이 되는 아이디
     targetId: {
         type: String,
     },
