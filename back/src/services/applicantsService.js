@@ -9,12 +9,16 @@ class applicantsService {
         return Applicants.checkOverlapping({ applicantId, roomId });
     }
 
+    static getLists({ roomId }) {
+        return Applicants.getLists({ roomId });
+    }
+
     static delete({ applicantId, roomId }) {
         return Applicants.delete({ applicantId, roomId });
     }
 
-    static getLists({ roomId }) {
-        return Applicants.getLists({ roomId });
+    static deleteApplicants({ roomId }) {
+        return Applicants.deleteMany({ roomId });
     }
 
     // static changeStatus({ ApplicantId, roomId, updateThing }) {
