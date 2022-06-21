@@ -12,6 +12,11 @@ timeLogRouter.post('/timelog', login_required, async function (req, res, next) {
         const startTime = req.body.startTime;
         const endTime = req.body.endTime;
 
+        if (!startTime || !endTime) {
+            res.status(400).json({ message: '시작 시간 혹은 끝나는 시간이 제대로 들어오지 않았습니다.' });
+            return;
+        }
+
         const newLog = await timeLogService.addTimeLog({
             user_id,
             startTime,
@@ -30,13 +35,9 @@ timeLogRouter.get('/timelogs/:date/:id', login_required, async function (req, re
         const date = req.params.date;
         // YYYY-MM-DD
         // 0123456789
-        if (!user_id) {
-            const errorMessage = '아이디가 제대로 넘어오지 않았습니다.';
-            return errorMessage;
-        }
-        if (!date) {
-            const errorMessage = '날짜가 제대로 넘어오지 않았습니다';
-            return errorMessage;
+        if (!user_id || !date) {
+            res.status(400).json({ message: '아이디 혹은 날짜가 제대로 넘어오지 않았습니다.' });
+            return;
         }
 
         const logList = await timeLogService.getTimeLogs({ user_id, date });
