@@ -5,6 +5,7 @@ import {
 } from '../../core/atoms/createroomState';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import * as API from '../../pages/api/api';
+import FormData from 'form-data';
 
 const boardCreate = () => {
   const [room, setRoom] = useRecoilState(createroomAtom);
@@ -14,25 +15,14 @@ const boardCreate = () => {
   const [members, setMemers] = useState([]);
   const [file, setFile] = useRecoilState(studyroomImgAtom);
 
-  // const saveImg = async () => {
-  //   const formD = new FormData();
-  //   formD.append('img', file);
-
-  //   try {
-  //     const res = await API.postImg(`roomimg/${room.roomId}`, formD);
-  //     console.log(res);
-  //     setRoom(null);
-  //     console.log('이미지 전송에 성공했습니다.');
-  //   } catch (err) {
-  //     console.log('이미지 전송에 실패했습니다.', err);
-  //   }
-  // };
+  const formD = new FormData();
+  useEffect(() => {
+    if (!file) return null;
+    formD.append('img', file);
+  }, [file]);
 
   async function onclickHandler() {
     const hashTags = hashTag.split(' ');
-    const formD = new FormData();
-    formD.append('img', file);
-
     try {
       const res = await API.post('studyroom', {
         ...room,
