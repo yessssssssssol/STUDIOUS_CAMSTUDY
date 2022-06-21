@@ -3,6 +3,7 @@ import { login_required } from '../middlewares/login_required';
 import dayjs from 'dayjs';
 import { applicantsService } from '../services/applicantsService';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
+import { userAuthService } from '../services/userService';
 
 const applicantsRouter = Router();
 
@@ -88,9 +89,17 @@ applicantsRouter.get('/applicants/:roomId', login_required, async function (req,
         if (!roomId) return res.status(400).json({ message: 'roomId 를 파라미터를 통해 보내주세요.' });
 
         const applicantsList = await applicantsService.getLists({ roomId });
-        if (!applicantsList) return res.status(400).json({ message: '리스트를 불러오지 못했습니다.' });
+        if (!applicantsList) return res.status(500).json({ message: '리스트를 불러오지 못했습니다.' });
 
-        return res.status(200).json(applicantsList);
+        const applicantsListWithName = await Promise.all(
+            applicantsList.map(async (applicant) => {
+                const user_id = applicant.applicantId;
+                const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                return { userName, ...applicant.toObject() };
+            }),
+        );
+
+        return res.status(200).json(applicantsListWithName);
     } catch (error) {
         next(error);
     }
