@@ -24,6 +24,16 @@ applicantsRouter.post('/apply', login_required, async function (req, res, next) 
         const checkOverlapping = await applicantsService.checkOverlapping({ roomId });
         if (checkOverlapping) return res.status(400).json({ message: '이미 신청했습니다.' });
 
+        // 멤버 중복 확인
+        let findOverLap = false;
+        checkRoomId.members.map((user) => {
+            if (user === applicantId) {
+                findOverLap = true;
+                return;
+            }
+        });
+        if (findOverLap) return res.status(400).json({ message: '이미 멤버입니다.' });
+
         const application = {
             roomId,
             applicantId,
