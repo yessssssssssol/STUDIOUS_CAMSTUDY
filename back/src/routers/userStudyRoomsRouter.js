@@ -177,7 +177,23 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
 // 스터디룸 하나 가저오기(roomId를 통해)
 userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
     try {
-        const roomId = req.params.roomId;
+        const { roomId } = req.params;
+
+        if (!roomId) {
+            return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
+        }
+
+        const getInfo = await userStudyRoomsService.getRoom({ roomId });
+        return res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 조회수
+userStudyRoomsRouter.put('/studyroom/view', login_required, async function (req, res, next) {
+    try {
+        const { roomId } = req.body;
 
         if (!roomId) {
             return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
@@ -189,8 +205,9 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
             const updateChange = { views };
             const updateViews = await userStudyRoomsService.updateRoom({ roomId, updateChange });
             return res.status(200).json(updateViews);
+        } else {
+            return res.status(400).json({ message: '오픈스터디룸과 멤버스터디룸만 조회수를 올릴 수 있습니다.' });
         }
-        return res.status(200).json(getInfo);
     } catch (error) {
         next(error);
     }
