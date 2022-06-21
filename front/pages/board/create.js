@@ -14,45 +14,40 @@ const boardCreate = () => {
   const [members, setMemers] = useState([]);
   const [file, setFile] = useRecoilState(studyroomImgAtom);
 
-  const saveImg = async () => {
-    const formD = new FormData();
-    formD.append('img', file);
+  // const saveImg = async () => {
+  //   const formD = new FormData();
+  //   formD.append('img', file);
 
-    try {
-      const res = await API.postImg(`roomimg/${room.roomId}`, formD);
-      console.log(res);
-      console.log(room);
-      setRoom(null);
-      console.log('이미지 전송에 성공했습니다.');
-    } catch (err) {
-      console.log('이미지 전송에 실패했습니다.', err);
-    }
-  };
+  //   try {
+  //     const res = await API.postImg(`roomimg/${room.roomId}`, formD);
+  //     console.log(res);
+  //     setRoom(null);
+  //     console.log('이미지 전송에 성공했습니다.');
+  //   } catch (err) {
+  //     console.log('이미지 전송에 실패했습니다.', err);
+  //   }
+  // };
 
   async function onclickHandler() {
     const hashTags = hashTag.split(' ');
     const formD = new FormData();
-    const file = room.roomImg;
     formD.append('img', file);
 
-    const sendRoomData = async () => {
-      try {
-        const res = await API.post('studyroom', {
-          ...room,
-          roomTitle,
-          roomDesc,
-          members,
-          hashTags,
-        });
-        console.log(formD);
-        await API.putImg(`roomimg/${res.data.roomId}`, formD);
-        setRoom(null);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    await sendRoomData();
-    // await saveImg();
+    try {
+      const res = await API.post('studyroom', {
+        ...room,
+        roomTitle,
+        roomDesc,
+        members,
+        hashTags,
+      });
+      console.log(res.data);
+      console.log(formD);
+      await API.putImg(`roomimg/${res.data.roomId}`, formD);
+      setRoom(null);
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
     <div>

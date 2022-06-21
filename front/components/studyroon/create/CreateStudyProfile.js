@@ -30,24 +30,24 @@ const CreateStudyProfile = () => {
     );
   };
 
-  const saveEdit = async (e) => {
-    e.preventDefault();
-    //Put request to update edited user data
-    const formD = new FormData();
-    formD.append('img', file);
+  // const saveEdit = async (e) => {
+  //   e.preventDefault();
+  //   //Put request to update edited user data
+  //   const formD = new FormData();
+  //   formD.append('img', file);
 
-    try {
-      const res = await API.postImg('user/img', formD);
-      const updatedUrl = res.data.url;
-      setUser((prev) => {
-        return { ...prev, profileUrl: updatedUrl };
-      });
-      console.log('이미지 전송에 성공했습니다.');
-      setShowModal(false);
-    } catch (err) {
-      console.log('이미지 전송에 실패했습니다.', err);
-    }
-  };
+  //   try {
+  //     const res = await API.postImg('user/img', formD);
+  //     const updatedUrl = res.data.url;
+  //     setUser((prev) => {
+  //       return { ...prev, profileUrl: updatedUrl };
+  //     });
+  //     console.log('이미지 전송에 성공했습니다.');
+  //     setShowModal(false);
+  //   } catch (err) {
+  //     console.log('이미지 전송에 실패했습니다.', err);
+  //   }
+  // };
 
   return (
     <div className="mx-20">
