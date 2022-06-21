@@ -55,7 +55,7 @@ export default function mypage() {
       console.log(res);
       const datas = res.data;
       console.log(datas[0].timeGoal);
-      setGetTimeGoal(datas[0].timeGoal);
+      setGetTimeGoal(datas[-1].timeGoal);
       datas.length == 0
         ? console.log('Git데이터', gittime)
         : datas.map((data) =>
@@ -81,7 +81,8 @@ export default function mypage() {
         : (res = await API.put('dailysheet', {
             timeGoal: timeGoal + ':00:00',
           }));
-      setGetTimeGoal(res.data.timeGoal);
+      console.log(res);
+      setGetTimeGoal(res.data?.timeGoal);
     }
   }
   return (
