@@ -105,11 +105,11 @@ applicantsRouter.get('/applicants/:roomId', login_required, async function (req,
     }
 });
 
-//신청자 거절(방장권한)
+//신청자거절(방장)/신청취소(신청자)
 applicantsRouter.delete('/apply/:roomId/:applicantId', login_required, async function (req, res, next) {
     try {
         const { roomId, applicantId } = req.params;
-        if (!applicantId) return res.status(400).json({ message: 'applicantId를 파라미터를 통해 보내주세요.' });
+        if (!roomId || !applicantId) return res.status(400).json({ message: 'roomId 혹은 applicantId를 파라미터를 통해 보내주세요.' });
 
         const deletedApplication = await applicantsService.delete({ applicantId, roomId });
         if (!deletedApplication) return res.status(400).json({ message: '삭제가 정상적으로 되지 않았습니다.' });
@@ -117,6 +117,32 @@ applicantsRouter.delete('/apply/:roomId/:applicantId', login_required, async fun
         return res.status(200).json({ message: '성공적으로 신청자 리스트에서 삭제되었습니다.', deletedApplication });
     } catch (error) {
         next();
+    }
+});
+
+//멤버 강제 퇴장 기능
+applicantsRouter.delete('/appliant/:roomId/:applicantId', login_required, async function (req, res, next) {
+    try {
+        const id = req.currentUserId;
+        const { roomId, applicantId } = req.params;
+        if (!roomId || !applicantId) return res.status(400).json({ message: 'roomId 혹은 applicantId를 파라미터를 통해 보내주세요.' });
+
+        // 이 방의 방장인가?
+        const checkRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!checkRoom) return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
+        if (checkRoom.id !== id) return res.status(400).json({ message: '이 방의 방장이 아닙니다. 멤버 퇴장 권한이 없습니다.' });
+
+        // 삭제할 멤버가 배열 안에 있는지 확인
+
+        const members = checkRoom.members.filter((user) => user !== applicantId);
+        const updateChange = { members };
+        console.log(updateChange);
+        const delMember = await userStudyRoomsService.delMember({ roomId, updateChange }).then((result) => result.members);
+        if (!delMember) return res.status(500).json({ message: ' 해당 멤버를 퇴장시키지 못했습니다.' });
+
+        return res.status(200).json({ message: '성공적으로 스터디룸 멤버에서 제거되었습니다.', roomMembers: delMember });
+    } catch (error) {
+        next(error);
     }
 });
 

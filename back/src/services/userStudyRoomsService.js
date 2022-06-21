@@ -28,6 +28,10 @@ class userStudyRoomsService {
     static addMember({ roomId, updateChange }) {
         return UserStudyRooms.update({ roomId, updateChange });
     }
+
+    static delMember({ roomId, updateChange }) {
+        return UserStudyRooms.update({ roomId, updateChange });
+    }
 }
 
 export { userStudyRoomsService };
