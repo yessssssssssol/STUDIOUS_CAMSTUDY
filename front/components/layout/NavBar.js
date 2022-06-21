@@ -148,11 +148,13 @@ export default function NavBar() {
               id="menu-button"
             >
               <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                src={user.profileUrl}
-                alt="user photo"
-              />
+              {user.profileUrl && (
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src={user.profileUrl}
+                  alt="user photo"
+                />
+              )}
             </button>
 
             {showOptions && (
