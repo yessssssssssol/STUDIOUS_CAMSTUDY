@@ -1,8 +1,12 @@
 import { ApplicantsModel } from '../schemas/aplicants';
 
 class Applicants {
-    static create({}) {
-        return ApplicantsModel.create();
+    static create({ application }) {
+        return ApplicantsModel.create(application);
+    }
+
+    static checkOverlapping({ roomId }) {
+        return ApplicantsModel.findOne({ roomId });
     }
 
     // static create({ newLog }) {
