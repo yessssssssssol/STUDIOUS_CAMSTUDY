@@ -33,6 +33,11 @@ export const tokenAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const isloginAtom = atom({
+  key: 'islogin',
+  default: { login: false },
+  effects_UNSTABLE: [persistAtom],
+});
 // export const currentUserState = atom({
 //   key: 'currentUserState',
 //   default: { user: null },

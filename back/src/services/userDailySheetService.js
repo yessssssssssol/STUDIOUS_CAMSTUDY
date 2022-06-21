@@ -8,14 +8,19 @@ const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기
-    static async createSheets() {
+    static async createSheets(date = undefined) {
         // 날짜 가져오기
         const now = dayjs();
-        const today = now.format('YYYY-MM-DD');
-        const yesterday = now.add(-1, 'day').format().slice(0, 10);
-        console.log(typeof yesterday);
+        let today = now.format('YYYY-MM-DD');
+        let yesterday = now.add(-1, 'day').format().slice(0, 10);
+        if (date) {
+            const dateThatInsert = dayjs(date);
+            today = dateThatInsert.format('YYYY-MM-DD');
+            yesterday = dateThatInsert.add(-1, 'day').format().slice(0, 10);
+        }
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
         const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
+        console.log(userSheets);
         if (userSheets === []) {
             const errorMessage = '새로 데일리 시트를 만들 때 필요한 전날 데일리 시트 데이터가 없습니다.';
             return { errorMessage };
@@ -48,7 +53,7 @@ class UserDailySheetService {
                 };
             }
         });
-        await UserDailySheet.addSheets(newSheets);
+        UserDailySheet.addSheets(newSheets);
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
     }
 

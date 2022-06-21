@@ -7,7 +7,14 @@ const userDailySheetRouter = Router();
 // 새벽 5시 업데이트 확인용
 userDailySheetRouter.post('/dailysheet', login_required, async function (req, res, next) {
     try {
-        const madeSheets = await UserDailySheetService.createSheets();
+        const arbitrarilyDate = req.body.date;
+        let madeSheets = undefined;
+
+        if (arbitrarilyDate) {
+            madeSheets = await UserDailySheetService.createSheets(arbitrarilyDate);
+        } else {
+            madeSheets = await UserDailySheetService.createSheets();
+        }
 
         if (!madeSheets) {
             throw new Error('시트를 가져오지 못했습니다.');
@@ -64,7 +71,7 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
         const id = req.currentUserId;
         const timeGoal = req.body.timeGoal;
 
-        if (!id || timeGoal) {
+        if (!id || !timeGoal) {
             res.status(400).json({ message: 'id가 혹은 timeGoal이 제대로 넘어오지 않았습니다.' });
             return;
         }

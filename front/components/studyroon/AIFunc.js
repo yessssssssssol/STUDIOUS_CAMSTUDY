@@ -38,7 +38,7 @@ const AIFunc = () => {
           },
         })
         .then((stream) => {
-          window.stream = stream;
+          //window.stream = stream;
           videoRef.current.srcObject = stream;
           return new Promise((resolve, reject) => {
             videoRef.current.onloadedmetadata = () => {
