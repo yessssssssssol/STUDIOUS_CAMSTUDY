@@ -24,7 +24,7 @@ export default function NavBar() {
   const user = useRecoilValue(userAtom);
   const profileUrl = useRecoilValue(profileUrlAtom);
   const userActions = useUserActions();
-  const islogin = useRecoilValue(isloginAtom);
+  const [islogin, setIsLogin] = useRecoilState(isloginAtom);
   const [element, setElement] = useState(null);
   const handleShow = () => {
     setShowOptions(true);
@@ -162,10 +162,10 @@ export default function NavBar() {
                 >
                   <div className="py-3 px-4">
                     <span className="block text-sm text-gray-900">
-                      {user.name}
+                      {user?.name}
                     </span>
                     <span className="block text-sm font-medium text-gray-500 truncate">
-                      {user.email}
+                      {user?.email}
                     </span>
                   </div>
                   <ul className="py-1">

@@ -9,6 +9,7 @@ import {
   userAtom,
   userDescriptionAtom,
   userNameAtom,
+  NameAtom,
 } from '../core/atoms/userState';
 import * as API from '../pages/api/api';
 import {
@@ -17,12 +18,13 @@ import {
   charts_color,
 } from '../components/common/UseData';
 export default function mypage() {
-  const userName = useRecoilValue(userAtom);
+  const [userName, setUserName] = useRecoilState(userNameAtom);
   const [timeDatas, setTimeData] = useState(null);
-  const [user, setUser] = useRecoilState(userAtom);
+  const user = useRecoilValue(userAtom);
   const [gittime, setGitTime] = useState([]);
   const [timeGoal, setTimeGoal] = useState();
   const [getTimeGoal, setGetTimeGoal] = useState();
+  const [element, setElement] = useState(null);
 
   const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
     ssr: false,
@@ -55,7 +57,7 @@ export default function mypage() {
       console.log(res);
       const datas = res.data;
       console.log(datas[0].timeGoal);
-      setGetTimeGoal(datas[-1].timeGoal);
+      setGetTimeGoal(datas[datas.length - 1].timeGoal);
       datas.length == 0
         ? console.log('Git데이터', gittime)
         : datas.map((data) =>
@@ -66,7 +68,7 @@ export default function mypage() {
     getTimeData();
     getGitTimeData();
     setGitTime(gittime);
-  }, []);
+  }, [user]);
   async function clickHandler(e) {
     var res = '';
     {
@@ -82,13 +84,14 @@ export default function mypage() {
             timeGoal: timeGoal + ':00:00',
           }));
       console.log(res);
-      setGetTimeGoal(res.data?.timeGoal);
     }
   }
   return (
     <div class="flex-col py-[50px] lg:px-[200px]">
       <div class="flex flex-row justify-between">
-        <BoldText text={`${userName?.name}님의 최근 공부시간`} />
+        <div class="font-bold text-3xl text-center lg:text-left">
+          <BoldText text={`${user?.name}님의 최근 공부시간`} />
+        </div>
         <span class="hidden sm:block">
           <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
             일일 목표
@@ -108,14 +111,14 @@ export default function mypage() {
         ))}
       </div>
       <div class="pt-[50px] ">
-        <BoldText text={`${userName?.name}님의 공부기록`} />
+        <BoldText text={`${user?.name}님의 공부기록`} />
         <div class="pt-[10px]">
           <NoSSR gittimes={gittime} />
         </div>
       </div>
 
       <div class=" pt-[50px]">
-        <BoldText text={`${userName?.name}의 공부 기록 통계`} />
+        <BoldText text={`${user?.name}의 공부 기록 통계`} />
         <div class="flex flex-col items-center  lg:flex-row justify-evenly">
           {charts_data.map((title) => (
             <div class="py-8 lg:mr-[30px]">

@@ -1,5 +1,7 @@
 import { RecoilRoot } from 'recoil';
 import '../styles/globals.css';
+import dynamic from 'next/dynamic';
+
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 function MyApp({ Component, pageProps }) {
@@ -11,5 +13,6 @@ function MyApp({ Component, pageProps }) {
     </RecoilRoot>
   );
 }
-
-export default MyApp;
+export default dynamic(() => Promise.resolve(MyApp), {
+  ssr: false,
+});
