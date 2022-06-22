@@ -3,61 +3,81 @@ import Helmet from '../../../components/layout/Helmet';
 import CommentAddForm from '../../../components/comment/CommentAddForm';
 import ProfileCard from '../../../components/common/ProfileCard';
 import Temporary from '../../../components/comment/CommentsTemporary';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import * as API from '../../../pages/api/api';
 
 export default function Detail() {
+  const [detailData, setDetailData] = useState();
   const router = useRouter();
-  console.log(router);
-  useEffect(() => {});
+  useEffect(() => {
+    async function getBoardDetail() {
+      try {
+        const res = await API.get('studyroom', router.query.id);
+        console.log(res, '방 데이터');
+        setDetailData(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (router.isReady) {
+      getBoardDetail();
+    }
+  }, [router.isReady]);
   return (
-    <div>
-      <Helmet title="상세페이지" />
-      <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-        <main class="mt-10">
-          <div class="mb-4 md:mb-0 w-full mx-auto relative">
-            <div class="px-4 lg:px-0">
-              <h2 class="text-4xl font-semibold text-gray-800 leading-tight">
-                스터디 같이 하실 분 찾습니다!!!!
-              </h2>
-              <a
-                href="#"
-                class="py-2 text-green-700 inline-flex items-center justify-center mb-2"
-              >
-                스터디원모집/오늘공부자랑 등등...
-              </a>
-            </div>
-          </div>
-          <div class="flex flex-col lg:flex-row lg:space-x-12">
-            <div class="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
-              <p class="pb-6">
-                Advantage old had otherwise sincerity dependent additions. It in
-                adapted natural hastily is justice. Six draw you him full not
-                mean evil. Prepare garrets it expense windows shewing do an. She
-                projection advantages resolution son indulgence. Part sure on no
-                long life am at ever. In songs above he as drawn to. Gay was
-                outlived peculiar rendered led six.
-              </p>
-
-              <div class="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
-                Sportsman do offending supported extremity breakfast by
-                listening. Decisively advantages nor expression unpleasing she
-                led met. Estate was tended ten boy nearer seemed. As so seeing
-                latter he should thirty whence. Steepest speaking up attended it
-                as. Made neat an on be gave show snug tore.
+    <>
+      {detailData && (
+        <div>
+          <Helmet title="상세페이지" />
+          <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+            <main className="mt-10">
+              <div className="mb-4 md:mb-0 w-full mx-auto relative">
+                <div className="px-4 lg:px-0">
+                  <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
+                    {detailData.roomTitle}
+                  </h2>
+                  <a
+                    href="#"
+                    className="py-2 text-green-700 inline-flex items-center justify-center mb-2"
+                  >
+                    {detailData.roomDesc}
+                  </a>
+                </div>
               </div>
-              <div class="flex-col w-full">
-                <CommentAddForm />
-                <Temporary />
-                <Temporary />
-              </div>
-            </div>
+              <div className="flex flex-col lg:flex-row lg:space-x-12">
+                <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
+                  <p className="pb-6">
+                    Advantage old had otherwise sincerity dependent additions.
+                    It in adapted natural hastily is justice. Six draw you him
+                    full not mean evil. Prepare garrets it expense windows
+                    shewing do an. She projection advantages resolution son
+                    indulgence. Part sure on no long life am at ever. In songs
+                    above he as drawn to. Gay was outlived peculiar rendered led
+                    six.
+                  </p>
 
-            <div class="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-              <ProfileCard />
-            </div>
+                  <div className="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
+                    Sportsman do offending supported extremity breakfast by
+                    listening. Decisively advantages nor expression unpleasing
+                    she led met. Estate was tended ten boy nearer seemed. As so
+                    seeing latter he should thirty whence. Steepest speaking up
+                    attended it as. Made neat an on be gave show snug tore.
+                  </div>
+                  <div className="flex-col w-full">
+                    <CommentAddForm />
+                    <Temporary />
+                    <Temporary />
+                  </div>
+                </div>
+
+                <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
+                  <ProfileCard />
+                </div>
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

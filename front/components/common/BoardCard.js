@@ -1,9 +1,14 @@
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 export default function BoardCard({ boardData, profileURL }) {
+  const router = useRouter();
+  useEffect(() => {});
   return (
     <div className="px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         <div className="overflow-hidden transition-shadow duration-300 bg-white rounded">
-          <a href="/board/detail" aria-label="Article">
+          <a href={`/board/detail/${boardData.roomId}`}>
             <img
               src="img.jpeg"
               className="object-cover w-full h-64 rounded"
