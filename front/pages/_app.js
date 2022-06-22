@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <NavBar />
@@ -13,6 +13,3 @@ function MyApp({ Component, pageProps }) {
     </RecoilRoot>
   );
 }
-export default dynamic(() => Promise.resolve(MyApp), {
-  ssr: false,
-});

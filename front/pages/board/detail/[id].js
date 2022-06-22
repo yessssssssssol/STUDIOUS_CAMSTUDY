@@ -1,9 +1,14 @@
-import Helmet from '../../components/layout/Helmet';
-import CommentAddForm from '../../components/comment/CommentAddForm';
-import ProfileCard from '../../components/common/ProfileCard';
-import Temporary from '../../components/comment/CommentsTemporary';
+import { useRouter } from 'next/router';
+import Helmet from '../../../components/layout/Helmet';
+import CommentAddForm from '../../../components/comment/CommentAddForm';
+import ProfileCard from '../../../components/common/ProfileCard';
+import Temporary from '../../../components/comment/CommentsTemporary';
+import { useEffect } from 'react';
 
-export default function detail() {
+export default function Detail() {
+  const router = useRouter();
+  console.log(router);
+  useEffect(() => {});
   return (
     <div>
       <Helmet title="상세페이지" />
