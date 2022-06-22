@@ -24,8 +24,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         } else if (group === 'true' || group === 'true' || group === true) {
             group = true;
         } else {
-            res.status(400).json({ message: 'group 값을 제대로 입력해주세요.' });
-            return;
+            return res.status(400).json({ message: 'group 값을 제대로 입력해주세요.' });
         }
         // membersOnly 형변환
         if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
@@ -33,15 +32,13 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
             membersOnly = true;
         } else {
-            res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
-            return;
+            return res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
         }
 
         if (group === false) {
             // 개인 룸
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-                return;
+                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
             }
             newRoomInfo = {
                 id,
@@ -60,8 +57,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
         } else if (group === true && membersOnly === false) {
             // 공개 룸
             if (roomName && membersNum && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-                return;
+                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
             }
             newRoomInfo = {
                 id,
@@ -82,8 +78,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             console.log('오픈룸 생성');
         } else if (group === true && membersOnly === true) {
             if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd && roomTitle && roomDesc && hashTags === undefined) {
-                res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-                return;
+                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
             }
             // 멤버 온니 룸
             newRoomInfo = {
@@ -108,13 +103,12 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             };
             console.log('멤버룸 생성');
         } else {
-            res.status(400).json('방 정보를 제대로 입력해주세요');
-            return;
+            return res.status(400).json('방 정보를 제대로 입력해주세요');
         }
 
         const roomInfo = await userStudyRoomsService.createRoom({ newRoomInfo });
 
-        res.status(201).json(roomInfo);
+        return res.status(201).json(roomInfo);
     } catch (error) {
         next(error);
     }
@@ -125,8 +119,7 @@ userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomIm
     try {
         const now = dayjs();
         if (!req.file) {
-            res.status(400).json({ message: '업로드할 이미지가 없습니다.' });
-            return;
+            return res.status(400).json({ message: '업로드할 이미지가 없습니다.' });
         }
 
         const { roomId } = req.params;
@@ -135,11 +128,10 @@ userStudyRoomsRouter.put('/roomimg/:roomId', uploadRoomImgHandler.single('roomIm
         const createImg = await userStudyRoomsService.updateRoom({ roomId, updateChange });
 
         if (!createImg.roomImg || createImg.roomImg === '사진 정보가 없습니다.') {
-            res.status(400).json({ message: '이미지가 제대로 저장되지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: '이미지가 제대로 저장되지 않았습니다.' });
         }
 
-        res.status(200).send({ url: url });
+        return res.status(200).send({ url: url });
     } catch (error) {
         next(error);
     }
@@ -154,17 +146,14 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
 
         // 오류처리
         if (!roomId) {
-            res.status(400).json({ message: 'roomId값은 필수입니다.' });
-            return;
+            return res.status(400).json({ message: 'roomId값은 필수입니다.' });
         }
         const validRoomId = await commentsService.getOneByRoomId({ roomId });
         if (!validRoomId) {
-            res.status(400).json({ message: '존재하지 않는 스터디방입니다.' });
-            return;
+            return res.status(400).json({ message: '존재하지 않는 스터디방입니다.' });
         }
         if (group || membersOnly || membersNum) {
-            res.status(400).json({ message: 'group, membersOnly, membersNum값은 변경할 수 없습니다.' });
-            return;
+            return res.status(400).json({ message: 'group, membersOnly, membersNum값은 변경할 수 없습니다.' });
         }
 
         updateChange.updateAt = now.format('YYYY-MM-DD HH:mm:ss');
@@ -179,7 +168,7 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
 
         const udatedInfo = await userStudyRoomsService.updateRoom({ roomId, updateChange });
 
-        res.status(200).json(udatedInfo);
+        return res.status(200).json(udatedInfo);
     } catch (error) {
         next(error);
     }
@@ -188,11 +177,26 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
 // 스터디룸 하나 가저오기(roomId를 통해)
 userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
     try {
-        const roomId = req.params.roomId;
+        const { roomId } = req.params;
 
         if (!roomId) {
-            res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
-            return;
+            return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
+        }
+
+        const getInfo = await userStudyRoomsService.getRoom({ roomId });
+        return res.status(200).json(getInfo);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 조회수
+userStudyRoomsRouter.put('/studyroom/view', login_required, async function (req, res, next) {
+    try {
+        const { roomId } = req.body;
+
+        if (!roomId) {
+            return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
         }
 
         const getInfo = await userStudyRoomsService.getRoom({ roomId });
@@ -200,10 +204,10 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
             const views = Number(getInfo.views + 1);
             const updateChange = { views };
             const updateViews = await userStudyRoomsService.updateRoom({ roomId, updateChange });
-            res.status(200).json(updateViews);
-            return;
+            return res.status(200).json(updateViews);
+        } else {
+            return res.status(400).json({ message: '오픈스터디룸과 멤버스터디룸만 조회수를 올릴 수 있습니다.' });
         }
-        res.status(200).json(getInfo);
     } catch (error) {
         next(error);
     }
@@ -212,16 +216,13 @@ userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (r
 // 내가 생성한 스터디룸 가저오기(id를 통해)
 userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req, res, next) {
     try {
-        const id = req.params.id;
+        const { id } = req.params;
 
-        if (!roomId) {
-            res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
-            return;
-        }
+        if (!id) return res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
 
-        const getInfo = await userStudyRoomsService.getRooms({ id });
+        const getInfo = await Promise.all([userStudyRoomsService.getRooms({ id }), userStudyRoomsService.getOtherRooms({ id })]).then((result) => [...result[0], ...result[1]]);
 
-        res.status(200).json(getInfo);
+        return res.status(200).json(getInfo);
     } catch (error) {
         next(error);
     }
@@ -234,7 +235,7 @@ userStudyRoomsRouter.get('/open/studyrooms', login_required, async function (req
         const membersOnly = false;
         const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
-        res.status(200).json(getInfo);
+        return res.status(200).json(getInfo);
     } catch (error) {
         next(error);
     }
@@ -247,7 +248,7 @@ userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async functio
         const membersOnly = true;
         const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
-        res.status(200).json(getInfo);
+        return res.status(200).json(getInfo);
     } catch (error) {
         next(error);
     }
@@ -260,8 +261,7 @@ userStudyRoomsRouter.delete('/deleteroom/:roomId', login_required, async functio
         const id = req.currentUserId;
 
         if (!roomId || !id) {
-            res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
-            return;
+            return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
         }
 
         await userStudyRoomsService.delRoom({ id, roomId });
