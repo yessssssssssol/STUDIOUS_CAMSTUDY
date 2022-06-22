@@ -4,12 +4,11 @@ import dynamic from 'next/dynamic';
 import Pie from '../components/common/Pie';
 import Button from '../components/common/Button';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userAtom, userNameAtom } from '../core/atoms/userState';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '../core/atoms/userState';
 import * as API from '../pages/api/api';
 import { charts_data, charts_color } from '../components/common/UseData';
 export default function mypage() {
-  const [userName, setUserName] = useRecoilState(userNameAtom);
   const [timeDatas, setTimeData] = useState(null);
   const useratom = useRecoilValue(userAtom);
   const [user, setUser] = useState();
@@ -124,13 +123,6 @@ export default function mypage() {
                 </div>
               ))}
             </div>
-            {/* <div className="my-[100px] min-w-[1000px]">
-                
-                    {
-                        category_time.map((category)=>(<CategoryBox category={category} />))
-                    }
-                    
-            </div> */}
           </div>
         </div>
       )}

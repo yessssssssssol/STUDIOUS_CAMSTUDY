@@ -46,16 +46,6 @@ export default function Detail() {
               </div>
               <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
-                  <p className="pb-6">
-                    Advantage old had otherwise sincerity dependent additions.
-                    It in adapted natural hastily is justice. Six draw you him
-                    full not mean evil. Prepare garrets it expense windows
-                    shewing do an. She projection advantages resolution son
-                    indulgence. Part sure on no long life am at ever. In songs
-                    above he as drawn to. Gay was outlived peculiar rendered led
-                    six.
-                  </p>
-
                   <div className="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
                     Sportsman do offending supported extremity breakfast by
                     listening. Decisively advantages nor expression unpleasing
@@ -71,7 +61,7 @@ export default function Detail() {
                 </div>
 
                 <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-                  <ProfileCard />
+                  <ProfileCard hashTag={detailData.hashTags} />
                 </div>
               </div>
             </main>
