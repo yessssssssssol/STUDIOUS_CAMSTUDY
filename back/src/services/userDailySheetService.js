@@ -20,7 +20,6 @@ class UserDailySheetService {
         }
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
         const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
-        console.log(userSheets);
         if (userSheets === []) {
             const errorMessage = '새로 데일리 시트를 만들 때 필요한 전날 데일리 시트 데이터가 없습니다.';
             return { errorMessage };
@@ -62,11 +61,7 @@ class UserDailySheetService {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
         const date = ChangeDate.getCurrentDate(startTime);
-        console.log(id);
-        console.log(date);
-
         const getSheet = await UserDailySheet.getSheet({ id, date });
-        console.log(getSheet);
         const { timeGoal, beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
@@ -128,7 +123,6 @@ class UserDailySheetService {
         const now = ChangeDate.getCurrentDate();
         const todaySheet = getSheets.filter((sheet) => sheet.date === now);
         let studyTimeADay = todaySheet[0].studyTimeADay;
-        console.log(todaySheet, now);
         if (!studyTimeADay) {
             const errorMessage = '금일 시트를 찾을 수 없습니다.';
             return errorMessage;

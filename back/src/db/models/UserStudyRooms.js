@@ -18,6 +18,10 @@ class UserStudyRooms {
         return UserStudyRoomsModel.find({ id });
     }
 
+    static findAllotherMine({ id }) {
+        return UserStudyRoomsModel.find({ members: { $in: [id] } });
+    }
+
     static findAll({ group, membersOnly }) {
         return UserStudyRoomsModel.find({ group, membersOnly }).sort({ views: -1 });
     }
