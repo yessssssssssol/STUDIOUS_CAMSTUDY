@@ -6,7 +6,10 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
+import { useRouter } from 'next/router';
+
 const CreateStudyContent = () => {
+  const router = useRouter();
   const [room, setRoom] = useRecoilState(createroomAtom);
 
   // 스터디 이름
@@ -52,7 +55,7 @@ const CreateStudyContent = () => {
         focusTimeStart,
         focusTimeEnd,
       });
-      //window.location.replace('/board/create');
+      router.push('/board/create');
     }
 
     changeData();

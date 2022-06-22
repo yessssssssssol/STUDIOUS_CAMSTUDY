@@ -13,12 +13,13 @@ const boardCreate = () => {
   const [roomDesc, setRoomDesc] = useState('');
   const [hashTag, setHashTag] = useState('');
   const [members, setMemers] = useState([]);
-  const [file, setFile] = useRecoilState(studyroomImgAtom);
+  const file = useRecoilValue(studyroomImgAtom);
 
   const formD = new FormData();
+
   useEffect(() => {
     if (!file) return null;
-    formD.append('img', file);
+    formD.append('roomImg', file);
   }, [file]);
 
   async function onclickHandler() {

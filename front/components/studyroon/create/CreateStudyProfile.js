@@ -5,6 +5,7 @@ import {
   createroomAtom,
   studyroomImgAtom,
 } from '../../../core/atoms/createroomState';
+import * as API from '../../../pages/api/api';
 
 const CreateStudyProfile = () => {
   const [file, setFile] = useRecoilState(studyroomImgAtom);
@@ -30,24 +31,20 @@ const CreateStudyProfile = () => {
     );
   };
 
-  // const saveEdit = async (e) => {
-  //   e.preventDefault();
-  //   //Put request to update edited user data
-  //   const formD = new FormData();
-  //   formD.append('img', file);
+  const saveEdit = async (e) => {
+    e.preventDefault();
+    //Put request to update edited user data
+    const formD = new FormData();
+    formD.append('roomImg', file);
 
-  //   try {
-  //     const res = await API.postImg('user/img', formD);
-  //     const updatedUrl = res.data.url;
-  //     setUser((prev) => {
-  //       return { ...prev, profileUrl: updatedUrl };
-  //     });
-  //     console.log('이미지 전송에 성공했습니다.');
-  //     setShowModal(false);
-  //   } catch (err) {
-  //     console.log('이미지 전송에 실패했습니다.', err);
-  //   }
-  // };
+    try {
+      await API.putImg('roomimg/d76b03b79ce442db9fa7453bdb3ce761', formD);
+      // const updatedUrl = res.data.url;
+      console.log('이미지 전송에 성공했습니다.');
+    } catch (err) {
+      console.log('이미지 전송에 실패했습니다.', err);
+    }
+  };
 
   return (
     <div className="mx-20">
@@ -81,12 +78,12 @@ const CreateStudyProfile = () => {
         >
           프로필 삭제
         </button>
-        {/* <button
+        <button
           className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
-          //   onClick={saveEdit}
+          onClick={saveEdit}
         >
           프로필 저장
-        </button> */}
+        </button>
       </div>
     </div>
   );
