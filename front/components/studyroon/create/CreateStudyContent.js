@@ -52,7 +52,7 @@ const CreateStudyContent = () => {
         focusTimeStart,
         focusTimeEnd,
       });
-      window.location.replace('/board/create');
+      //window.location.replace('/board/create');
     }
 
     changeData();
