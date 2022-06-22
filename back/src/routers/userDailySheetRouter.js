@@ -7,9 +7,20 @@ const userDailySheetRouter = Router();
 // 새벽 5시 업데이트 확인용
 userDailySheetRouter.post('/dailysheet', login_required, async function (req, res, next) {
     try {
-        const madeSheets = await UserDailySheetService.createSheets();
+        const arbitrarilyDate = req.body.date;
+        let madeSheets = undefined;
 
-        res.status(201).json(madeSheets);
+        if (arbitrarilyDate) {
+            madeSheets = await UserDailySheetService.createSheets(arbitrarilyDate);
+        } else {
+            madeSheets = await UserDailySheetService.createSheets();
+        }
+
+        if (!madeSheets) {
+            throw new Error('시트를 가져오지 못했습니다.');
+        }
+
+        return res.status(201).json(madeSheets);
     } catch (error) {
         next(error);
     }
@@ -20,10 +31,13 @@ userDailySheetRouter.get('/dailysheets/:id', login_required, async function (req
     try {
         const id = req.params.id;
 
+        if (!id) {
+            return res.status(400).json({ message: 'id가 제대로 들어오지 않았습니다.' });
+        }
+
         const getSheets = await UserDailySheetService.getSheets({ id });
 
-        res.status(200).json(getSheets);
-        return;
+        return res.status(200).json(getSheets);
     } catch (error) {
         next(error);
     }
@@ -35,14 +49,12 @@ userDailySheetRouter.get('/totaltime/:id', login_required, async function (req, 
         const id = req.params.id;
 
         if (!id) {
-            const errorMessage = '아이디가 제대로 넘어오지 않았습니다.';
-            return errorMessage;
+            return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
 
         const getSheetsForCal = await UserDailySheetService.getSheetsForCal({ id });
 
-        res.status(200).json(getSheetsForCal);
-        return;
+        return res.status(200).json(getSheetsForCal);
     } catch (error) {
         next(error);
     }
@@ -55,12 +67,16 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
         const id = req.currentUserId;
         const timeGoal = req.body.timeGoal;
 
+        if (!id || !timeGoal) {
+            return res.status(400).json({ message: 'id가 혹은 timeGoal이 제대로 넘어오지 않았습니다.' });
+        }
+
         const updatedGoal = await UserDailySheetService.updateTimeGoal({
             id,
             timeGoal,
         });
 
-        res.status(200).json(updatedGoal);
+        return res.status(200).json(updatedGoal);
     } catch (error) {
         next(error);
     }

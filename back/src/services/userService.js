@@ -1,4 +1,4 @@
-import { TimeLog, User, UserDailySheet } from '../db';
+import { Comments, TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
+import { userStudyRoomsService } from './userStudyRoomsService';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -54,7 +55,7 @@ class userAuthService {
 
         // 로그인 성공 -> JWT 웹 토큰 생성
         const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
-        console.log(secretKey);
+        // console.log(secretKey);
         const token = jwt.sign({ user_id: user.id }, secretKey);
 
         // 반환할 loginuser 객체를 위한 변수 설정
@@ -97,7 +98,7 @@ class userAuthService {
         if (toUpdate.email) changeUpdate.email = toUpdate.email;
         if (toUpdate.password) changeUpdate.password = await bcrypt.hash(toUpdate.password, 10);
         if (toUpdate.description) changeUpdate.description = toUpdate.description;
-        console.log(changeUpdate);
+        // console.log(changeUpdate);
 
         return User.update({ user_id, changeUpdate });
     }
@@ -148,7 +149,6 @@ class userAuthService {
 
     static async getUserInfo({ user_id }) {
         const user = await User.findById({ user_id });
-
         // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
             const errorMessage = '해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
@@ -193,7 +193,19 @@ class userAuthService {
     }
 
     static async deleteUser({ id }) {
-        return Promise.all([User.deleteUser({ id }), TimeLog.deleteUser({ id }), UserDailySheet.deleteUser({ id })]);
+        const roomAr = userStudyRoomsService.getRooms({ id });
+
+        Promise.all([
+            User.deleteUser({ id }),
+            TimeLog.deleteUser({ id }),
+            UserDailySheet.deleteUser({ id }),
+            (await roomAr).map((room) => {
+                const { roomId, id } = room;
+                userStudyRoomsService.delRoom({ id, roomId });
+            }),
+        ]);
+        await Comments.changeWithdrawalComments({ id });
+        return;
     }
 }
 

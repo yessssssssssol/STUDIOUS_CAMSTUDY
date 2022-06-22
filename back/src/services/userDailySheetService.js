@@ -8,12 +8,16 @@ const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기
-    static async createSheets() {
+    static async createSheets(date = undefined) {
         // 날짜 가져오기
         const now = dayjs();
-        const today = now.format('YYYY-MM-DD');
-        const yesterday = now.add(-1, 'day').format().slice(0, 10);
-        console.log(typeof yesterday);
+        let today = now.format('YYYY-MM-DD');
+        let yesterday = now.add(-1, 'day').format().slice(0, 10);
+        if (date) {
+            const dateThatInsert = dayjs(date);
+            today = dateThatInsert.format('YYYY-MM-DD');
+            yesterday = dateThatInsert.add(-1, 'day').format().slice(0, 10);
+        }
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
         const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
         if (userSheets === []) {
@@ -48,7 +52,7 @@ class UserDailySheetService {
                 };
             }
         });
-        await UserDailySheet.addSheets(newSheets);
+        UserDailySheet.addSheets(newSheets);
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
     }
 
@@ -57,11 +61,7 @@ class UserDailySheetService {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
         const date = ChangeDate.getCurrentDate(startTime);
-        console.log(id);
-        console.log(date);
-
         const getSheet = await UserDailySheet.getSheet({ id, date });
-        console.log(getSheet);
         const { timeGoal, beginStudyTime } = getSheet;
 
         // 금일 데일리 시트에 아무 정보도 없는 상태일 때
@@ -123,7 +123,6 @@ class UserDailySheetService {
         const now = ChangeDate.getCurrentDate();
         const todaySheet = getSheets.filter((sheet) => sheet.date === now);
         let studyTimeADay = todaySheet[0].studyTimeADay;
-        console.log(todaySheet, now);
         if (!studyTimeADay) {
             const errorMessage = '금일 시트를 찾을 수 없습니다.';
             return errorMessage;
