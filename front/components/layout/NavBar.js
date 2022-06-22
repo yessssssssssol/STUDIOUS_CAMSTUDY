@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 import UserEditModal from '../user/UserEditModal';
