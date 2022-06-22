@@ -6,14 +6,8 @@ import { useUserActions } from '../utils/hooks/useUserAction';
 
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
-function MyApp({ Component, pageProps }) {
-  // useBeforeunload((e) => {
-  //   e.preventDefault();
-  //   useUserActions.logout().catch((err) => {
-  //     console.log(err);
-  //   });
-  // });
 
+export default function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <NavBar />
@@ -22,8 +16,3 @@ function MyApp({ Component, pageProps }) {
     </RecoilRoot>
   );
 }
-
-export default MyApp;
-// export default dynamic(() => Promise.resolve(MyApp), {
-//   ssr: false,
-// });

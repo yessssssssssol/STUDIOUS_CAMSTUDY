@@ -6,3 +6,10 @@ export function useBeforeunloads() {
     window.localStorage.clear();
   });
 }
+
+// useBeforeunload((e) => {
+//   e.preventDefault();
+//   useUserActions.logout().catch((err) => {
+//     console.log(err);
+//   });
+// });

@@ -1,4 +1,4 @@
-export default function BoardCard() {
+export default function BoardCard({ boardData, profileURL }) {
   return (
     <div className="px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
