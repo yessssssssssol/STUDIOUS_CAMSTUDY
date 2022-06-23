@@ -14,7 +14,7 @@ const uploadRoomImgHandler = multer({
         projectId: projectId,
         keyFilename: keyFilename,
         filename: (req, file, cb) => {
-            cb(null, `roomImg/${Date.now()}_${req.currentUserId}`);
+            cb(null, `roomImg/${Date.now()}_${req.currentUserId}_${req.params.roomId}`);
         },
     }),
     limits: { fileSize: 2 * 1024 * 1024 },

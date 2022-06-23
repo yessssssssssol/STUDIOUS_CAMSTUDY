@@ -45,6 +45,16 @@ class analyzeDate {
 
         return weekSheets;
     }
+
+    // static monthAvgStudyTime(getSheet) {
+    //     // 최근 30일 전 공부 평균
+    //     const curDate = ChangeDate.getCurrentDate();
+    //     const now = dayjs(curDate);
+    //     const thisSunday = now.set('day', 0).format('YYYY-MM-DD');
+    //     const thisSaturday = now.set('day', 6).format('YYYY-MM-DD');
+
+    //     return;
+    // }
 }
 
 export { analyzeDate };
