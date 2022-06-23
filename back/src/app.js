@@ -54,39 +54,30 @@ wsServer.on("connection", (socket) => {
         console.log(`socket event: ${event}`);
     })
 
-    socket.on("enter_room", async (roomName, newUserId, userToken) => {
-        
-        if (!roomList[roomName]) {
-            roomList[roomName] = [];
-        }
+    socket.on("enter_room", async (roomId, newUserId, userToken, userName) => {
+        const getInfo = await userStudyRoomsService.getRoom({ roomId }); // 이부분이 아직임.
 
-        const getInfo = await userStudyRoomsService.getRoom({ roomName });
-
-        if (!getInfo?.members?.includes(userToken) || roomList[roomName]) {
+        if (!getInfo?.members?.includes(userToken) || roomList[roomId].length >= getInfo.membersNum) {
             // 유저 토큰이 있는지 확인
             const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
             socket.emit("refuse", errorMessage);
         }
         else {
 
-            if (!roomList[roomName]) {
-                roomList[roomName] = [];
-                roomList[roomName].push({
-                    "userId" : newUserId,
-                    "userToken" : userToken
-                });
-            }
-            else {
-                roomList[roomName].push({
-                    "userId" : newUserId,
-                    "userToken" : userToken
-                })
+            if (roomList[roomId] === undefined) {
+                roomList[roomId] = [];
             }
 
+            roomList[roomId].push({
+                "userName" : userName,
+                "userId" : newUserId,
+                "userToken" : userToken
+            });
+
              // 현재 방에 4명인지 체크
-            socket.join(roomName);
-            console.log(`${roomName} : ${nickName}`);
-            socket.to(roomName).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+            socket.join(roomId);
+            // console.log(`${roomId} : ${nickName}`);
+            socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
         }
     });
     
@@ -102,8 +93,22 @@ wsServer.on("connection", (socket) => {
     })
 
     socket.on("disconnecting", () => {
-        socket.rooms.forEach(room => socket.to(room).emit("bye", socket.id, roomList[socket.id]));
-        // 비디오 테그 삭제, 피어리스트 제거
+        let findUser;
+        let roomId;
+        let index;
+        Object.keys(roomList).forEach((v, i) => {
+            if (roomList[v].userId == socket.id) {
+                findUser = roomList[v]
+                roomId = v;
+                index = i;
+                return false;
+            }
+        })
+
+        console.log(socket.rooms);
+        socket.to(roomId).emit("bye", socket.id, findUser?.userName);
+        // 룸 리스트 내 제거
+        roomList[roomId].splice(index, index+1);
         
     })
 })

@@ -4,6 +4,7 @@ import AlertModal from '../../components/studyroon/AlertModal';
 import { io } from "socket.io-client";
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import * as API from '../api/api';
 import {
   userAtom,
   userDescriptionAtom,
@@ -23,11 +24,9 @@ let chatAll = [];
 
 export default function Group() {
 
-  const [room, setRoom] = useState(createroomAtom);
+  const [room, setRoom] = useState();
   const [chat, setChat] = useState([]);
   const [user, setUser] = useRecoilState(userAtom);
-
-  // 방 정보 가져와야함.
 
   console.log(user);
   console.log(room);
@@ -42,7 +41,7 @@ export default function Group() {
   async function initCall() {
 
     await getMedia();
-    socket.emit("enter_room", room.name, socket.id, user.token);
+    socket.emit("enter_room", room.roomId, socket.id, user.token, user.name);
   }
   
   async function getMedia(deviceId) {
@@ -187,6 +186,11 @@ export default function Group() {
     console.log("send the offer");
   })
 
+  socket.on("refuse", (errorMessage) => {
+    console.log(errorMessage);
+    // 들어가지 못한다는 에러페이지 출력
+  })
+
   socket.on("bye", (leaveId, userName) => {
     console.log("leave user");
     // 나갔다는 메시지
@@ -244,7 +248,10 @@ export default function Group() {
   }
 
   useEffect(async () => {
-
+    const roomId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+      // 방 정보 가져와야함.
+    const res = await API.get(`studyroom/${roomId}`);
+    setRoom(res);
     if (myStream == null) {
       await initCall();
     }
@@ -253,7 +260,7 @@ export default function Group() {
   
   return (
     <div>
-      <p>스터티 룸 이름</p>
+      <p>{room?.roomName}</p>
       <div className="w-full items-center lg:flex">
         <div className="w-full lg:w-1/2">
           <div>
