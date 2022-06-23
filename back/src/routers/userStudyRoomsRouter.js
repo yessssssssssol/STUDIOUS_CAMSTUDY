@@ -19,6 +19,10 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
 
         let { roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
 
+        //마감 날짜
+        let expiredAt = new Date(endStudyDay + ' 23:59:59');
+        expiredAt.setHours(expiredAt.getHours() + 9);
+
         // group 형변환
         if ((group === 'False', group === 'false' || group === false)) {
             group = false;
@@ -28,12 +32,14 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             return res.status(400).json({ message: 'group 값을 제대로 입력해주세요.' });
         }
         // membersOnly 형변환
-        if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
-            membersOnly = false;
-        } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
-            membersOnly = true;
-        } else {
-            return res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
+        if (membersOnly !== undefined) {
+            if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
+                membersOnly = false;
+            } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
+                membersOnly = true;
+            } else {
+                return res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
+            }
         }
 
         if (group === false) {
@@ -53,6 +59,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
                 focusTimeEnd,
                 createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
                 updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
+                expiredAt,
             };
             console.log('개인룸 생성');
         } else if (group === true && membersOnly === false) {
@@ -75,6 +82,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
                 views: 0, // 개인룸과 다른 점
                 createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
                 updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
+                expiredAt,
             };
             console.log('오픈룸 생성');
         } else if (group === true && membersOnly === true) {
@@ -101,6 +109,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
                 views: 0,
                 createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
                 updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
+                expiredAt,
             };
             console.log('멤버룸 생성');
         } else {
