@@ -27,6 +27,7 @@ export default function mypage() {
 
     return studyTimeADayNum / 1000;
   }
+
   useEffect(() => {
     setUser(useratom);
     const getTimeData = async () => {

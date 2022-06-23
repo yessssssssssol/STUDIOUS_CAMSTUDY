@@ -5,7 +5,7 @@ import RegisterModal from '../user/RegisterModal';
 import UserEditModal from '../user/UserEditModal';
 import { useRouter } from 'next/router';
 import { isloginAtom, tokenAtom } from '../../core/atoms/userState';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
 import { dropboxModalState, menuModalState } from '../../core/atoms/modalState';
@@ -21,6 +21,9 @@ export default function NavBar() {
   const userActions = useUserActions();
   const [islogin, setIsLogin] = useRecoilState(isloginAtom);
   const [element, setElement] = useState(null);
+
+  const resetUser = useResetRecoilState(tokenAtom);
+
   const handleShow = () => {
     setShowOptions(true);
   };
@@ -42,7 +45,15 @@ export default function NavBar() {
       setMenuBar(false);
     }
   }
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const item = sessionStorage.getItem('userToken');
+      if (!item) {
+        console.log(localStorage.clear());
+        setIsLogin(false);
+      }
+    }
+  }, []);
   const handleLogout = () => {
     userActions.logout().catch((err) => {
       console.log(err);
