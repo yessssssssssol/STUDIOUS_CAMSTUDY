@@ -115,6 +115,8 @@ class UserDailySheetService {
         const totalAchievementRate = total.rate;
         const totalStudyTime = total.time;
 
+        const attendanceRate = analyzeDate.monthAvgStudyTime(getSheets);
+
         const weekSheets = analyzeDate.weekPeriod(getSheets);
         const week = analyzeDate.avgAndSum(weekSheets);
         const weekAchievementRate = week.rate;
@@ -132,7 +134,7 @@ class UserDailySheetService {
 
         // console.log(total, week);
 
-        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay };
+        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay, attendanceRate };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
