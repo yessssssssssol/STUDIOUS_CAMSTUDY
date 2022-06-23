@@ -31,14 +31,6 @@ const AIFunc = () => {
   };
 
   useEffect(() => {
-    console.log(navigator.mediaDevices);
-    console.log(navigator.mediaDevices.webCamPromise);
-    const promise = navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true,
-    });
-    console.log('promise');
-    console.log(promise);
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       const webCamPromise = navigator.mediaDevices
         .getUserMedia({
