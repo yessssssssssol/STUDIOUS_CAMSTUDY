@@ -40,14 +40,9 @@ export default function Group() {
   });
   
   async function initCall() {
-    //setUserName();
-    //EnterRoom()
-    // selectCamera();
+
     await getMedia();
-    console.log(myStream);
     socket.emit("enter_room", room.name, socket.id, user.token);
-    console.log("enterRoom");
-    //addMessage(`${nickName}(나)님 환영합니다😄`);
   }
   
   async function getMedia(deviceId) {

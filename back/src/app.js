@@ -8,6 +8,7 @@ import { errorMiddleware } from './middlewares/errorMiddleware';
 import { userDailySheetRouter } from './routers/userDailySheetRouter';
 import { userStudyRoomsRouter } from './routers/userStudyRoomsRouter';
 import { commentsRouter } from './routers/commentsRouter';
+import { userStudyRoomsService } from './services/userStudyRoomsService';
 
 
 const app = express();
@@ -53,12 +54,40 @@ wsServer.on("connection", (socket) => {
         console.log(`socket event: ${event}`);
     })
 
-    socket.on("enter_room", (roomName, newUserId, nickName) => {
-        roomList[newUserId] = nickName;
-        // 현재 방에 4명인지 체크
-        socket.join(roomName);
-        console.log(`${roomName} : ${nickName}`);
-        socket.to(roomName).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+    socket.on("enter_room", async (roomName, newUserId, userToken) => {
+        
+        if (!roomList[roomName]) {
+            roomList[roomName] = [];
+        }
+
+        const getInfo = await userStudyRoomsService.getRoom({ roomName });
+
+        if (!getInfo?.members?.includes(userToken) || roomList[roomName]) {
+            // 유저 토큰이 있는지 확인
+            const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
+            socket.emit("refuse", errorMessage);
+        }
+        else {
+
+            if (!roomList[roomName]) {
+                roomList[roomName] = [];
+                roomList[roomName].push({
+                    "userId" : newUserId,
+                    "userToken" : userToken
+                });
+            }
+            else {
+                roomList[roomName].push({
+                    "userId" : newUserId,
+                    "userToken" : userToken
+                })
+            }
+
+             // 현재 방에 4명인지 체크
+            socket.join(roomName);
+            console.log(`${roomName} : ${nickName}`);
+            socket.to(roomName).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+        }
     });
     
     socket.on("offer", (offer, newUserId, offersId) => {
