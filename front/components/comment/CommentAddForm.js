@@ -2,25 +2,26 @@ import { useRecoilState } from 'recoil';
 import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useState } from 'react';
-import BoldText from '../common/BoldText';
 
-const CommentAddForm = () => {
+const CommentAddForm = ({ roomId, setComments }) => {
   const [content, setContent] = useState('');
   const [user, setUser] = useRecoilState(userAtom);
   const { name, profileUrl } = user;
-  console.log(user);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    // Id를 user_id 변수에 할당함.
-    // const userId = Id;
+    console.log(roomId);
+    // // roomId를 user_id 변수에 할당함.
+    const userId = roomId;
 
     await Api.post('comment', {
-      hostId: userId,
+      // writerId,
+      roomId,
       content,
+      // createdAt,
     });
-    const res = await Api.get('commentlist', user_id);
+    const res = await Api.get('comments', roomId);
     setComments(res.data);
   };
 
@@ -50,6 +51,7 @@ const CommentAddForm = () => {
               <button
                 className="px-4 py-1 bg-gray-800 text-white rounded font-light hover:bg-gray-700"
                 type="submit"
+                onClick={handleSubmit}
               >
                 Submit
               </button>
