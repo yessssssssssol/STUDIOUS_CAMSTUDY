@@ -3,8 +3,8 @@
  * isPersonal이 false일 때만 공개 비공개 선택 창이 뜨게 하기
  *
  */
-import { useEffect, useState } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
+
+import { useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 
 const CreateStudyContent = () => {
@@ -86,53 +86,7 @@ const CreateStudyContent = () => {
       };
     });
   };
-  // 스터디 이름
-  // const [roomName, setRoomName] = useState(room?.roomName || '');
-  // // 스터디 해쉬태그
-  // // 개인 스터디 true, 그룹 스터디 false
-  // const [group, setGroup] = useState(room?.group || '');
-  // // 공개 스터디 true 비공개 스터디 false
-  // const [membersOnly, setMemberOnly] = useState(room?.membersOnly || '');
-  // // 스터디 기간
-  // const [startStudyDay, setStartStudyDay] = useState(
-  //   new Date().toISOString().substring(0, 10)
-  // );
-  // const [endStudyDay, setEndStudyDay] = useState(room?.endStudyDay || '');
-  // // 스터디 집중시간
-  // const [focusTimeStart, setFocusTimeStart] = useState(
-  //   room?.focusTimeStart || ''
-  // );
-  // // rule
-  // const [focusTimeEnd, setFocusTimeEnd] = useState(room?.focusTimeEnd || '');
 
-  // const [rule, setRule] = useState('');
-  // // 스터디 멤버 수
-  // const [membersNum, setMembersNum] = useState(room?.membersNum || 0);
-  // useEffect(() => {});
-
-  // function handleClick() {
-  //   // group === 'only' ? setGroup(false) : setGroup(true);
-  //   // memberOnly === 'public' ? setMemberOnly(false) : setMemberOnly(true);
-  //   function changeData() {
-  //     console.log(membersOnly);
-  //     console.log(group);
-  //   }
-
-  //   function passData() {
-  //     setRoom({
-  //       roomName,
-  //       group,
-  //       membersOnly,
-  //       membersNum,
-  //       startStudyDay,
-  //       endStudyDay,
-  //       focusTimeStart,
-  //       focusTimeEnd,
-  //     });
-  //   }
-  //   changeData();
-  //   passData();
-  // }
   return (
     <div className="container space-y-3  mx-auto bg-white dark:bg-gray-800 rounded">
       <div className=" xl:w-full border-b border-gray-300 dark:border-gray-700 py-5 bg-white dark:bg-gray-800">

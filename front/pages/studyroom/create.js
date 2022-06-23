@@ -1,11 +1,10 @@
+import * as API from '../../pages/api/api';
 import CreateStudyRoom from '../../components/studyroon/create/CreateStudyContent';
-import CreateStudyRoomProfile from '../../components/studyroon/create/CreateStudyProfile';
 import CreateBoard from '../../components/studyroon/create/CreateBoard';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { createroomAtom } from '../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
-import * as API from '../../pages/api/api';
 
 export default function Create() {
   const router = useRouter();

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 const CreateBoard = () => {
   const [room, setRoom] = useRecoilState(createroomAtom);
