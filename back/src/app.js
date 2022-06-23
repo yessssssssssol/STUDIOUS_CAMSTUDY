@@ -49,29 +49,39 @@ const wsServer = SocketIO(httpServer, {
 
 const roomList = {};
 
+function isEmptyObj(obj)  {
+    if(obj.constructor === Object
+       && Object.keys(obj).length === 0)  {
+      return true;
+    }
+    
+    return false;
+}
+
 wsServer.on("connection", (socket) => {
     socket.onAny((event) => {
         console.log(`socket event: ${event}`);
     })
 
-    socket.on("enter_room", async (roomId, newUserId, userToken, userName) => {
-        const getInfo = await userStudyRoomsService.getRoom({ roomId }); // 이부분이 아직임.
+    socket.on("enter_room", async (roomId, newUserId, userId, userName) => {
+        const getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
 
-        if (!getInfo?.members?.includes(userToken) || roomList[roomId].length >= getInfo.membersNum) {
+        if (isEmptyObj(getInfo) == false) {
+            if (!roomList[roomId]) {
+                roomList[roomId] = [];
+            }
+        }
+        console.log(roomList);
+        if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
             // 유저 토큰이 있는지 확인
             const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
             socket.emit("refuse", errorMessage);
         }
         else {
-
-            if (roomList[roomId] === undefined) {
-                roomList[roomId] = [];
-            }
-
             roomList[roomId].push({
                 "userName" : userName,
-                "userId" : newUserId,
-                "userToken" : userToken
+                "socketId" : newUserId,
+                "userId" : userId
             });
 
              // 현재 방에 4명인지 체크
@@ -93,23 +103,25 @@ wsServer.on("connection", (socket) => {
     })
 
     socket.on("disconnecting", () => {
-        let findUser;
+        let findUser = null;
         let roomId;
         let index;
         Object.keys(roomList).forEach((v, i) => {
-            if (roomList[v].userId == socket.id) {
-                findUser = roomList[v]
-                roomId = v;
-                index = i;
-                return false;
-            }
+            roomList[v].forEach((data, i) => {
+                if (data.socketId === socket.id) {
+                    findUser = data
+                    roomId = v;
+                    index = i;
+                    return false;
+                }
+            })
         })
-
-        console.log(socket.rooms);
-        socket.to(roomId).emit("bye", socket.id, findUser?.userName);
-        // 룸 리스트 내 제거
-        roomList[roomId].splice(index, index+1);
         
+        if (findUser != null) {
+            socket.to(roomId).emit("bye", socket.id, findUser?.userName);
+            // 룸 리스트 내 제거
+            roomList[roomId]?.splice(index, index+1);
+        }
     })
 })
 

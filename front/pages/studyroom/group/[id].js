@@ -26,20 +26,26 @@ let chatAll = [];
 
 export default function Group() {
   const router = useRouter();
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState(null);
   const [chat, setChat] = useState([]);
   const [user, setUser] = useRecoilState(userAtom);
+  let roomId;
+
+  if (typeof window !== 'undefined') {
+    roomId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+  }
 
   const socket = io(url, {
     withCredentials: true,
     extraHeaders: {
-      "checkMyService": user.token
+      "checkMyService": user?.id
     }
   });
   
-  async function initCall() {
+  async function initCall(data) {
     await getMedia();
-    socket.emit("enter_room", room?.roomId, socket.id, user.token, user.name);
+    console.log(user);
+    socket.emit("enter_room", data?.roomId, socket.id, user?.id, user?.name);
   }
   
   async function getMedia(deviceId) {
@@ -133,13 +139,11 @@ export default function Group() {
       if(!_offer) {
           myDataChannel = myPeerConnection.createDataChannel("chat");
           myDataChannel.addEventListener("open", (event) => {
-            myDataChannel.send(`닉네임님 입장하셨습니다!`);
+            myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
           })
           myDataChannel.addEventListener("message", (event) => {
-            console.log(chat);
             setChat([...chatAll, event.data]);
             chatAll.push(event.data);
-            console.log(chat);
           });
           console.log("made data channel");
           console.log(myDataChannel);
@@ -155,13 +159,11 @@ export default function Group() {
           myPeerConnection.addEventListener("datachannel", (event) => {
             myDataChannel = event.channel;
             myDataChannel.addEventListener("open", (event) => {
-                myDataChannel.send(`~~님 입장하셨습니다!`);
+                myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
             })
             myDataChannel.addEventListener("message", (event) => {
-              console.log(chat);
               setChat([...chatAll, event.data]);
               chatAll.push(event.data);
-              console.log(chat);
             });
   
             dataChannels[userId] = myDataChannel
@@ -248,13 +250,14 @@ export default function Group() {
 
   useEffect(() => {
     async function getRoomData() {
-      const roomId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+      console.log(roomId);
       const res = await API.get(`studyroom/${roomId}`);
       const data = res.data;
       setRoom(data);
-    }
-    if (myStream == null) {
-      initCall();
+
+      if (myStream == null) {
+        await initCall(data);
+      }
     }
     getRoomData();
   }, []);
