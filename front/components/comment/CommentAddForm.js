@@ -1,4 +1,4 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ const CommentAddForm = () => {
       hostId: userId,
       content,
     });
-    const res = await Api.get('commentlist', userId);
+    const res = await Api.get('commentlist', user_id);
     setComments(res.data);
   };
 
