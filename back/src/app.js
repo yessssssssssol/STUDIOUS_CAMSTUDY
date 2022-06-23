@@ -1,11 +1,14 @@
 import cors from 'cors';
 import express from 'express';
+import SocketIO from "socket.io";
+import http from "http";
 import { userAuthRouter } from './routers/userRouter';
 import { timeLogRouter } from './routers/timeLogRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import { userDailySheetRouter } from './routers/userDailySheetRouter';
 import { userStudyRoomsRouter } from './routers/userStudyRoomsRouter';
 import { commentsRouter } from './routers/commentsRouter';
+
 
 const app = express();
 
@@ -33,4 +36,48 @@ app.use(commentsRouter);
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
 
-export { app };
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+        method: ["GET", "POST"],
+        allowedHeaders: ["checkMyService"],
+        credentials: true
+    }
+});
+
+const roomList = {};
+
+wsServer.on("connection", (socket) => {
+    socket.onAny((event) => {
+        console.log(`socket event: ${event}`);
+    })
+
+    socket.on("enter_room", (roomName, newUserId, nickName) => {
+        roomList[newUserId] = nickName;
+        // 현재 방에 4명인지 체크
+        socket.join(roomName);
+        console.log(`${roomName} : ${nickName}`);
+        socket.to(roomName).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+    });
+    
+    socket.on("offer", (offer, newUserId, offersId) => {
+        socket.to(newUserId).emit("offer", offer, offersId);
+    })
+    socket.on("answer", (answer, newUserId, offersId) => {
+        socket.to(offersId).emit("answer", answer, newUserId);
+    })
+    socket.on("ice", (ice, othersId, myId) => {
+        // 다른 사람에게 나의 icecandidate 전달
+        socket.to(othersId).emit("ice", ice, myId);
+    })
+
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach(room => socket.to(room).emit("bye", socket.id, roomList[socket.id]));
+        // 비디오 테그 삭제, 피어리스트 제거
+        
+    })
+})
+
+
+export { httpServer, wsServer };
