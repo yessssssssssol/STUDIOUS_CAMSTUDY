@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { commentsService } from '../services/commentsService';
+import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
 
@@ -105,7 +106,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
                 roomTitle,
                 roomDesc,
                 hashTags,
-                members: [],
+                members: [id],
                 views: 0,
                 createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
                 updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -162,8 +163,8 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
         if (!validRoomId) {
             return res.status(400).json({ message: '존재하지 않는 스터디방입니다.' });
         }
-        if (group || membersOnly || membersNum) {
-            return res.status(400).json({ message: 'group, membersOnly, membersNum값은 변경할 수 없습니다.' });
+        if (group || membersOnly || membersNum || startStudyDay) {
+            return res.status(400).json({ message: 'group, membersOnly, membersNum, startStudyDay값은 변경할 수 없습니다.' });
         }
 
         updateChange.updateAt = now.format('YYYY-MM-DD HH:mm:ss');
@@ -261,10 +262,21 @@ userStudyRoomsRouter.get('/studyrooms/:id', login_required, async function (req,
         const { id } = req.params;
 
         if (!id) return res.status(400).json({ message: 'id를 제대로 입력 해주세요.' });
+        const getInfo = await Promise.all([userStudyRoomsService.getRooms({ id }), userStudyRoomsService.getOtherRooms({ id })]).then((result) => [result[0], result[1]]);
 
-        const getInfo = await Promise.all([userStudyRoomsService.getRooms({ id }), userStudyRoomsService.getOtherRooms({ id })]).then((result) => [...result[0], ...result[1]]);
+        //중복 제거
+        let ar1 = getInfo[0];
+        let ar2 = getInfo[1];
+        getInfo[0].map((sheet0) => {
+            getInfo[1].map((sheet1) => {
+                if (sheet0.roomId === sheet1.roomId) {
+                    ar2 = ar2.filter((sheet) => sheet.roomId !== sheet0.roomId);
+                }
+            });
+        });
 
-        return res.status(200).json(getInfo);
+        const getInfoAr = ar1.concat(ar2);
+        return res.status(200).json(getInfoAr);
     } catch (error) {
         next(error);
     }
