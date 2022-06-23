@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 
 export default function OpenroomCard({ openRoom }) {
-  useEffect(() => {
-    console.log(openRoom, '오픈카드');
-  });
   return (
     <div className=" px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 py-20">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
