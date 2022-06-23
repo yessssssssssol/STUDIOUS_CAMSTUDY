@@ -2,7 +2,7 @@ import { TimeLog } from '../db/models/TimeLog';
 import { User } from '../db';
 import { ChangeDate } from '../utils/changeDate';
 import { UserDailySheetService } from './userDailySheetService';
-import { TotalTimeService, totalTimeService } from './totalTimeService';
+import { TotalTimeService } from './totalTimeService';
 
 class timeLogService {
     static async addTimeLog({ user_id, startTime, endTime }) {
