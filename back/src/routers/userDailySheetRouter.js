@@ -82,4 +82,7 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
     }
 });
 
+//검색 기능
+// userDailySheetRouter.get('/search')
+
 export { userDailySheetRouter };

@@ -56,8 +56,8 @@ class timeLogService {
 
         const studyLogADay = await TimeLog.findAllADay({ user_id, beginTime, finishTime });
         if (!studyLogADay || studyLogADay.length === 0) {
-            const errorMessage = '금일 공부한 이력이 없습니다.';
-            return { errorMessage };
+            const message = '금일 공부한 이력이 없습니다.';
+            return { message };
         }
 
         return studyLogADay;

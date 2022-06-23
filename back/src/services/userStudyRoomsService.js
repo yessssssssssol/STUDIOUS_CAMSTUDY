@@ -11,7 +11,7 @@ class userStudyRoomsService {
     }
 
     static getRoom({ roomId }) {
-        return UserStudyRooms.find({ roomId });
+        return UserStudyRooms.findOne({ roomId });
     }
 
     static getRooms({ id }) {
