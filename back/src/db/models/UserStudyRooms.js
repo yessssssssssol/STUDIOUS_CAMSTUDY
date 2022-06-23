@@ -10,7 +10,7 @@ class UserStudyRooms {
         return UserStudyRoomsModel.findOneAndUpdate({ roomId }, updateChange, option);
     }
 
-    static find({ roomId }) {
+    static findOne({ roomId }) {
         return UserStudyRoomsModel.findOne({ roomId });
     }
 

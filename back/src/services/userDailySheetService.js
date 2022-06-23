@@ -132,8 +132,6 @@ class UserDailySheetService {
             studyTimeADay = '00:00:00';
         }
 
-        // console.log(total, week);
-
         return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay, attendanceRate };
     }
 

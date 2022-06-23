@@ -93,10 +93,3 @@ class analyzeDate {
 }
 
 export { analyzeDate };
-
-// avgStyTimeAr = monthSheets.map((sheet)=>{
-//     if(sheet.date === before){
-//         return sheet
-//     }
-
-// })
