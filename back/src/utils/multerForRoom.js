@@ -14,7 +14,6 @@ const uploadRoomImgHandler = multer({
         projectId: projectId,
         keyFilename: keyFilename,
         filename: (req, file, cb) => {
-            console.log(req.currentUserId);
             cb(null, `roomImg/${Date.now()}_${req.currentUserId}`);
         },
     }),
