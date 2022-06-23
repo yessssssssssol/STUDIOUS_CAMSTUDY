@@ -7,7 +7,7 @@ import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';
 
 export default function MyApp({ Component, pageProps }) {
-  useBeforeunloads();
+  // useBeforeunloads();
   return (
     <RecoilRoot>
       <NavBar />

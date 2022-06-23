@@ -15,13 +15,6 @@ const boardCreate = () => {
   const [members, setMemers] = useState([]);
   const file = useRecoilValue(studyroomImgAtom);
 
-  const formD = new FormData();
-
-  useEffect(() => {
-    if (!file) return null;
-    formD.append('roomImg', file);
-  }, [file]);
-
   async function onclickHandler() {
     const hashTags = hashTag.split(' ');
     try {
