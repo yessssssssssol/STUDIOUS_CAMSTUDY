@@ -12,7 +12,7 @@ export default function Detail() {
   useEffect(() => {
     async function getComments() {
       try {
-        const res = await API.get('comments', router.query.roomId);
+        const res = await API.get('comment', router.query.roomId);
         console.log(res, '댓글 리스트');
         setComment(res.data);
       } catch (error) {
@@ -42,8 +42,7 @@ export default function Detail() {
                   {comment.userName}
                 </a>
                 <span className="text-sm font-thin text-gray-500">
-                  {' '}
-                  {comment.createdAt}{' '}
+                  {comment.createdAt}
                 </span>
               </div>
               <div className="p-1">
