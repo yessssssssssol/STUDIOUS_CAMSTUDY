@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
+import { checkRoomId } from '../middlewares/checkRoomId';
 import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
