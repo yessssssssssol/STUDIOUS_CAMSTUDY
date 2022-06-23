@@ -4,16 +4,12 @@ import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 import UserEditModal from '../user/UserEditModal';
 import { useRouter } from 'next/router';
-import {
-  isloginAtom,
-  profileUrlAtom,
-  tokenAtom,
-} from '../../core/atoms/userState';
+import { isloginAtom, tokenAtom } from '../../core/atoms/userState';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
 import { dropboxModalState, menuModalState } from '../../core/atoms/modalState';
-import { items, drop_item } from '../common/UseData';
+import { items } from '../common/UseData';
 import ProfileEditModal from '../user/ProfileEditModal';
 export default function NavBar() {
   const router = useRouter();
@@ -78,7 +74,7 @@ export default function NavBar() {
       );
     }
     return (
-      <ul className="list-none">
+      <ul key={index} className="list-none">
         <li key={index}>{item[0] && token ? make_link() : make_link()}</li>
       </ul>
     );
@@ -158,7 +154,7 @@ export default function NavBar() {
 
               {showOptions && (
                 <div
-                  className="absolute top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow"
+                  className="absolute w-[150px] top-9 z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow"
                   id="dropdown"
                 >
                   <div className="py-3 px-4">
@@ -170,16 +166,22 @@ export default function NavBar() {
                     </span>
                   </div>
                   <ul className="py-1">
-                    {drop_item.map((item) => NavDropItem(item))}
-                    <li key={1}>
-                      <UserEditModal />
+                    <li key={1} className="text-center">
+                      <a className="block text-sm text-center text-gray-700 hover:bg-gray-100">
+                        <UserEditModal />
+                      </a>
                     </li>
-                    <li key={2}>
-                      <ProfileEditModal />
+                    <li key={2} className="text-center">
+                      <a className="block text-sm text-center text-gray-700 hover:bg-gray-100">
+                        <ProfileEditModal />
+                      </a>
                     </li>
                     <li key={3}>
-                      <button onClick={handleLogout} className="w-full">
-                        <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">
+                      <button
+                        className="text-center w-full"
+                        onClick={handleLogout}
+                      >
+                        <a className="block  text-sm text-gray-700 hover:bg-gray-100">
                           Sign out
                         </a>
                       </button>
