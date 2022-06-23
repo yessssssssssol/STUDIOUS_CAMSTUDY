@@ -175,6 +175,30 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
     }
 });
 
+// 방장 변경
+userStudyRoomsRouter.put('/changeroomleader', login_required, async function (req, res, next) {
+    try {
+        const id = req.currentUserId;
+        const { roomId, idChangingToLeader } = req.body;
+        if (!roomId || !idChangingToLeader) return res.status(400).json({ message: 'roomId 혹은 idChangingToLeader가 넘어오지 않았습니다.' });
+
+        const isRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!isRoom || isRoom === []) return res.status(400).json({ message: '해당 스터디룸을 찾을 수 없습니다.' });
+
+        //기존에 팀원인 사람 배열에서 삭제
+        const curmebers = isRoom.members.filter((member) => member !== idChangingToLeader);
+
+        const updateChange = { id: idChangingToLeader, members: [...curmebers, id] };
+
+        const changedRoomAuth = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+        if (!changedRoomAuth) return res.status(400).json({ message: '변경에 실패했습니다.' });
+
+        res.status(200).json(changedRoomAuth);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // 스터디룸 하나 가저오기(roomId를 통해)
 userStudyRoomsRouter.get('/studyroom/:roomId', login_required, async function (req, res, next) {
     try {
