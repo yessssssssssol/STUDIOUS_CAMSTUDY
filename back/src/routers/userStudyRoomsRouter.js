@@ -158,7 +158,7 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
         if (!roomId) {
             return res.status(400).json({ message: 'roomId값은 필수입니다.' });
         }
-        const validRoomId = await commentsService.getOneByRoomId({ roomId });
+        const validRoomId = await userStudyRoomsService.getRoom({ roomId });
         if (!validRoomId) {
             return res.status(400).json({ message: '존재하지 않는 스터디방입니다.' });
         }
@@ -168,8 +168,14 @@ userStudyRoomsRouter.put('/studyroom', login_required, async function (req, res,
 
         updateChange.updateAt = now.format('YYYY-MM-DD HH:mm:ss');
         if (roomName) updateChange.roomName = roomName;
-        if (startStudyDay) updateChange.startStudyDay = startStudyDay;
-        if (endStudyDay) updateChange.endStudyDay = endStudyDay;
+        // if (startStudyDay) updateChange.startStudyDay = startStudyDay;
+        if (endStudyDay) {
+            //마감 날짜 변경
+            let expiredAt = new Date(endStudyDay + ' 23:59:59');
+            expiredAt.setHours(expiredAt.getHours() + 9);
+            updateChange.endStudyDay = endStudyDay;
+            updateChange.expiredAt = expiredAt;
+        }
         if (focusTimeStart) updateChange.focusTimeStart = focusTimeStart;
         if (focusTimeEnd) updateChange.focusTimeEnd = focusTimeEnd;
         if (roomTitle) updateChange.roomTitle = roomTitle;
