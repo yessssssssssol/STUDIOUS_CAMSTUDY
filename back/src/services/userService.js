@@ -7,6 +7,7 @@ import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
 import { userStudyRoomsService } from './userStudyRoomsService';
+import { TotalTime } from '../db/models/TotalTime';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -29,6 +30,9 @@ class userAuthService {
 
         //날짜 생성
         const date = ChangeDate.getCurrentDate();
+
+        // 총 공부시간 생성
+        await TotalTime.create({ id });
 
         const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
         createdNewUserSheet.errorMessage = null;
