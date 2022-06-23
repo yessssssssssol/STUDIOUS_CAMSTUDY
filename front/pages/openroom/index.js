@@ -29,15 +29,14 @@ export default function Openroom() {
     }
   }, [inView]);
   return (
-    <div class="flex flex-raw flex-wrap lg:flex justify-center gap-x-[100px]">
+    <div className="flex flex-raw flex-wrap lg:flex justify-center gap-x-[100px]">
       <Helmet title="Openroom" />
 
       {openRooms &&
-        openRooms.slice(0, count).map((openRoom) => {
-          console.log(inView.toString);
+        openRooms.slice(0, count).map((openRoom, index) => {
           return (
-            <div className="">
-              <OpenroomCard openRoom={openRoom} />
+            <div key={index}>
+              <OpenroomCard key={index} openRoom={openRoom} />
               <div ref={ref} />
             </div>
           );
