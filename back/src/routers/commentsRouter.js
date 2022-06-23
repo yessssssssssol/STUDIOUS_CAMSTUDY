@@ -32,7 +32,7 @@ commentsRouter.post('/comment', login_required, async function (req, res, next) 
         }
         const Comment = await commentsService.create({ newComment });
 
-        res.status(201).json(Comment);
+        return res.status(201).json(Comment);
     } catch (error) {
         next(error);
     }
@@ -45,14 +45,12 @@ commentsRouter.put('/comment', login_required, async function (req, res, next) {
         const writerId = req.currentUserId;
         const { _id, content } = req.body;
         if (!_id || !content) {
-            res.status(400).json({ message: '_id혹은 content가 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: '_id혹은 content가 넘어오지 않았습니다.' });
         }
 
         const writerIdValid = await commentsService.getOne({ _id }).then((data) => data.writerId);
         if (writerId !== writerIdValid) {
-            res.status(400).json('자신의 댓글만 수정할 수 있습니다.');
-            return;
+            return res.status(400).json('자신의 댓글만 수정할 수 있습니다.');
         }
 
         const updateChange = {
@@ -62,11 +60,10 @@ commentsRouter.put('/comment', login_required, async function (req, res, next) {
 
         const updatedComment = await commentsService.update({ _id, updateChange });
         if (!updateChange) {
-            res.status(400).json('댓글 수정에 실패했습니다.');
-            return;
+            return res.status(400).json('댓글 수정에 실패했습니다.');
         }
 
-        res.status(200).json(updatedComment);
+        return res.status(200).json(updatedComment);
     } catch (error) {
         next(error);
     }
@@ -78,8 +75,7 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
         const { roomId } = req.params;
         const commentList = await commentsService.getAll({ roomId });
         if (!commentList) {
-            res.status(500).json('댓글 목록을 가져오는데 실패했습니다.');
-            return;
+            return res.status(500).json('댓글 목록을 가져오는데 실패했습니다.');
         }
         // 댓글 정보에 맞는 이름 가져오기
         const commentListWithName = await Promise.all(
@@ -98,7 +94,7 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
             }),
         );
 
-        res.status(200).json(commentListWithName);
+        return res.status(200).json(commentListWithName);
     } catch (error) {
         next(error);
     }
@@ -121,7 +117,7 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
         // const commentWithName = { name: userName, ...comment };
         // console.log('commentWithName 로그입니다.\n', commentWithName);
 
-        res.status(200).json({ userName, targetName, ...comment.toObject() });
+        return res.status(200).json({ userName, targetName, ...comment.toObject() });
     } catch (error) {
         next(error);
     }
@@ -132,22 +128,19 @@ commentsRouter.delete('/comment/:_id', login_required, async function (req, res,
         const writerId = req.currentUserId;
         const { _id } = req.params;
         if (!_id) {
-            res.status(400).json('_id가 넘어오지 않았습니다.');
-            return;
+            return res.status(400).json('_id가 넘어오지 않았습니다.');
         }
 
         const writerIdValid = await commentsService.getOne({ _id }).then((data) => data.writerId);
         if (writerId !== writerIdValid) {
-            res.status(400).json('자신의 댓글만 삭제할 수 있습니다.');
-            return;
+            return res.status(400).json('자신의 댓글만 삭제할 수 있습니다.');
         }
 
         const deletedComment = await commentsService.delete({ _id });
         if (!deletedComment) {
-            res.status(400).json('댓글 삭제에 실패했습니다.');
-            return;
+            return res.status(400).json('댓글 삭제에 실패했습니다.');
         }
-        res.status(200).json({ result: 'success' });
+        return res.status(200).json({ result: 'success' });
     } catch (error) {
         next(error);
     }
