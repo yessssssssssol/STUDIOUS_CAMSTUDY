@@ -185,6 +185,8 @@ userStudyRoomsRouter.put('/changeroomleader', login_required, async function (re
         const isRoom = await userStudyRoomsService.getRoom({ roomId });
         if (!isRoom || isRoom === []) return res.status(400).json({ message: '해당 스터디룸을 찾을 수 없습니다.' });
 
+        if (id !== isRoom.id) return res.status(400).json({ message: '방장만 방장 권한을 넘겨줄 수 있습니다.' });
+
         //기존에 팀원인 사람 배열에서 삭제
         const curmebers = isRoom.members.filter((member) => member !== idChangingToLeader);
 
