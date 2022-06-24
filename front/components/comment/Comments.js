@@ -3,7 +3,7 @@ import CommentCard from './CommentCard';
 import CommentAddForm from './CommentAddForm';
 import { useState, useEffect } from 'react';
 
-function Comments({ roomId }) {
+function Comments({ roomId, writerId }) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -15,10 +15,15 @@ function Comments({ roomId }) {
     <div>
       <div>
         <div>Comments</div>
-        <CommentAddForm roomId={roomId} setComments={setComments} />
+        <CommentAddForm
+          roomId={roomId}
+          setComments={setComments}
+          // writerId={writeId}
+        />
         {comments.map((comment) => (
           <CommentCard
             roomId={roomId}
+            // writerId={writeId}
             key={comment.id}
             comment={comment}
             setComments={setComments}

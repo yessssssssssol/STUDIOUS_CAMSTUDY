@@ -55,7 +55,7 @@ export default function Detail() {
                     attended it as. Made neat an on be gave show snug tore.
                   </div>
                   <div className="flex-col w-full">
-                    <Comments roomId={detailData.roomId} />
+                    <Comments roomId={detailData.roomId} Id={detailData.id} />
                   </div>
                 </div>
 

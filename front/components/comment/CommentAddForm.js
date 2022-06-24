@@ -3,7 +3,7 @@ import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useState } from 'react';
 
-const CommentAddForm = ({ roomId, setComments }) => {
+const CommentAddForm = ({ roomId, setComments, writerId }) => {
   const [content, setContent] = useState('');
   const [user, setUser] = useRecoilState(userAtom);
   const { name, profileUrl } = user;
@@ -11,12 +11,13 @@ const CommentAddForm = ({ roomId, setComments }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(roomId);
-    // // roomId를 user_id 변수에 할당함.
-    const userId = roomId;
+    console.log(writerId);
+    // roomId를 user_id 변수에 할당함.
+    // const userId = roomId;
+    // const userName = writeId;
 
     await Api.post('comment', {
-      // writerId,
+      writerId,
       roomId,
       content,
       // createdAt,
