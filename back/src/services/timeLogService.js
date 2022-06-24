@@ -2,6 +2,7 @@ import { TimeLog } from '../db/models/TimeLog';
 import { User } from '../db';
 import { ChangeDate } from '../utils/changeDate';
 import { UserDailySheetService } from './userDailySheetService';
+import { TotalTimeService } from './totalTimeService';
 
 class timeLogService {
     static async addTimeLog({ user_id, startTime, endTime }) {
@@ -34,6 +35,11 @@ class timeLogService {
             const errorMessage = '데일리 시트를 제대로 업데이트 하지 못했습니다.';
             return { errorMessage };
         }
+        const updatedTotalTime = await TotalTimeService.update({ user_id });
+        if (!updatedTotalTime) {
+            const errorMessage = '전체 공부시간을 제대로 업데이트 하지 못했습니다.';
+            return { errorMessage };
+        }
 
         return { timeLog, updatedSheet };
     }
@@ -50,8 +56,8 @@ class timeLogService {
 
         const studyLogADay = await TimeLog.findAllADay({ user_id, beginTime, finishTime });
         if (!studyLogADay || studyLogADay.length === 0) {
-            const errorMessage = '금일 공부한 이력이 없습니다.';
-            return { errorMessage };
+            const message = '금일 공부한 이력이 없습니다.';
+            return { message };
         }
 
         return studyLogADay;

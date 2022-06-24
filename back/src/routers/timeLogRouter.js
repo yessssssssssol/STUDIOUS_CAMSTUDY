@@ -39,9 +39,6 @@ timeLogRouter.get('/timelogs/:date/:id', login_required, async function (req, re
         }
 
         const logList = await timeLogService.getTimeLogs({ user_id, date });
-        if (logList.errorMessage) {
-            throw new Error(logList.errorMessage);
-        }
 
         return res.status(200).json(logList);
     } catch (error) {
