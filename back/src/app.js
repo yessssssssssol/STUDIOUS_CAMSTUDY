@@ -49,6 +49,17 @@ const wsServer = SocketIO(httpServer, {
 
 const roomList = {};
 
+function isUserInRoom(obj, roomId, userId) {
+    let check = false;
+    obj[roomId].forEach((data) => {
+        if(data.userId === userId) {
+            check = true;
+        }
+    });
+   
+    return check;
+}
+
 function isEmptyObj(obj)  {
     if(obj.constructor === Object
        && Object.keys(obj).length === 0)  {
@@ -71,24 +82,33 @@ wsServer.on("connection", (socket) => {
                 roomList[roomId] = [];
             }
         }
-        console.log(roomList);
+        if (isUserInRoom(roomList, roomId, userId) == true) {
+            const errorMessage = "스터디룸에 중독 참여하실 수 없습니다."
+            socket.emit("refuse", errorMessage)
+            return;
+        }
         if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
             // 유저 토큰이 있는지 확인
             const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
             socket.emit("refuse", errorMessage);
+            return;
         }
         else {
+            // 브라우저 이중접속 차단 이미 유저가 있으면 추가 안함
+            
             roomList[roomId].push({
                 "userName" : userName,
                 "socketId" : newUserId,
                 "userId" : userId
             });
 
-             // 현재 방에 4명인지 체크
+                // 현재 방에 4명인지 체크
             socket.join(roomId);
             // console.log(`${roomId} : ${nickName}`);
             socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+            
         }
+        console.log(roomList);
     });
     
     socket.on("offer", (offer, newUserId, offersId) => {

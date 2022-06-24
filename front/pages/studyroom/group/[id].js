@@ -24,6 +24,15 @@ let dataChannels = {};
 
 let chatAll = [];
 
+function rtcInit() {
+  myStream = null;
+  myPeerConnection = null;
+  myDataChannel = null;
+  peerConnections = {};
+  dataChannels = {};
+  chatAll = [];
+}
+
 export default function Group() {
   const router = useRouter();
   const [room, setRoom] = useState(null);
@@ -44,11 +53,12 @@ export default function Group() {
   
   async function initCall(data) {
     await getMedia();
-    console.log(user);
+    console.log(myStream);
     socket.emit("enter_room", data?.roomId, socket.id, user?.id, user?.name);
   }
   
   async function getMedia(deviceId) {
+    console.log("getMedia");
     const initialConstraints = {
         audio : true, 
         video : {facingMode: "user"}
@@ -61,7 +71,6 @@ export default function Group() {
         myStream = await navigator.mediaDevices.getUserMedia(
             deviceId ? cameraConstraints : initialConstraints
         )
-        myFace.srcObject = myStream;
         if (!deviceId) {
             await selectCamera();
         }
@@ -108,18 +117,18 @@ export default function Group() {
                   urls: [
                       "stun:stun.l.google.com:19302",
                       "stun:stun1.l.google.com:19302",
-                      "stun:stun2.l.google.com:19302",
-                      "stun:stun3.l.google.com:19302",
-                      "stun:stun4.l.google.com:19302",
-                      "stun:stun.ekiga.net",
-                      "stun:stun.ideasip.com",
-                      "stun:stun.rixtelecom.se",
-                      "stun:stun.schlund.de",
-                      "stun:stun.stunprotocol.org:3478",
-                      "stun:stun.voiparound.com",
-                      "stun:stun.voipbuster.com",
-                      "stun:stun.voipstunt.com",
-                      "stun:stun.voxgratia.org"
+                      // "stun:stun2.l.google.com:19302",
+                      // "stun:stun3.l.google.com:19302",
+                      // "stun:stun4.l.google.com:19302",
+                      // "stun:stun.ekiga.net",
+                      // "stun:stun.ideasip.com",
+                      // "stun:stun.rixtelecom.se",
+                      // "stun:stun.schlund.de",
+                      // "stun:stun.stunprotocol.org:3478",
+                      // "stun:stun.voiparound.com",
+                      // "stun:stun.voipbuster.com",
+                      // "stun:stun.voipstunt.com",
+                      // "stun:stun.voxgratia.org"
                   ]
               }
           ]
@@ -130,8 +139,9 @@ export default function Group() {
       // 연결 후 처리 이벤트 등록
       myPeerConnection.addEventListener("icecandidate", (data) => handleIce(data, userId));
       myPeerConnection.addEventListener("addstream", (data) => handleAddStream(data, userId));
-      console.log(myStream.getTracks());
-      myStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, myStream));
+      if (myStream != null) {
+        myStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, myStream));
+      }
     
       let _offer = offer;
       let answer;
@@ -189,6 +199,7 @@ export default function Group() {
   socket.on("refuse", (errorMessage) => {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
+    rtcInit();
     router.push('/openroom');
   })
 
