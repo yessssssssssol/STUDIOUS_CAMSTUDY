@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import Helmet from '../../../components/layout/Helmet';
-import CommentAddForm from '../../../components/comment/CommentAddForm';
+import Comments from '../../../components/comment/Comments';
+
 import ProfileCard from '../../../components/common/ProfileCard';
-import Temporary from '../../../components/comment/CommentsTemporary';
+import Certification from '../../../components/common/Certification';
+
 import { useEffect, useState } from 'react';
 import * as API from '../../../pages/api/api';
 
@@ -54,14 +56,13 @@ export default function Detail() {
                     attended it as. Made neat an on be gave show snug tore.
                   </div>
                   <div className="flex-col w-full">
-                    <CommentAddForm />
-                    <Temporary />
-                    <Temporary />
+                    <Comments roomId={detailData.roomId} Id={detailData.id} />
                   </div>
                 </div>
 
                 <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
                   <ProfileCard hashTag={detailData.hashTags} />
+                  <Certification />
                 </div>
               </div>
             </main>
