@@ -2,7 +2,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 
-function CommentCard({ roomId, writeId, comment, setComments }) {
+function CommentCard({ roomId, writerId, comment, setComments }) {
   const [user, setUser] = useRecoilState(userAtom);
   const { name, description, profileUrl } = user;
   //useState로 isEditing 상태를 생성함.import React, { useState } from "react";
@@ -14,9 +14,8 @@ function CommentCard({ roomId, writeId, comment, setComments }) {
 
     // const userId = roomId;
     // const userName = writeId;
-
     // comment.id로 조회하여 데이터 삭제
-    await API.delete(`comment/${comment.id}`);
+    await API.delete(`comment/${comment._id}`);
 
     // "comments/:roomId" 엔드포인트로 GET 요청함.
     const res = await API.get('comments', roomId);

@@ -5,19 +5,19 @@ import { useState } from 'react';
 
 const CommentAddForm = ({ roomId, setComments, writerId }) => {
   const [content, setContent] = useState('');
+  const [wirterId, setWriterId] = useState('');
   const [user, setUser] = useRecoilState(userAtom);
   const { name, profileUrl } = user;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(writerId);
+
     // roomId를 user_id 변수에 할당함.
-    // const userId = roomId;
     // const userName = writeId;
 
     await Api.post('comment', {
-      writerId,
+      // writerId,
       roomId,
       content,
       // createdAt,
@@ -25,7 +25,7 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
     const res = await Api.get('comments', roomId);
     setComments(res.data);
   };
-
+  console.log(writerId);
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">

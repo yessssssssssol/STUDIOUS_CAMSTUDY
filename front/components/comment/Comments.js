@@ -18,12 +18,12 @@ function Comments({ roomId, writerId }) {
         <CommentAddForm
           roomId={roomId}
           setComments={setComments}
-          // writerId={writeId}
+          writerId={writerId}
         />
         {comments.map((comment) => (
           <CommentCard
             roomId={roomId}
-            // writerId={writeId}
+            writerId={comment.writerId}
             key={comment.id}
             comment={comment}
             setComments={setComments}
