@@ -22,8 +22,7 @@ userAuthRouter.post('/user/register', async function (req, res, next) {
         const password = req.body.password;
 
         if (!name || !email || !password) {
-            res.status(400).json({ message: 'id 혹은 email이나 password가 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'id 혹은 email이나 password가 제대로 넘어오지 않았습니다.' });
         }
 
         // 위 데이터를 유저 db에 추가하기
@@ -37,7 +36,7 @@ userAuthRouter.post('/user/register', async function (req, res, next) {
             throw new Error(newUser.errorMessage);
         }
 
-        res.status(201).json(newUser);
+        return res.status(201).json(newUser);
     } catch (error) {
         next(error);
     }
@@ -50,8 +49,7 @@ userAuthRouter.post('/user/login', async function (req, res, next) {
         const password = req.body.password;
 
         if (!email || !password) {
-            res.status(400).json({ message: 'email이나 password가 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'email이나 password가 제대로 넘어오지 않았습니다.' });
         }
 
         // 위 데이터를 이용하여 유저 db에서 유저 찾기
@@ -61,7 +59,7 @@ userAuthRouter.post('/user/login', async function (req, res, next) {
             throw new Error(user.errorMessage);
         }
 
-        res.status(200).send(user);
+        return res.status(200).send(user);
     } catch (error) {
         next(error);
     }
@@ -73,11 +71,10 @@ userAuthRouter.get('/userlist', login_required, async function (req, res, next) 
         const users = await userAuthService.getUsers();
 
         if (!users) {
-            res.status(400).json({ message: '사용자 목록을 가져오지 못했습니다.' });
-            return;
+            return res.status(400).json({ message: '사용자 목록을 가져오지 못했습니다.' });
         }
 
-        res.status(200).send(users);
+        return res.status(200).send(users);
     } catch (error) {
         next(error);
     }
@@ -102,7 +99,7 @@ userAuthRouter.put('/user/:id', login_required, async function (req, res, next) 
             throw new Error(updatedUser.errorMessage);
         }
 
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
     }
@@ -113,8 +110,7 @@ userAuthRouter.get('/user/:id', login_required, async function (req, res, next) 
         const user_id = req.params.id;
 
         if (!user_id) {
-            res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
 
         const currentUserInfo = await userAuthService.getUserInfo({ user_id });
@@ -123,7 +119,7 @@ userAuthRouter.get('/user/:id', login_required, async function (req, res, next) 
             throw new Error(currentUserInfo.errorMessage);
         }
 
-        res.status(200).send(currentUserInfo);
+        return res.status(200).send(currentUserInfo);
     } catch (error) {
         next(error);
     }
@@ -132,12 +128,10 @@ userAuthRouter.get('/user/:id', login_required, async function (req, res, next) 
 userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), async function (req, res, next) {
     try {
         if (!req.file) {
-            res.status(400).json({ message: '업로드할 이미지가 없습니다' });
-            return;
+            return res.status(400).json({ message: '업로드할 이미지가 없습니다' });
         }
 
         const user_id = req.currentUserId;
-        console.log(user_id);
         const url = req.file.path;
         const updatedUser = await userAuthService.updateImg({ user_id, url });
 
@@ -145,7 +139,7 @@ userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), as
             throw new Error(updatedUser.errorMessage);
         }
 
-        res.status(200).send({ url: url });
+        return res.status(200).send({ url: url });
     } catch (error) {
         next(error);
     }
@@ -157,8 +151,7 @@ userAuthRouter.get('/user/email/:email', rateLimit({ windowMs: 30000, max: 1 }),
         const { email } = req.params;
 
         if (!email) {
-            res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
         }
 
         const code = uuidv4().split('-')[0];
@@ -180,8 +173,7 @@ userAuthRouter.put('/password/init', async (req, res, next) => {
         const { email } = req.body;
 
         if (!email) {
-            res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
         }
 
         await userAuthService.sendNewpassword({ email });
@@ -197,9 +189,8 @@ userAuthRouter.delete('/user/:id', login_required, async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        if (!email) {
-            res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
-            return;
+        if (!id) {
+            return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
 
         await userAuthService.deleteUser({ id });

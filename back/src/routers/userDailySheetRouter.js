@@ -20,7 +20,7 @@ userDailySheetRouter.post('/dailysheet', login_required, async function (req, re
             throw new Error('시트를 가져오지 못했습니다.');
         }
 
-        res.status(201).json(madeSheets);
+        return res.status(201).json(madeSheets);
     } catch (error) {
         next(error);
     }
@@ -32,14 +32,12 @@ userDailySheetRouter.get('/dailysheets/:id', login_required, async function (req
         const id = req.params.id;
 
         if (!id) {
-            res.status(400).json({ message: 'id가 제대로 들어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'id가 제대로 들어오지 않았습니다.' });
         }
 
         const getSheets = await UserDailySheetService.getSheets({ id });
 
-        res.status(200).json(getSheets);
-        return;
+        return res.status(200).json(getSheets);
     } catch (error) {
         next(error);
     }
@@ -51,14 +49,12 @@ userDailySheetRouter.get('/totaltime/:id', login_required, async function (req, 
         const id = req.params.id;
 
         if (!id) {
-            res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
 
         const getSheetsForCal = await UserDailySheetService.getSheetsForCal({ id });
 
-        res.status(200).json(getSheetsForCal);
-        return;
+        return res.status(200).json(getSheetsForCal);
     } catch (error) {
         next(error);
     }
@@ -72,8 +68,7 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
         const timeGoal = req.body.timeGoal;
 
         if (!id || !timeGoal) {
-            res.status(400).json({ message: 'id가 혹은 timeGoal이 제대로 넘어오지 않았습니다.' });
-            return;
+            return res.status(400).json({ message: 'id가 혹은 timeGoal이 제대로 넘어오지 않았습니다.' });
         }
 
         const updatedGoal = await UserDailySheetService.updateTimeGoal({
@@ -81,10 +76,13 @@ userDailySheetRouter.put('/dailysheet', login_required, async function (req, res
             timeGoal,
         });
 
-        res.status(200).json(updatedGoal);
+        return res.status(200).json(updatedGoal);
     } catch (error) {
         next(error);
     }
 });
+
+//검색 기능
+// userDailySheetRouter.get('/search')
 
 export { userDailySheetRouter };

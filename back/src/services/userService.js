@@ -7,6 +7,7 @@ import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
 import { userStudyRoomsService } from './userStudyRoomsService';
+import { TotalTime } from '../db/models/TotalTime';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -29,6 +30,9 @@ class userAuthService {
 
         //날짜 생성
         const date = ChangeDate.getCurrentDate();
+
+        // 총 공부시간 생성
+        await TotalTime.create({ id });
 
         const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
         createdNewUserSheet.errorMessage = null;
@@ -55,7 +59,7 @@ class userAuthService {
 
         // 로그인 성공 -> JWT 웹 토큰 생성
         const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
-        console.log(secretKey);
+        // console.log(secretKey);
         const token = jwt.sign({ user_id: user.id }, secretKey);
 
         // 반환할 loginuser 객체를 위한 변수 설정
@@ -98,7 +102,7 @@ class userAuthService {
         if (toUpdate.email) changeUpdate.email = toUpdate.email;
         if (toUpdate.password) changeUpdate.password = await bcrypt.hash(toUpdate.password, 10);
         if (toUpdate.description) changeUpdate.description = toUpdate.description;
-        console.log(changeUpdate);
+        // console.log(changeUpdate);
 
         return User.update({ user_id, changeUpdate });
     }
