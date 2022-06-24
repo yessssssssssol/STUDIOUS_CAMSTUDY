@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5001;
-// const serverUrl =
-//   'http://' + window.location.hostname + ':' + backendPortNumber + '/';
-const serverUrl = 'http://' + 'localhost' + ':' + backendPortNumber + '/';
+const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
+
+const hostname =
+  typeof window !== 'undefined' && window.location.hostname
+    ? window.location.hostname
+    : '';
+const serverUrl = 'http://' + hostname + ':' + backendPortNumber + '/';
 
 async function get(endpoint, params = '') {
   console.log(
