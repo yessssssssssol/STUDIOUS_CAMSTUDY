@@ -1,29 +1,31 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useState } from 'react';
-import BoldText from '../common/BoldText';
 
-const CommentAddForm = () => {
+const CommentAddForm = ({ roomId, setComments, writerId }) => {
   const [content, setContent] = useState('');
+  const [wirterId, setWriterId] = useState('');
   const [user, setUser] = useRecoilState(userAtom);
   const { name, profileUrl } = user;
-  console.log(user);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // Id를 user_id 변수에 할당함.
-    // const userId = Id;
+    // roomId를 user_id 변수에 할당함.
+    // const userName = writeId;
 
     await Api.post('comment', {
-      hostId: userId,
+      // writerId,
+      roomId,
       content,
+      // createdAt,
     });
-    const res = await Api.get('commentlist', userId);
+    const res = await Api.get('comments', roomId);
     setComments(res.data);
   };
-
+  console.log(writerId);
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
@@ -50,6 +52,7 @@ const CommentAddForm = () => {
               <button
                 className="px-4 py-1 bg-gray-800 text-white rounded font-light hover:bg-gray-700"
                 type="submit"
+                onClick={handleSubmit}
               >
                 Submit
               </button>
