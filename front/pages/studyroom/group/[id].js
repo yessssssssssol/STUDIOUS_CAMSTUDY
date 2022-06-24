@@ -14,7 +14,7 @@ import {
 } from '../../../core/atoms/userState';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 
-const url = `http://localhost:5001`;
+const url = `http://localhost:5000`;
 
 let myStream = null;
 let myPeerConnection = null;

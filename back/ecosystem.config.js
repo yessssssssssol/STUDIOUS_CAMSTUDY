@@ -2,7 +2,8 @@ module.exports = {
     apps: [
         {
             name: 'back-server', // pm2 name
-            script: 'npm -- start',
+            script: 'npm',
+            args: ['start'],
             instances: 3, // 클러스터 모드 사용 시 생성할 인스턴스 수
             exec_mode: 'cluster', // fork, cluster 모드 중 선택
             merge_logs: true, // 클러스터 모드 사용 시 각 클러스터에서 생성되는 로그를 한 파일로 합쳐준다.
