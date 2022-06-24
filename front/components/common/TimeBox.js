@@ -5,19 +5,20 @@ export default function TimeBox({ timeData, index, timeGoal }) {
   const color = randomColor[Math.round((Math.random() * 15) % 14)];
   return (
     <div
-      class={`${color} rounded-[50px] w-[320px] h-[130px] space-x-3 mt-[30px]`}
+      className={`${color} rounded-[50px] w-[320px] h-[130px] space-x-3 mt-[30px]`}
     >
-      <div class="font-bold pt-[10px] text-center">{title[index]}</div>
-      <div class="text-center text-5xl pt-[10px]">{timeData}</div>
+      <div className="font-bold pt-[10px] text-center">{title[index]}</div>
+      <div className="text-center text-5xl pt-[10px]">{timeData}</div>
       {index === 0 ? (
-        timeGoal==="아직 목표 공부시간을 설정하지 않았습니다."?
-        <span class="block text-center text-slate-500 text-lg mt-[5px]">
-          목표 공부 시간:00:00:00
-        </span>
-        :
-        <span class="block text-center text-slate-500 text-lg mt-[5px]">
-          목표 공부 시간:{timeGoal}
-        </span>
+        timeGoal === '아직 목표 공부시간을 설정하지 않았습니다.' ? (
+          <span className="block text-center text-slate-500 text-lg mt-[5px]">
+            목표 공부 시간:00:00:00
+          </span>
+        ) : (
+          <span className="block text-center text-slate-500 text-lg mt-[5px]">
+            목표 공부 시간:{timeGoal}
+          </span>
+        )
       ) : (
         <></>
       )}
