@@ -49,6 +49,7 @@ const AIFunc = () => {
           });
         });
       const modelPromise = cocoSsd.load();
+      console.log(webCamPromise);
       Promise.all([modelPromise, webCamPromise])
         .then((values) => {
           detectFrame(videoRef.current, values[0]);
