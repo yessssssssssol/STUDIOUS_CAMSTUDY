@@ -1,6 +1,6 @@
 import * as API from '../../pages/api/api';
-import CreateStudyRoom from '../../components/studyroon/create/CreateStudyContent';
-import CreateBoard from '../../components/studyroon/create/CreateBoard';
+import CreateStudyRoom from '../../components/studyroom/create/CreateStudyContent';
+import CreateBoard from '../../components/studyroom/create/CreateBoard';
 import { useState, useRef } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { createroomAtom } from '../../core/atoms/createroomState';
