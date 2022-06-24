@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
-
+// 로딩페이지 임포트
 import {
   userAtom,
   userDescriptionAtom,
@@ -38,6 +38,8 @@ export default function Group() {
   const [room, setRoom] = useState(null);
   const [chat, setChat] = useState([]);
   const [user, setUser] = useRecoilState(userAtom);
+  const [isLoading, setIsLoading] = useState(false);
+
   let roomId;
 
   if (typeof window !== 'undefined') {
@@ -50,11 +52,18 @@ export default function Group() {
       "checkMyService": user?.id
     }
   });
+
+  function addMessage(message) {
+    setChat([...chatAll, message]);
+    chatAll.push(message);
+  }
   
   async function initCall(data) {
     await getMedia();
     console.log(myStream);
-    socket.emit("enter_room", data?.roomId, socket.id, user?.id, user?.name);
+    socket.emit("enter_room", data?.roomId, socket.id, user?.id, user?.name, () => {
+      setIsLoading(true);
+    });
   }
   
   async function getMedia(deviceId) {
@@ -152,8 +161,7 @@ export default function Group() {
             myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
           })
           myDataChannel.addEventListener("message", (event) => {
-            setChat([...chatAll, event.data]);
-            chatAll.push(event.data);
+            addMessage(event.data);
           });
           console.log("made data channel");
           console.log(myDataChannel);
@@ -172,8 +180,7 @@ export default function Group() {
                 myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
             })
             myDataChannel.addEventListener("message", (event) => {
-              setChat([...chatAll, event.data]);
-              chatAll.push(event.data);
+              addMessage(event.data);
             });
   
             dataChannels[userId] = myDataChannel
@@ -204,21 +211,23 @@ export default function Group() {
   })
 
   socket.on("bye", (leaveId, userName) => {
-    console.log("leave user");
     // 나갔다는 메시지
-    //addMessage(`${userName}님이 퇴장하셨습니다.!`);
+    addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
-    // 비디오 태그 삭제
     const video = document.getElementById(leaveId);
     const name = document.getElementById(leaveId);
-    video.remove();
-    name.remove();
+    // 비디오 태그 삭제
+    if (video != null && name != null) {
+      video.remove();
+      name.remove();
+    }
     
     // peerConnections 제거
-
-
-    // const h3 = room.querySelector("h3");
-    // h3.innerText = `Room ${roomName} (${Object.keys(peerConnections).length})`;
+    Object.keys(peerConnections).forEach((id, i) => {
+      if(id == leaveId) {
+        delete peerConnections[id];
+      }
+    })
   })
 
 
@@ -250,8 +259,7 @@ export default function Group() {
   const sendChatHandler = (e) => {
     e.preventDefault();
     const input = document.getElementById("inputbox");
-    setChat([...chat, `${user.name} : ${input.value}`]);
-    chatAll.push(`${user.name} : ${input.value}`);
+    addMessage(`${user.name} : ${input.value}`);
     Object.keys(dataChannels).forEach((userId) => {
       console.log(dataChannels[userId]);
       dataChannels[userId].send(`${user.name} : ${input.value}`);
@@ -261,7 +269,7 @@ export default function Group() {
 
   useEffect(() => {
     async function getRoomData() {
-      console.log(roomId);
+      rtcInit();
       const res = await API.get(`studyroom/${roomId}`);
       const data = res.data;
       setRoom(data);
@@ -275,38 +283,42 @@ export default function Group() {
   
   return (
     <div>
-      <p>{room?.roomName}</p>
-      <div className="w-full items-center lg:flex">
-        <div className="w-full lg:w-1/2">
-          <div>
-            <StopWatch />
+      { isLoading === true ? 
+        <div>
+          <p>{room?.roomName}</p>
+          <div className="w-full items-center lg:flex">
+            <div className="w-full lg:w-1/2">
+              <div>
+                <StopWatch />
+              </div>
+              <div>
+                <p>메인 카메라(인공지능 적용된 것)</p>
+                <AIFunc />
+                <AlertModal />
+              </div>
+            </div>
+            <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
+              <p>일반 카메라</p>
+              <div id='others'>  
+              </div>
+            </div>
           </div>
-          <div>
-            <p>메인 카메라(인공지능 적용된 것)</p>
-            <AIFunc />
-            <AlertModal />
-          </div>
-        </div>
-        <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
-          <p>일반 카메라</p>
-          <div id='others'>  
-          </div>
-        </div>
-      </div>
-      <div>채팅</div>
-      <form>
-        <input 
-          id="inputbox"
-          placeholder='message' 
-          required type='text'
-        ></input>
-        <button onClick={sendChatHandler}>Send</button>
-      </form>
-      
-      {chat.map((i) => {
-        console.log(i)
-        return <div>{i}</div>
-      })}
+          <div>채팅</div>
+          <form>
+            <input 
+              id="inputbox"
+              placeholder='message' 
+              required type='text'
+            ></input>
+            <button onClick={sendChatHandler}>Send</button>
+          </form>
+          
+          {chat.map((i) => {
+            console.log(i)
+            return <div>{i}</div>
+          })}
+        </div> : <p>로딩중</p> 
+      }
     </div>
   );
 }

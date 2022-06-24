@@ -77,7 +77,7 @@ wsServer.on("connection", (socket) => {
         console.log(`socket event: ${event}`);
     });
 
-    socket.on("enter_room", async (roomId, newUserId, userId, userName) => {
+    socket.on("enter_room", async (roomId, newUserId, userId, userName, done) => {
         const getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
 
         if (isEmptyObj(getInfo) == false) {
@@ -86,7 +86,7 @@ wsServer.on("connection", (socket) => {
             }
         }
         if (isUserInRoom(roomList, roomId, userId) == true) {
-            const errorMessage = "스터디룸에 중독 참여하실 수 없습니다."
+            const errorMessage = "스터디룸에 중복 참여하실 수 없습니다."
             socket.emit("refuse", errorMessage)
             return;
         }
@@ -108,6 +108,7 @@ wsServer.on("connection", (socket) => {
                 // 현재 방에 4명인지 체크
             socket.join(roomId);
             // console.log(`${roomId} : ${nickName}`);
+            done();
             socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
             
         }
