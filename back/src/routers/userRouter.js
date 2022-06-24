@@ -189,7 +189,7 @@ userAuthRouter.delete('/user/:id', login_required, async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        if (!email) {
+        if (!id) {
             return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
 
