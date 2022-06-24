@@ -1,6 +1,6 @@
-import StopWatch from '../../../components/studyroon/StopWatch';
-import AIFunc from '../../../components/studyroon/AIFunc';
-import AlertModal from '../../../components/studyroon/AlertModal';
+import StopWatch from '../../../components/studyroom/StopWatch';
+import AIFunc from '../../../components/studyroom/AIFunc';
+import AlertModal from '../../../components/studyroom/AlertModal';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
