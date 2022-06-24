@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
-import SocketIO from "socket.io";
-import http from "http";
+import SocketIO from 'socket.io';
+import http from 'http';
 import { userAuthRouter } from './routers/userRouter';
 import { timeLogRouter } from './routers/timeLogRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
@@ -9,7 +9,6 @@ import { userDailySheetRouter } from './routers/userDailySheetRouter';
 import { userStudyRoomsRouter } from './routers/userStudyRoomsRouter';
 import { commentsRouter } from './routers/commentsRouter';
 import { userStudyRoomsService } from './services/userStudyRoomsService';
-
 
 const app = express();
 
@@ -33,6 +32,7 @@ app.use(timeLogRouter);
 app.use(userDailySheetRouter);
 app.use(userStudyRoomsRouter);
 app.use(commentsRouter);
+app.use(applicantsRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
@@ -40,11 +40,11 @@ app.use(errorMiddleware);
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
-        method: ["GET", "POST"],
-        allowedHeaders: ["checkMyService"],
-        credentials: true
-    }
+        origin: 'http://localhost:3000',
+        method: ['GET', 'POST'],
+        allowedHeaders: ['checkMyService'],
+        credentials: true,
+    },
 });
 
 const roomList = {};
@@ -72,7 +72,7 @@ function isEmptyObj(obj)  {
 wsServer.on("connection", (socket) => {
     socket.onAny((event) => {
         console.log(`socket event: ${event}`);
-    })
+    });
 
     socket.on("enter_room", async (roomId, newUserId, userId, userName) => {
         const getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
@@ -110,17 +110,17 @@ wsServer.on("connection", (socket) => {
         }
         console.log(roomList);
     });
-    
-    socket.on("offer", (offer, newUserId, offersId) => {
-        socket.to(newUserId).emit("offer", offer, offersId);
-    })
-    socket.on("answer", (answer, newUserId, offersId) => {
-        socket.to(offersId).emit("answer", answer, newUserId);
-    })
-    socket.on("ice", (ice, othersId, myId) => {
+
+    socket.on('offer', (offer, newUserId, offersId) => {
+        socket.to(newUserId).emit('offer', offer, offersId);
+    });
+    socket.on('answer', (answer, newUserId, offersId) => {
+        socket.to(offersId).emit('answer', answer, newUserId);
+    });
+    socket.on('ice', (ice, othersId, myId) => {
         // 다른 사람에게 나의 icecandidate 전달
-        socket.to(othersId).emit("ice", ice, myId);
-    })
+        socket.to(othersId).emit('ice', ice, myId);
+    });
 
     socket.on("disconnecting", () => {
         let findUser = null;
