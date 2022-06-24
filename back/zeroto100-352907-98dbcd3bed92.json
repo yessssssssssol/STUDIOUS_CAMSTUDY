@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "zeroto100-352907",
+  "private_key_id": "98dbcd3bed92383a8aef033b8a25bbad6a1a6b24",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCq1e2+0EaP2qo0\ndL5Od4unfP9AA1VF6kB7C3hTZKrq0uO+Lo5ybD72hPrGFNw9xo8HxUxebd6EQ0qA\neQnAg3MXcICV+5rFVSwRJ+cdRa/5bj+rhSjv7xcMiRXK07Sf0l3/Fi9GIJhFIZST\n31kA8QpDcl/Nb349EVX9VQEVCZ/EkSebu4SSmATvQcQSvuirzMi87egprRNao0N2\n4GcuYb5zT8J8oVx0FySJgQPK+xwquefVK2EZodNDSHFFl4OT1p4mSsRG7/i1Pvqe\nTuZ03t6zlEa4ovtAXH4Sz6lGwd+A7RrDwahBiwHFe6wEn2mRnzoDeyvQBukYAI9W\nUvwx+QfnAgMBAAECggEAKK15x8amFpjVkFn/+oUinsX3rVFd26D0q5fGlezRecqv\nadiCGKLHt0FgyQusiZUe95W2IoH8yveO5NptRQbHv9wM8imP587pCEi9Ek5GoZjr\n1jaF0ePXVCfMJZiVWLzpntS0evlF6KgfTbqP4daDQB4ay7rxjy7yj7jO4iiBf3dA\nsPbBN4zTYXs+/a/BKfIm0eZd86OQvmzZh8Bg7HnYf1MRqQru1VkAsCaZR5LsGQ9P\nOEzOmEtqT5S07zaG24dK4YRfz6is30XL6U8ZvXqWvENG62gWrkBrR5N68+6tay4H\ngxH1OY3fI9xyyv3+wvvDAL6zTpK2MxSyTx6tiBoDYQKBgQDmBet73x3WG4OJzIV/\nNQJkJnR4/E3d3Hj6VWJqCoeiTNKHE9veFe49fQBS5po7AU09sp0M6a5/NEx63Kxq\n04TycJYYOZE7j3YaWOc4G9SzFi5PniMusbbkoGzUg4BGNUiQ/GGJtHZX7OaVYq86\nE5cOaY6nM/YB4XJHl7XgVkz4NwKBgQC+IN7YQIsMY1Nj+hfEjKtwxp61ePlcRj9I\n6F8WTsVwqoYTGbCL5beLHNqRIRLYqhDXWoNSpMEBGTh9EDmxHrX/OxL+1NBmf0u4\nJIusPQwirTI0WTtW7YPteSpOpSSKMFZjzLMKsVFZvqtSprcuo70JIETwqjTy3TMP\n43nYArk10QKBgQCWMwNjbXukFW89CcmaGNko4FtprQaDerWccSjEKYALoLJP9c26\nJQPeLsOJXn8TTHRNd1ZJ2kVRVqsiBvqm/ttvG8lGpECLbdAmwCqrXrDzB+bRomdC\n1FSi0YZ+9idKsPxjgAmIy8gC/fRLU5csCyK2DINT9wAKllXzHcNra67y3QKBgGnH\ng/QwxKvZvxWKmRqjYObXuokgiyvJcYAwuGaC4Np0JTAPROgwoFNndDr2ebPNupz2\nIMYkH7VqwMDj/BUNDxi3VzQsVt4PyKLkwkjLlirczWfOlXMhphrDJMSooJG5nvbb\ndmlmieoyaMMNOjFaq9ud9n0nVVohsz0NxEZoDX9hAoGAAbK/Mlvq6sf9pbyJD8nU\nVaqs+ee1Y7/aZdZCXht/wwCbcOW1uW4/hOSad+PpmZYtKanPtN0qvTM9AdyGtIlY\nYrg2+Py6ZbMybYcsF47sZtcOp6P88eyIbEjhrIxwU10+ZIHAK7zz/+B9/by5rdPO\nWGHTpc6R14NwtGvjfMeWymY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "zeroto100-storage-access@zeroto100-352907.iam.gserviceaccount.com",
+  "client_id": "102652360489584681343",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/zeroto100-storage-access%40zeroto100-352907.iam.gserviceaccount.com"
+}

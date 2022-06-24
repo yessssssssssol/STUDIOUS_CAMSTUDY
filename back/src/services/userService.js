@@ -1,4 +1,4 @@
-import { TimeLog, User, UserDailySheet } from '../db';
+import { Comments, TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
+import { userStudyRoomsService } from './userStudyRoomsService';
+import { TotalTime } from '../db/models/TotalTime';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -28,6 +30,9 @@ class userAuthService {
 
         //날짜 생성
         const date = ChangeDate.getCurrentDate();
+
+        // 총 공부시간 생성
+        await TotalTime.create({ id });
 
         const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
         createdNewUserSheet.errorMessage = null;
@@ -54,7 +59,7 @@ class userAuthService {
 
         // 로그인 성공 -> JWT 웹 토큰 생성
         const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
-        console.log(secretKey);
+        // console.log(secretKey);
         const token = jwt.sign({ user_id: user.id }, secretKey);
 
         // 반환할 loginuser 객체를 위한 변수 설정
@@ -82,53 +87,72 @@ class userAuthService {
     }
 
     static async setUser({ user_id, toUpdate }) {
-        // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
         let user = await User.findById({ user_id });
-
-        // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
             const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
 
-        // 업데이트 날짜 갱신
         const date = dayjs();
-        const fieldToUpdate = 'updatedAt';
-        const newValue = date.format('YYYY-MM-DD HH:mm:ss');
-        user = await User.update({ user_id, fieldToUpdate, newValue });
+        const updatedAt = date.format('YYYY-MM-DD HH:mm:ss');
 
-        // 업데이트 대상에 name이 있다면, 즉 name 값이 null 이 아니라면 업데이트 진행
-        if (toUpdate.name) {
-            const fieldToUpdate = 'name';
-            const newValue = toUpdate.name;
-            user = await User.update({ user_id, fieldToUpdate, newValue });
-        }
+        let changeUpdate = {};
+        changeUpdate.updatedAt = updatedAt;
+        if (toUpdate.name) changeUpdate.name = toUpdate.name;
+        if (toUpdate.email) changeUpdate.email = toUpdate.email;
+        if (toUpdate.password) changeUpdate.password = await bcrypt.hash(toUpdate.password, 10);
+        if (toUpdate.description) changeUpdate.description = toUpdate.description;
+        // console.log(changeUpdate);
 
-        if (toUpdate.email) {
-            const fieldToUpdate = 'email';
-            const newValue = toUpdate.email;
-            user = await User.update({ user_id, fieldToUpdate, newValue });
-        }
-
-        if (toUpdate.password) {
-            const fieldToUpdate = 'password';
-            const password = toUpdate.password;
-            const newValue = await bcrypt.hash(password, 10);
-            user = await User.update({ user_id, fieldToUpdate, newValue });
-        }
-
-        if (toUpdate.description) {
-            const fieldToUpdate = 'description';
-            const newValue = toUpdate.description;
-            user = await User.update({ user_id, fieldToUpdate, newValue });
-        }
-
-        return user;
+        return User.update({ user_id, changeUpdate });
     }
+    // static async setUser({ user_id, toUpdate }) {
+    //     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
+    //     let user = await User.findById({ user_id });
+
+    //     // db에서 찾지 못한 경우, 에러 메시지 반환
+    //     if (!user) {
+    //         const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+    //         return { errorMessage };
+    //     }
+
+    //     // 업데이트 날짜 갱신
+    //     const date = dayjs();
+    //     const fieldToUpdate = 'updatedAt';
+    //     const newValue = date.format('YYYY-MM-DD HH:mm:ss');
+    //     user = await User.update({ user_id, fieldToUpdate, newValue });
+
+    //     // 업데이트 대상에 name이 있다면, 즉 name 값이 null 이 아니라면 업데이트 진행
+    //     if (toUpdate.name) {
+    //         const fieldToUpdate = 'name';
+    //         const newValue = toUpdate.name;
+    //         user = await User.update({ user_id, fieldToUpdate, newValue });
+    //     }
+
+    //     if (toUpdate.email) {
+    //         const fieldToUpdate = 'email';
+    //         const newValue = toUpdate.email;
+    //         user = await User.update({ user_id, fieldToUpdate, newValue });
+    //     }
+
+    //     if (toUpdate.password) {
+    //         const fieldToUpdate = 'password';
+    //         const password = toUpdate.password;
+    //         const newValue = await bcrypt.hash(password, 10);
+    //         user = await User.update({ user_id, fieldToUpdate, newValue });
+    //     }
+
+    //     if (toUpdate.description) {
+    //         const fieldToUpdate = 'description';
+    //         const newValue = toUpdate.description;
+    //         user = await User.update({ user_id, fieldToUpdate, newValue });
+    //     }
+
+    //     return user;
+    // }
 
     static async getUserInfo({ user_id }) {
         const user = await User.findById({ user_id });
-
         // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
             const errorMessage = '해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
@@ -166,14 +190,26 @@ class userAuthService {
         );
 
         const user_id = await User.findByEmail({ email }).then((data) => data.id);
-        const fieldToUpdate = 'password';
-        const newValue = await bcrypt.hash(temp_pw, 10);
-        const user = await User.update({ user_id, fieldToUpdate, newValue });
+        const password = await bcrypt.hash(temp_pw, 10);
+        const changeUpdate = { password };
+        const user = await User.update({ user_id, changeUpdate });
         return user;
     }
 
     static async deleteUser({ id }) {
-        return Promise.all([User.deleteUser({ id }), TimeLog.deleteUser({ id }), UserDailySheet.deleteUser({ id })]);
+        const roomAr = userStudyRoomsService.getRooms({ id });
+
+        Promise.all([
+            User.deleteUser({ id }),
+            TimeLog.deleteUser({ id }),
+            UserDailySheet.deleteUser({ id }),
+            (await roomAr).map((room) => {
+                const { roomId, id } = room;
+                userStudyRoomsService.delRoom({ id, roomId });
+            }),
+        ]);
+        await Comments.changeWithdrawalComments({ id });
+        return;
     }
 }
 
