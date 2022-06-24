@@ -8,12 +8,16 @@ const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기
-    static async createSheets() {
+    static async createSheets(date = undefined) {
         // 날짜 가져오기
         const now = dayjs();
-        const today = now.format('YYYY-MM-DD');
-        const yesterday = now.add(-1, 'day').format().slice(0, 10);
-        console.log(typeof yesterday);
+        let today = now.format('YYYY-MM-DD');
+        let yesterday = now.add(-1, 'day').format().slice(0, 10);
+        if (date) {
+            const dateThatInsert = dayjs(date);
+            today = dateThatInsert.format('YYYY-MM-DD');
+            yesterday = dateThatInsert.add(-1, 'day').format().slice(0, 10);
+        }
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
         const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
         if (userSheets === []) {
@@ -23,7 +27,7 @@ class UserDailySheetService {
 
         const newSheets = userSheets.map((sheet) => {
             const { id, timeGoal } = sheet;
-            console.log(timeGoal);
+            // console.log(timeGoal);
             if (timeGoal === '00:00:00') {
                 return {
                     id,
@@ -48,7 +52,7 @@ class UserDailySheetService {
                 };
             }
         });
-        await UserDailySheet.addSheets(newSheets);
+        UserDailySheet.addSheets(newSheets);
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
     }
 
@@ -57,7 +61,6 @@ class UserDailySheetService {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
         const date = ChangeDate.getCurrentDate(startTime);
-
         const getSheet = await UserDailySheet.getSheet({ id, date });
         const { timeGoal, beginStudyTime } = getSheet;
 
@@ -92,6 +95,10 @@ class UserDailySheetService {
             achievementRate = Number((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
         }
 
+        if (achievementRate > 100) {
+            achievementRate = 100;
+        }
+
         const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
         return updatedSheet;
     }
@@ -108,14 +115,24 @@ class UserDailySheetService {
         const totalAchievementRate = total.rate;
         const totalStudyTime = total.time;
 
+        const attendanceRate = analyzeDate.monthAvgStudyTime(getSheets);
+
         const weekSheets = analyzeDate.weekPeriod(getSheets);
         const week = analyzeDate.avgAndSum(weekSheets);
         const weekAchievementRate = week.rate;
         const weekStudyTime = week.time;
 
-        // console.log(total, week);
+        const now = ChangeDate.getCurrentDate();
+        const todaySheet = getSheets.filter((sheet) => sheet.date === now);
+        let studyTimeADay = todaySheet[0].studyTimeADay;
+        if (!studyTimeADay) {
+            const errorMessage = '금일 시트를 찾을 수 없습니다.';
+            return errorMessage;
+        } else if (studyTimeADay === ' ') {
+            studyTimeADay = '00:00:00';
+        }
 
-        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime };
+        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay, attendanceRate };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
@@ -132,6 +149,9 @@ class UserDailySheetService {
         const studyTimeADayNum = ChangeDate.toMilliseconds(studyTimeADay);
         let achievementRate = ((studyTimeADayNum / timeGoalNum) * 100).toFixed(2);
 
+        if (achievementRate > 100) {
+            achievementRate = 100;
+        }
         if (timeGoal === '00:00:00') {
             achievementRate = 100;
         }

@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 
-import * as Api from '../../pages/api/api';
+import * as API from '../../pages/api/api';
 import Modal from '../common/Modal';
 import { registerModalState } from '../../core/atoms/modalState';
 
 const RegisterModal = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useRecoilState(registerModalState);
-
   const modalTitle = 'Register';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -19,7 +19,7 @@ const RegisterModal = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await Api.post('user/register', {
+      await API.post('user/register', {
         email,
         password,
         name,
@@ -48,88 +48,90 @@ const RegisterModal = () => {
   const isFormValid = isEmailValid && isPasswordValid && isNameValid;
 
   return (
-    <>
+    <div>
       <button
-        className='bg-gray-400 text-white active:bg-gray-600 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150'
-        type='button'
+        className="bg-gray-400 text-white active:bg-gray-600 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
         onClick={() => setShowModal(true)}
       >
         {modalTitle}
       </button>
       {showModal && (
         <Modal title={modalTitle}>
-          <form className='space-y-6 w-80' onSubmit={submitHandler}>
-            <div className='w-full'>
-              <label
-                htmlFor='email'
-                className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'
+          <div>
+            <form className="space-y-6 w-80" onSubmit={submitHandler}>
+              <div className="w-full">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  이메일
+                </label>
+                <input
+                  type="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="name@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {!isEmailValid && (
+                  <p className="text-red-500 text-xs italic px-2.5">
+                    이메일이 유효하지 않습니다.
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  비밀번호
+                </label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {!isPasswordValid && (
+                  <p className="text-red-500 text-xs px-2.5 italic">
+                    비밀번호가 유효하지 않습니다.
+                  </p>
+                )}
+              </div>
+              <div className="w-full">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  이름
+                </label>
+                <input
+                  type="text"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {!isNameValid && (
+                  <p className="text-red-500 text-xs px-2.5 italic">
+                    이름이 유효하지 않습니다.
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                disabled={!buttonAct}
               >
-                이메일
-              </label>
-              <input
-                type='email'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
-                placeholder='name@email.com'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {!isEmailValid && (
-                <p className='text-red-500 text-xs italic px-2.5'>
-                  이메일이 유효하지 않습니다.
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor='password'
-                className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'
-              >
-                비밀번호
-              </label>
-              <input
-                type='password'
-                placeholder='••••••••'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {!isPasswordValid && (
-                <p className='text-red-500 text-xs px-2.5 italic'>
-                  비밀번호가 유효하지 않습니다.
-                </p>
-              )}
-            </div>
-            <div className='w-full'>
-              <label
-                htmlFor='email'
-                className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'
-              >
-                이름
-              </label>
-              <input
-                type='text'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
-                placeholder='name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              {!isNameValid && (
-                <p className='text-red-500 text-xs px-2.5 italic'>
-                  이름이 유효하지 않습니다.
-                </p>
-              )}
-            </div>
-            <button
-              type='submit'
-              className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-              disabled={!buttonAct}
-            >
-              회원가입
-            </button>
-          </form>
+                회원가입
+              </button>
+            </form>
+          </div>
         </Modal>
       )}
-    </>
+    </div>
   );
 };
 

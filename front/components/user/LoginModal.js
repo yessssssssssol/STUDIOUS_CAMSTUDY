@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { tokenAtom } from '../../core/atoms/userState';
-import { loginModalState } from '../../core/atoms/modalState';
+import { loginModalState,dropboxModalState } from '../../core/atoms/modalState';
 
 import Modal from '../common/Modal';
 import { useUserActions } from '../../utils/hooks/useUserAction';
@@ -16,6 +16,7 @@ const LoginModal = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useRecoilState(loginModalState);
+  const [dropModal,setDropModal]=useRecoilState(dropboxModalState)
   const token = useRecoilValue(tokenAtom);
   const userActions = useUserActions();
 
@@ -34,6 +35,7 @@ const LoginModal = () => {
       console.log(err);
     });
     setShowModal(false);
+    setDropModal(false)
   };
 
   return (
