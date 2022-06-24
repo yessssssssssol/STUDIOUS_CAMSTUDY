@@ -43,4 +43,4 @@ export const items = [
   ['AboutUs', '/aboutus'],
   ['마이페이지', '/mypage'],
 ];
-export const drop_item = ['Dashboard', 'Settings', 'Earnings'];
+export const drop_item = [];
