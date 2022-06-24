@@ -84,6 +84,10 @@ const UserStudyRoomsSchema = new Schema({
         type: String,
         required: true,
     },
+    expiredAt: {
+        type: Date,
+        expires: 0,
+    },
 });
 
 const UserStudyRoomsModel = model('UserStudyRooms', UserStudyRoomsSchema);
