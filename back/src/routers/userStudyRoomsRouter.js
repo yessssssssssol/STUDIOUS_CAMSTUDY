@@ -5,8 +5,8 @@ import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
-import { commentsService } from '../services/commentsService';
-import { get } from 'express/lib/request';
+// import { commentsService } from '../services/commentsService';
+// import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
 
@@ -15,7 +15,6 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
     try {
         const id = req.currentUserId;
         const roomId = uuid().replace(/-/g, '');
-        let newRoomInfo = {};
         const now = dayjs();
         const group = true;
 
@@ -41,7 +40,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
         }
 
-        newRoomInfo = {
+        const newRoomInfo = {
             id,
             roomId,
             roomImg: '사진 정보가 없습니다.',
@@ -187,11 +186,10 @@ userStudyRoomsRouter.put('/headcount', login_required, async function (req, res,
             if (curRoom.membersNum === curRoom.headCount.length) return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
 
             if (curRoom.headCount.includes(id)) return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
+
             curRoom.headCount.push(id);
             const headCount = curRoom.headCount;
-            console.log(headCount);
             const updateChange = { headCount };
-
             const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
             if (!newHeadCount) return res.status(500).json({ message: 'headCount에 추가하지 못했습니다.' });
             return res.status(200).json(newHeadCount);
