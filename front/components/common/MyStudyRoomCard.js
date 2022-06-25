@@ -5,7 +5,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
     console.log(myStudyRoom, '나의 카드');
   });
   return (
-    <div className=" px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-20">
+    <div className="  px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         {/* 바로 스터디룸으로 연결하기  */}
         <a href={`/board/${myStudyRoom.roomId}`} aria-label="Article">
