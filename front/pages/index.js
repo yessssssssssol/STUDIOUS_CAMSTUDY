@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [islogin, setIsLogin] = useRecoilState(isloginAtom);
-  const [element, setElement] = useState(null);
+  const [loginState, setLoginState] = useState(null);
 
   useEffect(() => {
-    setElement(true);
+    setLoginState(true);
   }, []);
 
-  if (islogin && element) {
+  if (islogin && loginState) {
     return <IsLoginHome />;
   } else {
     return (
