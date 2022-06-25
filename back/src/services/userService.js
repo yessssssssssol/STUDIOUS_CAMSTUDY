@@ -221,6 +221,7 @@ class userAuthService {
         Promise.all([
             User.deleteUser({ id }),
             TimeLog.deleteUser({ id }),
+            TotalTime.deleteUser({ id }),
             UserDailySheet.deleteUser({ id }),
             (await roomAr).map((room) => {
                 const { roomId, id } = room;
