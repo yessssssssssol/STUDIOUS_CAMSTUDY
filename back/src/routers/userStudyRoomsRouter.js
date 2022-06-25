@@ -60,7 +60,7 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             views: 0,
             createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
             updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
-            headCount: 0,
+            headCount: [],
             expiredAt,
         };
 
@@ -159,6 +159,35 @@ userStudyRoomsRouter.put('/changeroomleader', login_required, async function (re
         if (!changedRoomAuth) return res.status(400).json({ message: '변경에 실패했습니다.' });
 
         res.status(200).json(changedRoomAuth);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 스터디룸 입장(인원수 증가)
+userStudyRoomsRouter.put('/addheadcount', login_required, async function (req, res, next) {
+    try {
+        const id = req.currentUserId;
+        const { roomId } = req.body;
+        if (!roomId) return res.status(400).json({ message: 'roomId혹은 headCount값이 넘어오지 않았습니다.' });
+
+        //방 정보 확인하기
+        const curRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!curRoom || curRoom === []) return res.status(400).json({ message: '존재하지 않은 roomId입니다.' });
+
+        if (curRoom.membersNum === curRoom.headCount.length) return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
+
+        if (curRoom.headCount.includes(id)) return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
+
+        curRoom.headCount.push(id);
+        const headCount = curRoom.headCount;
+        console.log(headCount);
+        const updateChange = { headCount };
+
+        const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+        if (!newHeadCount) return res.status(500).json({ message: 'headCount에 추가하지 못했습니다.' });
+
+        return res.status(200).json(newHeadCount);
     } catch (error) {
         next(error);
     }
