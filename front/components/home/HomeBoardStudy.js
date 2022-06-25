@@ -1,8 +1,7 @@
-import BoardCard from '../../components/common/BoardCard';
-
 import { useEffect, useState } from 'react';
-import * as API from '../../pages/api/api';
 import Link from 'next/link';
+import * as API from '../../pages/api/api';
+import BoardCard from '../../components/common/BoardCard';
 
 const HomeBoardStudy = ({ profileURL }) => {
   const [boardDatas, setBoardData] = useState();

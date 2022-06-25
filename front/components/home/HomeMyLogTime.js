@@ -1,4 +1,3 @@
-import Mypage from '../../pages/mypage';
 import * as API from '../../pages/api/api';
 import { userAtom } from '../../core/atoms/userState';
 import { useRecoilValue } from 'recoil';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import OpenroomCard from '../../components/common/OpenroomCard';
-import * as API from '../../pages/api/api';
 import Link from 'next/link';
+import * as API from '../../pages/api/api';
+import OpenroomCard from '../../components/common/OpenroomCard';
 
 const HomeOpenStudy = () => {
   const [openRooms, setOpenRooms] = useState([]);
