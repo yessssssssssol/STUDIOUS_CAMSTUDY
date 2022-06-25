@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import OpenroomCard from '../../components/common/OpenroomCard';
-import Helmet from '../../components/layout/Helmet';
 import * as API from '../../pages/api/api';
 import Link from 'next/link';
 
@@ -20,8 +19,6 @@ const HomeOpenStudy = () => {
       <div>오픈 스터디방 입장</div>
       {/* <div class="px-10 md:px-15 lg:px-20"> */}
       <div class="h-full w-full flex flex-raw flex-wrap">
-        <Helmet title="Openroom" />
-
         {openRooms &&
           openRooms.slice(0, 4).map((openRoom) => {
             return (

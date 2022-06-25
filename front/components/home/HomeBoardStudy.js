@@ -1,5 +1,5 @@
 import BoardCard from '../../components/common/BoardCard';
-import Helmet from '../../components/layout/Helmet';
+
 import { useEffect, useState } from 'react';
 import * as API from '../../pages/api/api';
 import Link from 'next/link';
@@ -23,7 +23,6 @@ const HomeBoardStudy = ({ profileURL }) => {
     <>
       <div>스터디 모집</div>
       <div className="flex flex-raw flex-wrap lg:flex justify-center">
-        <Helmet title="board" />
         {boardDatas &&
           boardDatas.slice(0, 3).map((boardData, index) => {
             return (

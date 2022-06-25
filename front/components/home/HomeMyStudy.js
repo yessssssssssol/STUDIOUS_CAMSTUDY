@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import MyStudyRoomCard from '../../components/common/MyStudyRoomCard';
-import Helmet from '../../components/layout/Helmet';
 import * as API from '../../pages/api/api';
 import { userAtom } from '../../core/atoms/userState';
 import { useRecoilValue } from 'recoil';
@@ -22,9 +21,7 @@ const HomeMyStudy = () => {
   return (
     <>
       <div>내 스터디방 입장</div>
-
       <div class="px-10 md:px-15 lg:px-20">
-        {/* <Helmet title="MyStudyRoom" /> */}
         <div class="h-full w-full flex flex-raw  overflow-x-auto snap-x snap-mandatory overscroll-x-auto ">
           {myStudyRooms &&
             myStudyRooms.map((myStudyRoom) => {
