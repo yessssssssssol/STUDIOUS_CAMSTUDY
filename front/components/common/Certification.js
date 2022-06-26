@@ -7,12 +7,12 @@ export default function Certification() {
 
   return (
     <div>
-      <div class="flex items-center space-x-2 text-base">
-        <h4 class="font-semibold text-slate-900">Applicant</h4>
+      <div className="flex items-center space-x-2 text-base">
+        <h4 className="font-semibold text-slate-900">Applicant</h4>
       </div>
-      <div class="mt-3 flex -space-x-2 overflow-hidden">
+      <div className="mt-3 flex -space-x-2 overflow-hidden">
         <img
-          class="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
           src={profileUrl}
           alt="신청한사람"
         />
