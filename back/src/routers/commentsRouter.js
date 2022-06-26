@@ -82,15 +82,16 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
             commentList.map(async (comment) => {
                 // 댓글 쓴 사람 이름 가져오기
                 let user_id = comment.writerId;
-                const userName = await userAuthService.getUserInfo({ user_id });
+                const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                const userInfo = await userAuthService.getUserInfo({ user_id });
                 // 댓글 타겟이 된 사람 이름 적어오기
                 user_id = comment.targetId;
                 let targetName = null;
                 if (user_id) {
-                    targetName = await userAuthService.getUserInfo({ user_id });
+                    targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                    targetInfo = await userAuthService.getUserInfo({ user_id });
                 }
-
-                return { userName, targetName, ...comment.toObject() };
+                return { userName, targetName, ...comment.toObject(), userInfo, targetInfo };
             }),
         );
 
@@ -107,18 +108,20 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
         const comment = await commentsService.getOne({ _id });
         let user_id = comment.writerId;
         console.log(user_id);
-        const userName = await userAuthService.getUserInfo({ user_id });
+        const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+        const userInfo = await userAuthService.getUserInfo({ user_id });
         user_id = comment.targetId;
         let targetName = null;
         if (user_id) {
-            targetName = await userAuthService.getUserInfo({ user_id });
+            targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+            targetInfo = await userAuthService.getUserInfo({ user_id });
         }
         // console.log('comment 타입입니다.\n', typeof comment);
         // console.log('comment 로그입니다.\n', comment);
         // const commentWithName = { name: userName, ...comment };
         // console.log('commentWithName 로그입니다.\n', commentWithName);
 
-        return res.status(200).json({ userName, targetName, ...comment.toObject() });
+        return res.status(200).json({ userName, targetName, ...comment.toObject(), userInfo, targetInfo });
     } catch (error) {
         next(error);
     }
