@@ -86,31 +86,10 @@ const CreateStudyContent = () => {
 
   return (
     <div className="container w-full mx-auto my-5 bg-white dark:bg-gray-800 rounded">
-      <div className="w-full xl:w-full border-b border-gray-300 dark:border-gray-700 py-3 bg-white dark:bg-gray-800">
-        <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
-          <p className="text-lg text-gray-800 dark:text-gray-100 font-bold">
-            스터디방 생성
-          </p>
-          <div className="ml-2 cursor-pointer text-gray-600 dark:text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-            >
-              <path
-                className="heroicon-ui"
-                d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-                fill="currentColor"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
       <div className="mx-auto">
         <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
-          <div className="mt-8 flex flex-col w-full">
-            <div className="flex gap-x-6 ">
+          <div className="mt-3 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
+            <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
                 className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
@@ -129,8 +108,8 @@ const CreateStudyContent = () => {
               className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 dark:text-gray-400"
             />
           </div>
-          <div className="mt-8 flex flex-col w-full">
-            <div className="flex gap-x-6">
+          <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
+            <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
                 className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
@@ -176,8 +155,8 @@ const CreateStudyContent = () => {
               </div>
             </div>
           </div>
-          <div className="mt-8 flex flex-col w-full">
-            <div className="flex gap-x-6">
+          <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
+            <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
                 className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
@@ -197,8 +176,8 @@ const CreateStudyContent = () => {
               type="number"
             ></input>
           </div>
-          <div className="mt-8 flex flex-col w-full">
-            <div className="flex gap-x-6">
+          <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
+            <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
                 className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
@@ -228,7 +207,7 @@ const CreateStudyContent = () => {
             </div>
           </div>
           <div className="mt-8 flex flex-col w-full">
-            <div className="flex gap-x-6">
+            <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
                 className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"

@@ -60,7 +60,7 @@ const CreateBoard = () => {
       </div>
       <div className="mx-auto">
         <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
-          <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
+          <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full ">
             <label
               htmlFor="title"
               className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
