@@ -13,7 +13,7 @@ export default function Create() {
 
   const [file, setFile] = useState(null);
   const [tempUrl, setTempURL] = useState(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    'https://www.teahub.io/photos/full/59-599093_samsung-chromebook-3-background.jpg'
   );
 
   const fileInput = useRef(null);
@@ -52,7 +52,7 @@ export default function Create() {
       console.log('방이 생성되었습니다.');
       await API.putImg(`roomimg/${res.data.roomId}`, formD);
       console.log('이미지가 추가되었습니다.');
-      router.push('/');
+      router.back();
       resetRoom();
     } catch (err) {
       console.log(err);
@@ -62,7 +62,7 @@ export default function Create() {
   const resetHandler = () => {
     resetRoom();
     console.log(room);
-    router.push('/');
+    router.back();
   };
   return (
     <div>
@@ -70,7 +70,7 @@ export default function Create() {
         <div className="mx-20">
           <div className="my-6">
             <img
-              className="h-40 w-40 rounded-full"
+              className="object-fill h-48 w-96 rounded-md"
               src={tempUrl}
               alt="Rounded avatar"
             />
@@ -100,10 +100,12 @@ export default function Create() {
             </button>
           </div>
         </div>
-        <CreateStudyRoom />
+        <div className="flex justify-center">
+          <CreateStudyRoom />
+        </div>
       </div>
       <div className="flex justify-center">
-        {room.membersOnly && <CreateBoard />}
+        <CreateBoard />
       </div>
       <div className="container mx-auto w-11/12 xl:w-full">
         <div className="w-full py-4 sm:px-0 bg-white dark:bg-gray-800 flex justify-center">
