@@ -21,7 +21,6 @@ let myPeerConnection = null;
 let myDataChannel = null;
 let peerConnections = {};
 let dataChannels = {};
-
 let chatAll = [];
 
 function rtcInit() {
@@ -39,6 +38,9 @@ export default function Group() {
   const [chat, setChat] = useState([]);
   const [user, setUser] = useRecoilState(userAtom);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCamera, setIsCamera] = useState(false);
+  const [isMute, setMute] = useState(false);
+  const [isCameraOn, setCameraOn] = useState(true);
 
   let roomId;
 
@@ -67,7 +69,6 @@ export default function Group() {
   }
   
   async function getMedia(deviceId) {
-    console.log("getMedia");
     const initialConstraints = {
         audio : true, 
         video : {facingMode: "user"}
@@ -77,12 +78,19 @@ export default function Group() {
         video : {deviceId: {exact : deviceId}},
     }
     try {
-        myStream = await navigator.mediaDevices.getUserMedia(
+        if (navigator.mediaDevices) {
+          setIsCamera(true);
+          myStream = await navigator.mediaDevices.getUserMedia(
             deviceId ? cameraConstraints : initialConstraints
-        )
-        if (!deviceId) {
-            await selectCamera();
+          )
+          if (!deviceId) {
+              await selectCamera();
+          }
         }
+        else {
+          setIsCamera(false);
+        }
+        
     } catch (e) {
         console.log(e);
     }
@@ -116,6 +124,38 @@ export default function Group() {
     name.innerText = othersId;
     name.id = othersId;
     name.key = othersId;
+  }
+
+  function MuteBtnClick () {
+    const muteBtn = document.getElementById("muteBtn");
+    if (myStream !== null) {
+      console.log(myStream.getAudioTracks());
+      myStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+      if (isMute == true) {
+          muteBtn.innerText = "Unmute";
+          setMute(false);
+      }
+      else {
+          muteBtn.innerText = "Mute";
+          setMute(true);
+      }
+    }
+  }
+
+  function CameraOnOffClick () {
+    const cameraBtn = document.getElementById("cameraBtn");
+    if (myStream !== null) {
+      myStream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
+      console.log(myStream.getVideoTracks());
+      if (isCameraOn == true) {
+          cameraBtn.innerText = "turnOff";
+          setCameraOn(false);
+      }
+      else {
+          cameraBtn.innerText = "turnOn";
+          setCameraOn(true);
+      }
+    }
   }
 
   async function makeConnection(userId, offer=null) {
@@ -230,7 +270,6 @@ export default function Group() {
     })
   })
 
-
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
   socket.on("offer", async (offer, offersId) => {
     console.log("receive the offer");
@@ -288,14 +327,17 @@ export default function Group() {
           <p>{room?.roomName}</p>
           <div className="w-full items-center lg:flex">
             <div className="w-full lg:w-1/2">
-              <div>
-                <StopWatch />
-              </div>
-              <div>
-                <p>메인 카메라(인공지능 적용된 것)</p>
-                <AIFunc />
-                <AlertModal />
-              </div>
+              { isCamera ? 
+                <div>
+                  <StopWatch />
+                  <p>메인 카메라(인공지능 적용된 것)</p>
+                    <AIFunc />
+                    <AlertModal />
+                    <button id='muteBtn' onClick={MuteBtnClick}>Unmute</button>
+                    <br/>
+                    <button id='cameraBtn' onClick={CameraOnOffClick}>turnOn</button>
+                </div> : <p>카메라가 없습니다.</p>
+              }
             </div>
             <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
               <p>일반 카메라</p>
@@ -314,7 +356,6 @@ export default function Group() {
           </form>
           
           {chat.map((i) => {
-            console.log(i)
             return <div>{i}</div>
           })}
         </div> : <p>로딩중</p> 
