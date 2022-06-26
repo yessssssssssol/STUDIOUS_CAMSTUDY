@@ -6,6 +6,7 @@ import { useRecoilState, useResetRecoilState } from 'recoil';
 import { createroomAtom } from '../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
+import Alert from '../../components/common/Alert';
 
 export default function Create() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function Create() {
 
   const [file, setFile] = useState(null);
   const [tempUrl, setTempURL] = useState(roomDefaultImg);
+  const [error, setError] = useState(false);
 
   const fileInput = useRef(null);
 
@@ -50,6 +52,7 @@ export default function Create() {
       resetRoom();
     } catch (err) {
       console.log(err);
+      setError(true);
     }
   };
 
@@ -89,9 +92,15 @@ export default function Create() {
           >
             대표 이미지 설정
           </label>
-          <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
-            대표 이미지를 설정해주세요.
-          </p>
+          {!error ? (
+            <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              대표 이미지를 설정해주세요.
+            </p>
+          ) : (
+            <p className="pb-2 text-sm text-red-500 dark:text-gray-100">
+              대표 이미지를 설정해주세요.
+            </p>
+          )}
         </div>
         <div className="container w-full mx-auto my-3 bg-white dark:bg-gray-800 rounded">
           <div className="my-3">
@@ -133,6 +142,11 @@ export default function Create() {
       <div className="flex justify-center">
         <CreateBoard />
       </div>
+      {error && (
+        <div className="m-10">
+          <Alert title="error" content="대표 이미지를 설정해주세요!" />
+        </div>
+      )}
       <div className="container mx-auto w-11/12 xl:w-full">
         <div className="w-full py-4 sm:px-0 bg-white dark:bg-gray-800 flex justify-center">
           <button
