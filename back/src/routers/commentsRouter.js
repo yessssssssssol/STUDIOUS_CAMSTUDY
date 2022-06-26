@@ -89,9 +89,8 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
                 let targetName = null;
                 if (user_id) {
                     targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
-                    targetInfo = await userAuthService.getUserInfo({ user_id });
                 }
-                return { userName, targetName, ...comment.toObject(), userInfo, targetInfo };
+                return { userName, targetName, ...comment.toObject(), userInfo };
             }),
         );
 
@@ -114,14 +113,13 @@ commentsRouter.get('/comment/:_id', login_required, async function (req, res, ne
         let targetName = null;
         if (user_id) {
             targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
-            targetInfo = await userAuthService.getUserInfo({ user_id });
         }
         // console.log('comment 타입입니다.\n', typeof comment);
         // console.log('comment 로그입니다.\n', comment);
         // const commentWithName = { name: userName, ...comment };
         // console.log('commentWithName 로그입니다.\n', commentWithName);
 
-        return res.status(200).json({ userName, targetName, ...comment.toObject(), userInfo, targetInfo });
+        return res.status(200).json({ userName, targetName, ...comment.toObject(), userInfo });
     } catch (error) {
         next(error);
     }
