@@ -1,11 +1,14 @@
+import { useRouter } from 'next/router';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
-import { userAtom } from '../../core/atoms/userState';
+import { isloginAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 
 const EditUser = () => {
   const setShowModal = useSetRecoilState(editUserModalAtom);
   const [user, setUser] = useRecoilState(userAtom);
+  const setIsLogin = useSetRecoilState(isloginAtom);
+  const router = useRouter();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -28,6 +31,15 @@ const EditUser = () => {
     setUser((prev) => {
       return { ...prev, description: e.target.value };
     });
+  };
+
+  const handleUserDelete = async () => {
+    await API.delete(`user/${user.id}`);
+    console.log('회원탈퇴가 완료되었습니다.');
+    setShowModal(false);
+    setIsLogin(false);
+    localStorage.clear();
+    router.push('/');
   };
 
   return (
@@ -63,7 +75,10 @@ const EditUser = () => {
         ></textarea>
       </div>
       <div>
-        <button className="text-white py-2 px-4 mt-3 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200">
+        <button
+          className="text-white py-2 px-4 mt-3 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
+          onClick={handleUserDelete}
+        >
           회원탈퇴
         </button>
         <p

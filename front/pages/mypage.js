@@ -44,7 +44,6 @@ export default function mypage() {
     const getGitTimeData = async () => {
       const res = await API.get('dailysheets', useratom.id);
       const datas = res.data;
-      setGetTimeGoal(datas[datas.length - 1].timeGoal);
       datas.length == 0
         ? console.log('Git데이터', gittime)
         : datas.map((data) =>
@@ -55,23 +54,25 @@ export default function mypage() {
     getTimeData();
     getGitTimeData();
     setGitTime(gittime);
-    console.log(useratom);
   }, [user]);
   async function clickHandler(e) {
     var res = '';
     {
-      e.type === 'change'
-        ? setTimeGoal(e.target.value)
-        : Number(timeGoal) < '10'
-        ? (res = await API.put('dailysheet', {
+      if (e.type === 'click') {
+        if (Number(timeGoal) < '10') {
+          res = await API.put('dailysheet', {
             timeGoal: '0' + timeGoal + ':00:00',
-          }))
-        : Number(timeGoal) > '24'
-        ? alert('목표공부시간 최대는 24시간 입니다.')
-        : (res = await API.put('dailysheet', {
+          });
+        } else if (Number(timeGoal) > '24') {
+          alert('목표공부시간 최대는 24시간 입니다.');
+        } else {
+          res = await API.put('dailysheet', {
             timeGoal: timeGoal + ':00:00',
-          }));
+          });
+        }
+      }
     }
+    setGetTimeGoal(res.data.timeGoal);
   }
   return (
     <>
@@ -88,7 +89,7 @@ export default function mypage() {
               <input
                 className="text-center w-[70px] border-2 rounded-xl border-orange-300"
                 value={timeGoal}
-                onChange={(e) => clickHandler(e)}
+                onChange={(e) => setTimeGoal(e.target.value)}
               ></input>
               <span className=" mr-3">시간</span>
               <Button text={'설정'} onClick={clickHandler}></Button>
