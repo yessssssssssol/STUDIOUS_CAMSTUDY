@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
+const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5001;
 
 const hostname =
   typeof window !== 'undefined' && window.location.hostname

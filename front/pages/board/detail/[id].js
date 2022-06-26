@@ -3,7 +3,7 @@ import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
 
 import ProfileCard from '../../../components/common/ProfileCard';
-import Certification from '../../../components/common/Certification';
+import Application from '../../../components/common/Application';
 
 import { useEffect, useState } from 'react';
 import * as API from '../../../pages/api/api';
@@ -61,8 +61,12 @@ export default function Detail() {
                 </div>
 
                 <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-                  <ProfileCard hashTag={detailData.hashTags} />
-                  <Certification />
+                  <ProfileCard
+                    roomId={detailData.roomId}
+                    Id={detailData.id}
+                    hashTag={detailData.hashTags}
+                  />
+                  <Application roomId={detailData.roomId} Id={detailData.id} />
                 </div>
               </div>
             </main>
