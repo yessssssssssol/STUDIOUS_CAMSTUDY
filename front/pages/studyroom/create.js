@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { createroomAtom } from '../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
+import { roomDefaultImg } from '../../components/common/UseData';
 
 export default function Create() {
   const router = useRouter();
@@ -12,9 +13,7 @@ export default function Create() {
   const resetRoom = useResetRecoilState(createroomAtom);
 
   const [file, setFile] = useState(null);
-  const [tempUrl, setTempURL] = useState(
-    'https://www.teahub.io/photos/full/59-599093_samsung-chromebook-3-background.jpg'
-  );
+  const [tempUrl, setTempURL] = useState(roomDefaultImg);
 
   const fileInput = useRef(null);
 
@@ -22,16 +21,11 @@ export default function Create() {
     setRoom((prev) => {
       return {
         ...prev,
-        roomImg:
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        roomImg: roomDefaultImg,
       };
     });
-    setTempURL(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
-    setFile(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
+    setTempURL(roomDefaultImg);
+    setFile(roomDefaultImg);
   };
 
   const handleUpload = (e) => {
