@@ -25,7 +25,6 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
     const res = await Api.get('comments', roomId);
     setComments(res.data);
   };
-  console.log(writerId);
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
