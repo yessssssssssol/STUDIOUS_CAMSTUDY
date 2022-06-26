@@ -16,7 +16,8 @@ export default function NavBar() {
   const ref = useRef(null);
   const [showOptions, setShowOptions] = useRecoilState(dropboxModalState);
   const [menuBar, setMenuBar] = useRecoilState(menuModalState);
-  const [token, setToken] = useRecoilState(tokenAtom);
+  const tokenatom = useRecoilValue(tokenAtom);
+  const [token, setToken] = useState();
   const user = useRecoilValue(userAtom);
   const userActions = useUserActions();
   const [islogin, setIsLogin] = useRecoilState(isloginAtom);
@@ -31,13 +32,14 @@ export default function NavBar() {
     setMenuBar(true);
   };
   useEffect(() => {
+    setToken(tokenatom);
     setElement(true);
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [islogin]);
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -54,7 +56,7 @@ export default function NavBar() {
         setToken(false);
       }
     }
-  }, []);
+  }, [token]);
   const handleLogout = () => {
     userActions.logout().catch((err) => {
       console.log(err);
@@ -63,11 +65,7 @@ export default function NavBar() {
 
   function NavItem(item, index) {
     function make_link() {
-      console.log(token);
-      if (token === null) {
-        console.log(333);
-      } else if (token && router.pathname === item[1]) {
-        console.log(3233);
+      if (token && router.pathname === item[1]) {
         return (
           <Link href={item[1]}>
             <a
@@ -77,7 +75,7 @@ export default function NavBar() {
             </a>
           </Link>
         );
-      } else if (token && router.pathname !== item[1]) {
+      } else {
         return (
           <Link href={item[1]}>
             <a
@@ -91,7 +89,7 @@ export default function NavBar() {
     }
     return (
       <ul key={index} className="list-none">
-        <li key={index}>{make_link()}</li>
+        <li key={index}>{token ? make_link() : null}</li>
       </ul>
     );
   }
