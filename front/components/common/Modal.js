@@ -14,7 +14,6 @@ export default function Modal(props) {
 
   const ref = useRef(null);
   useEffect(() => {
-    console.log(ref);
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
