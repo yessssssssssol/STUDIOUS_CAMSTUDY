@@ -1,11 +1,8 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userAtom } from '../../core/atoms/userState';
-import * as Api from '../../pages/api/api';
-import BoldText from '../common/BoldText';
+import * as API from '../../pages/api/api';
 
-export default function ProfileCard({ hashTag }) {
-  const [user, setUser] = useRecoilState(userAtom);
-  const { name, description, profileUrl } = user;
+export default function ProfileCard({ owner, detailData }) {
+  const hashTags = detailData.hashTags;
+  const { name, description, profileUrl } = owner;
   return (
     <div className="max-w-md flex m-4 rounded overflow-hidden shadow-lg">
       <img
@@ -19,7 +16,7 @@ export default function ProfileCard({ hashTag }) {
           <p className="text-gray-700 text-base">{description}</p>
         </div>
         <div className="px-6  pt-4 pb-2">
-          {hashTag.map((tag, index) => {
+          {hashTags.map((tag, index) => {
             return (
               <span
                 key={index}

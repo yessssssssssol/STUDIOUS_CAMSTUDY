@@ -3,20 +3,31 @@ import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
 
 import ProfileCard from '../../../components/common/ProfileCard';
-import Certification from '../../../components/common/Certification';
+import CertificationList from '../../../components/board/CertificationList';
 
 import { useEffect, useState } from 'react';
 import * as API from '../../../pages/api/api';
 
 export default function Detail() {
+  let tempData = {};
+  const [applicants, setApplicants] = useState([]);
   const [detailData, setDetailData] = useState();
+  const [owner, setOwner] = useState({});
   const router = useRouter();
+
   useEffect(() => {
     async function getBoardDetail() {
       try {
         const res = await API.get('studyroom', router.query.id);
         console.log(res, '방 데이터');
         setDetailData(res.data);
+        tempData = res.data;
+        console.log(detailData);
+        const ownerData = await API.get(`user/${res.data.id}`);
+        setOwner(ownerData.data);
+        const applicantsData = await API.get(`applicants/${tempData.roomId}`);
+        setApplicants(applicantsData.data);
+        console.log('dd', applicants);
       } catch (error) {
         console.log(error);
       }
@@ -49,11 +60,7 @@ export default function Detail() {
               <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
                   <div className="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
-                    Sportsman do offending supported extremity breakfast by
-                    listening. Decisively advantages nor expression unpleasing
-                    she led met. Estate was tended ten boy nearer seemed. As so
-                    seeing latter he should thirty whence. Steepest speaking up
-                    attended it as. Made neat an on be gave show snug tore.
+                    {detailData.roomDesc}
                   </div>
                   <div className="flex-col w-full">
                     <Comments roomId={detailData.roomId} Id={detailData.id} />
@@ -61,8 +68,8 @@ export default function Detail() {
                 </div>
 
                 <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-                  <ProfileCard hashTag={detailData.hashTags} />
-                  <Certification />
+                  <ProfileCard detailData={detailData} owner={owner} />
+                  {applicants && <CertificationList applicants={applicants} />}
                 </div>
               </div>
             </main>
