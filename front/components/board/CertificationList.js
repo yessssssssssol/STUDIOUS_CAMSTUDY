@@ -7,7 +7,13 @@ export default function CertificationList({ applicants }) {
         <h4 className="font-semibold text-slate-900">스터디 신청자</h4>
       </div>
       {applicants.map((applicant, index) => {
-        return <Certification key={index} name={applicant.userName} />;
+        return (
+          <Certification
+            key={index}
+            name={applicant.userName}
+            profile={applicant.userURL}
+          />
+        );
       })}
     </div>
   );
