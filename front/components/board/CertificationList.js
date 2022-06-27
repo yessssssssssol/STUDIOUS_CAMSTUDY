@@ -1,20 +1,22 @@
 import Certification from './Certification';
 
-export default function CertificationList({ applicants }) {
+export default function CertificationList({ applicants, isOwner }) {
   return (
-    <div className="bg-blue-100 rounded-lg p-3">
+    <div className="bg-gray-100 rounded-lg p-3">
       <div className="flex items-center space-x-2 text-base">
-        <h4 className="font-semibold text-slate-900">스터디 신청자</h4>
+        <h4 className="font-bold text-slate-900">스터디 신청자</h4>
       </div>
-      {applicants.map((applicant, index) => {
-        return (
-          <Certification
-            key={index}
-            name={applicant.userName}
-            profile={applicant.userURL}
-          />
-        );
-      })}
+      <div>
+        {applicants.map((applicant, index) => {
+          return (
+            <Certification
+              key={index}
+              applicant={applicant}
+              isOwner={isOwner}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
