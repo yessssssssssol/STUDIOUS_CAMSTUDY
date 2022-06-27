@@ -46,7 +46,12 @@ export default function Group() {
   let roomId;
 
   if (typeof window !== 'undefined') {
-    roomId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    const leng = window.location.href.length;
+    let href = window.location.href;
+    if (href[leng-1] === '/') {
+      href = href.slice(0, leng-2);
+    }
+    roomId = href.substring(href.lastIndexOf('/') + 1);
   }
 
   const socket = io(url, {
