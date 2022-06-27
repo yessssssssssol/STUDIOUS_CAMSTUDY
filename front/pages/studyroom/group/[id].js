@@ -3,18 +3,19 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 
-import {
-  userAtom,
-  userDescriptionAtom,
-  userNameAtom,
-} from '../../../core/atoms/userState';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import { userAtom } from '../../../core/atoms/userState';
 
-const url = `http://localhost:5000`;
+const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
+
+const hostname =
+  typeof window !== 'undefined' && window.location.hostname
+    ? window.location.hostname
+    : '';
+const url = 'http://' + hostname + ':' + backendPortNumber;
 
 let myStream = null;
 let myPeerConnection = null;

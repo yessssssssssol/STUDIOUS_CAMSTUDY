@@ -12,7 +12,9 @@ export default function board({ profileURL }) {
     async function getBoardData() {
       try {
         const res = await API.get('memberonly/studyrooms');
-        setBoardData(res.data);
+        const res2 = await API.get(`open/studyrooms`);
+        // const resList = [...res.data, ...res2.data];
+        setBoardData(res);
       } catch (err) {
         console.log(err);
       }
