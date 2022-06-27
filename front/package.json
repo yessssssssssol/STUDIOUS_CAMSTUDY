@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tensorflow-models/coco-ssd": "^0.1.1",
-    "@tensorflow/tfjs": "^0.14.0",
+    "@tensorflow-models/coco-ssd": "^2.2.2",
+    "@tensorflow/tfjs": "^3.3.0",
     "axios": "^0.27.2",
     "d3": "^7.4.4",
     "dayjs": "^1.11.3",
