@@ -9,7 +9,7 @@ const HomeRanking = () => {
   useEffect(() => {
     async function getRanking() {
       try {
-        const res = await API.get('totaltimes');
+        const res = await API.get('totaltimes/ranking');
         setRankings(res.data);
       } catch (err) {
         console.log(err);
@@ -31,12 +31,12 @@ const HomeRanking = () => {
   }, []);
 
   // const timeSort = rankings.sort((a, b) => a.totalTime - b.totalTime);
-  const timeSort = rankings.sort((a, b) =>
-    a.totalTime.toLowerCase() < b.totalTime.toLowerCase() ? 1 : -1
-  );
-  console.log('timeSort');
-  console.log(timeSort);
-  console.log(timeSort === rankings);
+  // const timeSort = rankings.sort((a, b) =>
+  //   a.totalTime.toLowerCase() < b.totalTime.toLowerCase() ? 1 : -1
+  // );
+  // console.log('timeSort');
+  // console.log(timeSort);
+  // console.log(timeSort === rankings);
 
   return (
     <>
