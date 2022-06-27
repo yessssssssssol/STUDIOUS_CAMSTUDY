@@ -44,6 +44,8 @@ export default function mypage() {
     const getGitTimeData = async () => {
       const res = await API.get('dailysheets', useratom.id);
       const datas = res.data;
+      console.log(datas);
+      setGetTimeGoal(datas[datas.length - 1].timeGoal);
       datas.length == 0
         ? console.log('Git데이터', gittime)
         : datas.map((data) =>
@@ -116,7 +118,7 @@ export default function mypage() {
             <BoldText text={`${user.name}의 공부 기록 통계`} />
             <div className="flex flex-col items-center  lg:flex-row justify-evenly">
               {charts_data.map((title, index) => (
-                <div className="py-8 lg:mr-[30px]">
+                <div key={index} className="py-8 lg:mr-[30px]">
                   <Pie
                     key={index}
                     title={title}

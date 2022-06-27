@@ -1,3 +1,4 @@
+import { TimeLogModel } from '../schemas/timeLog';
 import { TotalTimeModel } from '../schemas/totalTime';
 
 class TotalTime {
@@ -30,6 +31,11 @@ class TotalTime {
         ];
 
         return await TotalTimeModel.aggregate(aggregatorOpts).limit(10).exec();
+    }
+
+    static async deleteUser({ id }) {
+        const user_id = id;
+        return await TotalTimeModel.findOneAndDelete({ user_id });
     }
 }
 
