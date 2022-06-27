@@ -5,8 +5,8 @@ import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
-import { commentsService } from '../services/commentsService';
-import { get } from 'express/lib/request';
+// import { commentsService } from '../services/commentsService';
+// import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
 
@@ -15,107 +15,53 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
     try {
         const id = req.currentUserId;
         const roomId = uuid().replace(/-/g, '');
-        let newRoomInfo = {};
         const now = dayjs();
+        const group = true;
 
-        let { roomName, group, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
+        let { roomName, membersOnly, membersNum, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd, roomTitle, roomDesc, hashTags } = req.body;
 
         //마감 날짜
         let expiredAt = new Date(endStudyDay + ' 23:59:59');
         expiredAt.setHours(expiredAt.getHours() + 9);
 
-        // group 형변환
-        if ((group === 'False', group === 'false' || group === false)) {
-            group = false;
-        } else if (group === 'true' || group === 'true' || group === true) {
-            group = true;
-        } else {
-            return res.status(400).json({ message: 'group 값을 제대로 입력해주세요.' });
-        }
         // membersOnly 형변환
-        if (membersOnly !== undefined) {
-            if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
-                membersOnly = false;
-            } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
-                membersOnly = true;
-            } else {
-                return res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
-            }
+        if ((membersOnly === 'False', membersOnly === 'false' || membersOnly === false)) {
+            membersOnly = false;
+            console.log('오픈룸 생성');
+        } else if (membersOnly === 'true' || membersOnly === 'true' || membersOnly === true) {
+            membersOnly = true;
+            console.log('맴버온니룸 생성');
+        } else {
+            return res.status(400).json({ message: 'membersOnly 값을 제대로 입력해주세요.' });
         }
 
-        if (group === false) {
-            // 개인 룸
-            if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-            }
-            newRoomInfo = {
-                id,
-                roomId,
-                roomImg: '사진 정보가 없습니다.',
-                roomName,
-                group,
-                startStudyDay,
-                endStudyDay,
-                focusTimeStart,
-                focusTimeEnd,
-                createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                expiredAt,
-            };
-            console.log('개인룸 생성');
-        } else if (group === true && membersOnly === false) {
-            // 공개 룸
-            if (roomName && membersNum && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd === undefined) {
-                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-            }
-            newRoomInfo = {
-                id,
-                roomId,
-                roomImg: '사진 정보가 없습니다.',
-                roomName,
-                group,
-                membersOnly, // 개인룸과 다른 점
-                membersNum, // 개인룸과 다른 점
-                startStudyDay,
-                endStudyDay,
-                focusTimeStart,
-                focusTimeEnd,
-                views: 0, // 개인룸과 다른 점
-                createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                expiredAt,
-            };
-            console.log('오픈룸 생성');
-        } else if (group === true && membersOnly === true) {
-            if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd && roomTitle && roomDesc && hashTags === undefined) {
-                return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
-            }
-            // 멤버 온니 룸
-            newRoomInfo = {
-                id,
-                roomId,
-                roomImg: '사진 정보가 없습니다.',
-                roomName,
-                group,
-                membersOnly,
-                membersNum,
-                startStudyDay,
-                endStudyDay,
-                focusTimeStart,
-                focusTimeEnd,
-                roomTitle,
-                roomDesc,
-                hashTags,
-                members: [id],
-                views: 0,
-                createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
-                expiredAt,
-            };
-            console.log('멤버룸 생성');
-        } else {
-            return res.status(400).json('방 정보를 제대로 입력해주세요');
+        // 내용이 잘 들어왔는지 확인
+        if (roomName && startStudyDay && endStudyDay && focusTimeStart && focusTimeEnd && roomTitle && roomDesc && hashTags === undefined) {
+            return res.status(400).json({ message: '방 정보를 제대로 입력해주세요' });
         }
+
+        const newRoomInfo = {
+            id,
+            roomId,
+            roomImg: '사진 정보가 없습니다.',
+            roomName,
+            group,
+            membersOnly,
+            membersNum,
+            startStudyDay,
+            endStudyDay,
+            focusTimeStart,
+            focusTimeEnd,
+            roomTitle,
+            roomDesc,
+            hashTags,
+            members: [id],
+            views: 0,
+            createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: now.format('YYYY-MM-DD HH:mm:ss'),
+            headCount: [],
+            expiredAt,
+        };
 
         const roomInfo = await userStudyRoomsService.createRoom({ newRoomInfo });
 
@@ -212,6 +158,53 @@ userStudyRoomsRouter.put('/changeroomleader', login_required, async function (re
         if (!changedRoomAuth) return res.status(400).json({ message: '변경에 실패했습니다.' });
 
         res.status(200).json(changedRoomAuth);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// 스터디룸 입장 및 퇴장(인원수)
+userStudyRoomsRouter.put('/headcount', login_required, async function (req, res, next) {
+    try {
+        const id = req.currentUserId;
+        const { roomId, attend } = req.body;
+        if (!roomId) return res.status(400).json({ message: 'roomId값이 넘어오지 않았습니다.' });
+        if (typeof attend !== 'boolean') return res.status(400).json({ message: 'attend값을 boolean형태로 보내주세요' });
+
+        //방 정보 확인하기
+        const curRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!curRoom || curRoom === []) return res.status(400).json({ message: '존재하지 않은 roomId입니다.' });
+
+        // 멤버온니룸에 들어올 경우 멤버인지 확인
+        if (curRoom.membersOnly === true) {
+            if (!curRoom.members.includes(id)) return res.status(400).json({ message: '해당 멤버온니룸의 접근권한이 없습니다.' });
+        }
+
+        // 스터디룸에 들어오는 경우
+        if (attend === true) {
+            // 정원 확인
+            if (curRoom.membersNum === curRoom.headCount.length) return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
+
+            if (curRoom.headCount.includes(id)) return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
+
+            curRoom.headCount.push(id);
+            const headCount = curRoom.headCount;
+            const updateChange = { headCount };
+            const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+            if (!newHeadCount) return res.status(500).json({ message: 'headCount에 추가하지 못했습니다.' });
+            return res.status(200).json(newHeadCount);
+        }
+
+        // 스터디룸에서 나가는 경우
+        if (curRoom.headCount.length === 0) return res.status(400).json({ message: '이미 방에 아무도 없습니다.' });
+
+        if (!curRoom.headCount.includes(id)) return res.status(400).json({ message: '방에 id가 존재하지 않습니다.' });
+
+        const headCount = curRoom.headCount.filter((userId) => id !== userId);
+        const updateChange = { headCount };
+        const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+        if (!newHeadCount) return res.status(500).json({ message: 'headCount에 제거하지 못했습니다.' });
+        return res.status(200).json(newHeadCount);
     } catch (error) {
         next(error);
     }

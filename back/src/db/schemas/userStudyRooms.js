@@ -84,6 +84,12 @@ const UserStudyRoomsSchema = new Schema({
         type: String,
         required: true,
     },
+    // 방 인원수 세기
+    headCount: {
+        type: Array,
+        required: true,
+    },
+    // 방 만료시간
     expiredAt: {
         type: Date,
         expires: 0,
