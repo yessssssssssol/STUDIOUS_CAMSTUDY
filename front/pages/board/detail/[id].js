@@ -115,21 +115,27 @@ export default function Detail() {
                   <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
                     {detailData.roomTitle}
                   </h2>
-                  <a
-                    href="#"
-                    className="py-2 text-green-700 inline-flex items-center justify-center mb-2"
-                  >
-                    {detailData.roomDesc}
-                  </a>
+                  <div className="pt-4 pb-2">
+                    {detailData.hashTags.map((tag, index) => {
+                      return (
+                        <span
+                          key={index}
+                          className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                        >
+                          {tag}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
-                  <div className="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
+                  <div className="border-l-4 border-gray-500 pl-4 mb-10 italic rounded">
                     {detailData.roomDesc}
                   </div>
 
-                  <div>
+                  <div className="mb-6">
                     {!isMember && (
                       <div className="flex">
                         <button
@@ -164,9 +170,7 @@ export default function Detail() {
                 </div>
 
                 <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-                  {owner && (
-                    <ProfileCard detailData={detailData} owner={owner} />
-                  )}
+                  {owner && <ProfileCard owner={owner} />}
                   {applicants && (
                     <CertificationList
                       applicants={applicants}
