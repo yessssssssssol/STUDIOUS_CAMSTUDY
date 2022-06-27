@@ -1,3 +1,4 @@
 node_modules
 .env
-
+/src/cert.pem
+/src/privkey.pem
