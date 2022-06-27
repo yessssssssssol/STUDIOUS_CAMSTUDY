@@ -7,7 +7,6 @@ import HomeRanking from '../../components/home/HomeRanking';
 const Home = () => {
   return (
     <div>
-      Home page
       <HomeMyLogTime />
       <HomeMyStudy />
       <HomeRanking />

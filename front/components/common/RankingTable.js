@@ -1,14 +1,17 @@
 export default function RankingTable({ rankings }) {
-  const oddRank = 'text-center bg-blue-200 p-2';
-  const evenRank = 'text-center p-2';
+  const oddRank = 'text-center bg-green-200 py-2';
+  const evenRank = 'text-center py-2';
+  const test1 = ' w-1/5';
+  const test2 = ' w-3/5';
+
   return (
     <>
-      <table class="border-collapse table-auto ">
+      <table class="border-collapse table-auto w-4/5">
         <thead>
           <tr>
-            <th>Ranking</th>
-            <th>ID</th>
-            <th>TotalTime</th>
+            <th class="bg-gray-200 py-2">Ranking</th>
+            <th class="bg-gray-200 py-2">ID</th>
+            <th class="bg-gray-200 py-2">TotalTime</th>
           </tr>
         </thead>
         <tbody>
@@ -16,9 +19,9 @@ export default function RankingTable({ rankings }) {
             if (index % 2 === 0) {
               return (
                 <tr key={index}>
-                  <td class={oddRank}>{index + 1}</td>
-                  <td class={oddRank}>{ranking.user_id}</td>
-                  <td class={oddRank}>{ranking.totalTime}</td>
+                  <td class={oddRank + test1}>{index + 1}</td>
+                  <td class={oddRank + test2}>{ranking.user_id}</td>
+                  <td class={oddRank + test1}>{ranking.totalTime}</td>
                 </tr>
               );
             } else {
