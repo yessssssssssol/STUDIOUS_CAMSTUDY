@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@tensorflow-models/coco-ssd": "0.1.1",
-    "@tensorflow/tfjs": "0.14.0",
+    "@tensorflow-models/coco-ssd": "^0.1.1",
+    "@tensorflow/tfjs": "^0.14.0",
     "axios": "^0.27.2",
     "d3": "^7.4.4",
     "dayjs": "^1.11.3",
