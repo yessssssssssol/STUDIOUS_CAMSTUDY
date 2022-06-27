@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { editProfileModalAtom } from '../../core/atoms/modalState';
 import { userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
+import { userDefaultImg } from '../common/UseData';
 
 const EditProfileImg = () => {
   const [show, setShowModal] = useRecoilState(editProfileModalAtom);
@@ -17,16 +18,11 @@ const EditProfileImg = () => {
     setUser((prev) => {
       return {
         ...prev,
-        profileUrl:
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        profileUrl: userDefaultImg,
       };
     });
-    setTempURL(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
-    setFile(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
+    setTempURL(userDefaultImg);
+    setFile(userDefaultImg);
   };
 
   const saveEdit = async (e) => {
@@ -66,7 +62,7 @@ const EditProfileImg = () => {
       <input
         type="file"
         style={{ display: 'none' }}
-        accept="image/jpg,impge/png,image/jpeg"
+        accept="image/jpg,image/png,image/jpeg"
         name="profile_img"
         onChange={handleUpload}
         ref={fileInput}

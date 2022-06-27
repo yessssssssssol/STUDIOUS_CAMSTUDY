@@ -16,7 +16,8 @@ export default function NavBar() {
   const ref = useRef(null);
   const [showOptions, setShowOptions] = useRecoilState(dropboxModalState);
   const [menuBar, setMenuBar] = useRecoilState(menuModalState);
-  const token = useRecoilValue(tokenAtom);
+  const tokenatom = useRecoilValue(tokenAtom);
+  const [token, setToken] = useState();
   const user = useRecoilValue(userAtom);
   const userActions = useUserActions();
   const [islogin, setIsLogin] = useRecoilState(isloginAtom);
@@ -31,13 +32,14 @@ export default function NavBar() {
     setMenuBar(true);
   };
   useEffect(() => {
+    setToken(tokenatom);
     setElement(true);
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [islogin]);
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -51,9 +53,10 @@ export default function NavBar() {
       if (!item) {
         console.log(localStorage.clear());
         setIsLogin(false);
+        setToken(false);
       }
     }
-  }, []);
+  }, [token]);
   const handleLogout = () => {
     userActions.logout().catch((err) => {
       console.log(err);
@@ -61,32 +64,32 @@ export default function NavBar() {
   };
 
   function NavItem(item, index) {
-    function make_link(invisible) {
-      return (
-        <>
-          {router.pathname === item[1] ? (
-            <Link href={item[1]}>
-              <a
-                className={`${invisible} hidden md:block font-bold rounded-lg  text-orange-300 px-2  `}
-              >
-                {item[0]}👑
-              </a>
-            </Link>
-          ) : (
-            <Link href={item[1]}>
-              <a
-                className={`${invisible} hidden md:block px-2 rounded-lg hover:bg-sky-100 contrast-100`}
-              >
-                {item[0]}
-              </a>
-            </Link>
-          )}
-        </>
-      );
+    function make_link() {
+      if (token && router.pathname === item[1]) {
+        return (
+          <Link href={item[1]}>
+            <a
+              className={`hidden md:block font-bold rounded-lg  text-orange-300 px-2  `}
+            >
+              {item[0]}👑
+            </a>
+          </Link>
+        );
+      } else {
+        return (
+          <Link href={item[1]}>
+            <a
+              className={`hidden md:block px-2 rounded-lg hover:bg-sky-100 contrast-100`}
+            >
+              {item[0]}
+            </a>
+          </Link>
+        );
+      }
     }
     return (
       <ul key={index} className="list-none">
-        <li key={index}>{item[0] && token ? make_link() : make_link()}</li>
+        <li key={index}>{token ? make_link() : null}</li>
       </ul>
     );
   }

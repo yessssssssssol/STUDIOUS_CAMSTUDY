@@ -20,11 +20,11 @@ function Comments({ roomId, writerId }) {
           setComments={setComments}
           writerId={writerId}
         />
-        {comments.map((comment) => (
+        {comments.map((comment, index) => (
           <CommentCard
             roomId={roomId}
             writerId={comment.writerId}
-            key={comment.id}
+            key={index}
             comment={comment}
             setComments={setComments}
           />

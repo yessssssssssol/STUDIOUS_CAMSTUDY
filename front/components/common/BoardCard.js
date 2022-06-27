@@ -2,17 +2,13 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function BoardCard({ boardData, profileURL }) {
-  const router = useRouter();
-  useEffect(() => {
-    console.log(boardData);
-  });
   return (
     <div className="px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         <div className="overflow-hidden transition-shadow duration-300 bg-white rounded">
           <a href={`/board/detail/${boardData.roomId}`}>
             <img
-              src="img.jpeg"
+              src={boardData.roomImg}
               className="object-cover w-full h-64 rounded"
               alt="프로필사진"
             />
@@ -34,8 +30,12 @@ export default function BoardCard({ boardData, profileURL }) {
             </a>
             <p className="mb-2 text-gray-700">{boardData.roomDesc}</p>
             <div className="flex space-x-4">
-              {boardData.hashTags.map((hashTag) => {
-                return <span className="pr-1 font-medium">{hashTag}</span>;
+              {boardData.hashTags.map((hashTag, index) => {
+                return (
+                  <span key={index} className="pr-1 font-medium">
+                    {hashTag}
+                  </span>
+                );
               })}
             </div>
           </div>

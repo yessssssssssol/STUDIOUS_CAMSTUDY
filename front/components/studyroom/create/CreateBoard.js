@@ -37,7 +37,7 @@ const CreateBoard = () => {
 
   return (
     <div className="container mx-auto bg-white dark:bg-gray-800 rounded">
-      <div className="xl:w-full border-b border-gray-300 dark:border-gray-700 py-5 bg-white dark:bg-gray-800">
+      <div className="xl:w-full border-b border-gray-300 dark:border-gray-700 py-3 bg-white dark:bg-gray-800">
         <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
           <p className="text-lg text-gray-800 dark:text-gray-100 font-bold">
             스터디원 모집
@@ -60,7 +60,7 @@ const CreateBoard = () => {
       </div>
       <div className="mx-auto">
         <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
-          <div className="mt-16 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
+          <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full ">
             <label
               htmlFor="title"
               className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
