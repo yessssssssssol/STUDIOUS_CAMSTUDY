@@ -342,7 +342,24 @@ userStudyRoomsRouter.get('/open/studyrooms', login_required, async function (req
         const membersOnly = false;
         const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
-        return res.status(200).json(getInfo);
+        const imgList = await Promise.all(
+            getInfo.map(async (room) => {
+                const user_id = room.id;
+                let imgUrl = await userAuthService
+                    .getUserInfo({ user_id })
+                    .then((userInfo) => userInfo.profileUrl);
+                return imgUrl;
+            }),
+        );
+
+        let mergedList = [];
+        for (let i = 0; i < getInfo.length; i++) {
+            const idImg = imgList[i];
+            const mergedElem = { ...getInfo[i].toObject(), idImg };
+            mergedList.push(mergedElem);
+        }
+
+        return res.status(200).json(mergedList);
     } catch (error) {
         next(error);
     }
@@ -374,8 +391,6 @@ userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async functio
             const mergedElem = { ...getInfo[i].toObject(), idImg };
             mergedList.push(mergedElem);
         }
-
-        console.log(mergedList);
 
         return res.status(200).json(mergedList);
     } catch (error) {
