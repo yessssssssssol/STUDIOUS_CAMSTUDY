@@ -4,6 +4,7 @@ import Comments from '../../../components/comment/Comments';
 
 import ProfileCard from '../../../components/common/ProfileCard';
 import Application from '../../../components/common/Application';
+import Applicants from '../../../components/Application/Applicants';
 
 import { useEffect, useState } from 'react';
 import * as API from '../../../pages/api/api';
@@ -66,7 +67,7 @@ export default function Detail() {
                     Id={detailData.id}
                     hashTag={detailData.hashTags}
                   />
-                  <Application roomId={detailData.roomId} Id={detailData.id} />
+                  <Applicants roomId={detailData.roomId} Id={detailData.id} />
                 </div>
               </div>
             </main>

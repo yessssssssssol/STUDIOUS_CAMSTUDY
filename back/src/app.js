@@ -41,13 +41,14 @@ app.use(totalTimeRouter);
 app.use(errorMiddleware);
 
 const httpServer = http.createServer(app);
+
 const wsServer = SocketIO(httpServer, {
     cors: {
         origin: 'http://localhost:3000',
         method: ['GET', 'POST'],
         allowedHeaders: ['checkMyService'],
         credentials: true,
-    },
+    }
 });
 
 const roomList = {};
@@ -56,7 +57,7 @@ function isUserInRoom(obj, roomId, userId) {
     let check = false;
     obj[roomId].forEach((data) => {
         if(data.userId === userId) {
-            check = true;
+            check = data;
         }
     });
    
@@ -72,12 +73,33 @@ function isEmptyObj(obj)  {
     return false;
 }
 
+function deleteUserInRoom(obj, userId) {
+    let findUser = null;
+    let roomId;
+    let index;
+    Object.keys(obj).forEach((v, i) => {
+        roomList[v].forEach((data, i) => {
+            if (data.userId === userId) {
+                findUser = data
+                roomId = v;
+                index = i;
+                return false;
+            }
+        })
+    })
+    
+    if (findUser != null) {
+        roomList[roomId]?.splice(index, index+1);
+        return true;
+    }
+}
+
 wsServer.on("connection", (socket) => {
     socket.onAny((event) => {
         console.log(`socket event: ${event}`);
     });
 
-    socket.on("enter_room", async (roomId, newUserId, userId, userName) => {
+    socket.on("enter_room", async (roomId, newUserId, userId, userName, done) => {
         const getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
 
         if (isEmptyObj(getInfo) == false) {
@@ -85,33 +107,37 @@ wsServer.on("connection", (socket) => {
                 roomList[roomId] = [];
             }
         }
-        if (isUserInRoom(roomList, roomId, userId) == true) {
-            const errorMessage = "스터디룸에 중독 참여하실 수 없습니다."
-            socket.emit("refuse", errorMessage)
+        else {
+            const errorMessage = "요청하신 스터디룸은 없습니다."
+            socket.emit("refuse", errorMessage);
             return;
         }
+
         if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
             // 유저 토큰이 있는지 확인
             const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
             socket.emit("refuse", errorMessage);
             return;
         }
-        else {
-            // 브라우저 이중접속 차단 이미 유저가 있으면 추가 안함
-            
-            roomList[roomId].push({
-                "userName" : userName,
-                "socketId" : newUserId,
-                "userId" : userId
-            });
 
-                // 현재 방에 4명인지 체크
-            socket.join(roomId);
-            // console.log(`${roomId} : ${nickName}`);
-            socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+        const anotherMe = isUserInRoom(roomList, roomId, userId);
+
+        if (anotherMe != false) {
             
+            const errorMessage = "스터디룸에 중복 참여하실 수 없습니다."
+            socket.to(anotherMe.socketId).emit("refuse", errorMessage)
+            deleteUserInRoom(roomList, userId);
         }
-        console.log(roomList);
+        
+        roomList[roomId].push({
+            "userName" : userName,
+            "socketId" : newUserId,
+            "userId" : userId
+        });
+
+        socket.join(roomId);
+        done();
+        socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
     });
 
     socket.on('offer', (offer, newUserId, offersId) => {

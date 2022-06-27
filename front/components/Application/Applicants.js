@@ -3,7 +3,7 @@ import ApplicantCard from './ApplicantCard';
 import ApplicantAddForm from './ApplicantAddForm';
 import { useState, useEffect } from 'react';
 
-function Applicans({ roomId, applicantId }) {
+function Applicants({ roomId, applicantId }) {
   const [applicants, setApplicants] = useState([]);
 
   useEffect(() => {

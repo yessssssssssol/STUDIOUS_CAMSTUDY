@@ -62,7 +62,7 @@ const EditProfileImg = () => {
       <input
         type="file"
         style={{ display: 'none' }}
-        accept="image/jpg,impge/png,image/jpeg"
+        accept="image/jpg,image/png,image/jpeg"
         name="profile_img"
         onChange={handleUpload}
         ref={fileInput}

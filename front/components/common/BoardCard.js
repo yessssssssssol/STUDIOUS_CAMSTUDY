@@ -8,7 +8,7 @@ export default function BoardCard({ boardData, profileURL }) {
         <div className="overflow-hidden transition-shadow duration-300 bg-white rounded">
           <a href={`/board/detail/${boardData.roomId}`}>
             <img
-              src="img.jpeg"
+              src={boardData.roomImg}
               className="object-cover w-full h-64 rounded"
               alt="프로필사진"
             />
