@@ -1,22 +1,28 @@
-import BoldText from '../components/common/BoldText';
-import TimeBox from '../components/common/TimeBox';
+import BoldText from '../../components/common/BoldText';
+import TimeBox from '../../components/common/TimeBox';
 import dynamic from 'next/dynamic';
-import Pie from '../components/common/Pie';
-import Button from '../components/common/Button';
+import Pie from '../../components/common/Pie';
+import Button from '../../components/common/Button';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userAtom } from '../core/atoms/userState';
-import * as API from '../pages/api/api';
-import { charts_data, charts_color } from '../components/common/UseData';
+import { userAtom } from '../../core/atoms/userState';
+import { useRouter } from 'next/router';
+
+import * as API from '../api/api';
+import { charts_data, charts_color } from '../../components/common/UseData';
 export default function mypage() {
-  const [timeDatas, setTimeData] = useState(null);
   const useratom = useRecoilValue(userAtom);
+
+  const [timeDatas, setTimeData] = useState(null);
   const [user, setUser] = useState();
   const [gittime, setGitTime] = useState([]);
   const [timeGoal, setTimeGoal] = useState();
   const [getTimeGoal, setGetTimeGoal] = useState();
   const [pieData, setPieData] = useState([]);
-  const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
+
+  const router = useRouter();
+
+  const NoSSR = dynamic(() => import('../../components/common/Heatmap'), {
     ssr: false,
   });
 
@@ -30,29 +36,37 @@ export default function mypage() {
   }
 
   useEffect(() => {
-    setUser(useratom);
+    async function getTime() {
+      console.log(router.query.id);
+      try {
+        const res = await API.get('user', router.query.id);
+        console.log(res, '유저정보');
+        setUser(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     const getTimeData = async () => {
       try {
-        const res = await API.get('totaltime', useratom.id);
+        const res = await API.get('totaltime', router.query.id);
         const data = res.data;
-        console.log(res);
         var data2 = [
           data.studyTimeADay,
           data.weekStudyTime,
           data.totalStudyTime,
         ];
-        setTimeData(data2);
         setPieData([
           data.attendanceRate,
           data.weekAchievementRate,
           data.totalAchievementRate,
         ]);
+        setTimeData(data2);
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
       }
     };
     const getGitTimeData = async () => {
-      const res = await API.get('dailysheets', useratom.id);
+      const res = await API.get('dailysheets', router.query.id);
       const datas = res.data;
       console.log(datas);
       setGetTimeGoal(datas[datas.length - 1].timeGoal);
@@ -63,10 +77,14 @@ export default function mypage() {
           );
     };
 
-    getTimeData();
-    getGitTimeData();
-    setGitTime(gittime);
-  }, [user]);
+    if (router.isReady) {
+      getTime();
+      getTimeData();
+      getGitTimeData();
+      setGitTime(gittime);
+    }
+  }, [router.isReady]);
+
   async function clickHandler(e) {
     var res = '';
     {
@@ -94,19 +112,22 @@ export default function mypage() {
             <div className="font-bold text-3xl text-center lg:text-left">
               <BoldText text={`${user.name}님의 최근공부기록`} />
             </div>
-            <span className="hidden sm:block">
-              <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
-                일일 목표
+            {useratom.id === router.query.id ? (
+              <span className="hidden sm:block">
+                <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
+                  일일 목표
+                </span>
+                <input
+                  className="text-center w-[70px] border-2 rounded-xl border-orange-300"
+                  value={timeGoal}
+                  onChange={(e) => setTimeGoal(e.target.value)}
+                ></input>
+                <span className=" mr-3">시간</span>
+                <Button text={'설정'} onClick={clickHandler}></Button>
               </span>
-              <input
-                className="text-center w-[70px] border-2 rounded-xl border-orange-300"
-                value={timeGoal}
-                onChange={(e) => setTimeGoal(e.target.value)}
-              ></input>
-              <span className=" mr-3">시간</span>
-              <Button text={'설정'} onClick={clickHandler}></Button>
-            </span>
+            ) : null}
           </div>
+
           <div className="flex flex-col items-center  lg:flex-row justify-evenly">
             {timeDatas?.map((time, index) => (
               <TimeBox
@@ -117,6 +138,7 @@ export default function mypage() {
               />
             ))}
           </div>
+
           <div className="pt-[50px] ">
             <BoldText text={`${user.name}님의 공부기록`} />
             <div className="pt-[10px]">
