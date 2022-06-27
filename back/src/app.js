@@ -51,7 +51,7 @@ const httpsServer = https.createServer(options, app);
 
 const wsServer = SocketIO(httpsServer, {
     cors: {
-        origin: 'https://localhost:3000',
+        origin: 'https://kdt-ai4-team04.elicecoding.com',
         method: ['GET', 'POST'],
         allowedHeaders: ['checkMyService'],
         credentials: true,
