@@ -38,6 +38,7 @@ export const category_time = [
   ['헌법', '3:03:52'],
 ];
 export const items = [
+  ['오픈 스터디방', '/openroom'],
   ['스터디 모집', '/board'],
   ['프롤로그', '/prologue'],
   ['AboutUs', '/aboutus'],
