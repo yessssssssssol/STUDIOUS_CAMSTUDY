@@ -9,7 +9,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         {/* 바로 스터디룸으로 연결하기  */}
         <a href={`/board/${myStudyRoom.roomId}`} aria-label="Article">
-          <div className="bg-gray-300 h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 bg-white rounded">
+          <div className="bg-gray-300 h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300">
             <p className="mt-3 ml-2 font-bold text-orange-300">
               {/* {myStudyRoom.members.length + '/' + myStudyRoom.membersNum} */}
             </p>
