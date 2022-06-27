@@ -12,9 +12,7 @@ export default function board({ profileURL }) {
     async function getBoardData() {
       try {
         const res = await API.get('memberonly/studyrooms');
-        const res2 = await API.get(`open/studyrooms`);
-        // const resList = [...res.data, ...res2.data];
-        setBoardData(res);
+        setBoardData(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -34,14 +32,14 @@ export default function board({ profileURL }) {
       {boardDatas &&
         boardDatas.slice(0, count).map((boardData, index) => {
           return (
-            <div key={index}>
+            <>
               <BoardCard
                 key={index}
                 boardData={boardData}
                 profileURL={profileURL}
               />
               <div ref={ref} />
-            </div>
+            </>
           );
         })}
     </div>
