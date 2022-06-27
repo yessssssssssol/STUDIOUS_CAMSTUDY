@@ -1,8 +1,10 @@
 export default function RankingTable({ rankings, userDatas }) {
   const oddRank = 'text-center bg-green-200 py-2';
   const evenRank = 'text-center py-2';
-  const test1 = ' w-1/5';
-  const test2 = ' w-3/5';
+  const test1 = ' w-1/12';
+  const test2 = ' w-2/12';
+  const test3 = ' w-7/12';
+  const test4 = ' w-2/12';
 
   return (
     <>
@@ -11,6 +13,7 @@ export default function RankingTable({ rankings, userDatas }) {
           <tr>
             <th class="bg-gray-200 py-2">Ranking</th>
             <th class="bg-gray-200 py-2">Name</th>
+            <th class="bg-gray-200 py-2">한 줄 소개</th>
             <th class="bg-gray-200 py-2">TotalTime</th>
           </tr>
         </thead>
@@ -26,15 +29,17 @@ export default function RankingTable({ rankings, userDatas }) {
               return (
                 <tr key={index}>
                   <td class={oddRank + test1}>{index + 1}</td>
-                  <td class={oddRank + test2}>{user.name}</td>
-                  <td class={oddRank + test1}>{ranking.totalTime}</td>
+                  <td class={oddRank + test2}>{user?.name}</td>
+                  <td class={oddRank + test3}>{user?.description}</td>
+                  <td class={oddRank + test4}>{ranking.totalTime}</td>
                 </tr>
               );
             } else {
               return (
                 <tr key={index}>
                   <td class={evenRank}>{index + 1}</td>
-                  <td class={evenRank}>{user.name}</td>
+                  <td class={evenRank}>{user?.name}</td>
+                  <td class={evenRank}>{user?.description}</td>
                   <td class={evenRank}>{ranking.totalTime}</td>
                 </tr>
               );

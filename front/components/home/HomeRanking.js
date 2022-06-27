@@ -30,6 +30,14 @@ const HomeRanking = () => {
     getUserId();
   }, []);
 
+  // const timeSort = rankings.sort((a, b) => a.totalTime - b.totalTime);
+  const timeSort = rankings.sort((a, b) =>
+    a.totalTime.toLowerCase() < b.totalTime.toLowerCase() ? 1 : -1
+  );
+  console.log('timeSort');
+  console.log(timeSort);
+  console.log(timeSort === rankings);
+
   return (
     <>
       {/* <div className="container"> */}
