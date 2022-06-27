@@ -3,7 +3,6 @@ import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
 
 import ProfileCard from '../../../components/common/ProfileCard';
-import Application from '../../../components/common/Application';
 import Applicants from '../../../components/Application/Applicants';
 
 import { useEffect, useState } from 'react';
