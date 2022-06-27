@@ -22,7 +22,9 @@ userAuthRouter.post('/user/register', async function (req, res, next) {
         const password = req.body.password;
 
         if (!name || !email || !password) {
-            return res.status(400).json({ message: 'id 혹은 email이나 password가 제대로 넘어오지 않았습니다.' });
+            return res
+                .status(400)
+                .json({ message: 'id 혹은 email이나 password가 제대로 넘어오지 않았습니다.' });
         }
 
         // 위 데이터를 유저 db에 추가하기
@@ -49,7 +51,9 @@ userAuthRouter.post('/user/login', async function (req, res, next) {
         const password = req.body.password;
 
         if (!email || !password) {
-            return res.status(400).json({ message: 'email이나 password가 제대로 넘어오지 않았습니다.' });
+            return res
+                .status(400)
+                .json({ message: 'email이나 password가 제대로 넘어오지 않았습니다.' });
         }
 
         // 위 데이터를 이용하여 유저 db에서 유저 찾기
@@ -125,47 +129,56 @@ userAuthRouter.get('/user/:id', login_required, async function (req, res, next) 
     }
 });
 
-userAuthRouter.post('/user/img', login_required, uploadHandler.single('img'), async function (req, res, next) {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ message: '업로드할 이미지가 없습니다' });
+userAuthRouter.post(
+    '/user/img',
+    login_required,
+    uploadHandler.single('img'),
+    async function (req, res, next) {
+        try {
+            if (!req.file) {
+                return res.status(400).json({ message: '업로드할 이미지가 없습니다' });
+            }
+
+            const user_id = req.currentUserId;
+            const url = req.file.path;
+            const updatedUser = await userAuthService.updateImg({ user_id, url });
+
+            if (updatedUser.errorMessage) {
+                throw new Error(updatedUser.errorMessage);
+            }
+
+            return res.status(200).send({ url: url });
+        } catch (error) {
+            next(error);
         }
-
-        const user_id = req.currentUserId;
-        const url = req.file.path;
-        const updatedUser = await userAuthService.updateImg({ user_id, url });
-
-        if (updatedUser.errorMessage) {
-            throw new Error(updatedUser.errorMessage);
-        }
-
-        return res.status(200).send({ url: url });
-    } catch (error) {
-        next(error);
-    }
-});
+    },
+);
 
 // 이메일 인증
-userAuthRouter.get('/user/email/:email', rateLimit({ windowMs: 30000, max: 1 }), async function (req, res, next) {
-    try {
-        const { email } = req.params;
+userAuthRouter.get(
+    '/user/email/:email',
+    rateLimit({ windowMs: 30000, max: 1 }),
+    async function (req, res, next) {
+        try {
+            const { email } = req.params;
 
-        if (!email) {
-            return res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
+            if (!email) {
+                return res.status(400).json({ message: '이메일이 제대로 넘어오지 않았습니다.' });
+            }
+
+            const code = uuidv4().split('-')[0];
+            await sendMail(
+                email, //
+                '[의자왕] 안녕하세요 의자왕 웹 캠스터디입니다.',
+                `이메일 인증 코드는 [${code}] 입니다.\n`,
+            );
+
+            return res.status(200).send(code);
+        } catch (error) {
+            next(error);
         }
-
-        const code = uuidv4().split('-')[0];
-        await sendMail(
-            email, //
-            '[의자왕] 안녕하세요 의자왕 웹 캠스터디입니다.',
-            `이메일 인증 코드는 [${code}] 입니다.\n`,
-        );
-
-        return res.status(200).send(code);
-    } catch (error) {
-        next(error);
-    }
-});
+    },
+);
 
 // 임시 비밀번호 발급하기
 userAuthRouter.put('/password/init', async (req, res, next) => {
@@ -192,6 +205,10 @@ userAuthRouter.delete('/user/:id', login_required, async (req, res, next) => {
         if (!id) {
             return res.status(400).json({ message: 'id가 제대로 넘어오지 않았습니다.' });
         }
+
+        const user_id = id;
+        const findId = await userAuthService.getUserInfo({ user_id });
+        if (findId.errorMessage) return res.status(400).json(findId.errorMessage);
 
         await userAuthService.deleteUser({ id });
 
