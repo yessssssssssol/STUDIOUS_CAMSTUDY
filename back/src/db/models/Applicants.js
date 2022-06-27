@@ -13,6 +13,10 @@ class Applicants {
         return ApplicantsModel.findOneAndDelete({ applicantId, roomId });
     }
 
+    static deleteMany({ roomId }) {
+        return ApplicantsModel.deleteMany({ roomId });
+    }
+
     static getLists({ roomId }) {
         return ApplicantsModel.find({ roomId });
     }

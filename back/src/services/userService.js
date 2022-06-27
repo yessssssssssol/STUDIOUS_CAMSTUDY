@@ -8,6 +8,7 @@ import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
 import { userStudyRoomsService } from './userStudyRoomsService';
 import { TotalTime } from '../db/models/TotalTime';
+import res from 'express/lib/response';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -25,20 +26,36 @@ class userAuthService {
         const newUser = { id, name, email, password: hashedPassword };
 
         // db에 저장
-        const createdNewUser = await User.create({ newUser });
-        createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+        // const createdNewUser = await User.create({ newUser });
 
         //날짜 생성
         const date = ChangeDate.getCurrentDate();
 
         // 총 공부시간 생성
-        await TotalTime.create({ id });
+        // await TotalTime.create({ id });
 
-        const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
-        createdNewUserSheet.errorMessage = null;
-        console.log(`${id}의 sheet가 성공적으로 생성되었습니다.`);
+        // const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
 
-        return createdNewUser;
+        let resultPromise = undefined;
+        await Promise.all([
+            User.create({ newUser }),
+            TotalTime.create({ id }),
+            UserDailySheet.addSheet({ id, date }),
+            userStudyRoomsService.createPrivateRoom({ id }),
+        ]).then((result) => (resultPromise = result));
+        // createdNewUserSheet.errorMessage = null;
+        // createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
+        // console.log(`${id}의 sheet가 성공적으로 생성되었습니다.`);
+
+        if (!resultPromise === undefined)
+            return res
+                .status(500)
+                .json({ message: '회원가입이 정상적으로 이루어지지 않았습니다.' });
+
+        const registerResult = resultPromise[0].toObject();
+        delete registerResult.password;
+
+        return registerResult;
     }
 
     static async getUser({ email, password }) {
@@ -173,7 +190,9 @@ class userAuthService {
 
         // gcp 기존 이미지 삭제
         if (updatedUser.profileUrl != '') {
-            const url = updatedUser.profileUrl.split(`https://${process.env.GCS_BUCKET}.storage.googleapis.com/`)[1];
+            const url = updatedUser.profileUrl.split(
+                `https://${process.env.GCS_BUCKET}.storage.googleapis.com/`,
+            )[1];
             gcsBucket.file(url).delete();
         }
 
@@ -202,6 +221,7 @@ class userAuthService {
         Promise.all([
             User.deleteUser({ id }),
             TimeLog.deleteUser({ id }),
+            TotalTime.deleteUser({ id }),
             UserDailySheet.deleteUser({ id }),
             (await roomAr).map((room) => {
                 const { roomId, id } = room;

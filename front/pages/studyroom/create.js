@@ -5,6 +5,8 @@ import { useState, useRef } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { createroomAtom } from '../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
+import { roomDefaultImg } from '../../components/common/UseData';
+import Alert from '../../components/common/Alert';
 
 export default function Create() {
   const router = useRouter();
@@ -12,9 +14,8 @@ export default function Create() {
   const resetRoom = useResetRecoilState(createroomAtom);
 
   const [file, setFile] = useState(null);
-  const [tempUrl, setTempURL] = useState(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-  );
+  const [tempUrl, setTempURL] = useState(roomDefaultImg);
+  const [error, setError] = useState(false);
 
   const fileInput = useRef(null);
 
@@ -22,16 +23,11 @@ export default function Create() {
     setRoom((prev) => {
       return {
         ...prev,
-        roomImg:
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        roomImg: roomDefaultImg,
       };
     });
-    setTempURL(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
-    setFile(
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    );
+    setTempURL(roomDefaultImg);
+    setFile(roomDefaultImg);
   };
 
   const handleUpload = (e) => {
@@ -52,25 +48,64 @@ export default function Create() {
       console.log('방이 생성되었습니다.');
       await API.putImg(`roomimg/${res.data.roomId}`, formD);
       console.log('이미지가 추가되었습니다.');
-      router.push('/');
+      router.back();
       resetRoom();
     } catch (err) {
       console.log(err);
+      setError(true);
     }
   };
 
   const resetHandler = () => {
     resetRoom();
     console.log(room);
-    router.push('/');
+    router.back();
   };
   return (
     <div>
-      <div className="">
-        <div className="mx-20">
-          <div className="my-6">
+      <div className="container w-full mx-auto my-5 bg-white dark:bg-gray-800 rounded">
+        <div className="w-full xl:w-full border-b border-gray-300 dark:border-gray-700 py-3 bg-white dark:bg-gray-800">
+          <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
+            <p className="text-lg text-gray-800 dark:text-gray-100 font-bold">
+              스터디방 생성
+            </p>
+            <div className="ml-2 cursor-pointer text-gray-600 dark:text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+              >
+                <path
+                  className="heroicon-ui"
+                  d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-x-6 mt-8">
+          <label
+            htmlFor="name"
+            className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+          >
+            대표 이미지 설정
+          </label>
+          {!error ? (
+            <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              대표 이미지를 설정해주세요.
+            </p>
+          ) : (
+            <p className="pb-2 text-sm text-red-500 dark:text-gray-100">
+              대표 이미지를 설정해주세요.
+            </p>
+          )}
+        </div>
+        <div className="container w-full mx-auto my-3 bg-white dark:bg-gray-800 rounded">
+          <div className="my-3">
             <img
-              className="h-40 w-40 rounded-full"
+              className="object-fill h-48 w-96 rounded-md"
               src={tempUrl}
               alt="Rounded avatar"
             />
@@ -78,14 +113,14 @@ export default function Create() {
           <input
             type="file"
             style={{ display: 'none' }}
-            accept="image/jpg,impge/png,image/jpeg"
+            accept="image/jpg,image/png,image/jpeg"
             name="profile_img"
             onChange={handleUpload}
             ref={fileInput}
           />
-          <div className="w-40">
+          <div className="flex w-64 gap-x-3">
             <button
-              className="w-full text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
+              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={() => {
                 fileInput.current.click();
               }}
@@ -93,18 +128,25 @@ export default function Create() {
               프로필 업로드
             </button>
             <button
-              className="w-full text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
+              className="w-full text-indigo-500 hover:text-white py-2 px-2 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={handleResetProfileChange}
             >
               프로필 삭제
             </button>
           </div>
         </div>
-        <CreateStudyRoom />
+        <div className="flex justify-center">
+          <CreateStudyRoom />
+        </div>
       </div>
       <div className="flex justify-center">
-        {room.membersOnly && <CreateBoard />}
+        <CreateBoard />
       </div>
+      {error && (
+        <div className="m-10">
+          <Alert title="error" content="대표 이미지를 설정해주세요!" />
+        </div>
+      )}
       <div className="container mx-auto w-11/12 xl:w-full">
         <div className="w-full py-4 sm:px-0 bg-white dark:bg-gray-800 flex justify-center">
           <button
