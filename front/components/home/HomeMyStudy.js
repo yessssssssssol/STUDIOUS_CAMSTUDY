@@ -20,21 +20,24 @@ const HomeMyStudy = () => {
   }, []);
 
   return (
-    <div class="mt-10 mb-20">
-      <div class="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
+    <div className="mt-10 mb-20">
+      <div className="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
         내 스터디방 ({myStudyRooms.length})
-        <div class="border-none bg-indigo-500 w-20 h-1 mt-2 rounded text-xm"></div>
+        <div className="border-none bg-indigo-500 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
 
-      <div class="px-10 md:px-15 lg:px-20">
+      <div className="px-10 md:px-15 lg:px-20">
         <div id="scroll-horizontal" style={{ height: `25em` }}>
           {/* <ScrollHorizontal reverseScroll={true}> */}
           <ScrollContainer hideScrollbars={false}>
-            <div class="h-full w-full flex flex-raw   ">
+            <div className="h-full w-full flex flex-raw   ">
               {myStudyRooms &&
-                myStudyRooms.map((myStudyRoom) => {
+                myStudyRooms.map((myStudyRoom, index) => {
                   return (
-                    <div className="myStudyRoom snap-start snap-always ">
+                    <div
+                      className="myStudyRoom snap-start snap-always "
+                      key={index}
+                    >
                       <MyStudyRoomCard myStudyRoom={myStudyRoom} />
                     </div>
                   );
