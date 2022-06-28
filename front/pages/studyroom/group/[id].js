@@ -15,7 +15,7 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname
     : '';
-const url = 'https://' + hostname + ':' + backendPortNumber;
+const url = 'http://' + hostname + ':' + backendPortNumber;
 
 let myStream = null;
 let myPeerConnection = null;
@@ -49,7 +49,7 @@ export default function Group() {
     const leng = window.location.href.length;
     let href = window.location.href;
     if (href[leng-1] === '/') {
-      href = href.slice(0, leng-2);
+      href = href.slice(0, leng-1);
     }
     roomId = href.substring(href.lastIndexOf('/') + 1);
   }
