@@ -71,9 +71,9 @@ function isUserInRoom(obj, roomId, userId) {
 
 function isEmptyObj(obj)  {
     if(obj.constructor === Object
-       && Object.keys(obj).length === 0)  {
-      return true;
-    }
+        && Object.keys(obj).length === 0)  {
+        return true;
+    }        
     
     return false;
 }
@@ -105,7 +105,8 @@ wsServer.on("connection", (socket) => {
     });
 
     socket.on("enter_room", async (roomId, newUserId, userId, userName, done) => {
-        const getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
+        let getInfo = {};
+        getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
 
         if (isEmptyObj(getInfo) == false) {
             if (!roomList[roomId]) {
