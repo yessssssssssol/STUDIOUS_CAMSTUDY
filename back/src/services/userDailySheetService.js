@@ -18,10 +18,18 @@ class UserDailySheetService {
             today = dateThatInsert.format('YYYY-MM-DD');
             yesterday = dateThatInsert.add(-1, 'day').format().slice(0, 10);
         }
+        // 이미 데일리 시트가 만들어졌는지 확인
+        const checkAlreadyCreated = await UserDailySheet.checkSheetsFromDate({ today });
+        if (checkAlreadyCreated.length !== 0) {
+            const errorMessage = '이미 금일 시트가 생성되어 있습니다.';
+            return { errorMessage };
+        }
+
         // 유저 데일리 시트에 있는 최근 목표 공부 시간을 가져와서 배열로 만들어야 함
         const userSheets = await UserDailySheet.getSheetsFromDate({ yesterday });
         if (userSheets === []) {
-            const errorMessage = '새로 데일리 시트를 만들 때 필요한 전날 데일리 시트 데이터가 없습니다.';
+            const errorMessage =
+                '새로 데일리 시트를 만들 때 필요한 전날 데일리 시트 데이터가 없습니다.';
             return { errorMessage };
         }
 
@@ -72,7 +80,15 @@ class UserDailySheetService {
             const bestStudyTime = studyTimeStr;
             const achievementRate = 0;
 
-            const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
+            const updatedSheet = await UserDailySheet.updateSheet({
+                id,
+                date,
+                beginStudyTime,
+                finishStudyTime,
+                studyTimeADay,
+                bestStudyTime,
+                achievementRate,
+            });
             return updatedSheet;
         }
 
@@ -99,7 +115,15 @@ class UserDailySheetService {
             achievementRate = 100;
         }
 
-        const updatedSheet = await UserDailySheet.updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate });
+        const updatedSheet = await UserDailySheet.updateSheet({
+            id,
+            date,
+            beginStudyTime,
+            finishStudyTime,
+            studyTimeADay,
+            bestStudyTime,
+            achievementRate,
+        });
         return updatedSheet;
     }
 
@@ -132,7 +156,14 @@ class UserDailySheetService {
             studyTimeADay = '00:00:00';
         }
 
-        return { totalAchievementRate, totalStudyTime, weekAchievementRate, weekStudyTime, studyTimeADay, attendanceRate };
+        return {
+            totalAchievementRate,
+            totalStudyTime,
+            weekAchievementRate,
+            weekStudyTime,
+            studyTimeADay,
+            attendanceRate,
+        };
     }
 
     static async updateTimeGoal({ id, timeGoal }) {
@@ -156,7 +187,12 @@ class UserDailySheetService {
             achievementRate = 100;
         }
 
-        const updatedGoal = await UserDailySheet.updateTimeGoal({ id, date, timeGoal, achievementRate });
+        const updatedGoal = await UserDailySheet.updateTimeGoal({
+            id,
+            date,
+            timeGoal,
+            achievementRate,
+        });
 
         if (!updatedGoal) {
             const errorMessage = '목표 공부 시간을 업데이트 하지 못했습니다.';
