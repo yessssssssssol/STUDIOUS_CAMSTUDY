@@ -32,14 +32,10 @@ export default function board({ profileURL }) {
       {boardDatas &&
         boardDatas.slice(0, count).map((boardData, index) => {
           return (
-            <>
-              <BoardCard
-                key={index}
-                boardData={boardData}
-                profileURL={profileURL}
-              />
+            <div key={index}>
+              <BoardCard boardData={boardData} profileURL={profileURL} />
               <div ref={ref} />
-            </>
+            </div>
           );
         })}
     </div>

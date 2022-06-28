@@ -8,13 +8,13 @@ export default function RankingTable({ rankings, userDatas }) {
 
   return (
     <>
-      <table class="border-collapse table-auto w-4/5">
+      <table className="border-collapse table-auto w-4/5">
         <thead>
           <tr>
-            <th class="bg-gray-200 py-2">Ranking</th>
-            <th class="bg-gray-200 py-2">Name</th>
-            <th class="bg-gray-200 py-2">한 줄 소개</th>
-            <th class="bg-gray-200 py-2">TotalTime</th>
+            <th className="bg-gray-200 py-2">Ranking</th>
+            <th className="bg-gray-200 py-2">Name</th>
+            <th className="bg-gray-200 py-2">한 줄 소개</th>
+            <th className="bg-gray-200 py-2">TotalTime</th>
           </tr>
         </thead>
         <tbody>
@@ -28,19 +28,19 @@ export default function RankingTable({ rankings, userDatas }) {
             if (index % 2 === 0) {
               return (
                 <tr key={index}>
-                  <td class={oddRank + test1}>{index + 1}</td>
-                  <td class={oddRank + test2}>{user?.name}</td>
-                  <td class={oddRank + test3}>{user?.description}</td>
-                  <td class={oddRank + test4}>{ranking.totalTime}</td>
+                  <td className={oddRank + test1}>{index + 1}</td>
+                  <td className={oddRank + test2}>{user?.name}</td>
+                  <td className={oddRank + test3}>{user?.description}</td>
+                  <td className={oddRank + test4}>{ranking.totalTime}</td>
                 </tr>
               );
             } else {
               return (
                 <tr key={index}>
-                  <td class={evenRank}>{index + 1}</td>
-                  <td class={evenRank}>{user?.name}</td>
-                  <td class={evenRank}>{user?.description}</td>
-                  <td class={evenRank}>{ranking.totalTime}</td>
+                  <td className={evenRank}>{index + 1}</td>
+                  <td className={evenRank}>{user?.name}</td>
+                  <td className={evenRank}>{user?.description}</td>
+                  <td className={evenRank}>{ranking.totalTime}</td>
                 </tr>
               );
             }
