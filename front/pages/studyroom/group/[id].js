@@ -261,17 +261,20 @@ export default function Group() {
     addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
     const video = document.getElementById(leaveId);
-    const name = document.getElementById(leaveId);
-    // 비디오 태그 삭제
-    if (video != null && name != null) {
+    if (video != null) {
       video.remove();
+    }
+
+    const name = document.getElementById(leaveId);
+    if (name != null) {
       name.remove();
     }
     
     // peerConnections 제거
     Object.keys(peerConnections).forEach((id, i) => {
-      if(id == leaveId) {
+      if(id === leaveId) {
         delete peerConnections[id];
+        console.log(peerConnections);
       }
     })
   })
@@ -299,6 +302,7 @@ export default function Group() {
   socket.on("ice", (ice, othersId) => {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
+    console.log(peerConnections);
   })
 
   const sendChatHandler = (e) => {
@@ -319,7 +323,7 @@ export default function Group() {
       const data = res.data;
       setRoom(data);
 
-      if (myStream == null) {
+      if (myPeerConnection === null) {
         await initCall(data);
       }
     }
