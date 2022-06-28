@@ -43,7 +43,7 @@ const HomeMyLogTime = () => {
                   src={user?.profileUrl}
                   alt="user photo"
                 />
-                <p className="ml-6 text-left text-gray-600 dark:text-gray-400 font-bold">
+                <p className="ml-6 text-left text-gray-600  font-bold">
                   {user?.name} <br /> {user?.description}
                 </p>
               </button>

@@ -85,18 +85,18 @@ const CreateStudyContent = () => {
   };
 
   return (
-    <div className="container w-full mx-auto my-5 bg-white dark:bg-gray-800 rounded">
+    <div className="container w-full mx-auto my-5 bg-white  rounded">
       <div className="mx-auto">
         <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
           <div className="mt-3 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
             <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+                className="pb-2 text-sm font-bold text-gray-800 "
               >
                 스터디 이름
               </label>
-              <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              <p className="pb-2 text-sm text-gray-800 ">
                 스터디를 이름을 입력해주세요.
               </p>
             </div>
@@ -105,18 +105,18 @@ const CreateStudyContent = () => {
               onChange={onNameChange}
               type="text"
               id="name"
-              className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 dark:text-gray-400"
+              className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 "
             />
           </div>
           <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
             <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+                className="pb-2 text-sm font-bold text-gray-800 "
               >
                 스터디 종류
               </label>
-              <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              <p className="pb-2 text-sm text-gray-800 ">
                 스터디를 종류를 선택해주세요.
               </p>
             </div>
@@ -132,7 +132,7 @@ const CreateStudyContent = () => {
                 />
                 <label
                   htmlFor="공개 스터디"
-                  className="font-bold text-sm text-gray-800 dark:text-gray-100 mx-1"
+                  className="font-bold text-sm text-gray-800  mx-1"
                 >
                   공개 스터디
                 </label>
@@ -148,7 +148,7 @@ const CreateStudyContent = () => {
                 />
                 <label
                   htmlFor="비공개 스터디"
-                  className="font-bold text-sm text-gray-800 dark:text-gray-100 mx-1"
+                  className="font-bold text-sm text-gray-800  mx-1"
                 >
                   비공개 스터디
                 </label>
@@ -159,11 +159,11 @@ const CreateStudyContent = () => {
             <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+                className="pb-2 text-sm font-bold text-gray-800 "
               >
                 스터디인원
               </label>
-              <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              <p className="pb-2 text-sm text-gray-800 ">
                 스터디 참원 인원을 입력해주세요. (최대 4명)
               </p>
             </div>
@@ -180,11 +180,11 @@ const CreateStudyContent = () => {
             <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+                className="pb-2 text-sm font-bold text-gray-800 "
               >
                 스터디 기간
               </label>
-              <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              <p className="pb-2 text-sm text-gray-800 ">
                 스터디 기간을 입력해주세요. 스터디 기간이 지나면 자동으로 방이
                 사라집니다.
               </p>
@@ -210,11 +210,11 @@ const CreateStudyContent = () => {
             <div className="flex gap-x-6 mb-2">
               <label
                 htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+                className="pb-2 text-sm font-bold text-gray-800 "
               >
                 집중시간
               </label>
-              <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+              <p className="pb-2 text-sm text-gray-800 ">
                 스터디 집중시간을 입력해주세요.(스터디 모집시 사용됩니다.)
               </p>
             </div>
