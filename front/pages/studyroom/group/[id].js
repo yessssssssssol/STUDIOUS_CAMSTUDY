@@ -49,7 +49,7 @@ export default function Group() {
     const leng = window.location.href.length;
     let href = window.location.href;
     if (href[leng-1] === '/') {
-      href = href.slice(0, leng-2);
+      href = href.slice(0, leng-1);
     }
     roomId = href.substring(href.lastIndexOf('/') + 1);
   }
