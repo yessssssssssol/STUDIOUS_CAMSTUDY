@@ -41,17 +41,20 @@ export default function Create() {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
-
-    try {
-      const res = await API.post('studyroom', room);
-      console.log(res.data);
-      console.log('방이 생성되었습니다.');
-      await API.putImg(`roomimg/${res.data.roomId}`, formD);
-      console.log('이미지가 추가되었습니다.');
-      router.back();
-      resetRoom();
-    } catch (err) {
-      console.log(err);
+    if (file) {
+      try {
+        const res = await API.post('studyroom', room);
+        console.log(res.data);
+        console.log('방이 생성되었습니다.');
+        await API.putImg(`roomimg/${res.data.roomId}`, formD);
+        console.log('이미지가 추가되었습니다.');
+        router.back();
+        resetRoom();
+      } catch (err) {
+        console.log(err);
+        setError(true);
+      }
+    } else {
       setError(true);
     }
   };
@@ -63,13 +66,11 @@ export default function Create() {
   };
   return (
     <div>
-      <div className="container w-full mx-auto my-5 bg-white dark:bg-gray-800 rounded">
-        <div className="w-full xl:w-full border-b border-gray-300 dark:border-gray-700 py-3 bg-white dark:bg-gray-800">
+      <div className="container w-full mx-auto my-5 bg-white rounded">
+        <div className="w-full xl:w-full border-b border-gray-300  py-3 bg-white ">
           <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
-            <p className="text-lg text-gray-800 dark:text-gray-100 font-bold">
-              스터디방 생성
-            </p>
-            <div className="ml-2 cursor-pointer text-gray-600 dark:text-gray-400">
+            <p className="text-lg text-gray-800  font-bold">스터디방 생성</p>
+            <div className="ml-2 cursor-pointer text-gray-600 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -88,21 +89,21 @@ export default function Create() {
         <div className="flex gap-x-6 mt-8">
           <label
             htmlFor="name"
-            className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+            className="pb-2 text-sm font-bold text-gray-800 "
           >
             대표 이미지 설정
           </label>
           {!error ? (
-            <p className="pb-2 text-sm text-gray-800 dark:text-gray-100">
+            <p className="pb-2 text-sm text-gray-800 ">
               대표 이미지를 설정해주세요.
             </p>
           ) : (
-            <p className="pb-2 text-sm text-red-500 dark:text-gray-100">
+            <p className="pb-2 text-sm text-red-500 ">
               대표 이미지를 설정해주세요.
             </p>
           )}
         </div>
-        <div className="container w-full mx-auto my-3 bg-white dark:bg-gray-800 rounded">
+        <div className="container w-full mx-auto my-3 bg-white  rounded">
           <div className="my-3">
             <img
               className="object-fill h-48 w-96 rounded-md"
@@ -148,11 +149,11 @@ export default function Create() {
         </div>
       )}
       <div className="container mx-auto w-11/12 xl:w-full">
-        <div className="w-full py-4 sm:px-0 bg-white dark:bg-gray-800 flex justify-center">
+        <div className="w-full py-4 sm:px-0 bg-white  flex justify-center">
           <button
             role="button"
             aria-label="cancel form"
-            className="bg-gray-200 focus:outline-none transition duration-150 ease-in-out hover:bg-gray-300 dark:bg-gray-700 rounded text-indigo-600 dark:text-indigo-600 px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+            className="bg-gray-200 focus:outline-none transition duration-150 ease-in-out hover:bg-gray-300  rounded text-indigo-600  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
             onClick={resetHandler}
           >
             Cancel

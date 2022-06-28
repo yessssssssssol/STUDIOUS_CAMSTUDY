@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 const CreateBoard = () => {
@@ -35,14 +35,19 @@ const CreateBoard = () => {
     });
   };
 
+  useEffect(() => {
+    axios
+      .get('/studyroom', roomId)
+      .then((res) => setInfo(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
-    <div className="container mx-auto bg-white dark:bg-gray-800 rounded">
-      <div className="xl:w-full border-b border-gray-300 dark:border-gray-700 py-3 bg-white dark:bg-gray-800">
+    <div className="container mx-auto bg-white rounded">
+      <div className="xl:w-full border-b border-gray-300  py-3 bg-white ">
         <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
-          <p className="text-lg text-gray-800 dark:text-gray-100 font-bold">
-            스터디원 모집
-          </p>
-          <div className="ml-2 cursor-pointer text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-gray-800  font-bold">스터디원 모집</p>
+          <div className="ml-2 cursor-pointer text-gray-600 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -63,7 +68,7 @@ const CreateBoard = () => {
           <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full ">
             <label
               htmlFor="title"
-              className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+              className="pb-2 text-sm font-bold text-gray-800 "
             >
               제목
             </label>
@@ -72,14 +77,14 @@ const CreateBoard = () => {
               id="title"
               value={roomTitle}
               onChange={onTitleChange}
-              className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 dark:text-gray-400"
+              className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 "
               placeholder="스터디 모집 합니다."
             />
           </div>
           <div className="mt-8 flex flex-col xl:w-3/5 lg:w-1/2 md:w-1/2 w-full">
             <label
               htmlFor="about"
-              className="pb-2 text-sm font-bold text-gray-800 dark:text-gray-100"
+              className="pb-2 text-sm font-bold text-gray-800 "
             >
               내용
             </label>
@@ -89,11 +94,11 @@ const CreateBoard = () => {
               value={roomDesc}
               onChange={onDescChange}
               required
-              className="bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-600 dark:text-gray-400"
+              className="bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-600 "
               placeholder="스터디 모집에 관한 자세한 이야기를 적어주세요!"
               rows="5"
             ></textarea>
-            <p className="w-full text-right text-xs pt-1 text-gray-600 dark:text-gray-400">
+            <p className="w-full text-right text-xs pt-1 text-gray-600 ">
               Character Limit: 200
             </p>
           </div>

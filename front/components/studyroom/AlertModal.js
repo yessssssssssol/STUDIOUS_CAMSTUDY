@@ -13,10 +13,10 @@ const AlertModal = () => {
       {!userIsHear && (
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div className="relative bg-white rounded-lg shadow ">
               <button
                 type="button"
-                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                 onClick={onClick}
               >
                 <svg
@@ -29,17 +29,17 @@ const AlertModal = () => {
                 </svg>
               </button>
               <div className="p-6 text-center">
-                <h3 className="mb-5 text-lg font-normal text-gray-800 dark:text-gray-400">
+                <h3 className="mb-5 text-lg font-normal text-gray-800 ">
                   정말 자리에 없으신가요?
                 </h3>
-                <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
+                <p className="mb-5 text-sm font-normal text-gray-500 ">
                   AI가 유저를 확인하지 못해 타이머가 멈췄습니다.
                   <br />
                   눈, 코, 입이 모두 화면에 나오게 카메라를 조정해주세요!
                 </p>
                 <button
                   type="button"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2 text-center mr-2"
+                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2 text-center mr-2"
                   onClick={onClick}
                 >
                   확인

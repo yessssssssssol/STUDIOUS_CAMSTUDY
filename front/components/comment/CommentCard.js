@@ -12,8 +12,6 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     // 부모 엘리먼트에게 이벤트 전달을 중단해야 할 때 쓰이는 함수
     e.stopPropagation();
 
-    // const userId = roomId;
-    // const userName = writeId;
     // comment.id로 조회하여 데이터 삭제
     await API.delete(`comment/${comment._id}`);
 
@@ -21,17 +19,27 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     const res = await API.get('comments', roomId);
 
     setComments(res.data);
+    console.log(writerId);
   };
 
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
-        <img className="w-16 rounded-full shadow" src={profileUrl} alt="" />
+        <a href={`../../../mypage/${writerId}`}>
+          <img
+            className="w-16 rounded-full shadow"
+            src={comment.userInfo.profileUrl}
+            alt=""
+          />
+        </a>
       </div>
       <div className="flex">
         <div className="flex flex-row items-center justify-between py-1 pr-2">
           <div>
-            <a href="#" className="text-blue-400 hover:underline">
+            <a
+              href={`../../../mypage/${writerId}`}
+              className="text-blue-400 hover:underline"
+            >
               {comment.userName}
             </a>
             <span className="text-sm font-thin text-gray-500">
@@ -43,9 +51,11 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
               {comment.content}
             </p>
           </div>
-          <button onClick={handleDelete} className=" mr-3 align-items-center">
-            x
-          </button>
+          {user.id === writerId ? (
+            <button onClick={handleDelete} className=" mr-3 align-items-center">
+              x
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

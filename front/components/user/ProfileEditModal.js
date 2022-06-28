@@ -8,7 +8,7 @@ const ProfileEditModal = () => {
   return (
     <>
       <button
-        className="w-full block py-2 px-4 text-sm text-center text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+        className="w-full block py-2 px-4 text-sm text-center text-gray-700 hover:bg-gray-100"
         onClick={() => setShowModal(true)}
       >
         프로필 변경

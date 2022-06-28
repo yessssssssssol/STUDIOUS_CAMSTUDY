@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import OpenroomCard from '../../components/common/OpenroomCard';
-import Helmet from '../../components/layout/Helmet';
-import * as API from '../../pages/api/api';
 import Link from 'next/link';
+import * as API from '../../pages/api/api';
+import OpenroomCard from '../../components/common/OpenroomCard';
 
 const HomeOpenStudy = () => {
   const [openRooms, setOpenRooms] = useState([]);
@@ -10,32 +9,33 @@ const HomeOpenStudy = () => {
     async function getOpenroom() {
       const res = await API.get('open/studyrooms');
       const data = res.data;
-      console.log(data, 'openrooms');
+      // console.log(data, 'openrooms');
       setOpenRooms(data);
     }
     getOpenroom();
   }, []);
   return (
-    <>
-      <div>오픈 스터디방 입장</div>
-      <div class="flex flex-raw flex-wrap lg:flex justify-center gap-x-[100px]">
-        <Helmet title="Openroom" />
-
-        {openRooms &&
-          openRooms.slice(0, 4).map((openRoom) => {
-            return (
-              <div className="">
-                <OpenroomCard openRoom={openRoom} />
-              </div>
-            );
-          })}
+    <div className="mb-20">
+      <div className="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
+        오픈 스터디방 입장
+        <div className="border-none bg-indigo-500 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
-      <div>
+      <div className="px-10 md:px-15 lg:px-20">
+        <div className="h-full w-full flex flex-raw flex-wrap">
+          {openRooms &&
+            openRooms.slice(0, 4).map((openRoom, index) => {
+              return <OpenroomCard openRoom={openRoom} key={index} />;
+            })}
+        </div>
+      </div>
+      <div className="flex items-center justify-center w-full">
         <Link href={'/openroom'}>
-          <button className="w-full items-center ">View All</button>
+          <button className="bg-gray-700 text-white font-bold rounded-full px-10 py-3">
+            View All
+          </button>
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 
