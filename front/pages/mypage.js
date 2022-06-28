@@ -61,6 +61,7 @@ export default function mypage() {
       try {
         const res = await API.get('dailysheets', useratom.id);
         const datas = res.data;
+        console.log(datas);
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
         datas.length == 0
           ? console.log('Git데이터', gittime)
