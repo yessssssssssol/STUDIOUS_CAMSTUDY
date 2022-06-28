@@ -1,5 +1,6 @@
 import BoldText from '../components/common/BoldText';
 import TimeBox from '../components/common/TimeBox';
+import CategoryBox from '../components/common/CategoryBox';
 import dynamic from 'next/dynamic';
 import Pie from '../components/common/Pie';
 import Button from '../components/common/Button';
@@ -7,7 +8,12 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../core/atoms/userState';
 import * as API from '../pages/api/api';
-import { charts_data, charts_color } from '../components/common/UseData';
+import {
+  charts_data,
+  charts_color,
+  category_time,
+  randomColor,
+} from '../components/common/UseData';
 export default function mypage() {
   const [timeDatas, setTimeData] = useState(null);
   const useratom = useRecoilValue(userAtom);
@@ -16,6 +22,7 @@ export default function mypage() {
   const [timeGoal, setTimeGoal] = useState();
   const [getTimeGoal, setGetTimeGoal] = useState();
   const [pieData, setPieData] = useState([]);
+  const [myroomInfos, setMyroomInfos] = useState([]);
   const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
     ssr: false,
   });
@@ -35,7 +42,6 @@ export default function mypage() {
       try {
         const res = await API.get('totaltime', useratom.id);
         const data = res.data;
-        console.log(res);
         var data2 = [
           data.studyTimeADay,
           data.weekStudyTime,
@@ -52,20 +58,28 @@ export default function mypage() {
       }
     };
     const getGitTimeData = async () => {
-      const res = await API.get('dailysheets', useratom.id);
-      const datas = res.data;
-      console.log(datas);
-      setGetTimeGoal(datas[datas.length - 1].timeGoal);
-      datas.length == 0
-        ? console.log('Git데이터', gittime)
-        : datas.map((data) =>
-            gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
-          );
+      try {
+        const res = await API.get('dailysheets', useratom.id);
+        const datas = res.data;
+        setGetTimeGoal(datas[datas.length - 1].timeGoal);
+        datas.length == 0
+          ? console.log('Git데이터', gittime)
+          : datas.map((data) =>
+              gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
+            );
+      } catch (error) {
+        console.log(err);
+      }
     };
-
+    const getMyRoom = async () => {
+      const res = await API.get('studyrooms', useratom.id);
+      const data = res.data;
+      setMyroomInfos(data);
+    };
     getTimeData();
     getGitTimeData();
     setGitTime(gittime);
+    getMyRoom();
   }, [user]);
   async function clickHandler(e) {
     var res = '';
@@ -138,6 +152,19 @@ export default function mypage() {
                   />
                 </div>
               ))}
+            </div>
+            <div className="pt-[50px]">
+              <BoldText text={`${user.name}의 공부 기록 통계`} />
+
+              <div>
+                {myroomInfos.map((myroomInfo, index) => (
+                  <CategoryBox
+                    key={index}
+                    myroomInfo={myroomInfo}
+                    color={randomColor[Math.ceil(Math.random() * 10) + 1]}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
