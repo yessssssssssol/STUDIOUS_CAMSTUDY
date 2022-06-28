@@ -109,7 +109,26 @@ export default function my() {
     <div>
       <section class="bg-white ">
         <div class="container px-6 py-10 mx-auto">
-          <h1 class="text-3xl  text-gray-800 capitalize ">000님의 공부 기록</h1>
+          <div>
+            <h1 class="text-3xl  text-gray-800 capitalize ">
+              000님의 공부 기록
+            </h1>
+            {useratom.id === router.query.id ? (
+              <span className="hidden sm:block">
+                <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
+                  일일 목표
+                </span>
+                <input
+                  className="text-center w-[70px] border-2 rounded-xl border-orange-300"
+                  value={timeGoal}
+                  onChange={(e) => setTimeGoal(e.target.value)}
+                ></input>
+                <span className=" mr-3">시간</span>
+                <Button text={'설정'} onClick={clickHandler}></Button>
+              </span>
+            ) : null}
+          </div>
+
           <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             <div class="flex-col  p-8 space-y-3 border-2 border-amber-400 shadow-lg rounded-xl">
               <h1 class="text-xl font-semibold text-gray-400 capitalize ">
