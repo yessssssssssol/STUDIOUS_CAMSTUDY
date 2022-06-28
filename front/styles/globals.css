@@ -18,3 +18,15 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.indiana-scroll-container::-webkit-scrollbar {
+  height: 8px;
+  background-color:#ffffff;
+}
+.indiana-scroll-container::-webkit-scrollbar-thumb {
+  border-radius: 3.5px;
+  background: #b27fe8;
+}
+.indiana-scroll-container::-webkit-scrollbar-track {
+  background: #ffffff;
+}
