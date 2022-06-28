@@ -105,6 +105,18 @@ const StopWatch = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
     router.back();
+    updateHeadCount();
+  };
+
+  const updateHeadCount = async () => {
+    try {
+      await API.put(`headcount`, {
+        roomId,
+        attend: false,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
