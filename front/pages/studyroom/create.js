@@ -41,17 +41,20 @@ export default function Create() {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
-
-    try {
-      const res = await API.post('studyroom', room);
-      console.log(res.data);
-      console.log('방이 생성되었습니다.');
-      await API.putImg(`roomimg/${res.data.roomId}`, formD);
-      console.log('이미지가 추가되었습니다.');
-      router.back();
-      resetRoom();
-    } catch (err) {
-      console.log(err);
+    if (file) {
+      try {
+        const res = await API.post('studyroom', room);
+        console.log(res.data);
+        console.log('방이 생성되었습니다.');
+        await API.putImg(`roomimg/${res.data.roomId}`, formD);
+        console.log('이미지가 추가되었습니다.');
+        router.back();
+        resetRoom();
+      } catch (err) {
+        console.log(err);
+        setError(true);
+      }
+    } else {
       setError(true);
     }
   };

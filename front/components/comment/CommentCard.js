@@ -51,9 +51,11 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
               {comment.content}
             </p>
           </div>
-          <button onClick={handleDelete} className=" mr-3 align-items-center">
-            x
-          </button>
+          {user.id === writerId ? (
+            <button onClick={handleDelete} className=" mr-3 align-items-center">
+              x
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
