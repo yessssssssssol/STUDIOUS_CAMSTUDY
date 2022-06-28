@@ -1,4 +1,4 @@
-import { Comments, TimeLog, User, UserDailySheet } from '../db';
+import { Applicants, Comments, TimeLog, User, UserDailySheet } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
@@ -223,6 +223,7 @@ class userAuthService {
             TimeLog.deleteUser({ id }),
             TotalTime.deleteUser({ id }),
             UserDailySheet.deleteUser({ id }),
+            Applicants.deleteManyById({ id }),
             (await roomAr).map((room) => {
                 const { roomId, id } = room;
                 userStudyRoomsService.delRoom({ id, roomId });

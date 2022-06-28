@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import * as API from '../../../pages/api/api';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../../core/atoms/userState';
+import MemberList from '../../../components/board/MemberList';
 
 export default function Detail() {
   let tempData = {};
@@ -19,6 +20,7 @@ export default function Detail() {
   const [isOwner, setIsOwner] = useState();
   const [isMember, setIsMember] = useState(false);
   const [isApplicants, setIsApplicants] = useState(false);
+  const [members, setMembers] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function Detail() {
         // 멤버이면 스터디방 입장하기 버튼 아니면 신청하기 버튼
         const membersRes = await API.get(`studyroom/${tempData.roomId}`);
         const memberList = membersRes.data.members;
+        setMembers(memberList);
         if (memberList.includes(currUser.id)) {
           setIsMember(true);
         } else {
@@ -127,6 +130,9 @@ export default function Detail() {
                       );
                     })}
                   </div>
+                  <div className="px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 총 정원: ${detailData.membersNum}`}</div>
+                  <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${detailData.startStudyDay} ~ ${detailData.endStudyDay}`}</div>
+                  <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${detailData.focusTimeStart} ~ ${detailData.focusTimeEnd}`}</div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row lg:space-x-12">
@@ -175,6 +181,13 @@ export default function Detail() {
                     <CertificationList
                       applicants={applicants}
                       isOwner={isOwner}
+                    />
+                  )}
+                  {applicants && (
+                    <MemberList
+                      members={members}
+                      isOwner={isOwner}
+                      roomId={detailData.roomId}
                     />
                   )}
                 </div>
