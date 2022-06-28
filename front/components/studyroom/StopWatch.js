@@ -15,7 +15,7 @@ import * as API from '../../pages/api/api';
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
 
-const StopWatch = () => {
+const StopWatch = ({ roomId }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
 
   // 카운트다운 시간 설정: 10초
@@ -104,8 +104,9 @@ const StopWatch = () => {
   const handleClick = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
-    router.back();
     updateHeadCount();
+    console.log('나가기');
+    router.back();
   };
 
   const updateHeadCount = async () => {

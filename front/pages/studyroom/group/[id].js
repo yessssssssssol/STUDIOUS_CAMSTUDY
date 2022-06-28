@@ -347,7 +347,7 @@ export default function Group() {
             <div className="w-full lg:w-1/2">
               {isCamera ? (
                 <div>
-                  <StopWatch />
+                  <StopWatch roomId={roomId} />
                   <p>메인 카메라(인공지능 적용된 것)</p>
                   <AIFunc />
                   <AlertModal />
