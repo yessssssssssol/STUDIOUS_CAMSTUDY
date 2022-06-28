@@ -58,6 +58,7 @@ const AIFunc = () => {
           console.error(error);
         });
     }
+    // return
   }, []);
 
   const detectFrame = (video, model) => {
