@@ -14,7 +14,7 @@ export default function Create() {
   const resetRoom = useResetRecoilState(editroomAtom);
 
   const [file, setFile] = useState(null);
-  const [tempUrl, setTempURL] = useState(roomDefaultImg);
+  const [tempUrl, setTempURL] = useState(null);
   const [error, setError] = useState(false);
 
   const fileInput = useRef(null);
@@ -42,6 +42,7 @@ export default function Create() {
       const res = await API.get('studyroom', router.query.id);
       console.log(res);
       setRoom(res.data);
+      setTempURL(res.data.roomImg);
     };
 
     if (router.isReady) {
@@ -55,7 +56,16 @@ export default function Create() {
     formD.append('roomImg', file);
     if (file) {
       try {
-        const res = await API.put('studyroom', room);
+        const res = await API.put('studyroom', {
+          roomId: room.roomId,
+          roomName: room.roomName,
+          endStudyDay: room.endStudyDay,
+          focusTimeStart: room.focusTimeStart,
+          focusTimeEnd: room.focusTimeEnd,
+          roomTitle: room.roomTitle,
+          roomDesc: room.roomDesc,
+          hashTags: room.hashTags,
+        });
         console.log(res.data);
         console.log('방의 정보가 변경되었습니다.');
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
@@ -116,13 +126,15 @@ export default function Create() {
           )}
         </div>
         <div className="container w-full mx-auto my-3 bg-white  rounded">
-          <div className="my-3">
-            <img
-              className="object-fill h-48 w-96 rounded-md"
-              src={tempUrl}
-              alt="Rounded avatar"
-            />
-          </div>
+          {tempUrl && (
+            <div className="my-3">
+              <img
+                className="object-fill h-48 w-96 rounded-md"
+                src={tempUrl}
+                alt="Rounded avatar"
+              />
+            </div>
+          )}
           <input
             type="file"
             style={{ display: 'none' }}
