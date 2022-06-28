@@ -10,7 +10,8 @@ import { useRouter } from 'next/router';
 
 import * as API from '../api/api';
 import { charts_data, charts_color } from '../../components/common/UseData';
-export default function mypage() {
+
+export default function my() {
   const useratom = useRecoilValue(userAtom);
 
   const [timeDatas, setTimeData] = useState(null);
@@ -106,49 +107,50 @@ export default function mypage() {
   }
   return (
     <div>
-      {user && (
-        <div className="flex-col py-[50px] lg:px-[200px]">
-          <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl text-center lg:text-left">
-              <BoldText text={`${user.name}님의 최근공부기록`} />
+      <section class="bg-white ">
+        <div class="container px-6 py-10 mx-auto">
+          <h1 class="text-3xl  text-gray-800 capitalize ">000님의 공부 기록</h1>
+          <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+            <div class="flex-col  p-8 space-y-3 border-2 border-amber-400 shadow-lg rounded-xl">
+              <h1 class="text-xl font-semibold text-gray-400 capitalize ">
+                오늘 공부 시간
+              </h1>
+              <p class="text-gray-500 text-4xl font-medium">00:00:00</p>
             </div>
 
-            {useratom.id === router.query.id ? (
-              <span className="hidden sm:block">
-                <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
-                  일일 목표
-                </span>
-                <input
-                  className="text-center w-[70px] border-2 rounded-xl border-orange-300"
-                  value={timeGoal}
-                  onChange={(e) => setTimeGoal(e.target.value)}
-                ></input>
-                <span className=" mr-3">시간</span>
-                <Button text={'설정'} onClick={clickHandler}></Button>
-              </span>
-            ) : null}
-          </div>
+            <div class="flex-col p-8 space-y-3 border-2 border-amber-400 shadow-lg rounded-xl">
+              <h1 class="text-xl font-semibold text-gray-400 capitalize ">
+                이번주 공부 시간
+              </h1>
 
-          <div className="flex flex-col items-center  lg:flex-row justify-evenly">
-            {timeDatas?.map((time, index) => (
-              <TimeBox
-                key={index}
-                index={index}
-                timeData={time}
-                timeGoal={getTimeGoal}
-              />
-            ))}
-          </div>
+              <p class="text-gray-500 text-4xl font-medium ">00:00:00</p>
+            </div>
+            <div class="flex-col p-8 space-y-3 border-2 border-amber-400 shadow-lg rounded-xl">
+              <h1 class="text-xl font-semibold text-gray-400 capitalize ">
+                총 공부 시간
+              </h1>
 
-          <div className="pt-[50px] ">
-            <BoldText text={`${user.name}님의 공부기록`} />
-            <div className="pt-[10px]">
-              <NoSSR gittimes={gittime} />
+              <p class="text-gray-500 text-4xl font-medium">00:00:00</p>
             </div>
           </div>
-
-          <div className=" pt-[50px]">
-            <BoldText text={`${user.name}의 공부 기록 통계`} />
+        </div>
+      </section>
+      <div className="container px-6 py-10 mx-auto">
+        <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+          {timeDatas?.map((time, index) => (
+            <TimeBox
+              key={index}
+              index={index}
+              timeData={time}
+              timeGoal={getTimeGoal}
+            />
+          ))}
+        </div>
+        <div className="bg-gray-100">
+          <div className="pt-[10px]">
+            <NoSSR gittimes={gittime} />
+          </div>
+          <div className="bg-gray-100">
             <div className="flex flex-col items-center  lg:flex-row justify-evenly">
               {charts_data.map((title, index) => (
                 <div key={index} className="py-8 lg:mr-[30px]">
@@ -164,6 +166,7 @@ export default function mypage() {
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );
