@@ -157,7 +157,7 @@ applicantsRouter.delete(
     },
 );
 
-//멤버 강제 퇴장 기능
+//멤버 퇴장 기능(방장/멤버)
 applicantsRouter.delete(
     '/appliant/:roomId/:applicantId',
     login_required,
@@ -170,16 +170,17 @@ applicantsRouter.delete(
                     .status(400)
                     .json({ message: 'roomId 혹은 applicantId를 파라미터를 통해 보내주세요.' });
 
-            // 이 방의 방장인가?
+            // 이 방이 존재하는가
             const checkRoom = await userStudyRoomsService.getRoom({ roomId });
             if (!checkRoom)
                 return res.status(400).json({ message: '해당하는 방을 찾을 수 없습니다.' });
-            if (checkRoom.id !== id)
-                return res
-                    .status(400)
-                    .json({ message: '이 방의 방장이 아닙니다. 멤버 퇴장 권한이 없습니다.' });
-
-            // 삭제할 멤버가 배열 안에 있는지 확인
+            // 이 방의 방장 혹은 멤버인가
+            const membersAr = checkRoom.members;
+            if (!(checkRoom.id === id || membersAr.includes(id))) {
+                return res.status(400).json({
+                    message: '이 방의 방장 혹은 멤버가 아닙니다. 멤버 퇴장 권한이 없습니다.',
+                });
+            }
 
             const members = checkRoom.members.filter((user) => user !== applicantId);
             const updateChange = { members };
