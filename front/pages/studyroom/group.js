@@ -11,7 +11,7 @@ import {
   userNameAtom,
 } from '../../core/atoms/userState';
 import { createroomAtom } from '../../core/atoms/createroomState';
-const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5001;
+const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname

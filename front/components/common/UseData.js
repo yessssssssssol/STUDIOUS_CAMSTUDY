@@ -1,3 +1,11 @@
+export const items = [
+  ['오픈 스터디방', '/openroom'],
+  ['스터디 모집', '/board'],
+  ['프롤로그', '/prologue'],
+  ['AboutUs', '/aboutus'],
+  ['마이페이지', '/mypage'],
+];
+
 export const randomColor = [
   'bg-red-200',
   'bg-blue-200',
@@ -37,12 +45,7 @@ export const category_time = [
   ['경찰학개론', '10:31:22'],
   ['헌법', '3:03:52'],
 ];
-export const items = [
-  ['스터디 모집', '/board'],
-  ['프롤로그', '/prologue'],
-  ['AboutUs', '/aboutus'],
-  ['마이페이지', '/mypage'],
-];
+
 export const drop_item = [];
 
 export const userDefaultImg =

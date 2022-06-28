@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { createroomAtom } from '../../../core/atoms/createroomState';
 const CreateBoard = () => {
@@ -34,6 +34,13 @@ const CreateBoard = () => {
       };
     });
   };
+
+  useEffect(() => {
+    axios
+      .get('/studyroom', roomId)
+      .then((res) => setInfo(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="container mx-auto bg-white dark:bg-gray-800 rounded">

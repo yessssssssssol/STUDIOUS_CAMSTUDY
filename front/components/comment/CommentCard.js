@@ -19,21 +19,27 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     const res = await API.get('comments', roomId);
 
     setComments(res.data);
+    console.log(writerId);
   };
 
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
-        <img
-          className="w-16 rounded-full shadow"
-          src={comment.userInfo.profileUrl}
-          alt=""
-        />
+        <a href={`../../../mypage/${writerId}`}>
+          <img
+            className="w-16 rounded-full shadow"
+            src={comment.userInfo.profileUrl}
+            alt=""
+          />
+        </a>
       </div>
       <div className="flex">
         <div className="flex flex-row items-center justify-between py-1 pr-2">
           <div>
-            <a href="#" className="text-blue-400 hover:underline">
+            <a
+              href={`../../../mypage/${writerId}`}
+              className="text-blue-400 hover:underline"
+            >
               {comment.userName}
             </a>
             <span className="text-sm font-thin text-gray-500">
