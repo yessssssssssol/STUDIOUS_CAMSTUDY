@@ -2,7 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import SocketIO from 'socket.io';
 import http from 'http';
-import https from 'https';
 import { userAuthRouter } from './routers/userRouter';
 import { timeLogRouter } from './routers/timeLogRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
@@ -12,7 +11,6 @@ import { commentsRouter } from './routers/commentsRouter';
 import { applicantsRouter } from './routers/applicantsRouter';
 import { totalTimeRouter } from './routers/totalTimeRouter';
 import { userStudyRoomsService } from './services/userStudyRoomsService';
-import fs from 'fs';
 
 const app = express();
 
@@ -42,14 +40,14 @@ app.use('/api',totalTimeRouter);
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
 
-const options = {
-    key: fs.readFileSync(__dirname + '/privkey.pem'),
-    cert: fs.readFileSync(__dirname + '/cert.pem')
-};
+// const options = {
+//     key: fs.readFileSync(__dirname + '/privkey.pem'),
+//     cert: fs.readFileSync(__dirname + '/cert.pem')
+// };
 
-const httpsServer = https.createServer(options, app);
+const httpServer = http.createServer(app);
 
-const wsServer = SocketIO(httpsServer, {
+const wsServer = SocketIO(httpServer, {
     cors: {
         origin: 'http://localhost:3000',
         method: ['GET', 'POST'],
@@ -182,4 +180,4 @@ wsServer.on("connection", (socket) => {
 })
 
 
-export { httpsServer, wsServer };
+export { httpServer, wsServer };
