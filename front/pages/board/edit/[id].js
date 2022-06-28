@@ -1,18 +1,17 @@
-import * as API from '../../pages/api/api';
-import CreateStudyRoom from '../../components/studyroom/create/CreateStudyContent';
-import CreateBoard from '../../components/studyroom/create/CreateBoard';
+import * as API from '../../../pages/api/api';
+import EditBoard from '../../../components/board/edit/EditBoard';
+import EditStudyContent from '../../../components/board/edit/EditStudyContent';
 import { useState, useRef, useEffect } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
-import { createroomAtom } from '../../core/atoms/createroomState';
+import { editroomAtom } from '../../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
-import { roomDefaultImg } from '../../components/common/UseData';
-import Alert from '../../components/common/Alert';
-import { getModuleBuildInfo } from 'next/dist/build/webpack/loaders/get-module-build-info';
+import { roomDefaultImg } from '../../../components/common/UseData';
+import Alert from '../../../components/common/Alert';
 
-export default function Edit() {
+export default function Create() {
   const router = useRouter();
-  const [room, setRoom] = useRecoilState(createroomAtom);
-  const resetRoom = useResetRecoilState(createroomAtom);
+  const [room, setRoom] = useRecoilState(editroomAtom);
+  const resetRoom = useResetRecoilState(editroomAtom);
 
   const [file, setFile] = useState(null);
   const [tempUrl, setTempURL] = useState(roomDefaultImg);
@@ -38,15 +37,27 @@ export default function Edit() {
     }
   };
 
+  useEffect(() => {
+    const getInfo = async () => {
+      const res = await API.get('studyroom', router.query.id);
+      console.log(res);
+      setRoom(res.data);
+    };
+
+    if (router.isReady) {
+      getInfo();
+    }
+  }, [router.isReady]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
     if (file) {
       try {
-        const res = await API.post('studyroom', room);
+        const res = await API.put('studyroom', room);
         console.log(res.data);
-        console.log('방이 생성되었습니다.');
+        console.log('방의 정보가 변경되었습니다.');
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
         console.log('이미지가 추가되었습니다.');
         router.back();
@@ -138,11 +149,11 @@ export default function Edit() {
           </div>
         </div>
         <div className="flex justify-center">
-          <CreateStudyRoom />
+          <EditStudyContent />
         </div>
       </div>
       <div className="flex justify-center">
-        <CreateBoard />
+        <EditBoard />
       </div>
       {error && (
         <div className="m-10">

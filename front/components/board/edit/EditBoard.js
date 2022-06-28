@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import { editroomAtom } from '../../../core/atoms/createroomState';
 import * as API from '../../../pages/api/api';
 const CreateBoard = () => {
-  const [room, setRoom] = useRecoilState(createroomAtom);
+  const [room, setRoom] = useRecoilState(editroomAtom);
   const { roomTitle, roomDesc } = room;
   const [hashTag, setHashTag] = useState('');
 
@@ -35,12 +35,6 @@ const CreateBoard = () => {
       };
     });
   };
-
-  useEffect(() => {
-    API.get('/studyroom', roomId)
-      .then((res) => setInfo(res.data))
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <div className="container mx-auto bg-white rounded">

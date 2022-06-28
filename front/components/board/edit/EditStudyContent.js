@@ -5,11 +5,11 @@
  */
 
 import { useRecoilState } from 'recoil';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import { editroomAtom } from '../../../core/atoms/createroomState';
 import dayjs from 'dayjs';
 
-const CreateStudyContent = () => {
-  const [room, setRoom] = useRecoilState(createroomAtom);
+const EditStudyContent = ({}) => {
+  const [room, setRoom] = useRecoilState(editroomAtom);
   const {
     roomName,
     membersOnly,
@@ -242,4 +242,4 @@ const CreateStudyContent = () => {
   );
 };
 
-export default CreateStudyContent;
+export default EditStudyContent;
