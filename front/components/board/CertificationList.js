@@ -1,8 +1,8 @@
 import Certification from './Certification';
 
-export default function CertificationList({ applicants, isOwner }) {
+const CertificationList = ({ applicants, isOwner }) => {
   return (
-    <div className="bg-gray-100 rounded-lg p-3">
+    <div className="bg-gray-100 rounded-lg p-3 my-5">
       <div className="flex items-center space-x-2 text-base">
         <h4 className="font-bold text-slate-900">스터디 신청자</h4>
       </div>
@@ -19,4 +19,6 @@ export default function CertificationList({ applicants, isOwner }) {
       </div>
     </div>
   );
-}
+};
+
+export default CertificationList;
