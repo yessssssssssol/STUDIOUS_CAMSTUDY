@@ -5,6 +5,7 @@ import * as API from '../../api/api';
 
 import ProfileCard from '../../../components/common/ProfileCard';
 import Comments from '../../../components/comment/Comments';
+import SmallModal from '../../../components/common/SmallModal';
 
 const OpenRoomBoard = () => {
   const router = useRouter();
@@ -12,7 +13,11 @@ const OpenRoomBoard = () => {
   const [roomInfo, setRoomInfo] = useState({});
   const [owner, setOwner] = useState({});
   const [isFullMembers, setIsFullMembers] = useState(false);
+  const [show, setShow] = useState(false);
   let hashTags = [];
+  const modalTitle = 'Oops!';
+  const modalChildren =
+    '해당 스터디는 현재 정원이 초과되어 입장이 불가능합니다.';
 
   useEffect(() => {
     const getRoomInfo = async () => {
@@ -34,7 +39,29 @@ const OpenRoomBoard = () => {
     }
   }, [router.isReady]);
 
-  const enterHandler = () => {};
+  const checkHeadCount = async () => {
+    try {
+      const res = await API.get(`studyroom/${roomId}`);
+      const headCount = res.data.headCount;
+      if (headCount.length >= roomInfo.membersNum) {
+        setIsFullMembers(true);
+      } else {
+        setIsFullMembers(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const enterHandler = async () => {
+    checkHeadCount();
+    if (!isFullMembers) {
+      router.push(`/studyroom/group/${roomId}`);
+    } else {
+      setShow(true);
+      console.log('정원초과입니다.');
+    }
+  };
 
   return (
     <>
@@ -70,7 +97,7 @@ const OpenRoomBoard = () => {
                   </div>
                   <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mt-12 px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mt-12 px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     onClick={enterHandler}
                     disabled={isFullMembers}
                   >
@@ -85,6 +112,13 @@ const OpenRoomBoard = () => {
                 <Comments roomId={roomInfo.roomId} Id={roomInfo.id} />
               </div>
             </div>
+            {show && (
+              <SmallModal
+                setShow={setShow}
+                title={modalTitle}
+                children={modalChildren}
+              />
+            )}
           </div>
         </div>
       )}
