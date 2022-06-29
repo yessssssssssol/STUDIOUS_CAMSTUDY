@@ -102,27 +102,25 @@ export default function mypage() {
     setGetTimeGoal(res.data.timeGoal);
   }
   return (
-    <>
+    <div className="">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl text-center lg:text-left">
-              <BoldText text={`${user.name}님의 최근공부기록`} />
+            <div className="font-bold text-3xl text-center lg:text-left my-[50px]">
+              <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
-            <span className="hidden sm:block">
-              <span className="bg-sky-500 text-white font-bold py-1 px-3 mx-2 rounded-full">
-                일일 목표
-              </span>
+            <span className="hidden sm:block m-2">
+              <span className="  py-1 px-2">오늘의 목표 공부</span>
               <input
-                className="text-center w-[70px] border-2 rounded-xl border-orange-300"
+                className="text-center w-[70px] border border-amber-400 rounded-md "
                 value={timeGoal}
                 onChange={(e) => setTimeGoal(e.target.value)}
               ></input>
-              <span className=" mr-3">시간</span>
+              <span className=" mr-3"> 시간</span>
               <Button text={'설정'} onClick={clickHandler}></Button>
             </span>
           </div>
-          <div className="flex flex-col items-center  lg:flex-row justify-evenly">
+          <div className="flex flex-col items-center lg:flex-row justify-evenly">
             {timeDatas?.map((time, index) => (
               <TimeBox
                 key={index}
@@ -133,14 +131,14 @@ export default function mypage() {
             ))}
           </div>
           <div className="pt-[50px] ">
-            <BoldText text={`${user.name}님의 공부기록`} />
-            <div className="pt-[10px]">
+            <BoldText text={`1년 공부 기록`} />
+            <div className="pt-[10px] shadow-xl my-[30px]">
               <NoSSR gittimes={gittime} />
             </div>
           </div>
 
           <div className=" pt-[50px]">
-            <BoldText text={`${user.name}의 공부 기록 통계`} />
+            <BoldText text={`공부 기록 통계`} />
             <div className="flex flex-col items-center  lg:flex-row justify-evenly">
               {charts_data.map((title, index) => (
                 <div key={index} className="py-8 lg:mr-[30px]">
@@ -155,7 +153,7 @@ export default function mypage() {
               ))}
             </div>
             <div className="pt-[50px]">
-              <BoldText text={`${user.name}의 공부 기록 통계`} />
+              <BoldText text={`최근 공부한 방`} />
 
               <div>
                 {myroomInfos.map((myroomInfo, index) => (
@@ -170,6 +168,6 @@ export default function mypage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
