@@ -72,9 +72,9 @@ function isUserInRoom(obj, roomId, userId) {
 
 function isEmptyObj(obj)  {
     if(obj.constructor === Object
-       && Object.keys(obj).length === 0)  {
-      return true;
-    }
+        && Object.keys(obj).length === 0)  {
+        return true;
+    }        
     
     return false;
 }
@@ -95,7 +95,7 @@ function deleteUserInRoom(obj, userId) {
     })
     
     if (findUser != null) {
-        roomList[roomId]?.splice(index, index+1);
+        roomList[roomId]?.splice(index, 1);
         return true;
     }
 }
@@ -120,11 +120,23 @@ wsServer.on("connection", (socket) => {
             return;
         }
 
-        if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
-            // 유저 토큰이 있는지 확인
-            const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
-            socket.emit("refuse", errorMessage);
-            return;
+        if (getInfo?.membersOnly == true) {
+            //맴버 방
+            if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
+                // 유저 토큰이 있는지 확인
+                const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
+                socket.emit("refuse", errorMessage);
+                return;
+            }
+        }
+        else {
+            // 오픈 방
+            if (roomList[roomId]?.length >= getInfo.membersNum) {
+                // 유저 토큰이 있는지 확인
+                const errorMessage = "입장 인원을 초과하여 입장하실 수 없습니다."
+                socket.emit("refuse", errorMessage);
+                return;
+            }
         }
 
         const anotherMe = isUserInRoom(roomList, roomId, userId);
@@ -176,7 +188,7 @@ wsServer.on("connection", (socket) => {
         if (findUser != null) {
             socket.to(roomId).emit("bye", socket.id, findUser?.userName);
             // 룸 리스트 내 제거
-            roomList[roomId]?.splice(index, index+1);
+            roomList[roomId]?.splice(index, 1);
         }
     })
 })
