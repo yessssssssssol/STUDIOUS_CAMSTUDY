@@ -3,7 +3,10 @@ import CreateStudyRoom from '../../components/studyroom/create/CreateStudyConten
 import CreateBoard from '../../components/studyroom/create/CreateBoard';
 import { useState, useRef, useEffect } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
-import { createroomAtom } from '../../core/atoms/createroomState';
+import {
+  createroomAtom,
+  createhashtagAtom,
+} from '../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
@@ -13,10 +16,11 @@ export default function Edit() {
   const router = useRouter();
   const [room, setRoom] = useRecoilState(createroomAtom);
   const resetRoom = useResetRecoilState(createroomAtom);
-
+  const resetHashtag = useResetRecoilState(createhashtagAtom);
   const [file, setFile] = useState(null);
   const [tempUrl, setTempURL] = useState(roomDefaultImg);
   const [error, setError] = useState(false);
+  const [hashtag, setHashTag] = useRecoilState(createhashtagAtom);
 
   const fileInput = useRef(null);
 
@@ -40,17 +44,32 @@ export default function Edit() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(room);
+    const tag = hashtag.split(' ');
     const formD = new FormData();
     formD.append('roomImg', file);
     if (file) {
       try {
-        const res = await API.post('studyroom', room);
+        const res = await API.post('studyroom', {
+          roomName: room.roomName,
+          group: room.group,
+          membersOnly: room.membersOnly,
+          membersNum: room.membersNum,
+          startStudyDay: room.startStudyDay,
+          endStudyDay: room.endStudyDay,
+          focusTimeStart: room.focusTimeStart,
+          focusTimeEnd: room.focusTimeEnd,
+          roomTitle: room.roomTitle,
+          roomDesc: room.roomDesc,
+          hashTags: tag,
+        });
         console.log(res.data);
         console.log('방이 생성되었습니다.');
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
         console.log('이미지가 추가되었습니다.');
         router.back();
         resetRoom();
+        resetHashtag();
       } catch (err) {
         console.log(err);
         setError(true);
