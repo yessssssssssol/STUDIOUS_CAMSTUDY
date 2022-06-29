@@ -3,8 +3,7 @@ import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useState } from 'react';
 
-const CommentAddForm = ({ roomId, setComments, writerId }) => {
-  const [content, setContent] = useState('');
+const ApplicationAddForm = ({ roomId, setApplicants, writerId }) => {
   const [wirterId, setWriterId] = useState('');
   const [user, setUser] = useRecoilState(userAtom);
   const { name, profileUrl } = user;
@@ -13,17 +12,11 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // roomId를 user_id 변수에 할당함.
-    // const userName = writeId;
-
-    await Api.post('comment', {
-      // writerId,
+    await Api.post('apply', {
       roomId,
-      content,
-      // createdAt,
     });
-    const res = await Api.get('comments', roomId);
-    setComments(res.data);
+    const res = await Api.get('applicants', roomId);
+    setApplicants(res.data);
   };
   return (
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
@@ -37,15 +30,6 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
               {name}
             </a>
           </div>
-          <div className="p-1">
-            <textarea
-              rows="3"
-              className="border p-2 rounded w-full"
-              placeholder="Write something..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            ></textarea>
-          </div>
           <div className="flex justify-between mx-3">
             <div>
               <button
@@ -53,7 +37,7 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
                 type="submit"
                 onClick={handleSubmit}
               >
-                Submit
+                Apply
               </button>
             </div>
           </div>
@@ -63,4 +47,4 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
   );
 };
 
-export default CommentAddForm;
+export default ApplicationAddForm;

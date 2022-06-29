@@ -15,8 +15,9 @@ import * as API from '../../pages/api/api';
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
 
-const StopWatch = () => {
+const StopWatch = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
+  console.log(membersOnly);
 
   // 카운트다운 시간 설정: 10초
   const initialMinute = 0;
@@ -104,7 +105,22 @@ const StopWatch = () => {
   const handleClick = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
+    if (!membersOnly) {
+      updateHeadCount();
+    }
+    console.log('나가기');
     router.back();
+  };
+
+  const updateHeadCount = async () => {
+    try {
+      await API.put(`headcount`, {
+        roomId,
+        attend: false,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -112,17 +128,17 @@ const StopWatch = () => {
       <div>
         <div className="mx-10 my-10 flex justify-around">
           <div>
-            <h3 className="font-bold text-2xl dark:text-white">스터디 이름</h3>
+            <h3 className="font-bold text-2xl">스터디 이름</h3>
           </div>
           <div>
-            <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-300">
+            <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
           </div>
           <div>
             <button
-              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
               onClick={handleClick}
             >
               나가기
@@ -133,23 +149,23 @@ const StopWatch = () => {
       <div>
         {minutes === 0 && seconds === 0 ? null : (
           <div className="justify-center items-center text-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mx-10">
+            <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
               <img
                 className="rounded-t-lg"
                 src="/sampleImg.jpg"
                 alt="증명사진"
               />
               <div className="p-5">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
                   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                 </h5>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                <p className="mb-3 font-normal text-gray-700">
                   10초 뒤에 타이머가 시작됩니다.
                   <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                 </p>
                 <svg
                   role="status"
-                  className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  className="inline w-8 h-8 mr-2 text-gray-200 animate-spin fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +181,7 @@ const StopWatch = () => {
                 </svg>
               </div>
               <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
                 onClick={handleClick}
               >
                 나가기

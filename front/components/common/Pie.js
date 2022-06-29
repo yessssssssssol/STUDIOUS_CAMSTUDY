@@ -2,10 +2,9 @@ import { PieChart } from 'react-minimal-pie-chart';
 import { useState } from 'react';
 
 export default function Pie({ title, color, index, pieData }) {
-  console.log(typeof pieData[index], pieData[index]);
   return (
     <>
-      {pieData && (
+      {pieData[index] !== undefined && (
         <PieChart
           data={[
             {

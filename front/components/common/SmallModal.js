@@ -1,17 +1,7 @@
-import { useSetRecoilState, useRecoilState } from 'recoil';
-import {
-  loginModalState,
-  registerModalState,
-  editUserModalAtom,
-  editProfileModalAtom,
-} from '../../core/atoms/modalState';
 import { useEffect, useRef } from 'react';
-export default function Modal(props) {
-  const setLoginModal = useSetRecoilState(loginModalState);
-  const setRegisterModal = useSetRecoilState(registerModalState);
-  const setUserEditModal = useSetRecoilState(editUserModalAtom);
-  const setProfileEditModal = useSetRecoilState(editProfileModalAtom);
 
+const SmallModal = (props) => {
+  const { setShow, title, children } = props;
   const ref = useRef(null);
   useEffect(() => {
     // Bind the event listener
@@ -24,10 +14,7 @@ export default function Modal(props) {
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
-      setLoginModal(false);
-      setRegisterModal(false);
-      setUserEditModal(false);
-      setProfileEditModal(false);
+      setShow(false);
     }
   }
   return (
@@ -41,15 +28,12 @@ export default function Modal(props) {
           >
             {/*header*/}
             <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-xl font-semibold">{props.title}</h3>
+              <h3 className="text-xl font-semibold">{title}</h3>
               <button
                 type="button"
                 className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center  "
                 onClick={() => {
-                  setLoginModal(false);
-                  setRegisterModal(false);
-                  setUserEditModal(false);
-                  setProfileEditModal(false);
+                  setShow(false);
                 }}
               >
                 <svg
@@ -63,11 +47,13 @@ export default function Modal(props) {
               </button>
             </div>
             {/*body*/}
-            <div className="relative p-6 flex-auto">{props.children}</div>
+            <div className="relative p-6 flex-auto">{children}</div>
           </div>
         </div>
       </div>
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </>
   );
-}
+};
+
+export default SmallModal;

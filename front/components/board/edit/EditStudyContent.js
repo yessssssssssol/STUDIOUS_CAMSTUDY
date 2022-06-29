@@ -5,20 +5,13 @@
  */
 
 import { useRecoilState } from 'recoil';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import { editroomAtom } from '../../../core/atoms/createroomState';
 import dayjs from 'dayjs';
 
-const CreateStudyContent = () => {
-  const [room, setRoom] = useRecoilState(createroomAtom);
-  const {
-    roomName,
-    membersOnly,
-    startStudyDay,
-    endStudyDay,
-    focusTimeStart,
-    focusTimeEnd,
-    membersNum,
-  } = room;
+const EditStudyContent = () => {
+  const [room, setRoom] = useRecoilState(editroomAtom);
+  const { roomName, startStudyDay, endStudyDay, focusTimeStart, focusTimeEnd } =
+    room;
   dayjs.locale('ko');
 
   let today = dayjs().format('YYYY-MM-DD');
@@ -28,23 +21,6 @@ const CreateStudyContent = () => {
       return {
         ...prev,
         roomName: e.target.value,
-      };
-    });
-  };
-  const onMembersOnlyChange = (e) => {
-    setRoom((prev) => {
-      return {
-        ...prev,
-        group: true,
-        membersOnly: e.target.value,
-      };
-    });
-  };
-  const onStartStudyDayChange = (e) => {
-    setRoom((prev) => {
-      return {
-        ...prev,
-        startStudyDay: e.target.value,
       };
     });
   };
@@ -75,15 +51,6 @@ const CreateStudyContent = () => {
     });
   };
 
-  const onMembersNumChange = (e) => {
-    setRoom((prev) => {
-      return {
-        ...prev,
-        membersNum: e.target.value,
-      };
-    });
-  };
-
   return (
     <div className="container w-full mx-auto my-5 bg-white  rounded">
       <div className="mx-auto">
@@ -108,74 +75,7 @@ const CreateStudyContent = () => {
               className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 "
             />
           </div>
-          <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
-            <div className="flex gap-x-6 mb-2">
-              <label
-                htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 "
-              >
-                스터디 종류
-              </label>
-              <p className="pb-2 text-sm text-gray-800 ">
-                스터디를 종류를 선택해주세요.
-              </p>
-            </div>
-            <div className="flex gap-x-3">
-              <div>
-                <input
-                  type="radio"
-                  id="공개 스터디"
-                  name="public or private"
-                  value="false"
-                  checked={membersOnly === 'false'}
-                  onChange={onMembersOnlyChange}
-                />
-                <label
-                  htmlFor="공개 스터디"
-                  className="font-bold text-sm text-gray-800  mx-1"
-                >
-                  공개 스터디
-                </label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="비공개 스터디"
-                  name="public or private"
-                  value="true"
-                  checked={membersOnly === 'true'}
-                  onChange={onMembersOnlyChange}
-                />
-                <label
-                  htmlFor="비공개 스터디"
-                  className="font-bold text-sm text-gray-800  mx-1"
-                >
-                  비공개 스터디
-                </label>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
-            <div className="flex gap-x-6 mb-2">
-              <label
-                htmlFor="name"
-                className="pb-2 text-sm font-bold text-gray-800 "
-              >
-                스터디인원
-              </label>
-              <p className="pb-2 text-sm text-gray-800 ">
-                스터디 참원 인원을 입력해주세요. (최대 4명)
-              </p>
-            </div>
-            <input
-              value={membersNum}
-              onChange={onMembersNumChange}
-              className="border-2 rounded-md w-[40px]"
-              min="0"
-              max="4"
-              type="number"
-            ></input>
-          </div>
+
           <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">
             <div className="flex gap-x-6 mb-2">
               <label
@@ -195,13 +95,14 @@ const CreateStudyContent = () => {
                 type="date"
                 min={today}
                 value={startStudyDay}
-                onChange={onStartStudyDayChange}
+                disabled
               ></input>
               ~
               <input
                 className="mx-5"
                 type="date"
                 value={endStudyDay}
+                min={startStudyDay}
                 onChange={onEndStudyDayChange}
               ></input>
             </div>
@@ -242,4 +143,4 @@ const CreateStudyContent = () => {
   );
 };
 
-export default CreateStudyContent;
+export default EditStudyContent;

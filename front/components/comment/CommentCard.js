@@ -12,8 +12,6 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     // 부모 엘리먼트에게 이벤트 전달을 중단해야 할 때 쓰이는 함수
     e.stopPropagation();
 
-    // const userId = roomId;
-    // const userName = writeId;
     // comment.id로 조회하여 데이터 삭제
     await API.delete(`comment/${comment._id}`);
 
@@ -28,7 +26,11 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
         <a href={`../../../mypage/${writerId}`}>
-          <img className="w-16 rounded-full shadow" src={profileUrl} alt="" />
+          <img
+            className="w-16 rounded-full shadow"
+            src={comment.userInfo.profileUrl}
+            alt=""
+          />
         </a>
       </div>
       <div className="flex">
@@ -49,9 +51,11 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
               {comment.content}
             </p>
           </div>
-          <button onClick={handleDelete} className=" mr-3 align-items-center">
-            x
-          </button>
+          {user.id === writerId ? (
+            <button onClick={handleDelete} className=" mr-3 align-items-center">
+              x
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

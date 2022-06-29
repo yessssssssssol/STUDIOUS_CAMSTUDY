@@ -27,6 +27,11 @@ class UserDailySheet {
         return;
     }
 
+    // 시트가 이미 만들어져있는지 확인
+    static checkSheetsFromDate({ today }) {
+        return UserDailySheetModel.find({ date: today });
+    }
+
     // 오전 5시 마다 새로운 데일리 시트를 만들기 위해 전날 목표 공부시간을 가져와야함
     static getSheetsFromDate({ yesterday }) {
         return UserDailySheetModel.find({ date: yesterday });
@@ -43,9 +48,23 @@ class UserDailySheet {
     }
 
     // 데일리 시트 업데이트 하기
-    static updateSheet({ id, date, beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate }) {
+    static updateSheet({
+        id,
+        date,
+        beginStudyTime,
+        finishStudyTime,
+        studyTimeADay,
+        bestStudyTime,
+        achievementRate,
+    }) {
         const condition = { id, date };
-        const update = { beginStudyTime, finishStudyTime, studyTimeADay, bestStudyTime, achievementRate };
+        const update = {
+            beginStudyTime,
+            finishStudyTime,
+            studyTimeADay,
+            bestStudyTime,
+            achievementRate,
+        };
         const option = { returnOriginal: false };
 
         return UserDailySheetModel.findOneAndUpdate(condition, update, option);
@@ -54,7 +73,9 @@ class UserDailySheet {
     static async updateTimeGoal({ id, date, timeGoal, achievementRate }) {
         const condition = { id, date };
         const update = { timeGoal, achievementRate };
-        const updatedGoal = await UserDailySheetModel.findOneAndUpdate(condition, update, { returnOriginal: false });
+        const updatedGoal = await UserDailySheetModel.findOneAndUpdate(condition, update, {
+            returnOriginal: false,
+        });
 
         return updatedGoal;
     }
