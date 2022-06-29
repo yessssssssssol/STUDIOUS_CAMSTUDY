@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
+import { json } from 'express/lib/response';
 // import { commentsService } from '../services/commentsService';
 // import { get } from 'express/lib/request';
 
@@ -402,11 +403,21 @@ userStudyRoomsRouter.delete('/deleteroom/:roomId', login_required, async functio
         const roomId = req.params.roomId;
         const id = req.currentUserId;
 
-        if (!roomId || !id) {
+        if (!roomId) {
             return res.status(400).json({ message: 'roomId를 제대로 입력 해주세요.' });
         }
 
-        await userStudyRoomsService.delRoom({ id, roomId });
+        const checkRoom = await userStudyRoomsService.getRoom({ roomId });
+        if (!checkRoom) return res.status(400).json({ message: '해당하는 방이 없습니다.' });
+
+        if (checkRoom.id !== id)
+            return res.status(400).json({ message: '방장만 방을 삭제할 수 있습니다.' });
+
+        if (checkRoom.group === false)
+            return res.status(400).json({ message: '개인룸은 지울 수 없습니다.' });
+
+        const res1 = await userStudyRoomsService.delRoom({ id, roomId });
+        console.log(res1);
         return res.status(200).json({ result: 'success' });
     } catch (error) {
         next(error);
