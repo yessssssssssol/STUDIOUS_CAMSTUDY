@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { editroomAtom } from '../../../core/atoms/createroomState';
+import {
+  editroomAtom,
+  edithashtagAtom,
+} from '../../../core/atoms/createroomState';
 import * as API from '../../../pages/api/api';
 const CreateBoard = () => {
   const [room, setRoom] = useRecoilState(editroomAtom);
   const { roomTitle, roomDesc } = room;
-  const [hashTag, setHashTag] = useState('');
+  const [hashTag, setHashTag] = useRecoilState(edithashtagAtom);
 
   const onTitleChange = (e) => {
     setRoom((prev) => {
@@ -106,8 +109,8 @@ const CreateBoard = () => {
             id="name"
             className="bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             placeholder="ex)#프론트 #백앤드"
-            value={room.hashTags}
-            onChange={onhashTagChange}
+            value={hashTag}
+            onChange={(e) => setHashTag(e.target.value)}
           />
         </div>
       </div>
