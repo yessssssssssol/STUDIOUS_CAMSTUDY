@@ -2,8 +2,11 @@ import * as API from '../../../pages/api/api';
 import EditBoard from '../../../components/board/edit/EditBoard';
 import EditStudyContent from '../../../components/board/edit/EditStudyContent';
 import { useState, useRef, useEffect } from 'react';
-import { useRecoilState, useResetRecoilState } from 'recoil';
-import { editroomAtom } from '../../../core/atoms/createroomState';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import {
+  editroomAtom,
+  edithashtagAtom,
+} from '../../../core/atoms/createroomState';
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../../components/common/UseData';
 import Alert from '../../../components/common/Alert';
@@ -16,6 +19,7 @@ export default function Create() {
   const [file, setFile] = useState(null);
   const [tempUrl, setTempURL] = useState(null);
   const [error, setError] = useState(false);
+  const [hashtag, setHashTag] = useRecoilState(edithashtagAtom);
 
   const fileInput = useRef(null);
 
@@ -43,6 +47,9 @@ export default function Create() {
       console.log(res);
       setRoom(res.data);
       setTempURL(res.data.roomImg);
+      var tag = res.data.hashTags;
+      console.log();
+      setHashTag(tag.join(' '));
     };
 
     if (router.isReady) {
@@ -54,6 +61,8 @@ export default function Create() {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
+    const tag = hashtag.split(' ');
+    console.log(tag);
     if (file) {
       try {
         const res = await API.put('studyroom', {
@@ -64,7 +73,7 @@ export default function Create() {
           focusTimeEnd: room.focusTimeEnd,
           roomTitle: room.roomTitle,
           roomDesc: room.roomDesc,
-          hashTags: room.hashTags,
+          hashTags: tag,
         });
         console.log(res.data);
         console.log('방의 정보가 변경되었습니다.');
