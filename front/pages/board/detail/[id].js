@@ -24,6 +24,7 @@ export default function Detail() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(isApplicants, 'applicants');
     async function getBoardDetail() {
       try {
         // 방 데이터 가져오기
@@ -102,9 +103,7 @@ export default function Detail() {
     }
   };
 
-  useEffect(() => {
-    applicantsCheck();
-  }, [applicants]);
+  useEffect(() => {}, [applicants]);
 
   return (
     <>
