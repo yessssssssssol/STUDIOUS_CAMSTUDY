@@ -372,8 +372,6 @@ userStudyRoomsRouter.get('/memberonly/studyrooms', login_required, async functio
         const membersOnly = true;
         const getInfo = await userStudyRoomsService.getOpenRooms({ group, membersOnly });
 
-        console.log(getInfo);
-
         //map 비동기 처리하려면 Promise.all로 감싸줘야 한다.
         const imgList = await Promise.all(
             getInfo.map(async (room) => {
