@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AIFunc = () => {
+const AIFunc = (props) => {
   let person = false;
   let falseList = [];
   let trueList = [];
@@ -18,6 +18,7 @@ const AIFunc = () => {
       setUserIsHear(true);
       console.log('사람있음', userIsHear);
       trueList = [];
+      props.cb(userIsHear);
     }
   };
 
@@ -27,6 +28,7 @@ const AIFunc = () => {
       setUserIsHear(false);
       console.log('사람없음', userIsHear);
       trueList = [];
+      props.cb(userIsHear);
     }
   };
 

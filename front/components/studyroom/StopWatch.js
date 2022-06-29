@@ -128,7 +128,7 @@ const StopWatch = ({ roomId, membersOnly }) => {
       <div>
         <div className="mx-10 my-10 flex justify-around">
           <div>
-            <h3 className="font-bold text-2xl">스터디 이름</h3>
+            <p className="font-bold text-2xl">스터디 이름</p>
           </div>
           <div>
             <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
