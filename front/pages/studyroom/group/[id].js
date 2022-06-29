@@ -9,6 +9,7 @@ import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 
 import { userAtom } from '../../../core/atoms/userState';
+import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
@@ -341,7 +342,7 @@ export default function Group() {
   return (
     <div>
       {isLoading === true ? (
-        <div>
+        <div className="w-full flex">
           <p>{room?.roomName}</p>
           <div className="w-full items-center lg:flex">
             <div className="w-full lg:w-1/2">
@@ -368,20 +369,43 @@ export default function Group() {
               <div id="others"></div>
             </div>
           </div>
-          <div>채팅</div>
-          <form>
-            <input
-              id="inputbox"
-              placeholder="message"
-              required
-              type="text"
-            ></input>
-            <button onClick={sendChatHandler}>Send</button>
-          </form>
-
-          {chat.map((i) => {
-            return <div>{i}</div>;
-          })}
+          <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
+            <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
+            <form>
+              <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
+                <input
+                  id="inputbox"
+                  placeholder="message"
+                  required
+                  type="text"
+                  className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                ></input>
+                <button onClick={sendChatHandler}>
+                  <svg
+                    className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+            <div className="relative w-full p-6 overflow-y-auto h-[40rem]">
+              <ul className="space-y-2">
+                {chat.map((chat) => {
+                  return (
+                    <li className="flex justify-start">
+                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
+                        <span className="block">{chat}</span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
         </div>
       ) : (
         <Loading />
