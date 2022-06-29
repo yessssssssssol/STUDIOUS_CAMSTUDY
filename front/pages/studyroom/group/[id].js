@@ -60,6 +60,7 @@ const userRes = {
 //     userId :
 //     state :
 //     userName :
+//     socketId
 //   }
 // }
 
@@ -119,7 +120,7 @@ export default function Group() {
       socket.id,
       user?.id,
       user?.name,
-      () => {
+      (roomData) => {
         setIsLoading(true);
       }
     );
@@ -156,29 +157,42 @@ export default function Group() {
     socket.emit('ice', data.candidate, othersId, socket.id); // send ice candidate
   }
 
+  function FindUser(socketId) {
+    Object.keys(userDic).forEach((v) => {
+      if (userDic[v].socketId == socketId) {
+        return userDic[v];
+      }
+    })
+    return null;
+  }
+
   function handleAddStream(data, othersId) {
     console.log('got an stream from my pear');
     console.log("Peer's Stream", data.stream);
     console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    const others = document.getElementById('others');
-    const video = document.createElement('video');
-    const name = document.createElement('h3');
+    
+    // const others = document.getElementById('others');
+    // const video = document.createElement('video');
+    // const name = document.createElement('h3');
 
-    others.appendChild(video);
-    others.appendChild(name);
+    // others.appendChild(video);
+    // others.appendChild(name);
 
-    video.id = othersId;
-    video.key = othersId;
-    video.autoplay = true;
-    video.playsInline = true;
-    video.width = 400;
-    video.height = 400;
+    // video.id = othersId;
+    // video.key = othersId;
+    // video.autoplay = true;
+    // video.playsInline = true;
+    // video.width = 400;
+    // video.height = 400;
+    // video.srcObject = data.stream;
+
+    // // 이름 붙이기
+    // name.id = othersId;
+    // name.key = othersId;
+
+    const video = document.getElementById(othersId);
     video.srcObject = data.stream;
-
-    name.innerText = othersId;
-    name.id = othersId;
-    name.key = othersId;
   }
 
   function MuteBtnClick() {
@@ -220,13 +234,37 @@ export default function Group() {
   function MessageParse(res) {
     if (res.type === 'message') {
       addMessage(res.data);
+
     } else if (res.type === 'user') {
       // 유저 데이터 저장 혹인 갱신
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
+
         userDic[res.data?.userId] = {};
         addMessage(`${res.data?.userName}님 입장하셨습니다!`);
+
+        const others = document.getElementById('others');
+        const video = document.createElement('video');
+        const name = document.createElement('h3');
+
+        others.appendChild(video);
+        others.appendChild(name);
+        
+        video.id = res.data?.socketId;
+        video.key = res.data?.socketId;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.width = 400;
+        video.height = 400;
+
+        // 이름 붙이기
+        name.innerText = res.data?.userName;
+        name.id = res.data?.socketId;
+        name.key = res.data?.socketId;
+
       }
+
       userDic[res.data?.userId] = res.data;
+
     } else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
@@ -293,6 +331,7 @@ export default function Group() {
           req.data['userId'] = user?.id;
           req.data['state'] = false;
           req.data['userName'] = user?.name;
+          req.data['socketId'] = userId;
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -321,7 +360,8 @@ export default function Group() {
 
             req.data['userId'] = user?.id;
             req.data['state'] = false;
-            req.data['userName'] = user?.name;
+            req.data['socketId'] = userId;
+            req.data['userName'] = user?.name;            
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -460,7 +500,8 @@ export default function Group() {
             </div>
             <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
               <p>일반 카메라</p>
-              <div id="others"></div>
+              <div id="others">
+              </div>
             </div>
           </div>
           <div>채팅</div>
