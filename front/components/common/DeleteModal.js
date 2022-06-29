@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import Button from './Button';
-
+import * as API from '../../pages/api/api';
 const DeleteModal = (props) => {
-  const { setShow, title, children } = props;
+  const { setShow, title, myroomInfo } = props;
   const ref = useRef(null);
+
   useEffect(() => {
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
@@ -21,6 +22,16 @@ const DeleteModal = (props) => {
   function onClick() {
     setShow(false);
   }
+  async function deleteClick() {
+    try {
+      const res = API.delete('deleteroom', myroomInfo.roomId);
+      alert('게시글이 삭제 되었습니다.');
+      setShow(false);
+      location.reload();
+    } catch (error) {
+      alert('게시글 삭제에 실패했습니다.');
+    }
+  }
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -36,7 +47,7 @@ const DeleteModal = (props) => {
             </div>
             {/*body*/}
             <div className="relative p-6 flex justify-evenly">
-              <Button text={'삭제'} />
+              <Button text={'삭제'} onClick={deleteClick} />
               <Button color={'bg-red-400'} onClick={onClick} text={'취소'} />
             </div>
           </div>

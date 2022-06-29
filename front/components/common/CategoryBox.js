@@ -37,7 +37,11 @@ export default function CategoryBox({ myroomInfo, color }) {
             <BsTrashFill />
           </button>
           {open && (
-            <DeleteModal setShow={setOpen} title={'게시글을 지우시겠습니까?'} />
+            <DeleteModal
+              myroomInfo={myroomInfo}
+              setShow={setOpen}
+              title={'게시글을 지우시겠습니까?'}
+            />
           )}
         </section>
       ) : null}
