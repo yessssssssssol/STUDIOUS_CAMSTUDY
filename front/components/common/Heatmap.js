@@ -30,5 +30,11 @@ export default function Heatmap({ gittimes }) {
 
   var data = result;
 
-  return <CalendarHeatmap data={data} overview={'year'}></CalendarHeatmap>;
+  return (
+    <CalendarHeatmap
+      data={data}
+      overview={'year'}
+      color={'#fbbf24'}
+    ></CalendarHeatmap>
+  );
 }
