@@ -93,7 +93,7 @@ export default function Detail() {
       });
       console.log(checkList);
 
-      if (checkList.length === 0) {
+      if (!checkList.includes(currUser.id)) {
         setIsApplicants(false);
         console.log('hi');
       } else {
@@ -182,7 +182,7 @@ export default function Detail() {
                       isOwner={isOwner}
                     />
                   )}
-                  {applicants && (
+                  {members && (
                     <MemberList
                       members={members}
                       isOwner={isOwner}
