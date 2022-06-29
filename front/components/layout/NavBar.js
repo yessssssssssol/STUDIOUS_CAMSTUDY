@@ -69,9 +69,9 @@ export default function NavBar() {
         return (
           <Link href={item[1]}>
             <a
-              className={`hidden md:block font-bold rounded-lg  text-orange-300 px-2  `}
+              className={`hidden md:block font-semibold rounded-lg  text-amber-400 px-2  `}
             >
-              {item[0]}👑
+              {item[0]}
             </a>
           </Link>
         );
@@ -79,7 +79,7 @@ export default function NavBar() {
         return (
           <Link href={item[1]}>
             <a
-              className={`hidden md:block px-2 rounded-lg hover:bg-sky-100 contrast-100`}
+              className={`hidden md:block px-2 rounded-lg hover:text-amber-400  contrast-100`}
             >
               {item[0]}
             </a>
