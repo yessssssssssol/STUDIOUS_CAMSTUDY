@@ -10,7 +10,7 @@ export default function BoardCard({ boardData, profileURL }) {
             <img
               src={boardData.roomImg}
               className="object-cover w-full h-64 rounded"
-              alt="프로필사진"
+              alt="스터디 모집 이미지"
             />
           </a>
           <div className="py-5">
