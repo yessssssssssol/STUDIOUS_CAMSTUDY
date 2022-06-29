@@ -74,7 +74,7 @@ const RegisterModal = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {!isEmailValid && (
+                {!isEmailValid && email.length > 1 && (
                   <p className="text-red-500 text-xs italic px-2.5">
                     이메일이 유효하지 않습니다.
                   </p>
@@ -94,7 +94,7 @@ const RegisterModal = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {!isPasswordValid && (
+                {!isPasswordValid && password.length > 1 && (
                   <p className="text-red-500 text-xs px-2.5 italic">
                     비밀번호가 유효하지 않습니다.
                   </p>
@@ -114,7 +114,7 @@ const RegisterModal = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                {!isNameValid && (
+                {!isNameValid && name.length > 1 && (
                   <p className="text-red-500 text-xs px-2.5 italic">
                     이름이 유효하지 않습니다.
                   </p>

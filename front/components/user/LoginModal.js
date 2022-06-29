@@ -6,6 +6,7 @@ import { tokenAtom } from '../../core/atoms/userState';
 import {
   loginModalState,
   dropboxModalState,
+  registerModalState,
 } from '../../core/atoms/modalState';
 
 import Modal from '../common/Modal';
@@ -19,6 +20,7 @@ const LoginModal = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useRecoilState(loginModalState);
+  const [showModal2, setShowModal2] = useRecoilState(registerModalState);
   const [dropModal, setDropModal] = useRecoilState(dropboxModalState);
   const token = useRecoilValue(tokenAtom);
   const userActions = useUserActions();
@@ -40,7 +42,10 @@ const LoginModal = () => {
     setShowModal(false);
     setDropModal(false);
   };
-
+  function handleOnclick() {
+    setShowModal(false);
+    setShowModal2(true);
+  }
   return (
     <>
       <button
@@ -91,9 +96,11 @@ const LoginModal = () => {
             </button>
             <div className="text-sm font-medium text-gray-500">
               Not registered?
-              <a href="#" className="text-blue-700 hover:underline">
-                Create account
-              </a>
+              <button onClick={handleOnclick}>
+                <a href="#" className="text-blue-700 hover:underline">
+                  계정만들기
+                </a>
+              </button>
             </div>
           </form>
         </Modal>

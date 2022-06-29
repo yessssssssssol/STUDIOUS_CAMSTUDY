@@ -55,13 +55,14 @@ export default function mypage() {
         ]);
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
+        setPieData([0, 0, 0]);
       }
     };
     const getGitTimeData = async () => {
       try {
         const res = await API.get('dailysheets', useratom.id);
         const datas = res.data;
-        console.log(datas);
+        console.log(datas, 'ddd');
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
         datas.length == 0
           ? console.log('Git데이터', gittime)
@@ -69,7 +70,7 @@ export default function mypage() {
               gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
             );
       } catch (error) {
-        console.log(err);
+        console.log(error);
       }
     };
     const getMyRoom = async () => {
@@ -81,7 +82,7 @@ export default function mypage() {
     getGitTimeData();
     setGitTime(gittime);
     getMyRoom();
-  }, [user]);
+  }, []);
   async function clickHandler(e) {
     var res = '';
     {
