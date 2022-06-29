@@ -36,12 +36,6 @@ const CreateBoard = () => {
     });
   };
 
-  useEffect(() => {
-    API.get('/studyroom', roomId)
-      .then((res) => setInfo(res.data))
-      .catch((err) => console.log(err));
-  }, []);
-
   return (
     <div className="container mx-auto bg-white rounded">
       <div className="xl:w-full border-b border-gray-300  py-3 bg-white ">
