@@ -3,12 +3,13 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 
 import { userAtom } from '../../../core/atoms/userState';
+import { getElementsByTagName } from 'domutils';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
@@ -68,10 +69,22 @@ const stateRes = {
   type: 'state',
   data: {},
 };
-
 // ex)
 // const stateRes = {
 //   type: "state",
+//   data : {
+//     userId :
+//     result :
+//   }
+// }
+
+const cameraRes = {
+  type: 'camera',
+  data: {},
+};
+// ex)
+// const cameraRes = {
+//   type: "camera",
 //   data : {
 //     userId :
 //     result :
@@ -120,7 +133,7 @@ export default function Group() {
       socket.id,
       user?.id,
       user?.name,
-      (roomData) => {
+      () => {
         setIsLoading(true);
       }
     );
@@ -158,12 +171,16 @@ export default function Group() {
   }
 
   function FindUser(socketId) {
+    let data = null;
+    
     Object.keys(userDic).forEach((v) => {
-      if (userDic[v].socketId == socketId) {
-        return userDic[v];
+      if (userDic[v].socketId === socketId) {
+        data = userDic[v];
+        return;
       }
     })
-    return null;
+    console.log(data);
+    return data;
   }
 
   function handleAddStream(data, othersId) {
@@ -171,28 +188,33 @@ export default function Group() {
     console.log("Peer's Stream", data.stream);
     console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    
-    // const others = document.getElementById('others');
-    // const video = document.createElement('video');
-    // const name = document.createElement('h3');
+    console.log("othersId : " + othersId);
 
-    // others.appendChild(video);
-    // others.appendChild(name);
+    document.get
 
-    // video.id = othersId;
-    // video.key = othersId;
-    // video.autoplay = true;
-    // video.playsInline = true;
-    // video.width = 400;
-    // video.height = 400;
-    // video.srcObject = data.stream;
+    const cameras = document.getElementsByClassName("camera");
+    const names = document.getElementsByTagName("h3");
 
-    // // 이름 붙이기
-    // name.id = othersId;
-    // name.key = othersId;
+    console.log(cameras);
+    console.log(names);
 
-    const video = document.getElementById(othersId);
-    video.srcObject = data.stream;
+    for(let camera of cameras) {
+
+      let key;
+      console.log(camera);
+      if (camera.id === "none") {
+        camera.id = othersId;
+        camera.srcObject = data.stream;
+        key = camera.key;
+      }
+
+      for (let name of names) {
+        if (name.key === key) {
+          name.id = othersId;
+          return;
+        }
+      }
+    }
   }
 
   function MuteBtnClick() {
@@ -223,55 +245,70 @@ export default function Group() {
       if (isCameraOn == true) {
         cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = cameraRes;
+          req.data.userId = user.id;
+          req.data.result = false;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
+
       } else {
         cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = cameraRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
+
       }
     }
     console.log(userDic);
   }
 
   function MessageParse(res) {
+
     if (res.type === 'message') {
       addMessage(res.data);
-
-    } else if (res.type === 'user') {
+    } 
+    else if (res.type === 'user') {
       // 유저 데이터 저장 혹인 갱신
-      if (userDic.hasOwnProperty(res.data?.userId) == false) {
-
-        userDic[res.data?.userId] = {};
-        addMessage(`${res.data?.userName}님 입장하셨습니다!`);
-
-        const others = document.getElementById('others');
-        const video = document.createElement('video');
-        const name = document.createElement('h3');
-
-        others.appendChild(video);
-        others.appendChild(name);
-        
-        video.id = res.data?.socketId;
-        video.key = res.data?.socketId;
-        video.autoplay = true;
-        video.playsInline = true;
-        video.width = 400;
-        video.height = 400;
-
-        // 이름 붙이기
-        name.innerText = res.data?.userName;
-        name.id = res.data?.socketId;
-        name.key = res.data?.socketId;
-
-      }
 
       userDic[res.data?.userId] = res.data;
+      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
 
-    } else if (res.type == 'state') {
+      // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
+      console.log(res.data);
+      console.log(res.data?.socketId);
+      
+      const h3s = document.getElementsByTagName("h3");
+
+      for (let h3 of h3s) {
+        if (h3.id === res.data?.socketId) {
+          h3.innerText = res.data?.userName;
+          return;
+        }
+      }
+
+    } 
+    else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
       userDic[res.data?.userId].state = res.data?.result;
     }
+    else if(res.type == 'camera') {
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+      userDic[res.data?.userId].cameraOnState = res.data?.result;
+      console.log(userDic);
+    }
+
   }
 
   async function makeConnection(userId, offer = null) {
@@ -325,13 +362,17 @@ export default function Group() {
           // req.data = `${user?.name}님 입장하셨습니다!`;
           // myDataChannel.send(req);
 
+          console.log(myPeerConnection);
+
           // 유저 데이터도 보내기?
           let req = userRes;
 
           req.data['userId'] = user?.id;
+          req.data['socketId'] = socket.id;
           req.data['state'] = false;
           req.data['userName'] = user?.name;
-          req.data['socketId'] = userId;
+          req.data['streamId'] = myStream?.id;
+          req.data['cameraOnState'] = true;
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -357,11 +398,14 @@ export default function Group() {
 
             // 유더 데이터도 보내기
             let req = userRes;
+            console.log(myPeerConnection);
 
             req.data['userId'] = user?.id;
+            req.data['socketId'] = socket.id;
             req.data['state'] = false;
-            req.data['socketId'] = userId;
-            req.data['userName'] = user?.name;            
+            req.data['userName'] = user?.name;
+            req.data['streamId'] = myStream?.id;
+            req.data['cameraOnState'] = true;        
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -401,14 +445,18 @@ export default function Group() {
     // 나갔다는 메시지
     addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
+
+
     const video = document.getElementById(leaveId);
     if (video != null) {
-      video.remove();
+      video.id = "none";
+      video.srcObject = null;
     }
 
     const name = document.getElementById(leaveId);
     if (name != null) {
-      name.remove();
+      name.id = "none";
+      name.innerText = "빈자리";
     }
 
     // peerConnections 제거
@@ -418,6 +466,14 @@ export default function Group() {
         console.log(peerConnections);
       }
     });
+
+    FindUser(leaveId)
+
+    Object.keys(userDic).forEach((v) => {
+      if(v.socketId === leaveId) {
+        delete userDic[v];
+      }
+    })
   });
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
@@ -444,6 +500,13 @@ export default function Group() {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
     console.log(peerConnections);
+
+    const user = FindUser(othersId);
+    const name = document.getElementById(user?.streamId);
+    if (name != null) {
+      name.innerText = user?.data?.userName;
+    }
+    
   });
 
   const sendChatHandler = (e) => {
@@ -458,6 +521,20 @@ export default function Group() {
     });
     input.value = '';
   };
+
+  function AlertNoHear(result) {
+    let req = stateRes;
+    req.data.userId = user?.id;
+    req.data.result = result;
+
+    if (Object.keys(dataChannels).length > 0) {
+      Object.keys(dataChannels).forEach((userId) => {
+        dataChannels[userId].send(JSON.stringify(req));
+      });
+    }
+
+    console.log(result);
+  }
 
   useEffect(() => {
     async function getRoomData() {
@@ -484,7 +561,7 @@ export default function Group() {
                 <div>
                   <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
                   <p>메인 카메라(인공지능 적용된 것)</p>
-                  <AIFunc />
+                  <AIFunc cb = {(result) => {AlertNoHear(result)}}/>
                   <AlertModal />
                   <button id="muteBtn" onClick={MuteBtnClick}>
                     Unmute
@@ -501,6 +578,16 @@ export default function Group() {
             <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
               <p>일반 카메라</p>
               <div id="others">
+
+                <video className='camera' id="none" key={1} width={400} height={300} playsInline autoPlay muted></video>
+                <h3 id="none" key={1} >빈자리</h3>
+
+                <video className='camera' id="none" key={2} width={400} height={300} playsInline autoPlay muted></video>
+                <h3 id="none" key={2} >빈자리</h3>
+
+                <video className='camera' id="none" key={3} width={400} height={300} playsInline autoPlay muted></video>
+                <h3 id="none" key={3} >빈자리</h3>
+
               </div>
             </div>
           </div>

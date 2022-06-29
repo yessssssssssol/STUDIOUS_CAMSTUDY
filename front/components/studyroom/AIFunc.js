@@ -18,6 +18,7 @@ const AIFunc = ({ width, height }) => {
       setUserIsHear(true);
       console.log('사람있음', userIsHear);
       trueList = [];
+      props.cb(userIsHear);
     }
   };
 
@@ -27,6 +28,7 @@ const AIFunc = ({ width, height }) => {
       setUserIsHear(false);
       console.log('사람없음', userIsHear);
       trueList = [];
+      props.cb(userIsHear);
     }
   };
 
