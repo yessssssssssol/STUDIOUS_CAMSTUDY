@@ -24,6 +24,7 @@ let myDataChannel = null;
 let peerConnections = {};
 let dataChannels = {};
 let chatAll = [];
+let userDic = {};
 
 function rtcInit() {
   myStream = null;
@@ -32,7 +33,49 @@ function rtcInit() {
   peerConnections = {};
   dataChannels = {};
   chatAll = [];
+  userDic = {};
 }
+
+// 채팅용
+const chatRes = {
+  type: 'message',
+  data: '',
+};
+// ex)
+// const chatRes = {
+//   type: "message",
+//   data : "안녕하세여"
+// }
+
+// 유저 데이터 갱신용
+const userRes = {
+  type: 'user',
+  data: {},
+};
+
+// ex)
+// const userRes = {
+//   type: "state",
+//   data : {
+//     userId :
+//     state :
+//     userName :
+//   }
+// }
+
+const stateRes = {
+  type: 'state',
+  data: {},
+};
+
+// ex)
+// const stateRes = {
+//   type: "state",
+//   data : {
+//     userId :
+//     result :
+//   }
+// }
 
 export default function Group() {
   const router = useRouter();
@@ -153,6 +196,7 @@ export default function Group() {
         setMute(true);
       }
     }
+    console.log(userDic);
   }
 
   function CameraOnOffClick() {
@@ -169,6 +213,26 @@ export default function Group() {
         cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
       }
+    }
+    console.log(userDic);
+  }
+
+  function MessageParse(res) {
+    if (res.type === 'message') {
+      addMessage(res.data);
+    } else if (res.type === 'user') {
+      // 유저 데이터 저장 혹인 갱신
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        userDic[res.data?.userId] = {};
+        addMessage(`${res.data?.userName}님 입장하셨습니다!`);
+      }
+      userDic[res.data?.userId] = res.data;
+    } else if (res.type == 'state') {
+      // 집중 여부 갱신
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+      userDic[res.data?.userId].state = res.data?.result;
     }
   }
 
@@ -217,14 +281,27 @@ export default function Group() {
 
       if (!_offer) {
         myDataChannel = myPeerConnection.createDataChannel('chat');
+
         myDataChannel.addEventListener('open', (event) => {
-          myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
+          // let req = chatRes;
+          // req.data = `${user?.name}님 입장하셨습니다!`;
+          // myDataChannel.send(req);
+
+          // 유저 데이터도 보내기?
+          let req = userRes;
+
+          req.data['userId'] = user?.id;
+          req.data['state'] = false;
+          req.data['userName'] = user?.name;
+
+          myDataChannel.send(JSON.stringify(req));
         });
         myDataChannel.addEventListener('message', (event) => {
-          addMessage(event.data);
+          const res = JSON.parse(event.data);
+          MessageParse(res);
         });
-        console.log('made data channel');
-        console.log(myDataChannel);
+        // console.log("made data channel");
+        // console.log(myDataChannel);
 
         _offer = await myPeerConnection.createOffer();
         myPeerConnection.setLocalDescription(_offer);
@@ -235,10 +312,22 @@ export default function Group() {
         myPeerConnection.addEventListener('datachannel', (event) => {
           myDataChannel = event.channel;
           myDataChannel.addEventListener('open', (event) => {
-            myDataChannel.send(`${user?.name}님 입장하셨습니다!`);
+            // let req = chatRes;
+            // req.data = `${user?.name}님 입장하셨습니다!`;
+            // myDataChannel.send(req);
+
+            // 유더 데이터도 보내기
+            let req = userRes;
+
+            req.data['userId'] = user?.id;
+            req.data['state'] = false;
+            req.data['userName'] = user?.name;
+
+            myDataChannel.send(JSON.stringify(req));
           });
           myDataChannel.addEventListener('message', (event) => {
-            addMessage(event.data);
+            const res = JSON.parse(event.data);
+            MessageParse(res);
           });
 
           dataChannels[userId] = myDataChannel;
@@ -273,17 +362,20 @@ export default function Group() {
     addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
     const video = document.getElementById(leaveId);
-    const name = document.getElementById(leaveId);
-    // 비디오 태그 삭제
-    if (video != null && name != null) {
+    if (video != null) {
       video.remove();
+    }
+
+    const name = document.getElementById(leaveId);
+    if (name != null) {
       name.remove();
     }
 
     // peerConnections 제거
     Object.keys(peerConnections).forEach((id, i) => {
-      if (id == leaveId) {
+      if (id === leaveId) {
         delete peerConnections[id];
+        console.log(peerConnections);
       }
     });
   });
@@ -311,6 +403,7 @@ export default function Group() {
   socket.on('ice', (ice, othersId) => {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
+    console.log(peerConnections);
   });
 
   const sendChatHandler = (e) => {
@@ -319,7 +412,9 @@ export default function Group() {
     addMessage(`${user.name} : ${input.value}`);
     Object.keys(dataChannels).forEach((userId) => {
       console.log(dataChannels[userId]);
-      dataChannels[userId].send(`${user.name} : ${input.value}`);
+      let req = chatRes;
+      req.data = `${user.name} : ${input.value}`;
+      dataChannels[userId].send(JSON.stringify(req));
     });
     input.value = '';
   };
@@ -331,7 +426,7 @@ export default function Group() {
       const data = res.data;
       setRoom(data);
 
-      if (myStream == null) {
+      if (myPeerConnection === null) {
         await initCall(data);
       }
     }
