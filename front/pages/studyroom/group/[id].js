@@ -371,6 +371,19 @@ export default function Group() {
           </div>
           <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
             <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
+            <div className="relative w-full p-6 overflow-y-auto h-2/3">
+              <ul className="space-y-2">
+                {chat.map((chat) => {
+                  return (
+                    <li className="flex justify-start">
+                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
+                        <span className="block">{chat}</span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
             <form>
               <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
                 <input
@@ -392,19 +405,6 @@ export default function Group() {
                 </button>
               </div>
             </form>
-            <div className="relative w-full p-6 overflow-y-auto h-[40rem]">
-              <ul className="space-y-2">
-                {chat.map((chat) => {
-                  return (
-                    <li className="flex justify-start">
-                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-                        <span className="block">{chat}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
           </div>
         </div>
       ) : (
