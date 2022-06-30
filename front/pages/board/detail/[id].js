@@ -1,3 +1,9 @@
+import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
+import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
+import Link from 'next/link';
+
+import DeleteModal from '../../../components/common/DeleteModal';
+
 import { useRouter } from 'next/router';
 import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
@@ -23,6 +29,7 @@ export default function Detail() {
   const [isApplicants, setIsApplicants] = useState(false);
   const [members, setMembers] = useState([]);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     console.log(isApplicants, 'applicants');
@@ -117,6 +124,10 @@ export default function Detail() {
     }
   };
 
+  const modalShowHandler = () => {
+    setOpen(true);
+  };
+
   useEffect(() => {
     applicantsCheck();
   }, [applicants]);
@@ -134,17 +145,38 @@ export default function Detail() {
               <div className="mb-4 md:mb-0 w-full mx-auto relative flex gap-x-20 gap-y-4">
                 <div className="flex flex-col gap-y-12 flex-1">
                   <div className="flex flex-col gap-y-2">
-                    <div className="pt-4 pb-2">
-                      {detailData.hashTags.map((tag, index) => {
-                        return (
-                          <span
-                            key={index}
-                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                          >
-                            {tag}
-                          </span>
-                        );
-                      })}
+                    <div className="pt-4 pb-2 flex">
+                      <div className="flex-1">
+                        {detailData.hashTags.map((tag, index) => {
+                          return (
+                            <span
+                              key={index}
+                              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                            >
+                              {tag}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      {isOwner && (
+                        <section className="flex items-center gap-x-2 mr-[30px] font-bold">
+                          <Link href={`/board/edit/${detailData.roomId}`}>
+                            <a className="cursor-pointer">
+                              <RiEdit2Fill />
+                            </a>
+                          </Link>
+                          <button onClick={modalShowHandler}>
+                            <BsTrashFill />
+                          </button>
+                          {open && (
+                            <DeleteModal
+                              myroomInfo={detailData}
+                              setShow={setOpen}
+                              title={'해당 스터디를 지우시겠습니까?'}
+                            />
+                          )}
+                        </section>
+                      )}
                     </div>
                     <div>
                       <div className="px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 총 정원: ${detailData.membersNum}`}</div>
@@ -188,7 +220,6 @@ export default function Detail() {
                 </div>
 
                 <div className="w-full lg:w-2/5 mt-12 max-w-screen-sm">
-                  {/* {owner && <ProfileCard owner={owner} />} */}
                   {applicants && (
                     <CertificationList
                       applicants={applicants}
