@@ -6,7 +6,7 @@ export default function Heatmap({ gittimes }) {
 
   gittimes.length == 0
     ? result.push({
-        date: '2021-05-15',
+        date: '2022-06-30',
         total: 0,
         details: [
           {
