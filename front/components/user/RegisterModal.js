@@ -28,8 +28,11 @@ const RegisterModal = () => {
         });
 
         router.push('/');
-        console.log('회원가입 성공!');
+        alert('인증번호가 틀렸습니다. 다시 확인해주세요');
         setShowModal(false);
+        setEmail('');
+        setPassword('');
+        setName('');
       } catch (err) {
         console.log('회원가입에 실패', err);
       }
@@ -68,7 +71,12 @@ const RegisterModal = () => {
       <button
         className="bg-gray-400 text-white active:bg-gray-600 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150"
         type="button"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+          setEmail('');
+          setPassword('');
+          setName('');
+        }}
       >
         {modalTitle}
       </button>
