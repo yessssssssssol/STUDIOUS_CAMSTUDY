@@ -30,7 +30,7 @@ const HomeOpenStudy = () => {
       </div>
       <div className="flex items-center p-10 justify-center w-full">
         <Link href={'/openroom'}>
-          <button className="bg-amber-400 inline-block text-white font-bold rounded-full px-10 py-3">
+          <button className="px-4 py-1 bg-amber-400 text-white rounded font-semibold shadow-lg hover:bg-amber-500 hover:scale-110 hover:shadow-amber-300/50 mx-5">
             View All
           </button>
         </Link>

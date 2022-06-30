@@ -86,24 +86,10 @@ export default function Edit() {
   };
   return (
     <div>
-      <div className="container w-full mx-auto my-5 bg-white rounded">
-        <div className="w-full border-b border-gray-300  py-3 bg-white ">
-          <div className="flex xl:w-full xl:mx-0 items-center">
-            <p className="text-lg text-gray-800  font-bold">스터디방 생성</p>
-            <div className="ml-2 cursor-pointer text-gray-600 ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-              >
-                <path
-                  className="heroicon-ui"
-                  d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
+      <div className="container flex-col justify-center w-full mx-72 my-5 bg-white rounded">
+        <div className="w-full xl:w-full border-b border-amber-400 py-3 bg-white ">
+          <div className="flex w-11/12 mx-24 xl:w-full xl:mx-0 items-center">
+            <p className="text-2xl text-amber-400  font-bold">스터디방 생성</p>
           </div>
         </div>
         <div className="flex gap-x-6 mt-8 w-full">
@@ -141,7 +127,7 @@ export default function Edit() {
           />
           <div className="flex w-64 gap-x-3">
             <button
-              className="w-full text-white bg-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-amber-400 hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={() => {
                 fileInput.current.click();
               }}
@@ -149,7 +135,7 @@ export default function Edit() {
               프로필 업로드
             </button>
             <button
-              className="w-full text-amber-500 bg-white py-2 px-2 my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+              className="w-full text-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-amber-400 bg-white hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={handleResetProfileChange}
             >
               프로필 삭제
@@ -171,13 +157,15 @@ export default function Edit() {
       <div className="container mx-auto w-11/12 xl:w-full mt-10">
         <div className="w-full py-4 sm:px-0 bg-white  flex justify-center">
           <button
-            className="text-white py-2.5 px-5 mr-2 mb-2 bg-amber-400 hover:text-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+            role="button"
+            aria-label="cancel form"
+            className="bg-white focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 border-amber-400 hover:text-white border rounded text-amber-400  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
             onClick={resetHandler}
           >
             취소
           </button>
           <button
-            className="text-amber-500 py-2.5 px-5 mr-2 mb-2 bg-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+            className="focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 bg-amber-400 focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 rounded text-white px-8 py-2 text-sm"
             onClick={submitHandler}
           >
             생성

@@ -17,7 +17,6 @@ import { GoUnmute, GoMute } from 'react-icons/go';
 import * as ReactDOM from 'react-dom/client';
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
-import { getElementsByTagName } from 'domutils';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
@@ -655,15 +654,11 @@ export default function Group() {
                 {isCamera ? (
                   <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
                     <StopWatch
-                      cb={(result) => {
-                        StartStopWatch(result);
-                      }}
                       myTimer={true}
                       roomId={roomId}
-                      membersOnly={room?.membersOnly}
+                      membersOnly={room.membersOnly}
                       ref={stopWatchRef}
-                      userT={0}
-                      setCameraSetting={setCameraSetting}
+                      userT={'0000-00-00 00:00:00'}
                     />
                     <div className="absolute bottom-[5px] left-[8px]">
                       {isMute ? (
@@ -677,6 +672,7 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>
@@ -847,7 +843,6 @@ export default function Group() {
               </div>
             </form>
           </div>
-          <AlertModal />
         </>
       ) : (
         <Loading />

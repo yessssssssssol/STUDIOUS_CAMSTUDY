@@ -34,18 +34,23 @@ const HomeMyLogTime = () => {
           <div className="font-black text-3xl text-gray-700 text-center">{`${timeDatas}`}</div>
         </div>
         {/* 나의 프로필 */}
-        <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/3 drop-shadow-md">
+        <div className="flex items-center justify-center w-full mt-2 lg:mt-0 lg:w-1/3 drop-shadow-md hover:scale-105">
           <div className="lg:max-w-lg">
             <Link href={'/mypage'}>
-              <button className="myBtn flex items-center bg-amber-50 p-8 rounded-lg drop-shadow-md">
+              <button className="myBtn flex items-center bg-white p-4 rounded-lg drop-shadow-md">
                 <img
-                  className="w-8 h-8 rounded-full"
+                  className="w-20 h-20 object-fill rounded-full"
                   src={user?.profileUrl}
                   alt="user photo"
                 />
-                <p className="ml-6 text-left text-gray-600  font-bold">
-                  {user?.name} <br /> {user?.description}
-                </p>
+                <div className="flex-col">
+                  <p className="ml-6 text-left text-amber-400 font-bold">
+                    {user?.name}
+                  </p>
+                  <p className="ml-6 text-left text-gray-600 font-semibold">
+                    {user?.description}
+                  </p>
+                </div>
               </button>
             </Link>
           </div>

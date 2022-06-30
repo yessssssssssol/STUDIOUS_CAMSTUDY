@@ -160,11 +160,11 @@ export default function Detail() {
                         <section className="flex items-center gap-x-2 mr-[30px] font-bold">
                           <Link href={`/board/edit/${detailData.roomId}`}>
                             <a className="cursor-pointer">
-                              <RiEdit2Fill />
+                              <RiEdit2Fill size="24" color="#fbbf24" />
                             </a>
                           </Link>
                           <button onClick={modalShowHandler}>
-                            <BsTrashFill />
+                            <BsTrashFill size="24" color="#fbbf24" />
                           </button>
                           {open && (
                             <DeleteModal
@@ -181,7 +181,7 @@ export default function Detail() {
                       <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${detailData.startStudyDay} ~ ${detailData.endStudyDay}`}</div>
                       <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${detailData.focusTimeStart} ~ ${detailData.focusTimeEnd}`}</div>
                     </div>
-                    <div className="border-l-4 border-gray-500 pl-4 pt-4 italic rounded w-full">
+                    <div className="border-l-4 text-xl shadow-md border-gray-500 pl-4 p-4  rounded w-full border-r-4 ">
                       {detailData.roomDesc}
                     </div>
                   </div>

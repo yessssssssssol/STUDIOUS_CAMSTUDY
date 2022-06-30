@@ -123,11 +123,11 @@ const OpenRoomBoard = () => {
                         <section className="flex items-center gap-x-2 mr-[30px] font-bold">
                           <Link href={`/board/edit/${roomInfo.roomId}`}>
                             <a className="cursor-pointer">
-                              <RiEdit2Fill />
+                              <RiEdit2Fill size="24" color="#fbbf24" />
                             </a>
                           </Link>
                           <button onClick={modalShowHandler}>
-                            <BsTrashFill />
+                            <BsTrashFill size="24" color="#fbbf24" />
                           </button>
                           {open && (
                             <DeleteModal
