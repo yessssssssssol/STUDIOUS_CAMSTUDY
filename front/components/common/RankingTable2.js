@@ -1,25 +1,40 @@
-import { useState, useRef } from 'react';
-
+import { useState, useEffect, useRef } from 'react';
+import useInterval from './UseInterval';
 export default function RankingTable({ rankings, userDatas }) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(true);
-  const box = useRef();
+  const [count, setCount] = useState(0);
+  const chartBox = useRef();
+  const firstguy = userDatas.find(
+    (userData) => userData.id === rankings[0].user_id
+  );
 
-  const height = box.current?.className.split(' ')[7];
-  // const css = bsx.current?.style.console.log(height);
+  let count2 = 0;
+  console.log('count', count);
+  useEffect(() => {
+    let interval = setInterval(() => {
+      if (done) {
+        if (count2 < 10) {
+          setCount((prev) => prev + 1);
+          count2++;
+        } else {
+          setCount((prev) => prev === 0);
+          count2 = 0;
+        }
+      } else if (!done) {
+        count2 = 0;
+        setCount((prev) => prev === 0);
+        clearInterval(interval);
+      }
+      console.log(count);
+      console.log('count2', count2);
+    }, 2500);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [done]);
 
-  // function handleBox() {
-  //   const height = box.current.className.split(' ')[7];
-  //   console.log(box.current);
-  //   console.log(height);
-  //   if (height === 'h-190') {
-  //     setTimeout(() => {
-  //       setDone(true);
-  //     }, 780);
-  //   } else {
-  //     setDone(false);
-  //   }
-  // }
+  // useEffect(() => {}, count);
 
   function handleDone() {
     if (open) {
@@ -40,7 +55,7 @@ export default function RankingTable({ rankings, userDatas }) {
     if (done === false) {
       margin = 'mb-2';
     } else if (done === true) {
-      margin = 'mb-14';
+      margin = 'mb-20';
     }
 
     const rankChart = rankings.map((ranking, index) => {
@@ -89,6 +104,7 @@ export default function RankingTable({ rankings, userDatas }) {
         </div>
       );
     });
+
     return rankChart;
   }
 
@@ -98,14 +114,16 @@ export default function RankingTable({ rankings, userDatas }) {
       className={`w-4/5 justify-center bg-white rounded-2xl shadow-lg overflow-hidden duration-1000 ${
         open ? 'h-190 ' : 'h-40 '
       }`}
-      ref={box}
     >
       {/* index */}
-      <div className="flex flex-row h-14 items-center px-10 py-2">
-        <div className="font-semibold basis-1/12 text-center pl-3">Ranking</div>
-        <div className="font-semibold basis-1/12 text-center"></div>
-        <div className="font-semibold basis-2/12 pl-10">Name</div>
-        <div className="font-semibold basis-5/12 text-center ml-10">
+
+      <div className="flex flex-row h-14 items-center px-10 py-2 bg-white z-50">
+        <div className="font-semibold basis-1/12 text-center pl-3 bg-white">
+          Ranking
+        </div>
+        <div className="font-semibold basis-1/12 text-center bg-white"></div>
+        <div className="font-semibold basis-2/12 pl-10 bg-white">Name</div>
+        <div className="font-semibold basis-5/12 text-center ml-10 bg-white">
           한 줄 소개
         </div>
         <div className="font-semibold basis-3/12 text-center pl-20">
@@ -113,18 +131,50 @@ export default function RankingTable({ rankings, userDatas }) {
         </div>
         <div className="animate-bounce ">
           <button
-            className={`mt-2 duration-700 ${open ? 'rotate-180' : ''} `}
+            className={`mt-2 duration-700 z-50 ${open ? 'rotate-180' : ''} `}
             onClick={() => {
               setOpen((bool) => !bool);
               handleDone();
-              // handleBox();
             }}
           >
             <img className="w-8 h-8" src="/dropDown.png"></img>
           </button>
         </div>
       </div>
-      {rankAr()}
+
+      <div className="overflow-hidden">
+        <div
+          ref={chartBox}
+          className="w-full"
+          style={{
+            transform: `translateY(-${count * 136}px`,
+          }}
+        >
+          {rankAr()}
+          {done && (
+            <div className="flex flex-row h-14 items-center mx-10 my-3 rounded-xl shadow shadow-amber-700/20 bg-amber-100 mb-14">
+              <div className="font-semibold basis-1/12 text-center">1</div>
+              <div className="font-semibold basis-1/12 text-center flex justify-center items-center">
+                <img className="w-10 h-10 mr-5" src="gold.png"></img>
+                <img
+                  className="rounded-full bg-amber-400 w-10 h-10"
+                  src={firstguy?.profileUrl}
+                />
+              </div>
+              <div className="font-semibold basis-2/12 pl-10 truncate">
+                {firstguy?.name}
+              </div>
+              <div className="basis-5/12 text-center ml-10 truncate">
+                {firstguy?.description}
+              </div>
+              <div className="font-semibold basis-3/12 text-center pl-10 truncate">
+                {rankings[0]?.totalTime}
+              </div>
+            </div>
+          )}
+          {/* {done ? AutoSlideHandler() : AutoSlideHandler()} */}
+        </div>
+      </div>
       {/* 내 랭킹 보기 기능도 추후에 추가할 수 있도록 만들었싐미다 -여건-*/}
       {/* <div className="flex flex-row h-14 items-center mx-10 my-10 bg-amber-50 mb-2 rounded-xl shadow shadow-amber-700/20  ">
         <div className="font-semibold basis-1/12 text-center">33</div>

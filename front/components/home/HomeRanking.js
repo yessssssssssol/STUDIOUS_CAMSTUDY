@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import * as API from '../../pages/api/api';
 import RankingTable from '../../components/common/RankingTable';
-import RankingTable2 from '../common/RankingTable2';
+// import RankingTable2 from '../common/RankingTable2';
+
+const NoSSR = dynamic(() => import('../common/RankingTable2'), {
+  ssr: false,
+});
 
 const HomeRanking = () => {
   const [rankings, setRankings] = useState([]);
@@ -56,7 +61,7 @@ const HomeRanking = () => {
           />
         </div> */}
         <div className="flex items-center justify-center w-full mt-8">
-          <RankingTable2 rankings={rankings} userDatas={userDatas} />
+          <NoSSR rankings={rankings} userDatas={userDatas} />
         </div>
       </div>
     </>
