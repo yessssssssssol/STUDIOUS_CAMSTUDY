@@ -1,8 +1,8 @@
-export default function Button({ text, onClick }) {
+export default function Button({ text, onClick, color }) {
   return (
     <button
       onClick={onClick}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-full"
+      className={`bg-amber-400 ${color}  hover:shadow-lg hover:bg-amber-500 text-white font-semibold py-1 px-3 rounded-md`}
     >
       {text}
     </button>

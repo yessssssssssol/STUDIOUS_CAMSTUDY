@@ -14,7 +14,7 @@ export default function Pie({ title, color, index, pieData }) {
           ]}
           reveal={pieData[index]}
           lineWidth={15}
-          background="#f3f3f3"
+          background="#fafafa"
           lengthAngle={360}
           rounded
           animate
