@@ -75,7 +75,7 @@ const EditUser = () => {
         <Button
           text="회원탈퇴"
           onClick={handleUserDelete}
-          color="bg-orange-400"
+          color="bg-amber-500 py-2.5 shadow hover:shadow-lg"
         />
         <div
           id="helper-text-explanation"
@@ -85,12 +85,18 @@ const EditUser = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center space-x-2 my-2">
-        <Button text="수정" onClick={submitHandler} color="" />
-        <Button
-          text="취소"
+        <button
+          onClick={submitHandler}
+          className="text-white py-2.5 px-5 mr-2 mb-2 bg-amber-400 hover:text-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+        >
+          수정
+        </button>
+        <button
           onClick={() => setShowModal(false)}
-          color="bg-orange-50 text-amber-400 border border-amber-400 hover:text-white"
-        />
+          className="text-amber-500 py-2.5 px-5 mr-2 mb-2 bg-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
+        >
+          취소
+        </button>
       </div>
     </div>
   );
