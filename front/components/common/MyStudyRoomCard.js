@@ -1,6 +1,6 @@
 export default function MyStudyRoomCard({ myStudyRoom }) {
   return (
-    <div className="px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
+    <div className="px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8 ">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         {/* 바로 스터디룸으로 연결하기  */}
         {myStudyRoom.group === false ? (
@@ -9,14 +9,14 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             <div className="relative h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
               <div className="">
                 <img
-                  className="w-[250px] h-[300px] rounded-xl transition-shadow "
-                  src="img.jpeg"
+                  className="w-96 h-full rounded-2xl transition-shadow "
+                  src="study.png"
                   alt="Rounded avatar"
                 />
               </div>
-              <div className="absolute top-5 left-5 px-6 py-4">
-                <p className="text-3xl text-black font-bold">
-                  {'개인 스터디룸'}
+              <div className="absolute bottom-2 left-6 px-6 py-4">
+                <p className="text-2xl text-amber-400 font-semibold">
+                  {'STUDY START'}
                 </p>
                 <div className="flex space-x-4"></div>
               </div>
@@ -29,7 +29,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             aria-label="Article"
           >
             {/* <!-- card --> */}
-            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r from-amber-50 to-grag-50 rounded-2xl shadow-xl shadow-slate-300/60">
+            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r rounded-2xl shadow-lg shadow-slate-300/60 hover:shadow-amber-300/50 hover:scale-105">
               {/* <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gray-200 rounded-2xl shadow-xl shadow-slate-300/60"> */}
               {/* <!-- img --> */}
               <img
@@ -39,7 +39,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
               />
               {/* <!-- text information --> */}
               <div className="px-4">
-                <small className="text-amber-400 text-xs font-semibold">
+                <small className="text-amber-400 text-sx font-semibold">
                   {myStudyRoom.members.length + ' / ' + myStudyRoom.membersNum}
                 </small>
                 {/* 제목 클릭하면 스터디룸 게시판(?) 연결  */}
@@ -49,7 +49,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/board/detail/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold  text-slate-600 pb-2 text-center">
+                    <p className="text-2xl font-bold  text-slate-600 pb-2">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
@@ -59,12 +59,12 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/openroom/board/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold text-slate-600 pb-2 text-center">
+                    <p className="text-2xl font-bold text-slate-600 pb-2 ">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
                 )}
-                <p className="text-sm font-medium text-slate-400 text-center pb-2 ">
+                <p className="text-sm font-medium text-slate-400 pb-2 ">
                   {myStudyRoom.focusTimeStart.slice(0, 5) +
                     ' ~ ' +
                     myStudyRoom.focusTimeEnd.slice(0, 5)}
