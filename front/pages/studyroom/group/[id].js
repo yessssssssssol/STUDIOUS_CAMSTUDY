@@ -3,11 +3,18 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { isValidElement, useEffect, useState, useRef } from 'react';
+import React, {
+  isValidElement,
+  useEffect,
+  useState,
+  useRef,
+  useDebugValue,
+} from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
+import * as ReactDOM from 'react-dom/client';
 
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -26,7 +33,7 @@ let myDataChannel = null;
 let peerConnections = {};
 let dataChannels = {};
 let chatAll = [];
-let userDic = {};
+let userList = {};
 
 function rtcInit() {
   myStream = null;
@@ -35,7 +42,7 @@ function rtcInit() {
   peerConnections = {};
   dataChannels = {};
   chatAll = [];
-  userDic = {};
+  userList = {};
 }
 
 // 채팅용
@@ -92,6 +99,16 @@ const cameraRes = {
 //   }
 // }
 
+const timeRes = {
+  type: 'time',
+  data: {},
+};
+
+const muteRes = {
+  type: 'mute',
+  data: {},
+};
+
 export default function Group() {
   const router = useRouter();
   const [room, setRoom] = useState(null);
@@ -101,8 +118,23 @@ export default function Group() {
   const [isCamera, setIsCamera] = useState(false);
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
-  const stopWatchRef = useRef();
+
   const userValue = useRecoilValue(userAtom);
+  const stopWatchRef = useRef(null);
+  const [cameraSetting, setCameraSetting] = useState(false);
+  const [userList, setUserList] = useState({});
+
+  const [key1Mute, setKey1Mute] = useState(false);
+  const [key1Camera, setKey1Camera] = useState(true);
+  const [key1State, setKey1State] = useState(false);
+
+  const [key2Mute, setKey2Mute] = useState(false);
+  const [key2Camera, setKey2Camera] = useState(true);
+  const [key2State, setKey2State] = useState(false);
+
+  const [key3Mute, setKey3Mute] = useState(false);
+  const [key3Camera, setKey3Camera] = useState(true);
+  const [key3State, setKey3State] = useState(false);
 
   let roomId;
 
@@ -129,7 +161,12 @@ export default function Group() {
 
   async function initCall(data) {
     await getMedia();
-    console.log(myStream);
+
+    if (myStream == null) {
+      rtcInit();
+      router.push('/openroom');
+    }
+
     socket.emit(
       'enter_room',
       data?.roomId,
@@ -176,9 +213,9 @@ export default function Group() {
   function FindUser(socketId) {
     let data = null;
 
-    Object.keys(userDic).forEach((v) => {
-      if (userDic[v].socketId === socketId) {
-        data = userDic[v];
+    Object.keys(userList).forEach((v) => {
+      if (userList[v].socketId === socketId) {
+        data = userList[v];
         return;
       }
     });
@@ -197,6 +234,7 @@ export default function Group() {
 
     const cameras = document.getElementsByClassName('camera');
     const names = document.getElementsByTagName('h3');
+    const timers = document.getElementsByClassName('stopWatch');
 
     console.log(cameras);
     console.log(names);
@@ -213,6 +251,13 @@ export default function Group() {
       for (let name of names) {
         if (name.key === key) {
           name.id = othersId;
+          break;
+        }
+      }
+
+      for (let timer of timers) {
+        if (timer.key === key) {
+          timer.id = othersId;
           return;
         }
       }
@@ -229,12 +274,26 @@ export default function Group() {
       if (isMute == true) {
         muteBtn.innerText = 'Unmute';
         setMute(false);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = false;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       } else {
         muteBtn.innerText = 'Mute';
         setMute(true);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       }
     }
-    console.log(userDic);
+    console.log(userList);
   }
 
   function CameraOnOffClick() {
@@ -266,7 +325,7 @@ export default function Group() {
         });
       }
     }
-    console.log(userDic);
+    console.log(userList);
   }
 
   function MessageParse(res) {
@@ -275,7 +334,7 @@ export default function Group() {
     } else if (res.type === 'user') {
       // 유저 데이터 저장 혹인 갱신
 
-      userDic[res.data?.userId] = res.data;
+      // userList[res.data?.userId] = res.data;
       addMessage(`${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
@@ -287,21 +346,145 @@ export default function Group() {
       for (let h3 of h3s) {
         if (h3.id === res.data?.socketId) {
           h3.innerText = res.data?.userName;
-          return;
+          break;
         }
       }
+
+      const timers = document.getElementsByClassName('stopWatch');
+
+      for (let timer of timers) {
+        if (timer.id === res.data?.socketId) {
+          const root = ReactDOM.createRoot(timer);
+          const stopwatch = React.createElement(StopWatch, {
+            myTimer: false,
+            roomId: roomId,
+            membersOnly: room?.membersOnly,
+            userT: res.data?.userTime,
+          });
+          root.render(stopwatch);
+          break;
+        }
+      }
+
+      let prevList = userList;
+      let prev = res.data;
+
+      prevList[res.data?.userId] = prev;
+      setUserList(prevList);
     } else if (res.type == 'state') {
       // 집중 여부 갱신
-      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+      // if (userList.hasOwnProperty(res.data?.userId) == false) {
+      //   return;
+      // }
+
+      if (userList.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
-      userDic[res.data?.userId].state = res.data?.result;
+
+      let prevList = userList;
+      let prev = userList[res.data?.userId];
+
+      prev['state'] = res.data?.result;
+      prevList[res.data?.userId] = prev;
+
+      setUserList(prevList);
+      // userList[res.data?.userId].state = res.data?.result;
+      const cameras = document.getElementsByClassName('camera');
+
+      for (let i in cameras) {
+        if (FindUser(cameras[i].id) === null) {
+          continue;
+        } else {
+          if (i == 0) {
+            setKey1State(userList[res.data?.userId].state);
+          } else if (i == 1) {
+            setKey2State(userList[res.data?.userId].state);
+          } else if (i == 2) {
+            setKey3State(userList[res.data?.userId].state);
+          }
+          break;
+        }
+      }
     } else if (res.type == 'camera') {
-      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+      if (userList.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
-      userDic[res.data?.userId].cameraOnState = res.data?.result;
-      console.log(userDic);
+
+      let prevList = userList;
+      let prev = userList[res.data?.userId];
+
+      prev['cameraOnState'] = res.data?.result;
+      prevList[res.data?.userId] = prev;
+
+      setUserList(prevList);
+      // userList[res.data?.userId].cameraOnState = res.data?.result;
+      //console.log(userList[res.data?.userId]);
+
+      const cameras = document.getElementsByClassName('camera');
+
+      for (let i in cameras) {
+        if (FindUser(cameras[i].id) === null) {
+          continue;
+        } else {
+          if (i == 0) {
+            setKey1Camera(userList[res.data?.userId].cameraOnState);
+          } else if (i == 1) {
+            setKey2Camera(userList[res.data?.userId].cameraOnState);
+          } else if (i == 2) {
+            setKey3Camera(userList[res.data?.userId].cameraOnState);
+          }
+          break;
+        }
+      }
+    } else if (res.type == 'time') {
+      if (userList.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+    } else if (res.type == 'mute') {
+      if (userList.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+      let prevList = userList;
+      let prev = userList[res.data?.userId];
+
+      prev['muteState'] = res.data?.result;
+      prevList[res.data?.userId] = prev;
+
+      setUserList(prevList);
+
+      const cameras = document.getElementsByClassName('camera');
+
+      for (let i in cameras) {
+        if (FindUser(cameras[i].id) === null) {
+          continue;
+        } else {
+          if (i == 0) {
+            setKey1Mute(userList[res.data?.userId].muteState);
+          } else if (i == 1) {
+            setKey2Mute(userList[res.data?.userId].muteState);
+          } else if (i == 2) {
+            setKey3Mute(userList[res.data?.userId].muteState);
+          }
+          break;
+        }
+      }
+
+      // setNewState(userList[res.data?.userId].muteState);
+
+      // if (userList[res.data?.userId].key === 1) {
+      //   setKey1Mute(res.data?.result);
+      // }
+
+      // if (userList[res.data?.userId].key === 2) {
+      //   setKey2Mute(res.data?.result);
+      // }
+
+      // if (userList[res.data?.userId].key === 3) {
+      //   setKey3Mute(res.data?.result);
+      // }
+
+      // userList[res.data?.userId].muteState = res.data?.result;
+      // console.log(userList[res.data?.userId]);
     }
   }
 
@@ -367,7 +550,8 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
-          // req.data['userTime'] = stopWatchRef.current.getTime();
+          req.data['userTime'] = stopWatchRef.current.getTime();
+          req.data['muteState'] = false;
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -401,7 +585,8 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
-            //req.data['userTime'] = stopWatchRef.current.getTime();
+            req.data['userTime'] = stopWatchRef.current.getTime();
+            req.data['muteState'] = false;
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -450,7 +635,7 @@ export default function Group() {
     const name = document.getElementById(leaveId);
     if (name != null) {
       name.id = 'none';
-      name.innerText = '빈자리';
+      name.innerText = '';
     }
 
     // peerConnections 제거
@@ -461,11 +646,9 @@ export default function Group() {
       }
     });
 
-    FindUser(leaveId);
-
-    Object.keys(userDic).forEach((v) => {
+    Object.keys(userList).forEach((v) => {
       if (v.socketId === leaveId) {
-        delete userDic[v];
+        delete userList[v];
       }
     });
   });
@@ -493,12 +676,6 @@ export default function Group() {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
     console.log(peerConnections);
-
-    const user = FindUser(othersId);
-    const name = document.getElementById(user?.streamId);
-    if (name != null) {
-      name.innerText = user?.data?.userName;
-    }
   });
 
   const sendChatHandler = (e) => {
@@ -528,6 +705,33 @@ export default function Group() {
     console.log(result);
   }
 
+  function StartStopWatch(result) {
+    let req = timeRes;
+    req.data.userId = user?.id;
+    req.data.result = result;
+
+    if (Object.keys(dataChannels).length > 0) {
+      Object.keys(dataChannels).forEach((userId) => {
+        dataChannels[userId].send(JSON.stringify(req));
+      });
+    }
+
+    console.log(result);
+  }
+
+  function findUserByKey(key) {
+    const cameras = document.getElementsByClassName('name');
+    console.log(key);
+    console.log(cameras);
+
+    const camera = cameras[key];
+    console.log(camera);
+
+    const user = FindUser(camera?.id);
+    console.log(user);
+    return user;
+  }
+
   useEffect(() => {
     async function getRoomData() {
       rtcInit();
@@ -542,10 +746,6 @@ export default function Group() {
     getRoomData();
   }, []);
 
-  function getStartTime(userId) {
-    return userDic[userId].userTime;
-  }
-
   return (
     <div>
       <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
@@ -557,11 +757,15 @@ export default function Group() {
                 {isCamera ? (
                   <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
                     <StopWatch
+                      cb={(result) => {
+                        StartStopWatch(result);
+                      }}
                       myTimer={true}
                       roomId={roomId}
-                      membersOnly={room.membersOnly}
+                      membersOnly={room?.membersOnly}
                       ref={stopWatchRef}
-                      userT={'0000-00-00 00:00:00'}
+                      userT={0}
+                      setCameraSetting={setCameraSetting}
                     />
                     <div className="absolute bottom-[5px] left-[8px]">
                       {isMute ? (
@@ -575,54 +779,17 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
-                    <AlertModal />
                   </div>
                 ) : (
                   <div>
                     <p>카메라가 없습니다.</p>
                   </div>
                 )}
-                {/* <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2"> */}
-                {/* <div className="">
-                  <p>일반 카메라</p> */}
-
-                {/* <div id="others"> */}
-                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
-                  <div className="w-full py-10 flex justify-center ">
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={1}></div>
+                  <div className="w-full flex justify-center ">
                     <video
-                      className="camera"
-                      id="none"
-                      key={1}
-                      width="100%"
-                      height="100%"
-                      playsInline
-                      autoPlay
-                      muted
-                    ></video>
-                    {/* {
-                      document.getElementsByClassName("camera").map((v) => {
-                        if (v.key === 1) {
-                          const id = v.id;
-                          const user = FindUser(id);
-
-                          if(id === 'none') {
-                            return;
-                          }
-                          console.log("user", user); 
-                          return <StopWatch myTimer={false} roomId={roomId} membersOnly={room.membersOnly} userT={user?.userTime}/>;
-                        }
-                      })
-                    } */}
-                  </div>
-                  <h3 id="none" key={1}>
-                    빈자리
-                  </h3>
-                </div>
-
-                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
-                  <div className="w-full py-10 flex justify-center ">
-                    <video
-                      className="camera"
+                      className="camera rounded-xl"
                       id="none"
                       key={2}
                       width="100%"
@@ -631,28 +798,132 @@ export default function Group() {
                       autoPlay
                       muted
                     ></video>
+                    {key1Camera && findUserByKey(0)?.cameraOnState ? (
+                      <></>
+                    ) : (
+                      <>
+                        {key1State && findUserByKey(0)?.state ? (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/work.png`}
+                          ></img>
+                        ) : (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/sleep.png`}
+                          ></img>
+                        )}
+                      </>
+                    )}
                   </div>
-                  <h3 id="none" key={2}>
-                    빈자리
-                  </h3>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {key1Mute && findUserByKey(0)?.muteState ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      name={3}
+                    ></h3>
+                  </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
-                  <div className="w-full py-10 flex justify-center ">
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={4}></div>
+                  <div className="w-full flex justify-center ">
                     <video
-                      className="camera"
+                      className="camera rounded-xl"
                       id="none"
-                      key={3}
+                      key={5}
                       width="100%"
                       height="100%"
                       playsInline
                       autoPlay
                       muted
                     ></video>
+                    {key2Camera && findUserByKey(1)?.cameraOnState ? (
+                      <></>
+                    ) : (
+                      <>
+                        {key2State && findUserByKey(1)?.state ? (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/work.png`}
+                          ></img>
+                        ) : (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/sleep.png`}
+                          ></img>
+                        )}
+                      </>
+                    )}
                   </div>
-                  <h3 id="none" key={3}>
-                    빈자리
-                  </h3>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {key2Mute && findUserByKey(1)?.muteState ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      key={6}
+                    ></h3>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={7}></div>
+                  <div className="w-full flex justify-center ">
+                    <video
+                      className="camera rounded-xl"
+                      id="none"
+                      key={8}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                    {key3Camera && findUserByKey(2)?.cameraOnState ? (
+                      <></>
+                    ) : (
+                      <>
+                        {key3State && findUserByKey(2)?.state ? (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/work.png`}
+                          ></img>
+                        ) : (
+                          <img
+                            className="absolute w-[100%] h-[100%]"
+                            src={`/sleep.png`}
+                          ></img>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {key3Mute && findUserByKey(2)?.muteState ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      key={9}
+                    ></h3>
+                  </div>
                 </div>
               </div>
             </div>
@@ -665,20 +936,6 @@ export default function Group() {
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
                 <ul className="space-y-2">
                   {chat.map((chat) => {
-                    // if (href[leng - 1] === '/') {
-                    //   href = href.slice(0, leng - 1);
-                    // }
-                    let name = chat.split(' : ');
-                    console.log(name[0], 'name[0]');
-                    console.log('####################');
-                    console.log(name[0] == `${userValue?.name}`, 'compare 1번');
-                    console.log('+++++++++++++++++++');
-                    console.log(name[0] == `${userValue?.name}`, 'compare 2번');
-                    console.log('====================');
-                    // console.log(`${userValue?.name}`, '${userValue?.name}');
-
-                    console.log(name[1], 'name[1]');
-
                     return (
                       <>
                         {name[0] === `${userValue?.name}` ? (
@@ -701,7 +958,6 @@ export default function Group() {
                   })}
                 </ul>
               </div>
-
               <form>
                 <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
                   <input
@@ -723,7 +979,6 @@ export default function Group() {
                   </button>
                 </div>
               </form>
-              {/*  */}
               <div className="flex justify-between px-3 pt-5 ">
                 <div className="flex items-center">
                   <button
@@ -737,7 +992,6 @@ export default function Group() {
                     Unmute
                   </button>
                 </div>
-
                 <button
                   className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
                   onClick={() => {
