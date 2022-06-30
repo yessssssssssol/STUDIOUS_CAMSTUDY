@@ -482,7 +482,6 @@ export default function Group() {
     console.log(offer);
 
     const answer = await makeConnection(offersId, offer);
-    //todo: 메시지 전달
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
     // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
@@ -552,15 +551,14 @@ export default function Group() {
 
   return (
     <div>
+      <p className="text-center font-bold text-2xl">{room?.roomName}</p>
       {isLoading === true ? (
         <div className="w-full flex">
-          <p>{room?.roomName}</p>
           <div className="w-full items-center lg:flex">
             <div className="w-full lg:w-1/2">
               {isCamera ? (
                 <div>
                   <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
-                  <p>메인 카메라(인공지능 적용된 것)</p>
                   <AIFunc cb = {(result) => {AlertNoHear(result)}}/>
                   <AlertModal />
                   <button id="muteBtn" onClick={MuteBtnClick}>
@@ -576,7 +574,6 @@ export default function Group() {
               )}
             </div>
             <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
-              <p>일반 카메라</p>
               <div id="others">
 
                 <video className='camera' id="none" key={1} width={400} height={300} playsInline autoPlay muted></video>

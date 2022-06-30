@@ -184,6 +184,10 @@ wsServer.on("connection", (socket) => {
                 }
             })
         })
+
+        //todo: 룸정보 받음
+
+        //todo: 룸 정보가 오픈방이면 headcount 뺀다
         
         if (findUser != null) {
             socket.to(roomId).emit("bye", socket.id, findUser?.userName);
