@@ -6,16 +6,16 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
         {myStudyRoom.group === false ? (
           // "개인 스터디룸"
           <a href={`/studyroom/private`} aria-label="Article">
-            <div className="bg-blue-900 h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300">
-              <div className="mt-[130px] ml-2">
+            <div className="relative h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
+              <div className="">
                 <img
-                  className="h-[60px] w-[60px] rounded-full"
+                  className="w-[250px] h-[300px] rounded-xl transition-shadow "
                   src="img.jpeg"
                   alt="Rounded avatar"
                 />
               </div>
-              <div className="mt-3 mx-4">
-                <p className="text-2xl text-white font-bold leading-5">
+              <div className="absolute top-5 left-5 px-6 py-4">
+                <p className="text-3xl text-black font-bold">
                   {'개인 스터디룸'}
                 </p>
                 <div className="flex space-x-4"></div>
@@ -29,7 +29,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             aria-label="Article"
           >
             {/* <!-- card --> */}
-            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r from-purple-100 to-teal-50 rounded-2xl shadow-xl shadow-slate-300/60">
+            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r from-amber-50 to-grag-50 rounded-2xl shadow-xl shadow-slate-300/60">
               {/* <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gray-200 rounded-2xl shadow-xl shadow-slate-300/60"> */}
               {/* <!-- img --> */}
               <img
@@ -39,8 +39,8 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
               />
               {/* <!-- text information --> */}
               <div className="px-4">
-                <small className="text-blue-400 text-xs">
-                  {myStudyRoom.members.length + '/' + myStudyRoom.membersNum}
+                <small className="text-amber-400 text-xs font-semibold">
+                  {myStudyRoom.members.length + ' / ' + myStudyRoom.membersNum}
                 </small>
                 {/* 제목 클릭하면 스터디룸 게시판(?) 연결  */}
                 {myStudyRoom.membersOnly ? (
@@ -49,7 +49,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/board/detail/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold  text-slate-600 pb-2">
+                    <p className="text-2xl font-bold  text-slate-600 pb-2 text-center">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
@@ -59,14 +59,14 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/openroom/board/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold text-slate-600 pb-2">
+                    <p className="text-2xl font-bold text-slate-600 pb-2 text-center">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
                 )}
-                <p className="text-sm tracking-tight font-light text-slate-400 leading-6">
+                <p className="text-sm font-medium text-slate-400 text-center pb-2 ">
                   {myStudyRoom.focusTimeStart.slice(0, 5) +
-                    '~' +
+                    ' ~ ' +
                     myStudyRoom.focusTimeEnd.slice(0, 5)}
                 </p>
               </div>

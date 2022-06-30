@@ -7,7 +7,7 @@ import { isValidElement, useEffect, useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
-import { GoUnmute, GoMute } from "react-icons/go";
+import { GoUnmute, GoMute } from 'react-icons/go';
 
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -552,13 +552,29 @@ export default function Group() {
         <>
           <div className="flex px-5">
             <div className="lg:w-9/12">
-              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]" >
+              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
                   <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
-                    <StopWatch myTimer={true} roomId={roomId} membersOnly={room.membersOnly} ref={stopWatchRef} userT={"0000-00-00 00:00:00"}/>
-                    <div className='absolute bottom-[5px] left-[8px]'>{isMute ? <GoMute color="white" size="30"/>: <GoUnmute color="white" size="30"/>}</div>
-                    <AIFunc cb={(result) => {AlertNoHear(result);}} />
-                    
+                    <StopWatch
+                      myTimer={true}
+                      roomId={roomId}
+                      membersOnly={room.membersOnly}
+                      ref={stopWatchRef}
+                      userT={'0000-00-00 00:00:00'}
+                    />
+                    <div className="absolute bottom-[5px] left-[8px]">
+                      {isMute ? (
+                        <GoMute color="white" size="30" />
+                      ) : (
+                        <GoUnmute color="white" size="30" />
+                      )}
+                    </div>
+                    <AIFunc
+                      cb={(result) => {
+                        AlertNoHear(result);
+                      }}
+                    />
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>
@@ -637,7 +653,6 @@ export default function Group() {
                     빈자리
                   </h3>
                 </div>
-
               </div>
             </div>
             <div className="lg:w-3/12 w-[100px] bg-purple-400">
@@ -652,21 +667,64 @@ export default function Group() {
                 <button onClick={sendChatHandler}>Send</button>
               </form>
               <br />
-                <button id="cameraBtn" onClick={CameraOnOffClick}>
-                  turnOn
-                </button>
-                <p></p>
-                <button id="muteBtn" onClick={MuteBtnClick}>
-                  Unmute
-                </button>
-                <button className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
-                  onClick={() => {stopWatchRef.current.handleClick();}}> 나가기 </button>
+              <button id="cameraBtn" onClick={CameraOnOffClick}>
+                turnOn
+              </button>
+              <p></p>
+              <button id="muteBtn" onClick={MuteBtnClick}>
+                Unmute
+              </button>
+              <button
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                onClick={() => {
+                  stopWatchRef.current.handleClick();
+                }}
+              >
+                {' '}
+                나가기{' '}
+              </button>
               {chat.map((i) => {
                 return <div>{i}</div>;
               })}
             </div>
           </div>
-          <AlertModal />
+          <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
+            <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
+            <div className="relative w-full p-6 overflow-y-auto h-2/3">
+              <ul className="space-y-2">
+                {chat.map((chat) => {
+                  return (
+                    <li className="flex justify-start">
+                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
+                        <span className="block">{chat}</span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <form>
+              <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
+                <input
+                  id="inputbox"
+                  placeholder="message"
+                  required
+                  type="text"
+                  className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                ></input>
+                <button onClick={sendChatHandler}>
+                  <svg
+                    className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
         </>
       ) : (
         <Loading />

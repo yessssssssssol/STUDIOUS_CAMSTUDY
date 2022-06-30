@@ -1,9 +1,9 @@
 export const items = [
-  ['오픈 스터디방', '/openroom'],
-  ['스터디 모집', '/board'],
-  ['프롤로그', '/prologue'],
+  ['Open Study', '/openroom'],
+  ['Privite Study', '/board'],
+  ['Introduction', '/prologue'],
   ['AboutUs', '/aboutus'],
-  ['마이페이지', '/mypage'],
+  ['Mypage', '/mypage'],
 ];
 
 export const randomColor = [
@@ -38,12 +38,6 @@ export const charts_color = [
   '#f5d0fe',
   '#fbcfe8',
   '#fecdd3',
-];
-export const category_time = [
-  ['수학', '13:10:03'],
-  ['과학', '5:31:21'],
-  ['경찰학개론', '10:31:22'],
-  ['헌법', '3:03:52'],
 ];
 
 export const drop_item = [];
