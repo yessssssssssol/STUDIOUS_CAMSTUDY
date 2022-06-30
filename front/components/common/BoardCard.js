@@ -3,20 +3,20 @@ import { useEffect } from 'react';
 
 export default function BoardCard({ boardData, profileURL }) {
   return (
-    <div className="w-96  px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
-      <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
-        <div className="overflow-hidden transition-shadow duration-300 bg-white rounded  hover:scale-105 shadow-md">
+    <div className="inline-block w-96 h-64 px-2 py-16 m-1 sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
+      <div className="gap-5 sm:max-w-sm sm:mx-auto">
+        <div className=" duration-400 bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
           <a href={`/board/detail/${boardData.roomId}`}>
             <img
               src={boardData.roomImg}
-              className="object-fill w-full h-48 rounded"
+              className="object-fill w-full h-48 rounded-md"
               alt="스터디 모집 이미지"
             />
           </a>
-          <div className="py-5">
-            <p className="mb-2 text-xs font-semibold text-gray-600 uppercase">
-              <span className="pr-3 font-bold">스터디 기간</span>
-              {boardData.createdAt.slice(0, 10)}~
+          <div className="py-5 mx-4">
+            <p className="mb-2 text-xs font-semibold text-amber-400 uppercase">
+              {/* <span className="pr-3 font-bold"></span> */}
+              {boardData.createdAt.slice(0, 10)} ~{' '}
               {boardData.endStudyDay.slice(0, 10)}
             </p>
             <a
@@ -28,11 +28,16 @@ export default function BoardCard({ boardData, profileURL }) {
                 {boardData.roomName}
               </p>
             </a>
-            <p className="mb-2 text-gray-700">{boardData.roomDesc}</p>
-            <div className="flex space-x-4">
+            <p className="mb-2 text-gray-700">
+              {boardData.roomDesc.slice(0, 20)}
+            </p>
+            <div className="flex space-x-4 text-gray-400">
               {boardData.hashTags.map((hashTag, index) => {
                 return (
-                  <span key={index} className="pr-1 font-medium">
+                  <span
+                    key={index}
+                    className="font-medium inline-block bg-amber-50 rounded-full px-1 py-1 text-sm text-amber-500"
+                  >
                     {hashTag}
                   </span>
                 );
