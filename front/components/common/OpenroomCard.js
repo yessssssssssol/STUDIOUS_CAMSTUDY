@@ -1,33 +1,29 @@
 export default function OpenroomCard({ openRoom }) {
   return (
-    <div className=" px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
-      <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
-        <div className="bg-gray-300 h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300">
-          <a href={`/openroom/board/${openRoom.roomId}`} aria-label="Article">
-            <p className="mt-3 ml-2 font-bold text-orange-300">
-              {openRoom.members.length + '/' + openRoom.membersNum}
-            </p>
-            <div className="mt-[130px] ml-2">
-              <img
-                className="h-[60px] w-[60px] rounded-full"
-                src="img.jpeg"
-                alt="Rounded avatar"
-              />
-            </div>
-            <div className="mt-3 ml-2">
-              <p className="text-2xl font-bold leading-5">
-                {openRoom.roomName}
-              </p>
-              <p className="mb-4 font-semibold text-gray-700">
-                {openRoom.focusTimeStart.slice(0, 5) +
-                  '~' +
-                  openRoom.focusTimeEnd.slice(0, 5)}
-              </p>
-              <div className="flex space-x-4"></div>
-            </div>
-          </a>
+    <a href={`/openroom/board/${openRoom.roomId}`} aria-label="Article">
+      {/* <!-- card --> */}
+      <div class="mx-auto my-[3rem] flex h-[300px] w-[250px] flex-col justify-center bg-amber-50 rounded-2xl shadow-md shadow-amber-300/30 ">
+        {/* <!-- img --> */}
+        <img
+          class="aspect-video w-96 h-full rounded-t-2xl object-cover object-center"
+          src={openRoom.roomImg}
+          alt="Rounded avatar"
+        />
+        {/* <!-- text information --> */}
+        <div class="px-4">
+          <small class="text-blue-400 text-xs">
+            {openRoom.members.length + '/' + openRoom.membersNum}
+          </small>
+          <p class="text-2xl font-bold text-slate-600 pb-2">
+            {openRoom.roomName}
+          </p>
+          <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
+            {openRoom.focusTimeStart.slice(0, 5) +
+              '~' +
+              openRoom.focusTimeEnd.slice(0, 5)}
+          </p>
         </div>
       </div>
-    </div>
+    </a>
   );
 }

@@ -172,13 +172,13 @@ export default function Group() {
 
   function FindUser(socketId) {
     let data = null;
-    
+
     Object.keys(userDic).forEach((v) => {
       if (userDic[v].socketId === socketId) {
         data = userDic[v];
         return;
       }
-    })
+    });
     console.log(data);
     return data;
   }
@@ -188,21 +188,20 @@ export default function Group() {
     console.log("Peer's Stream", data.stream);
     console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    console.log("othersId : " + othersId);
+    console.log('othersId : ' + othersId);
 
-    document.get
+    document.get;
 
-    const cameras = document.getElementsByClassName("camera");
-    const names = document.getElementsByTagName("h3");
+    const cameras = document.getElementsByClassName('camera');
+    const names = document.getElementsByTagName('h3');
 
     console.log(cameras);
     console.log(names);
 
-    for(let camera of cameras) {
-
+    for (let camera of cameras) {
       let key;
       console.log(camera);
-      if (camera.id === "none") {
+      if (camera.id === 'none') {
         camera.id = othersId;
         camera.srcObject = data.stream;
         key = camera.key;
@@ -252,7 +251,6 @@ export default function Group() {
           req.data.result = false;
           dataChannels[userId].send(JSON.stringify(req));
         });
-
       } else {
         cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
@@ -263,18 +261,15 @@ export default function Group() {
           req.data.result = true;
           dataChannels[userId].send(JSON.stringify(req));
         });
-
       }
     }
     console.log(userDic);
   }
 
   function MessageParse(res) {
-
     if (res.type === 'message') {
       addMessage(res.data);
-    } 
-    else if (res.type === 'user') {
+    } else if (res.type === 'user') {
       // 유저 데이터 저장 혹인 갱신
 
       userDic[res.data?.userId] = res.data;
@@ -283,8 +278,8 @@ export default function Group() {
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
       console.log(res.data);
       console.log(res.data?.socketId);
-      
-      const h3s = document.getElementsByTagName("h3");
+
+      const h3s = document.getElementsByTagName('h3');
 
       for (let h3 of h3s) {
         if (h3.id === res.data?.socketId) {
@@ -292,23 +287,19 @@ export default function Group() {
           return;
         }
       }
-
-    } 
-    else if (res.type == 'state') {
+    } else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
       userDic[res.data?.userId].state = res.data?.result;
-    }
-    else if(res.type == 'camera') {
+    } else if (res.type == 'camera') {
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
       userDic[res.data?.userId].cameraOnState = res.data?.result;
       console.log(userDic);
     }
-
   }
 
   async function makeConnection(userId, offer = null) {
@@ -405,7 +396,7 @@ export default function Group() {
             req.data['state'] = false;
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
-            req.data['cameraOnState'] = true;        
+            req.data['cameraOnState'] = true;
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -445,18 +436,16 @@ export default function Group() {
     // 나갔다는 메시지
     addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
-
-
     const video = document.getElementById(leaveId);
     if (video != null) {
-      video.id = "none";
+      video.id = 'none';
       video.srcObject = null;
     }
 
     const name = document.getElementById(leaveId);
     if (name != null) {
-      name.id = "none";
-      name.innerText = "빈자리";
+      name.id = 'none';
+      name.innerText = '빈자리';
     }
 
     // peerConnections 제거
@@ -467,13 +456,13 @@ export default function Group() {
       }
     });
 
-    FindUser(leaveId)
+    FindUser(leaveId);
 
     Object.keys(userDic).forEach((v) => {
-      if(v.socketId === leaveId) {
+      if (v.socketId === leaveId) {
         delete userDic[v];
       }
-    })
+    });
   });
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
@@ -505,7 +494,6 @@ export default function Group() {
     if (name != null) {
       name.innerText = user?.data?.userName;
     }
-    
   });
 
   const sendChatHandler = (e) => {
@@ -579,13 +567,60 @@ export default function Group() {
                 <video className='camera' id="none" key={1} width={400} height={300} playsInline autoPlay muted></video>
                 <h3 id="none" key={1} >빈자리</h3>
 
-                <video className='camera' id="none" key={2} width={400} height={300} playsInline autoPlay muted></video>
-                <h3 id="none" key={2} >빈자리</h3>
+                <div className="bg-green-200 w-[500px] ">
+                  2번 캠
+                  <video
+                    className="camera"
+                    id="none"
+                    key={2}
+                    width={400}
+                    height={300}
+                    playsInline
+                    autoPlay
+                    muted
+                  ></video>
+                  <h3 id="none" key={2}>
+                    빈자리
+                  </h3>
+                </div>
 
-                <video className='camera' id="none" key={3} width={400} height={300} playsInline autoPlay muted></video>
-                <h3 id="none" key={3} >빈자리</h3>
-
+                <div className="bg-indigo-200 w-[500px]">
+                  3번 캠
+                  <video
+                    className="camera"
+                    id="none"
+                    key={3}
+                    width={400}
+                    height={300}
+                    playsInline
+                    autoPlay
+                    muted
+                  ></video>
+                  <h3 id="none" key={3}>
+                    빈자리
+                  </h3>
+                </div>
+                {/* </div> */}
               </div>
+              {/* </div> */}
+              {/* </div> */}
+              {/* </div>
+              </div> */}
+            </div>
+            <div className="lg:w-3/12 w-[100px] bg-purple-400">
+              <p>채팅</p>
+              <form>
+                <input
+                  id="inputbox"
+                  placeholder="message"
+                  required
+                  type="text"
+                ></input>
+                <button onClick={sendChatHandler}>Send</button>
+              </form>
+              {chat.map((i) => {
+                return <div>{i}</div>;
+              })}
             </div>
           </div>
           <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">

@@ -103,7 +103,7 @@ const AIFunc = (props) => {
 
   return (
     <div className="w-full py-10 flex justify-center ">
-      <video autoPlay playsInline muted ref={videoRef} width="600" height="500">
+      <video autoPlay playsInline muted ref={videoRef} width="500" height="350">
         {/* {ref
           ? console.log(`비디오 오케이 : ${autoPlay}`)
           : console.log('비디오 놉')} */}
