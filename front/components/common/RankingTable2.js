@@ -1,24 +1,45 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 export default function RankingTable({ rankings, userDatas }) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(true);
+  const box = useRef();
+
+  const height = box.current?.className.split(' ')[7];
+  // const css = bsx.current?.style.console.log(height);
+
+  // function handleBox() {
+  //   const height = box.current.className.split(' ')[7];
+  //   console.log(box.current);
+  //   console.log(height);
+  //   if (height === 'h-190') {
+  //     setTimeout(() => {
+  //       setDone(true);
+  //     }, 780);
+  //   } else {
+  //     setDone(false);
+  //   }
+  // }
 
   function handleDone() {
     if (open) {
       setTimeout(() => {
-        setDone((bool) => !bool);
-      }, 800);
+        setDone(true);
+      }, 780);
     } else {
-      setDone((bool) => !bool);
+      setDone(false);
+      setTimeout(() => {
+        setDone(false);
+      }, 780);
     }
   }
 
   function rankAr() {
+    console.log(done);
     let margin = undefined;
     if (done === false) {
       margin = 'mb-2';
-    } else {
+    } else if (done === true) {
       margin = 'mb-14';
     }
 
@@ -74,9 +95,10 @@ export default function RankingTable({ rankings, userDatas }) {
   //여기서 부터 렌더링입니다.
   return (
     <div
-      className={`w-4/5 justify-center bg-white rounded-2xl shadow-lg overflow-hidden ${
-        open ? 'h-200 ' : 'h-40 '
-      } duration-1000`}
+      className={`w-4/5 justify-center bg-white rounded-2xl shadow-lg overflow-hidden duration-1000 ${
+        open ? 'h-190 ' : 'h-40 '
+      }`}
+      ref={box}
     >
       {/* index */}
       <div className="flex flex-row h-14 items-center px-10 py-2">
@@ -95,6 +117,7 @@ export default function RankingTable({ rankings, userDatas }) {
             onClick={() => {
               setOpen((bool) => !bool);
               handleDone();
+              // handleBox();
             }}
           >
             <img className="w-8 h-8" src="/dropDown.png"></img>
