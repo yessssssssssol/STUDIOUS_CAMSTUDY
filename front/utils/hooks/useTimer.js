@@ -33,6 +33,10 @@ const useTimer = (initialState = 0) => {
     setTimer(0);
   };
 
+  const getActiveTime = () => {
+    return timer;
+  }
+
   return {
     timer,
     isActive,
@@ -41,6 +45,7 @@ const useTimer = (initialState = 0) => {
     handlePause,
     handleRestart,
     handleReset,
+    getActiveTime,
   };
 };
 
