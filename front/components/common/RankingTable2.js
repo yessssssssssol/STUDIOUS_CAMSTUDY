@@ -10,31 +10,29 @@ export default function RankingTable({ rankings, userDatas }) {
   );
 
   let count2 = 0;
-  console.log('count', count);
+
   useEffect(() => {
     let interval = setInterval(() => {
-      if (done) {
+      if (!open) {
         if (count2 < 10) {
           setCount((prev) => prev + 1);
           count2++;
         } else {
-          setCount((prev) => prev === 0);
-          count2 = 0;
+          setCount((prev) => prev === 1);
+          count2 = 1;
         }
-      } else if (!done) {
+      } else if (open) {
         count2 = 0;
         setCount((prev) => prev === 0);
         clearInterval(interval);
       }
-      console.log(count);
-      console.log('count2', count2);
-    }, 2500);
+      // console.log('count2', count2);
+    }, 2000);
     return () => {
       clearInterval(interval);
     };
-  }, [done]);
-
-  // useEffect(() => {}, count);
+  }, [open]);
+  // console.log('count', count);
 
   function handleDone() {
     if (open) {
@@ -42,15 +40,14 @@ export default function RankingTable({ rankings, userDatas }) {
         setDone(true);
       }, 780);
     } else {
-      setDone(false);
       setTimeout(() => {
         setDone(false);
       }, 780);
+      setDone(false);
     }
   }
 
   function rankAr() {
-    console.log(done);
     let margin = undefined;
     if (done === false) {
       margin = 'mb-2';
@@ -82,13 +79,11 @@ export default function RankingTable({ rankings, userDatas }) {
 
       return (
         <div key={index} className={`${css} ${color} ${margin}`}>
-          <div className="font-semibold basis-1/12 text-center">
-            {index + 1}
-          </div>
+          <div className="font-bold basis-1/12 text-center">{index + 1}</div>
           <div className="font-semibold basis-1/12 text-center flex justify-center items-center">
             <img className="w-10 h-10 mr-5" src={medal}></img>
             <img
-              className="rounded-full bg-amber-400 w-10 h-10"
+              className="rounded-full bg-cover w-10 h-10 "
               src={user?.profileUrl}
             />
           </div>
@@ -145,10 +140,14 @@ export default function RankingTable({ rankings, userDatas }) {
       <div className="overflow-hidden">
         <div
           ref={chartBox}
-          className="w-full"
-          style={{
-            transform: `translateY(-${count * 136}px`,
-          }}
+          className="w-full float-"
+          style={
+            open
+              ? {}
+              : {
+                  transform: `translateY(-${count * 136}px`,
+                }
+          }
         >
           {rankAr()}
           {done && (
