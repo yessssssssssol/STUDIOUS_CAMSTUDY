@@ -60,8 +60,8 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
         if (seconds > 0) {
           setSeconds(seconds - 1);
         }
-        if (seconds === 0) {
-          if (minutes === 0) {
+        if (seconds <= 0) {
+          if (minutes <= 0) {
             clearInterval(myInterval);
             setGetReady(true);
           } else {

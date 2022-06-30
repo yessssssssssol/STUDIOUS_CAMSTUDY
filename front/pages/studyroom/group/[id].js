@@ -32,7 +32,6 @@ let myDataChannel = null;
 let peerConnections = {};
 let dataChannels = {};
 let chatAll = [];
-let userList = {};
 
 function rtcInit() {
   myStream = null;
@@ -41,7 +40,6 @@ function rtcInit() {
   peerConnections = {};
   dataChannels = {};
   chatAll = [];
-  userList = {};
 }
 
 // 채팅용
@@ -120,7 +118,7 @@ export default function Group() {
 
   const userValue = useRecoilValue(userAtom);
   const stopWatchRef = useRef(null);
-  const [cameraSetting, setCameraSetting] = useState(false);
+
   const [userList, setUserList] = useState({});
 
   const [key1Mute, setKey1Mute] = useState(false);
@@ -163,10 +161,10 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    if (myStream == null) {
-      rtcInit();
-      router.push('/openroom');
-    }
+    // if (myStream == null) {
+    //   rtcInit();
+    //   router.push('/openroom');
+    // }
 
     socket.emit(
       'enter_room',
@@ -747,6 +745,8 @@ export default function Group() {
     getRoomData();
   }, []);
 
+  //todo: 첫번째 영상 스탑워치
+  // todo: 나갔을때 상태관리
   return (
     <div>
       <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
@@ -766,7 +766,6 @@ export default function Group() {
                       membersOnly={room?.membersOnly}
                       ref={stopWatchRef}
                       userT={0}
-                      setCameraSetting={setCameraSetting}
                     />
                     <div className="absolute bottom-[5px] left-[8px]">
                       {isMute ? (
