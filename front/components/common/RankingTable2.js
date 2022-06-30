@@ -21,10 +21,19 @@ export default function RankingTable({ rankings, userDatas }) {
         const css =
           'flex flex-row h-14 items-center mx-10 my-3 mb-2 rounded-xl shadow shadow-amber-700/20';
         let color = undefined;
+        let medal = undefined;
         if (index === 0) {
           color = ' bg-amber-100';
+          medal = 'gold.png';
+        } else if (index === 1) {
+          color = ' bg-amber-50';
+          medal = 'silver.png';
+        } else if (index === 2) {
+          color = ' bg-amber-50';
+          medal = 'bronze.png';
         } else {
           color = ' bg-amber-50';
+          medal = 'noneMedal.png';
         }
 
         return (
@@ -33,6 +42,7 @@ export default function RankingTable({ rankings, userDatas }) {
               {index + 1}
             </div>
             <div className="font-semibold basis-1/12 text-center flex justify-center items-center">
+              <img className="w-10 h-10 mr-3" src={medal}></img>
               <img
                 className="rounded-full bg-amber-400 w-10 h-10"
                 src={user?.profileUrl}
