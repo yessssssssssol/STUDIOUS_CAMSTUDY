@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
-import { getModuleBuildInfo } from 'next/dist/build/webpack/loaders/get-module-build-info';
+import Button from '../../components/common/Button';
 
 export default function Edit() {
   const router = useRouter();
@@ -92,7 +92,7 @@ export default function Edit() {
             <p className="text-2xl text-amber-400  font-bold">스터디방 생성</p>
           </div>
         </div>
-        <div className="flex gap-x-6 mt-8">
+        <div className="flex gap-x-6 mt-8 w-full">
           <label
             htmlFor="name"
             className="pb-2 text-sm font-bold text-gray-800 "
@@ -154,7 +154,7 @@ export default function Edit() {
           <Alert title="error" content="대표 이미지를 설정해주세요!" />
         </div>
       )}
-      <div className="container mx-auto w-11/12 xl:w-full">
+      <div className="container mx-auto w-11/12 xl:w-full mt-10">
         <div className="w-full py-4 sm:px-0 bg-white  flex justify-center">
           <button
             role="button"
@@ -162,13 +162,13 @@ export default function Edit() {
             className="bg-white focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 border-amber-400 hover:text-white border rounded text-amber-400  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
             onClick={resetHandler}
           >
-            Cancel
+            취소
           </button>
           <button
             className="focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 bg-amber-400 focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 rounded text-white px-8 py-2 text-sm"
             onClick={submitHandler}
           >
-            Save
+            생성
           </button>
         </div>
       </div>
