@@ -1,6 +1,6 @@
 export default function MyStudyRoomCard({ myStudyRoom }) {
   return (
-    <div className="px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
+    <div className="px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8 ">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         {/* 바로 스터디룸으로 연결하기  */}
         {myStudyRoom.group === false ? (
@@ -9,14 +9,14 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             <div className="relative h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
               <div className="">
                 <img
-                  className="w-[250px] h-[300px] rounded-xl transition-shadow "
-                  src="img.jpeg"
+                  className="w-96 h-full rounded-2xl transition-shadow "
+                  src="study.png"
                   alt="Rounded avatar"
                 />
               </div>
-              <div className="absolute top-10 left-5 px-6 py-4">
-                <p className="text-2xl text-black font-bold">
-                  {'개인 스터디룸'}
+              <div className="absolute bottom-2 left-6 px-6 py-4">
+                <p className="text-2xl text-amber-400 font-semibold">
+                  {'STUDY START'}
                 </p>
                 <div className="flex space-x-4"></div>
               </div>
@@ -29,7 +29,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             aria-label="Article"
           >
             {/* <!-- card --> */}
-            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r rounded-2xl shadow-xl shadow-slate-300/60">
+            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r rounded-2xl shadow-lg shadow-slate-300/60 hover:shadow-amber-300/50 hover:scale-105">
               {/* <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gray-200 rounded-2xl shadow-xl shadow-slate-300/60"> */}
               {/* <!-- img --> */}
               <img
