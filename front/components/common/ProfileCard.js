@@ -1,7 +1,7 @@
 export default function ProfileCard({ owner }) {
   const { name, description, profileUrl } = owner;
   return (
-    <div className="max-w-md flex m-4 rounded overflow-hidden shadow-lg">
+    <div className="w-72 flex m-4 rounded overflow-hidden shadow-lg">
       <img
         className="h-16 w-16 m-2 rounded-full content-center"
         src={profileUrl}

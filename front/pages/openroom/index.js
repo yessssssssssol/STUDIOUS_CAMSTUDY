@@ -29,9 +29,8 @@ export default function Openroom() {
     }
   }, [inView]);
   return (
-    <div className="flex flex-raw flex-wrap lg:flex justify-center gap-x-[100px]">
+    <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[3rem]">
       <Helmet title="Openroom" />
-
       {openRooms &&
         openRooms.slice(0, count).map((openRoom, index) => {
           return (
