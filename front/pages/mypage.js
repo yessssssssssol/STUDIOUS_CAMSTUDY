@@ -108,12 +108,6 @@ export default function mypage() {
     <div className="">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
-          <div className="pt-[20px] ">
-            <BoldText text={`1년 공부 기록`} />
-            <div className="pt-[10px] shadow-xl my-[10px]">
-              <Heatmap gittimes={gittime} />
-            </div>
-          </div>
           <div className="flex flex-row justify-between">
             <div className="font-bold text-3xl lg:block text-left my-[50px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
@@ -138,6 +132,12 @@ export default function mypage() {
                 timeGoal={getTimeGoal}
               />
             ))}
+          </div>
+          <div className="py-[20px] ">
+            <BoldText text={`1년 공부 기록`} />
+            <div className="pt-[10px] shadow-xl my-[10px]">
+              <Heatmap gittimes={gittime} />
+            </div>
           </div>
 
           <div className=" pt-[50px]">
