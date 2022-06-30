@@ -6,7 +6,6 @@ const Member = ({ member, isOwner, roomId }) => {
   const [isAccept, setIsAccept] = useState(false);
   const [userName, setUserName] = useState('');
   const [userProfile, setUserProfile] = useState();
-  console.log(member);
 
   useEffect(() => {
     // 멤버 정보 가져오기
@@ -24,21 +23,16 @@ const Member = ({ member, isOwner, roomId }) => {
     memberCheck();
   }, [isAccept]);
 
-  const handleReject = () => {
+  const handleReject = async () => {
     // 승인 후 거절
-    async function deleteMember() {
-      try {
-        await API.delete(`appliant/${roomId}/${member}`);
-        console.log('해당 신청자가 거절되었습니다.');
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    if (isAccept) {
-      deleteMember();
+    console.log('거절');
+    try {
+      console.log('hi');
+      await API.delete(`appliant/${roomId}/${member}`);
       setIsAccept(false);
-    } else {
-      reject();
+      console.log('해당 신청자가 거절되었습니다.');
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -51,18 +45,17 @@ const Member = ({ member, isOwner, roomId }) => {
             src={userProfile}
             alt="신청한사람"
           />
-          <div className="mt-2 font-bold">{userName}</div>
+          <div className="mt-2 font-bold flex-1">{userName}</div>
           {isOwner && (
             <div class="inline-flex">
               <button
-                class="bg-red-200 hover:bg-red-300 text-black font-bold text-sm px-2 rounded"
+                class="bg-red-100 hover:bg-red-200 text-gray-800 font-bold text-sm px-2 rounded"
                 onClick={handleReject}
               >
                 퇴장
               </button>
             </div>
           )}
-          {isAccept && <div className="mt-2 font-bold">승인되었습니다!</div>}
         </div>
       )}
     </>

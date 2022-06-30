@@ -10,6 +10,7 @@ import * as API from '../../../pages/api/api';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../../core/atoms/userState';
 import MemberList from '../../../components/board/MemberList';
+import Button from '../../../components/common/Button';
 
 export default function Detail() {
   let tempData = {};
@@ -57,7 +58,7 @@ export default function Detail() {
     if (router.isReady) {
       getBoardDetail();
     }
-  }, [router.isReady]);
+  }, [router.isReady, members]);
 
   useEffect(() => {
     if (owner.id === currUser.id) {
@@ -74,6 +75,19 @@ export default function Detail() {
         roomId: detailData.roomId,
       });
       console.log('신청되었습니다.');
+    } catch (err) {
+      console.log(err);
+    }
+    getApplicants();
+    console.log(applicants);
+  };
+
+  const getApplicants = async () => {
+    try {
+      const res = await API.get(`applicants/${detailData.roomId}`);
+      console.log(res.data);
+      setApplicants(res.data);
+      console.log(applicants);
     } catch (err) {
       console.log(err);
     }
@@ -133,24 +147,18 @@ export default function Detail() {
                   <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${detailData.startStudyDay} ~ ${detailData.endStudyDay}`}</div>
                   <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${detailData.focusTimeStart} ~ ${detailData.focusTimeEnd}`}</div>
                 </div>
-              </div>
-              <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
+                <div>
                   <div className="border-l-4 border-gray-500 pl-4 mb-10 italic rounded">
                     {detailData.roomDesc}
                   </div>
-
                   <div className="mb-6">
                     {!isMember && (
                       <div className="flex">
-                        <button
-                          type="button"
-                          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        <Button
+                          text={'스터디 신청하기'}
                           onClick={submitHandler}
-                          disabled={isApplicants}
-                        >
-                          스터디 신청하기
-                        </button>
+                          disable={isApplicants}
+                        />
                         {isApplicants && (
                           <p className="px-5 py-2.5 mr-2 mb-2 italic font-semibold text-red-500">
                             이미 신청한 스터디입니다.
@@ -159,15 +167,43 @@ export default function Detail() {
                       </div>
                     )}
                     {isMember && (
-                      <button
-                        type="button"
-                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      <Button
+                        text={'스터디방 입장하기'}
                         onClick={enterHandler}
-                      >
-                        스터디방 입장하기
-                      </button>
+                      />
                     )}
                   </div>
+                </div>
+              </div>
+              <div className="flex flex-col-reverse lg:flex-row lg:space-x-12">
+                <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
+                  {/* <div>
+                    <div className="border-l-4 border-gray-500 pl-4 mb-10 italic rounded">
+                      {detailData.roomDesc}
+                    </div>
+                    <div className="mb-6">
+                      {!isMember && (
+                        <div className="flex">
+                          <Button
+                            text={'스터디 신청하기'}
+                            onClick={submitHandler}
+                            disable={isApplicants}
+                          />
+                          {isApplicants && (
+                            <p className="px-5 py-2.5 mr-2 mb-2 italic font-semibold text-red-500">
+                              이미 신청한 스터디입니다.
+                            </p>
+                          )}
+                        </div>
+                      )}
+                      {isMember && (
+                        <Button
+                          text={'스터디방 입장하기'}
+                          onClick={enterHandler}
+                        />
+                      )}
+                    </div>
+                  </div> */}
 
                   <div className="flex-col w-full">
                     <Comments roomId={detailData.roomId} Id={detailData.id} />
