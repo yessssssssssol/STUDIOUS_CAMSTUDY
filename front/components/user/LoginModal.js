@@ -38,20 +38,29 @@ const LoginModal = () => {
 
     userActions.login(email, password).catch((err) => {
       console.log(err);
+      alert('로그인에 실패했습니다.');
     });
+    setEmail('');
+    setPassword('');
     setShowModal(false);
     setDropModal(false);
   };
   function handleOnclick() {
     setShowModal(false);
     setShowModal2(true);
+    setEmail('');
+    setPassword('');
   }
   return (
     <>
       <button
         className="bg-transparent text-gray-600 active:bg-gray-300 font-bold uppercase text-sm px-3 py-2 rounded-md hover:shadow-md outline-none focus:outline-none mx-1 mb-1 ease-linear transition-all duration-150 border"
         type="button"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+          setEmail('');
+          setPassword('');
+        }}
       >
         {title}
       </button>

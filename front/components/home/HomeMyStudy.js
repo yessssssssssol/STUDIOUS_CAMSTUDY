@@ -22,8 +22,8 @@ const HomeMyStudy = () => {
   return (
     <div className="mt-10 mb-20">
       <div className="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
-        내 스터디방 ({myStudyRooms.length})
-        <div className="border-none bg-indigo-500 w-20 h-1 mt-2 rounded text-xm"></div>
+        MY STUDY ROOM ({myStudyRooms.length})
+        <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
 
       <div className="px-10 md:px-15 lg:px-20">
@@ -47,8 +47,8 @@ const HomeMyStudy = () => {
                 <div className=" px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
                   <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
                     <a href={'/studyroom/create'} aria-label="Article">
-                      <div className="flex items-center justify-center bg-gray-300 h-[300px] w-[250px] rounded-xl  ">
-                        <p className="font-bold text-300">+ 방 추가</p>
+                      <div className="flex items-center justify-center bg-amber-50 h-[300px] w-[250px] rounded-xl hover:shadow-amber-300/50 shadow-lg hover:scale-105 hover:bg-white hover:border-amber-400 hover:border hover:text-amber-400">
+                        <p className="font-bold text-xl"> + ROOM CREATE</p>
                       </div>
                     </a>
                   </div>

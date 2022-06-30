@@ -3,10 +3,11 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
+import { GoUnmute, GoMute } from 'react-icons/go';
 
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -61,6 +62,7 @@ const userRes = {
 //     userId :
 //     state :
 //     userName :
+//     socketId
 //   }
 // }
 
@@ -68,10 +70,22 @@ const stateRes = {
   type: 'state',
   data: {},
 };
-
 // ex)
 // const stateRes = {
 //   type: "state",
+//   data : {
+//     userId :
+//     result :
+//   }
+// }
+
+const cameraRes = {
+  type: 'camera',
+  data: {},
+};
+// ex)
+// const cameraRes = {
+//   type: "camera",
 //   data : {
 //     userId :
 //     result :
@@ -87,6 +101,7 @@ export default function Group() {
   const [isCamera, setIsCamera] = useState(false);
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
+  const stopWatchRef = useRef();
 
   let roomId;
 
@@ -157,29 +172,50 @@ export default function Group() {
     socket.emit('ice', data.candidate, othersId, socket.id); // send ice candidate
   }
 
+  function FindUser(socketId) {
+    let data = null;
+
+    Object.keys(userDic).forEach((v) => {
+      if (userDic[v].socketId === socketId) {
+        data = userDic[v];
+        return;
+      }
+    });
+    console.log(data);
+    return data;
+  }
+
   function handleAddStream(data, othersId) {
     console.log('got an stream from my pear');
     console.log("Peer's Stream", data.stream);
     console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    const others = document.getElementById('others');
-    const video = document.createElement('video');
-    const name = document.createElement('h3');
+    console.log('othersId : ' + othersId);
 
-    others.appendChild(video);
-    others.appendChild(name);
+    document.get;
 
-    video.id = othersId;
-    video.key = othersId;
-    video.autoplay = true;
-    video.playsInline = true;
-    video.width = 400;
-    video.height = 400;
-    video.srcObject = data.stream;
+    const cameras = document.getElementsByClassName('camera');
+    const names = document.getElementsByTagName('h3');
 
-    name.innerText = othersId;
-    name.id = othersId;
-    name.key = othersId;
+    console.log(cameras);
+    console.log(names);
+
+    for (let camera of cameras) {
+      let key;
+      console.log(camera);
+      if (camera.id === 'none') {
+        camera.id = othersId;
+        camera.srcObject = data.stream;
+        key = camera.key;
+      }
+
+      for (let name of names) {
+        if (name.key === key) {
+          name.id = othersId;
+          return;
+        }
+      }
+    }
   }
 
   function MuteBtnClick() {
@@ -210,9 +246,23 @@ export default function Group() {
       if (isCameraOn == true) {
         cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = cameraRes;
+          req.data.userId = user.id;
+          req.data.result = false;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       } else {
         cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = cameraRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       }
     }
     console.log(userDic);
@@ -223,17 +273,34 @@ export default function Group() {
       addMessage(res.data);
     } else if (res.type === 'user') {
       // 유저 데이터 저장 혹인 갱신
-      if (userDic.hasOwnProperty(res.data?.userId) == false) {
-        userDic[res.data?.userId] = {};
-        addMessage(`${res.data?.userName}님 입장하셨습니다!`);
-      }
+
       userDic[res.data?.userId] = res.data;
+      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
+
+      // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
+      console.log(res.data);
+      console.log(res.data?.socketId);
+
+      const h3s = document.getElementsByTagName('h3');
+
+      for (let h3 of h3s) {
+        if (h3.id === res.data?.socketId) {
+          h3.innerText = res.data?.userName;
+          return;
+        }
+      }
     } else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userDic.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
       userDic[res.data?.userId].state = res.data?.result;
+    } else if (res.type == 'camera') {
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+      userDic[res.data?.userId].cameraOnState = res.data?.result;
+      console.log(userDic);
     }
   }
 
@@ -288,12 +355,18 @@ export default function Group() {
           // req.data = `${user?.name}님 입장하셨습니다!`;
           // myDataChannel.send(req);
 
+          console.log(myPeerConnection);
+
           // 유저 데이터도 보내기?
           let req = userRes;
 
           req.data['userId'] = user?.id;
+          req.data['socketId'] = socket.id;
           req.data['state'] = false;
           req.data['userName'] = user?.name;
+          req.data['streamId'] = myStream?.id;
+          req.data['cameraOnState'] = true;
+          // req.data['userTime'] = stopWatchRef.current.getTime();
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -319,10 +392,15 @@ export default function Group() {
 
             // 유더 데이터도 보내기
             let req = userRes;
+            console.log(myPeerConnection);
 
             req.data['userId'] = user?.id;
+            req.data['socketId'] = socket.id;
             req.data['state'] = false;
             req.data['userName'] = user?.name;
+            req.data['streamId'] = myStream?.id;
+            req.data['cameraOnState'] = true;
+            //req.data['userTime'] = stopWatchRef.current.getTime();
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -364,12 +442,14 @@ export default function Group() {
 
     const video = document.getElementById(leaveId);
     if (video != null) {
-      video.remove();
+      video.id = 'none';
+      video.srcObject = null;
     }
 
     const name = document.getElementById(leaveId);
     if (name != null) {
-      name.remove();
+      name.id = 'none';
+      name.innerText = '빈자리';
     }
 
     // peerConnections 제거
@@ -377,6 +457,14 @@ export default function Group() {
       if (id === leaveId) {
         delete peerConnections[id];
         console.log(peerConnections);
+      }
+    });
+
+    FindUser(leaveId);
+
+    Object.keys(userDic).forEach((v) => {
+      if (v.socketId === leaveId) {
+        delete userDic[v];
       }
     });
   });
@@ -387,7 +475,6 @@ export default function Group() {
     console.log(offer);
 
     const answer = await makeConnection(offersId, offer);
-    //todo: 메시지 전달
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
     // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
@@ -405,6 +492,12 @@ export default function Group() {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
     console.log(peerConnections);
+
+    const user = FindUser(othersId);
+    const name = document.getElementById(user?.streamId);
+    if (name != null) {
+      name.innerText = user?.data?.userName;
+    }
   });
 
   const sendChatHandler = (e) => {
@@ -420,6 +513,20 @@ export default function Group() {
     input.value = '';
   };
 
+  function AlertNoHear(result) {
+    let req = stateRes;
+    req.data.userId = user?.id;
+    req.data.result = result;
+
+    if (Object.keys(dataChannels).length > 0) {
+      Object.keys(dataChannels).forEach((userId) => {
+        dataChannels[userId].send(JSON.stringify(req));
+      });
+    }
+
+    console.log(result);
+  }
+
   useEffect(() => {
     async function getRoomData() {
       rtcInit();
@@ -434,34 +541,151 @@ export default function Group() {
     getRoomData();
   }, []);
 
+  function getStartTime(userId) {
+    return userDic[userId].userTime;
+  }
+
   return (
     <div>
+      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
-        <div className="w-full flex">
-          <p>{room?.roomName}</p>
-          <div className="w-full items-center lg:flex">
-            <div className="w-full lg:w-1/2">
-              {isCamera ? (
-                <div>
-                  <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
-                  <p>메인 카메라(인공지능 적용된 것)</p>
-                  <AIFunc />
-                  <AlertModal />
-                  <button id="muteBtn" onClick={MuteBtnClick}>
-                    Unmute
-                  </button>
-                  <br />
-                  <button id="cameraBtn" onClick={CameraOnOffClick}>
-                    turnOn
-                  </button>
+        <>
+          <div className="flex px-5">
+            <div className="lg:w-9/12">
+              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
+                {isCamera ? (
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                    <StopWatch
+                      myTimer={true}
+                      roomId={roomId}
+                      membersOnly={room.membersOnly}
+                      ref={stopWatchRef}
+                      userT={'0000-00-00 00:00:00'}
+                    />
+                    <div className="absolute bottom-[5px] left-[8px]">
+                      {isMute ? (
+                        <GoMute color="white" size="30" />
+                      ) : (
+                        <GoUnmute color="white" size="30" />
+                      )}
+                    </div>
+                    <AIFunc
+                      cb={(result) => {
+                        AlertNoHear(result);
+                      }}
+                    />
+                    <AlertModal />
+                  </div>
+                ) : (
+                  <div>
+                    <p>카메라가 없습니다.</p>
+                  </div>
+                )}
+                {/* <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2"> */}
+                {/* <div className="">
+                  <p>일반 카메라</p> */}
+
+                {/* <div id="others"> */}
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={1}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                    {/* {
+                      document.getElementsByClassName("camera").map((v) => {
+                        if (v.key === 1) {
+                          const id = v.id;
+                          const user = FindUser(id);
+
+                          if(id === 'none') {
+                            return;
+                          }
+                          console.log("user", user); 
+                          return <StopWatch myTimer={false} roomId={roomId} membersOnly={room.membersOnly} userT={user?.userTime}/>;
+                        }
+                      })
+                    } */}
+                  </div>
+                  <h3 id="none" key={1}>
+                    빈자리
+                  </h3>
                 </div>
-              ) : (
-                <p>카메라가 없습니다.</p>
-              )}
+
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={2}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
+                  <h3 id="none" key={2}>
+                    빈자리
+                  </h3>
+                </div>
+
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={3}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
+                  <h3 id="none" key={3}>
+                    빈자리
+                  </h3>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
-              <p>일반 카메라</p>
-              <div id="others"></div>
+            <div className="lg:w-3/12 w-[100px] bg-purple-400">
+              <p>채팅</p>
+              <form>
+                <input
+                  id="inputbox"
+                  placeholder="message"
+                  required
+                  type="text"
+                ></input>
+                <button onClick={sendChatHandler}>Send</button>
+              </form>
+              <br />
+              <button id="cameraBtn" onClick={CameraOnOffClick}>
+                turnOn
+              </button>
+              <p></p>
+              <button id="muteBtn" onClick={MuteBtnClick}>
+                Unmute
+              </button>
+              <button
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                onClick={() => {
+                  stopWatchRef.current.handleClick();
+                }}
+              >
+                {' '}
+                나가기{' '}
+              </button>
+              {chat.map((i) => {
+                return <div>{i}</div>;
+              })}
             </div>
           </div>
           <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
@@ -501,7 +725,7 @@ export default function Group() {
               </div>
             </form>
           </div>
-        </div>
+        </>
       ) : (
         <Loading />
       )}

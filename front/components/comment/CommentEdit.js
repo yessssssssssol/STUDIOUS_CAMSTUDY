@@ -23,7 +23,7 @@ const CommentEdit = () => {
   };
 
   return (
-    <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
+    <div className="my-2 mx-1 max-w-l flex gap-3 rounded-md bg-white p-2 text-black shadow">
       <div className="mt-2">
         <img
           className="w-16 rounded-full shadow"
@@ -36,7 +36,7 @@ const CommentEdit = () => {
           <div>
             <a
               href="#"
-              className="text-blue-400 hover:underline"
+              className="text-amber-400 hover:underline"
               value={comment.userName}
             ></a>
             <span
@@ -46,7 +46,7 @@ const CommentEdit = () => {
           </div>
           <div className="p-1">
             <p
-              className="text-gray-900 border-l-2 px-1 border-blue-500 bg-gray-100 rounded"
+              className="text-gray-900 border-l-2 px-1 border-amber-500 bg-gray-100 rounded"
               value={comment.content}
               onChange={handleContentChange}
             ></p>

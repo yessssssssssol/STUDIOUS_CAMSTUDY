@@ -1,3 +1,9 @@
+import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
+import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
+import Link from 'next/link';
+
+import DeleteModal from '../../../components/common/DeleteModal';
+
 import { useRouter } from 'next/router';
 import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
@@ -10,6 +16,7 @@ import * as API from '../../../pages/api/api';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../../core/atoms/userState';
 import MemberList from '../../../components/board/MemberList';
+import Button from '../../../components/common/Button';
 
 export default function Detail() {
   let tempData = {};
@@ -22,8 +29,10 @@ export default function Detail() {
   const [isApplicants, setIsApplicants] = useState(false);
   const [members, setMembers] = useState([]);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    console.log(isApplicants, 'applicants');
     async function getBoardDetail() {
       try {
         // 방 데이터 가져오기
@@ -56,7 +65,7 @@ export default function Detail() {
     if (router.isReady) {
       getBoardDetail();
     }
-  }, [router.isReady]);
+  }, [router.isReady, members]);
 
   useEffect(() => {
     if (owner.id === currUser.id) {
@@ -73,6 +82,19 @@ export default function Detail() {
         roomId: detailData.roomId,
       });
       console.log('신청되었습니다.');
+    } catch (err) {
+      console.log(err);
+    }
+    getApplicants();
+    console.log(applicants);
+  };
+
+  const getApplicants = async () => {
+    try {
+      const res = await API.get(`applicants/${detailData.roomId}`);
+      console.log(res.data);
+      setApplicants(res.data);
+      console.log(applicants);
     } catch (err) {
       console.log(err);
     }
@@ -102,6 +124,10 @@ export default function Detail() {
     }
   };
 
+  const modalShowHandler = () => {
+    setOpen(true);
+  };
+
   useEffect(() => {
     applicantsCheck();
   }, [applicants]);
@@ -111,47 +137,64 @@ export default function Detail() {
       {detailData && (
         <div>
           <Helmet title="상세페이지" />
-          <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-            <main className="mt-10">
-              <div className="mb-4 md:mb-0 w-full mx-auto relative">
-                <div className="px-4 lg:px-0">
-                  <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
-                    {detailData.roomTitle}
-                  </h2>
-                  <div className="pt-4 pb-2">
-                    {detailData.hashTags.map((tag, index) => {
-                      return (
-                        <span
-                          key={index}
-                          className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                        >
-                          {tag}
-                        </span>
-                      );
-                    })}
+          <div className="px-4 py-10 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-10">
+            <main className="mt-5">
+              <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
+                {detailData.roomTitle}
+              </h2>
+              <div className="mb-4 md:mb-0 w-full mx-auto relative flex gap-x-20 gap-y-4">
+                <div className="flex flex-col gap-y-12 flex-1">
+                  <div className="flex flex-col gap-y-2">
+                    <div className="pt-4 pb-2 flex">
+                      <div className="flex-1">
+                        {detailData.hashTags.map((tag, index) => {
+                          return (
+                            <span
+                              key={index}
+                              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                            >
+                              {tag}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      {isOwner && (
+                        <section className="flex items-center gap-x-2 mr-[30px] font-bold">
+                          <Link href={`/board/edit/${detailData.roomId}`}>
+                            <a className="cursor-pointer">
+                              <RiEdit2Fill size="24" color="#fbbf24" />
+                            </a>
+                          </Link>
+                          <button onClick={modalShowHandler}>
+                            <BsTrashFill size="24" color="#fbbf24" />
+                          </button>
+                          {open && (
+                            <DeleteModal
+                              myroomInfo={detailData}
+                              setShow={setOpen}
+                              title={'해당 스터디를 지우시겠습니까?'}
+                            />
+                          )}
+                        </section>
+                      )}
+                    </div>
+                    <div>
+                      <div className="px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 총 정원: ${detailData.membersNum}`}</div>
+                      <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${detailData.startStudyDay} ~ ${detailData.endStudyDay}`}</div>
+                      <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${detailData.focusTimeStart} ~ ${detailData.focusTimeEnd}`}</div>
+                    </div>
+                    <div className="border-l-4 text-xl shadow-md border-gray-500 pl-4 p-4  rounded w-full border-r-4 ">
+                      {detailData.roomDesc}
+                    </div>
                   </div>
-                  <div className="px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 총 정원: ${detailData.membersNum}`}</div>
-                  <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${detailData.startStudyDay} ~ ${detailData.endStudyDay}`}</div>
-                  <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${detailData.focusTimeStart} ~ ${detailData.focusTimeEnd}`}</div>
-                </div>
-              </div>
-              <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
-                  <div className="border-l-4 border-gray-500 pl-4 mb-10 italic rounded">
-                    {detailData.roomDesc}
-                  </div>
-
-                  <div className="mb-6">
+                  <div>
                     {!isMember && (
                       <div className="flex">
-                        <button
-                          type="button"
-                          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        <Button
+                          text={'스터디 신청하기'}
                           onClick={submitHandler}
-                          disabled={isApplicants}
-                        >
-                          스터디 신청하기
-                        </button>
+                          disable={isApplicants}
+                        />
                         {isApplicants && (
                           <p className="px-5 py-2.5 mr-2 mb-2 italic font-semibold text-red-500">
                             이미 신청한 스터디입니다.
@@ -160,23 +203,23 @@ export default function Detail() {
                       </div>
                     )}
                     {isMember && (
-                      <button
-                        type="button"
-                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      <Button
+                        text={'스터디방 입장하기'}
                         onClick={enterHandler}
-                      >
-                        스터디방 입장하기
-                      </button>
+                      />
                     )}
                   </div>
-
+                </div>
+                <div>{owner && <ProfileCard owner={owner} />}</div>
+              </div>
+              <div className="flex flex-col-reverse gap-x-20 lg:flex-row lg:space-x-12">
+                <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
                   <div className="flex-col w-full">
                     <Comments roomId={detailData.roomId} Id={detailData.id} />
                   </div>
                 </div>
 
-                <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-                  {owner && <ProfileCard owner={owner} />}
+                <div className="w-full lg:w-2/5 mt-12 max-w-screen-sm">
                   {applicants && (
                     <CertificationList
                       applicants={applicants}

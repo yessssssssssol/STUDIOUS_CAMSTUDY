@@ -15,7 +15,7 @@ function Comments({ roomId, writerId }) {
 
   return (
     <div>
-      <div>
+      <div className="mr-5">
         <div>Comments</div>
         <CommentAddForm
           roomId={roomId}

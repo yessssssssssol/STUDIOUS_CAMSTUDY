@@ -35,17 +35,27 @@ const Certification = ({ applicant, isOwner }) => {
       }
     }
     accept();
+    getMembers();
+  };
+
+  const getMembers = async () => {
+    try {
+      await API.get(`studyroom/${roomId}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleReject = () => {
     // 그냥 거절
-    async function reject() {
+    async function rejectMember() {
       try {
         await API.delete(`apply/${roomId}/${applicantId}`);
         console.log('해당 신청자가 거절되었습니다.');
       } catch (err) {
         console.log(err);
       }
+      getMembers();
     }
     // 승인 후 거절
     async function deleteMember() {
@@ -60,7 +70,7 @@ const Certification = ({ applicant, isOwner }) => {
       deleteMember();
       setIsAccept(false);
     } else {
-      reject();
+      rejectMember();
     }
   };
 
@@ -69,21 +79,21 @@ const Certification = ({ applicant, isOwner }) => {
       {applicant && (
         <div className="mt-3 flex space-x-5 overflow-hidden">
           <img
-            className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+            className=" inline-block h-12 w-12 rounded-full ring-2 ring-white"
             src={userURL}
             alt="신청한사람"
           />
-          <div className="mt-2 font-bold">{userName}</div>
+          <div className="flex-1 mt-2 font-bold">{userName}</div>
           {isOwner && (
             <div class="inline-flex">
               <button
-                class="bg-blue-200 hover:bg-blue-300 text-black font-bold text-sm px-2 rounded-l"
+                class="bg-blue-100 hover:bg-blue-200 text-gray-800  font-bold text-sm px-2 rounded-l"
                 onClick={handleAccept}
               >
                 수락
               </button>
               <button
-                class="bg-red-200 hover:bg-red-300 text-black font-bold text-sm px-2 rounded-r"
+                class="bg-red-100 hover:bg-red-200 text-gray-800  font-bold text-sm px-2 rounded-r"
                 onClick={handleReject}
               >
                 거절

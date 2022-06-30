@@ -1,6 +1,7 @@
-import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
+import { userAtom } from '../../core/atoms/userState';
 import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
@@ -9,13 +10,13 @@ import dayjs from 'dayjs';
 import { RiTimerLine } from 'react-icons/ri';
 
 import * as API from '../../pages/api/api';
-import { getClientBuildManifest } from 'next/dist/client/route-loader';
 // userIsHear가 true일 때 start
 // false가 되면 pause
 // 아예 창을 나가면 stop하고 reset
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
-const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null) => {
+
+const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
   console.log(membersOnly);
 
@@ -28,36 +29,18 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
   const userIsHear = useRecoilValue(aiAtom);
 
   // timelog 찍을 때 사용
-  const [startTime, setStartTime] = useState("0000-00-00 00:00:00");
-  const [endTime, setEndTime] = useState(userT);
+  const [startTime, setStartTime] = useState('yyyy-mm-dd HH:MM:SS');
+  const [endTime, setEndTime] = useState('yyyy-mm-dd HH:MM:SS');
 
   const router = useRouter();
-
+  const useratom = useRecoilValue(userAtom);
+  const [user, setUser] = useState();
   // dayjs 한국 시간 설정
   dayjs.locale('ko');
 
-  if (ref != null) {
-    useImperativeHandle(ref, () => ({
-      // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
-      handleClick () {
-        setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-        timelogFunc();
-        if (!membersOnly) {
-          updateHeadCount();
-        }
-          console.log('나가기');
-          router.back();
-      },
-      getTime () {
-        return endTime;
-      }
-    }));
-  }
-
-  
-
   // 처음 카운트다운 할 때 쓰는 코드
   useEffect(() => {
+    setUser(useratom);
     let myInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
@@ -95,7 +78,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
     if (getReady) {
       handleStart();
       console.log('getReady가 true');
-      setStartTime(startTime);
+      setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     }
   }, []);
 
@@ -108,21 +91,20 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
 
   // timelog 함수
   const timelogFunc = async () => {
-    if (myTimer == true) {
-      try {
-        const res = await API.post('timelog', {
-          startTime,
-          endTime,
-        });
-        const updatedTimelog = await res.data;
-        console.log('timelog 성공');
-        console.log(updatedTimelog);
-      } catch (err) {
-        console.log('timelog 실패', err);
-      }
+    try {
+      const res = await API.post('timelog', {
+        startTime,
+        endTime,
+      });
+      const updatedTimelog = await res.data;
+      console.log('timelog 성공');
+      console.log(updatedTimelog);
+    } catch (err) {
+      console.log('timelog 실패', err);
     }
   };
 
+  // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
   const handleClick = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
@@ -131,7 +113,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
     }
     console.log('나가기');
     router.back();
-  }
+  };
 
   const updateHeadCount = async () => {
     try {
@@ -147,12 +129,27 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
   return (
     <div>
       <div>
-        <div className="absolute flex justify-around">
-          <div>
-            <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+        <div className="mx-10 my-10 flex ">
+          <div className="w-1/3 text-center">
+            <h3 className="font-bold text-3xl">
+              {user?.name}님의 개인 스터디룸
+            </h3>
+          </div>
+
+          <div className="w-1/3 text-center">
+            <p className="bg-gray-100 text-gray-800 font-bold text-3xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
+          </div>
+
+          <div className="w-1/3 text-center">
+            <button
+              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+              onClick={handleClick}
+            >
+              나가기
+            </button>
           </div>
         </div>
       </div>
@@ -202,6 +199,6 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT}, ref = null)
       </div>
     </div>
   );
-});
+};
 
-export default StopWatch;
+export default StopWatchPrivate;
