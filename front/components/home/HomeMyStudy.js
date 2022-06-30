@@ -47,7 +47,7 @@ const HomeMyStudy = () => {
                 <div className=" px-2 py-10 mx-auto sm:max-w-xl  md:px-12 lg:px-8">
                   <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
                     <a href={'/studyroom/create'} aria-label="Article">
-                      <div className="flex items-center justify-center bg-amber-50 h-[300px] w-[250px] rounded-xl hover:shadow-amber-300/50  hover:bg-white hover:text-amber-400 shadow-lg hover:scale-105 hover:border-amber-400 hover:border">
+                      <div className="flex items-center justify-center bg-amber-50 h-[300px] w-[250px] rounded-xl hover:shadow-amber-300/50 shadow-lg hover:scale-105 hover:bg-white hover:border-amber-400 hover:border hover:text-amber-400">
                         <p className="font-bold text-xl"> + ROOM CREATE</p>
                       </div>
                     </a>

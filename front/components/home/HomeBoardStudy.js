@@ -42,7 +42,7 @@ const HomeBoardStudy = ({ profileURL }) => {
       </div>
       <div className="flex items-center justify-center w-full">
         <Link href={'/board'}>
-          <button className="px-4 py-1 bg-amber-400 text-white rounded font-semibold hover:scale-110 shadow-lg hover:bg-amber-500 hover:shadow-amber-300/50 mx-5">
+          <button className="px-4 py-1 bg-amber-400 text-white rounded font-semibold shadow-lg hover:bg-amber-500 hover:scale-110 hover:shadow-amber-300/50 mx-5">
             View All
           </button>
         </Link>
