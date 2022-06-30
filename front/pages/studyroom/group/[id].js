@@ -3,10 +3,11 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { isValidElement, useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
+import { GoUnmute, GoMute } from "react-icons/go";
 
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -100,6 +101,7 @@ export default function Group() {
   const [isCamera, setIsCamera] = useState(false);
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
+  const stopWatchRef = useRef();
 
   let roomId;
 
@@ -364,6 +366,7 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
+          // req.data['userTime'] = stopWatchRef.current.getTime();
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -397,6 +400,7 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
+            //req.data['userTime'] = stopWatchRef.current.getTime();
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -537,75 +541,104 @@ export default function Group() {
     getRoomData();
   }, []);
 
+  function getStartTime(userId) {
+    return userDic[userId].userTime;
+  }
+
   return (
     <div>
-      <p className="text-center font-bold text-2xl">{room?.roomName}</p>
+      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
-        <div className="w-full flex">
-          <div className="w-full items-center lg:flex">
-            <div className="w-full lg:w-1/2">
-              {isCamera ? (
-                <div>
-                  <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
-                  <AIFunc cb = {(result) => {AlertNoHear(result)}}/>
-                  <AlertModal />
-                  <button id="muteBtn" onClick={MuteBtnClick}>
-                    Unmute
-                  </button>
-                  <br />
-                  <button id="cameraBtn" onClick={CameraOnOffClick}>
-                    turnOn
-                  </button>
+        <>
+          <div className="flex px-5">
+            <div className="lg:w-9/12">
+              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]" >
+                {isCamera ? (
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                    <StopWatch myTimer={true} roomId={roomId} membersOnly={room.membersOnly} ref={stopWatchRef} userT={"0000-00-00 00:00:00"}/>
+                    <div className='absolute bottom-[5px] left-[8px]'>{isMute ? <GoMute color="white" size="30"/>: <GoUnmute color="white" size="30"/>}</div>
+                    <AIFunc cb={(result) => {AlertNoHear(result);}} />
+                    
+                  </div>
+                ) : (
+                  <div>
+                    <p>카메라가 없습니다.</p>
+                  </div>
+                )}
+                {/* <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2"> */}
+                {/* <div className="">
+                  <p>일반 카메라</p> */}
+
+                {/* <div id="others"> */}
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={1}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                    {/* {
+                      document.getElementsByClassName("camera").map((v) => {
+                        if (v.key === 1) {
+                          const id = v.id;
+                          const user = FindUser(id);
+
+                          if(id === 'none') {
+                            return;
+                          }
+                          console.log("user", user); 
+                          return <StopWatch myTimer={false} roomId={roomId} membersOnly={room.membersOnly} userT={user?.userTime}/>;
+                        }
+                      })
+                    } */}
+                  </div>
+                  <h3 id="none" key={1}>
+                    빈자리
+                  </h3>
                 </div>
-              ) : (
-                <p>카메라가 없습니다.</p>
-              )}
-            </div>
-            <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
-              <div id="others">
 
-                <video className='camera' id="none" key={1} width={400} height={300} playsInline autoPlay muted></video>
-                <h3 id="none" key={1} >빈자리</h3>
-
-                <div className="bg-green-200 w-[500px] ">
-                  2번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={2}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={2}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
                   <h3 id="none" key={2}>
                     빈자리
                   </h3>
                 </div>
 
-                <div className="bg-indigo-200 w-[500px]">
-                  3번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={3}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={3}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
                   <h3 id="none" key={3}>
                     빈자리
                   </h3>
                 </div>
-                {/* </div> */}
+
               </div>
-              {/* </div> */}
-              {/* </div> */}
-              {/* </div>
-              </div> */}
             </div>
             <div className="lg:w-3/12 w-[100px] bg-purple-400">
               <p>채팅</p>
@@ -618,49 +651,23 @@ export default function Group() {
                 ></input>
                 <button onClick={sendChatHandler}>Send</button>
               </form>
+              <br />
+                <button id="cameraBtn" onClick={CameraOnOffClick}>
+                  turnOn
+                </button>
+                <p></p>
+                <button id="muteBtn" onClick={MuteBtnClick}>
+                  Unmute
+                </button>
+                <button className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                  onClick={() => {stopWatchRef.current.handleClick();}}> 나가기 </button>
               {chat.map((i) => {
                 return <div>{i}</div>;
               })}
             </div>
           </div>
-          <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
-            <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
-            <div className="relative w-full p-6 overflow-y-auto h-2/3">
-              <ul className="space-y-2">
-                {chat.map((chat) => {
-                  return (
-                    <li className="flex justify-start">
-                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-                        <span className="block">{chat}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <form>
-              <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
-                <input
-                  id="inputbox"
-                  placeholder="message"
-                  required
-                  type="text"
-                  className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                ></input>
-                <button onClick={sendChatHandler}>
-                  <svg
-                    className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                  </svg>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+          <AlertModal />
+        </>
       ) : (
         <Loading />
       )}
