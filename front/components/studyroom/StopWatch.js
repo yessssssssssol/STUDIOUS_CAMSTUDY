@@ -19,7 +19,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
 
   // 카운트다운 시간 설정: 10초
   const initialMinute = 0;
-  const initialSeconds = 10;
+  const initialSeconds = 5;
   const [minutes, setMinutes] = useState(initialMinute);
   const [seconds, setSeconds] = useState(initialSeconds);
   const [getReady, setGetReady] = useState(false);
