@@ -13,7 +13,7 @@ export default function OpenroomCard({ openRoom }) {
               <small className="text-amber-400 font-bold">
                 {openRoom.members.length + ' / ' + openRoom.membersNum}
               </small>
-              <p className="text-2xl font-bold  text-black pb-2">
+              <p className="text-xl font-bold  text-black pb-2">
                 {openRoom.roomName}
               </p>
               <p className="text-sm font-normal  text-slate-400">

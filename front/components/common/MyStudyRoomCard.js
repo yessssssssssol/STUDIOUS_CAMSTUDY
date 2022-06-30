@@ -49,7 +49,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/board/detail/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold  text-slate-600 pb-2">
+                    <p className="text-xl font-bold  text-slate-600 pb-2">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
@@ -59,7 +59,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                     href={`/openroom/board/${myStudyRoom.roomId}`}
                     aria-label="Article"
                   >
-                    <p className="text-2xl font-bold text-slate-600 pb-2 ">
+                    <p className="text-xl font-bold text-slate-600 pb-2 ">
                       {myStudyRoom.roomName}
                     </p>
                   </a>
