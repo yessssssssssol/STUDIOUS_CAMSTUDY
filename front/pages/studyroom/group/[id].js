@@ -3,14 +3,14 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { isValidElement, useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
+import { GoUnmute, GoMute } from 'react-icons/go';
 
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
-import { getElementsByTagName } from 'domutils';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
@@ -101,6 +101,7 @@ export default function Group() {
   const [isCamera, setIsCamera] = useState(false);
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
+  const stopWatchRef = useRef();
 
   let roomId;
 
@@ -365,6 +366,7 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
+          // req.data['userTime'] = stopWatchRef.current.getTime();
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -398,6 +400,7 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
+            //req.data['userTime'] = stopWatchRef.current.getTime();
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -472,7 +475,6 @@ export default function Group() {
     console.log(offer);
 
     const answer = await makeConnection(offersId, offer);
-    //todo: 메시지 전달
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
     // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
@@ -539,37 +541,40 @@ export default function Group() {
     getRoomData();
   }, []);
 
+  function getStartTime(userId) {
+    return userDic[userId].userTime;
+  }
+
   return (
     <div>
+      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
         <>
-          <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
           <div className="flex px-5">
             <div className="lg:w-9/12">
-              <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
-              {/* <div className="lg:flex"> */}
-              {/* <div className="w-6/12">
-                <div className="grid grid-flow-row auto-rows-max"> */}
-              <div
-                id="others"
-                className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]"
-              >
+              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
-                  <div className="bg-blue-800">
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                    <StopWatch
+                      myTimer={true}
+                      roomId={roomId}
+                      membersOnly={room.membersOnly}
+                      ref={stopWatchRef}
+                      userT={'0000-00-00 00:00:00'}
+                    />
+                    <div className="absolute bottom-[5px] left-[8px]">
+                      {isMute ? (
+                        <GoMute color="white" size="30" />
+                      ) : (
+                        <GoUnmute color="white" size="30" />
+                      )}
+                    </div>
                     <AIFunc
                       cb={(result) => {
                         AlertNoHear(result);
                       }}
                     />
-
-                    <button id="muteBtn" onClick={MuteBtnClick}>
-                      Unmute
-                    </button>
-                    <br />
-                    <button id="cameraBtn" onClick={CameraOnOffClick}>
-                      turnOn
-                    </button>
-                    <p>메인 카메라(인공지능 적용된 것)</p>
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>
@@ -581,62 +586,74 @@ export default function Group() {
                   <p>일반 카메라</p> */}
 
                 {/* <div id="others"> */}
-                <div className="bg-yellow-200 w-[500px] ">
-                  1번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={1}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={1}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                    {/* {
+                      document.getElementsByClassName("camera").map((v) => {
+                        if (v.key === 1) {
+                          const id = v.id;
+                          const user = FindUser(id);
+
+                          if(id === 'none') {
+                            return;
+                          }
+                          console.log("user", user); 
+                          return <StopWatch myTimer={false} roomId={roomId} membersOnly={room.membersOnly} userT={user?.userTime}/>;
+                        }
+                      })
+                    } */}
+                  </div>
                   <h3 id="none" key={1}>
                     빈자리
                   </h3>
                 </div>
 
-                <div className="bg-green-200 w-[500px] ">
-                  2번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={2}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={2}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
                   <h3 id="none" key={2}>
                     빈자리
                   </h3>
                 </div>
 
-                <div className="bg-indigo-200 w-[500px]">
-                  3번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={3}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
+                <div className="bg-yellow-200 w-[500px] h-[370px] rounded-xl ">
+                  <div className="w-full py-10 flex justify-center ">
+                    <video
+                      className="camera"
+                      id="none"
+                      key={3}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
                   <h3 id="none" key={3}>
                     빈자리
                   </h3>
                 </div>
-                {/* </div> */}
               </div>
-              {/* </div> */}
-              {/* </div> */}
-              {/* </div>
-              </div> */}
             </div>
             <div className="lg:w-3/12 w-[100px] bg-purple-400">
               <p>채팅</p>
@@ -649,6 +666,23 @@ export default function Group() {
                 ></input>
                 <button onClick={sendChatHandler}>Send</button>
               </form>
+              <br />
+              <button id="cameraBtn" onClick={CameraOnOffClick}>
+                turnOn
+              </button>
+              <p></p>
+              <button id="muteBtn" onClick={MuteBtnClick}>
+                Unmute
+              </button>
+              <button
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                onClick={() => {
+                  stopWatchRef.current.handleClick();
+                }}
+              >
+                {' '}
+                나가기{' '}
+              </button>
               {chat.map((i) => {
                 return <div>{i}</div>;
               })}
