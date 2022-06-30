@@ -13,7 +13,7 @@ export default function RankingTable({ rankings, userDatas }) {
   console.log('count', count);
   useEffect(() => {
     let interval = setInterval(() => {
-      if (done) {
+      if (!open) {
         if (count2 < 10) {
           setCount((prev) => prev + 1);
           count2++;
@@ -21,7 +21,7 @@ export default function RankingTable({ rankings, userDatas }) {
           setCount((prev) => prev === 0);
           count2 = 0;
         }
-      } else if (!done) {
+      } else if (open) {
         count2 = 0;
         setCount((prev) => prev === 0);
         clearInterval(interval);
@@ -32,7 +32,7 @@ export default function RankingTable({ rankings, userDatas }) {
     return () => {
       clearInterval(interval);
     };
-  }, [done]);
+  }, [open]);
 
   // useEffect(() => {}, count);
 
@@ -42,11 +42,13 @@ export default function RankingTable({ rankings, userDatas }) {
         setDone(true);
       }, 780);
     } else {
-      setDone(false);
       setTimeout(() => {
         setDone(false);
       }, 780);
+      setDone(false);
     }
+    console.log('handleDoneOpen', open);
+    console.log('handelDone', done);
   }
 
   function rankAr() {
@@ -146,9 +148,13 @@ export default function RankingTable({ rankings, userDatas }) {
         <div
           ref={chartBox}
           className="w-full"
-          style={{
-            transform: `translateY(-${count * 136}px`,
-          }}
+          style={
+            open
+              ? {}
+              : {
+                  transform: `translateY(-${count * 136}px`,
+                }
+          }
         >
           {rankAr()}
           {done && (
