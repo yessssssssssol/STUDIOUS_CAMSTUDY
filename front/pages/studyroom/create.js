@@ -87,8 +87,8 @@ export default function Edit() {
   return (
     <div>
       <div className="container w-full mx-auto my-5 bg-white rounded">
-        <div className="w-full xl:w-full border-b border-gray-300  py-3 bg-white ">
-          <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
+        <div className="w-full border-b border-gray-300  py-3 bg-white ">
+          <div className="flex xl:w-full xl:mx-0 items-center">
             <p className="text-lg text-gray-800  font-bold">스터디방 생성</p>
             <div className="ml-2 cursor-pointer text-gray-600 ">
               <svg
@@ -106,7 +106,7 @@ export default function Edit() {
             </div>
           </div>
         </div>
-        <div className="flex gap-x-6 mt-8">
+        <div className="flex gap-x-6 mt-8 w-full">
           <label
             htmlFor="name"
             className="pb-2 text-sm font-bold text-gray-800 "

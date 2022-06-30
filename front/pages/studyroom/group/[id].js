@@ -3,11 +3,18 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
-import { isValidElement, useEffect, useState } from 'react';
+import React, {
+  isValidElement,
+  useEffect,
+  useState,
+  useRef,
+  useDebugValue,
+} from 'react';
 import { useRecoilState } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
-
+import { GoUnmute, GoMute } from 'react-icons/go';
+import * as ReactDOM from 'react-dom/client';
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
 import { getElementsByTagName } from 'domutils';
@@ -92,6 +99,16 @@ const cameraRes = {
 //   }
 // }
 
+const timeRes = {
+  type: 'time',
+  data: {},
+};
+
+const muteRes = {
+  type: 'mute',
+  data: {},
+};
+
 export default function Group() {
   const router = useRouter();
   const [room, setRoom] = useState(null);
@@ -101,6 +118,10 @@ export default function Group() {
   const [isCamera, setIsCamera] = useState(false);
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
+  const stopWatchRef = useRef(null);
+  const [cameraSetting, setCameraSetting] = useState(false);
+
+  const [newState, setNewState] = useState({});
 
   let roomId;
 
@@ -128,6 +149,7 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
     console.log(myStream);
+
     socket.emit(
       'enter_room',
       data?.roomId,
@@ -195,6 +217,7 @@ export default function Group() {
 
     const cameras = document.getElementsByClassName('camera');
     const names = document.getElementsByTagName('h3');
+    const timers = document.getElementsByClassName('stopWatch');
 
     console.log(cameras);
     console.log(names);
@@ -211,6 +234,13 @@ export default function Group() {
       for (let name of names) {
         if (name.key === key) {
           name.id = othersId;
+          break;
+        }
+      }
+
+      for (let timer of timers) {
+        if (timer.key === key) {
+          timer.id = othersId;
           return;
         }
       }
@@ -227,9 +257,23 @@ export default function Group() {
       if (isMute == true) {
         muteBtn.innerText = 'Unmute';
         setMute(false);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = false;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       } else {
         muteBtn.innerText = 'Mute';
         setMute(true);
+
+        Object.keys(dataChannels).forEach((userId) => {
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          dataChannels[userId].send(JSON.stringify(req));
+        });
       }
     }
     console.log(userDic);
@@ -285,7 +329,29 @@ export default function Group() {
       for (let h3 of h3s) {
         if (h3.id === res.data?.socketId) {
           h3.innerText = res.data?.userName;
-          return;
+          break;
+        }
+      }
+
+      const timers = document.getElementsByClassName('stopWatch');
+
+      for (let timer of timers) {
+        if (timer.id === res.data?.socketId) {
+          const root = ReactDOM.createRoot(timer);
+          const stopwatch = React.createElement(StopWatch, {
+            myTimer: false,
+            roomId: roomId,
+            membersOnly: room?.membersOnly,
+            userT: res.data?.userTime,
+          });
+          root.render(stopwatch);
+
+          // ReactDOM.render(stopwatch, timer);
+          // ReactDOM.createPortal(stopwatch, timer);
+          // console.log("Cheeeeeeeeeeeeeeeeeeeeeck");
+          // console.log(stopwatch);
+
+          break;
         }
       }
     } else if (res.type == 'state') {
@@ -299,7 +365,19 @@ export default function Group() {
         return;
       }
       userDic[res.data?.userId].cameraOnState = res.data?.result;
-      console.log(userDic);
+      console.log(userDic[res.data?.userId]);
+    } else if (res.type == 'time') {
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+    } else if (res.type == 'mute') {
+      if (userDic.hasOwnProperty(res.data?.userId) == false) {
+        return;
+      }
+      userDic[res.data?.userId].muteState = res.data?.result;
+      console.log(userDic[res.data?.userId]);
+      setNewState(userDic[res.data?.userId].muteState);
+      console.log(newState);
     }
   }
 
@@ -365,6 +443,8 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
+          req.data['userTime'] = stopWatchRef.current.getTime();
+          req.data['muteState'] = false;
 
           myDataChannel.send(JSON.stringify(req));
         });
@@ -398,6 +478,8 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
+            req.data['userTime'] = stopWatchRef.current.getTime();
+            req.data['muteState'] = false;
 
             myDataChannel.send(JSON.stringify(req));
           });
@@ -457,8 +539,6 @@ export default function Group() {
       }
     });
 
-    FindUser(leaveId);
-
     Object.keys(userDic).forEach((v) => {
       if (v.socketId === leaveId) {
         delete userDic[v];
@@ -472,7 +552,6 @@ export default function Group() {
     console.log(offer);
 
     const answer = await makeConnection(offersId, offer);
-    //todo: 메시지 전달
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
     // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
@@ -490,12 +569,6 @@ export default function Group() {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
     console.log(peerConnections);
-
-    const user = FindUser(othersId);
-    const name = document.getElementById(user?.streamId);
-    if (name != null) {
-      name.innerText = user?.data?.userName;
-    }
   });
 
   const sendChatHandler = (e) => {
@@ -525,6 +598,36 @@ export default function Group() {
     console.log(result);
   }
 
+  function StartStopWatch(result) {
+    let req = timeRes;
+    req.data.userId = user?.id;
+    req.data.result = result;
+
+    if (Object.keys(dataChannels).length > 0) {
+      Object.keys(dataChannels).forEach((userId) => {
+        dataChannels[userId].send(JSON.stringify(req));
+      });
+    }
+
+    console.log(result);
+  }
+
+  function findUserByKey(key) {
+    const videos = document.getElementsByClassName('camera');
+    let id;
+    for (let video of videos) {
+      if (video.key === key) {
+        id = video.id;
+        break;
+      }
+    }
+
+    const user = FindUser(id);
+    // setNewState(user.muteState);
+    console.log(newState);
+    return user;
+  }
+
   useEffect(() => {
     async function getRoomData() {
       rtcInit();
@@ -539,104 +642,138 @@ export default function Group() {
     getRoomData();
   }, []);
 
+  useEffect(() => {}, [userDic]);
+
   return (
     <div>
+      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
         <>
-          <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
           <div className="flex px-5">
             <div className="lg:w-9/12">
-              <StopWatch roomId={roomId} membersOnly={room.membersOnly} />
-              {/* <div className="lg:flex"> */}
-              {/* <div className="w-6/12">
-                <div className="grid grid-flow-row auto-rows-max"> */}
-              <div
-                id="others"
-                className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]"
-              >
+              <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
-                  <div className="bg-blue-800">
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                    <StopWatch
+                      cb={(result) => {
+                        StartStopWatch(result);
+                      }}
+                      myTimer={true}
+                      roomId={roomId}
+                      membersOnly={room?.membersOnly}
+                      ref={stopWatchRef}
+                      userT={0}
+                      setCameraSetting={setCameraSetting}
+                    />
+                    <div className="absolute bottom-[5px] left-[8px]">
+                      {isMute ? (
+                        <GoMute color="white" size="30" />
+                      ) : (
+                        <GoUnmute color="white" size="30" />
+                      )}
+                    </div>
                     <AIFunc
                       cb={(result) => {
                         AlertNoHear(result);
                       }}
                     />
-
-                    <button id="muteBtn" onClick={MuteBtnClick}>
-                      Unmute
-                    </button>
-                    <br />
-                    <button id="cameraBtn" onClick={CameraOnOffClick}>
-                      turnOn
-                    </button>
-                    <p>메인 카메라(인공지능 적용된 것)</p>
                   </div>
                 ) : (
                   <div>
                     <p>카메라가 없습니다.</p>
                   </div>
                 )}
-                {/* <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2"> */}
-                {/* <div className="">
-                  <p>일반 카메라</p> */}
-
-                {/* <div id="others"> */}
-                <div className="bg-yellow-200 w-[500px] ">
-                  1번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={1}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
-                  <h3 id="none" key={1}>
-                    빈자리
-                  </h3>
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={1}></div>
+                  <div className="w-full flex justify-center ">
+                    <video
+                      className="camera rounded-xl"
+                      id="none"
+                      key={1}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {newState &&
+                      (findUserByKey(1)?.muteState ? (
+                        <GoMute color="white" size="30" />
+                      ) : (
+                        <GoUnmute color="white" size="30" />
+                      ))}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      key={1}
+                    ></h3>
+                  </div>
                 </div>
 
-                <div className="bg-green-200 w-[500px] ">
-                  2번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={2}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
-                  <h3 id="none" key={2}>
-                    빈자리
-                  </h3>
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={2}></div>
+                  <div className="w-full flex justify-center ">
+                    <video
+                      className="camera rounded-xl"
+                      id="none"
+                      key={2}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {findUserByKey(2)?.muteState ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      key={2}
+                    ></h3>
+                  </div>
                 </div>
 
-                <div className="bg-indigo-200 w-[500px]">
-                  3번 캠
-                  <video
-                    className="camera"
-                    id="none"
-                    key={3}
-                    width={400}
-                    height={300}
-                    playsInline
-                    autoPlay
-                    muted
-                  ></video>
-                  <h3 id="none" key={3}>
-                    빈자리
-                  </h3>
+                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                  <div className="stopWatch" id="none" key={3}></div>
+                  <div className="w-full flex justify-center ">
+                    <video
+                      className="camera rounded-xl"
+                      id="none"
+                      key={3}
+                      width="100%"
+                      height="100%"
+                      playsInline
+                      autoPlay
+                      muted
+                    ></video>
+                  </div>
+                  <div className="absolute bottom-[5px] left-[8px]">
+                    {findUserByKey(3)?.muteState ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
+                  </div>
+                  <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
+                    <h3
+                      className="name font-medium text-lg"
+                      id="none"
+                      key={3}
+                    ></h3>
+                  </div>
                 </div>
-                {/* </div> */}
               </div>
-              {/* </div> */}
-              {/* </div> */}
-              {/* </div>
-              </div> */}
             </div>
             <div className="lg:w-3/12 w-[100px] bg-purple-400">
               <p>채팅</p>
@@ -649,6 +786,23 @@ export default function Group() {
                 ></input>
                 <button onClick={sendChatHandler}>Send</button>
               </form>
+              <br />
+              <button id="cameraBtn" onClick={CameraOnOffClick}>
+                turnOn
+              </button>
+              <p></p>
+              <button id="muteBtn" onClick={MuteBtnClick}>
+                Unmute
+              </button>
+              <button
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                onClick={() => {
+                  stopWatchRef.current.handleClick();
+                }}
+              >
+                {' '}
+                나가기{' '}
+              </button>
               {chat.map((i) => {
                 return <div>{i}</div>;
               })}
@@ -691,6 +845,7 @@ export default function Group() {
               </div>
             </form>
           </div>
+          <AlertModal />
         </>
       ) : (
         <Loading />
