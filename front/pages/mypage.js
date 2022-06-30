@@ -115,7 +115,7 @@ export default function mypage() {
             </div>
           </div>
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl text-center lg:block text-left my-[50px]">
+            <div className="font-bold text-3xl lg:block text-left my-[50px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
             <span className="hidden text-center sm:block m-2 lg:text-left my-[45px]">
@@ -165,17 +165,18 @@ export default function mypage() {
             </div>
             <div className="pt-[50px]">
               <BoldText text={`최근 공부한 방`} />
-
               <div>
-                {myroomInfos.map((myroomInfo, index) => (
-                  <>
-                    <CategoryBox
-                      key={index}
-                      myroomInfo={myroomInfo}
-                      color={randomColor[Math.ceil(Math.random() * 10) + 1]}
-                    />
-                  </>
-                ))}
+                {myroomInfos
+                  .filter((myroomInfo) => myroomInfo.group === true)
+                  .map((myroomInfo, index) => (
+                    <>
+                      <CategoryBox
+                        key={index}
+                        myroomInfo={myroomInfo}
+                        color={randomColor[Math.ceil(Math.random() * 10) + 1]}
+                      />
+                    </>
+                  ))}
               </div>
             </div>
           </div>

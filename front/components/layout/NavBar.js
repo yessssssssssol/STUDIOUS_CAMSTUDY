@@ -180,8 +180,8 @@ export default function NavBar() {
                     </span>
                   </div>
                   <ul className="py-1">
-                    <li key={1} className="text-center">
-                      <a className="block text-sm text-center text-gray-700 hover:bg-gray-100">
+                    <li key={1}>
+                      <a className="block text-sm  text-gray-700 hover:bg-gray-100">
                         <UserEditModal />
                       </a>
                     </li>

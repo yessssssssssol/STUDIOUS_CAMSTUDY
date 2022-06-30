@@ -28,7 +28,7 @@ const RegisterModal = () => {
         });
 
         router.push('/');
-        alert('인증번호가 틀렸습니다. 다시 확인해주세요');
+        alert('회원가입에 성공했습니다!');
         setShowModal(false);
         setEmail('');
         setPassword('');
@@ -76,6 +76,7 @@ const RegisterModal = () => {
           setEmail('');
           setPassword('');
           setName('');
+          setIsVaild(false);
         }}
       >
         {modalTitle}
