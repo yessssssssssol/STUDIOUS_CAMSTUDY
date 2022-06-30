@@ -3,6 +3,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
 import { isloginAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
+import Button from '../common/Button';
 
 const EditUser = () => {
   const setShowModal = useSetRecoilState(editUserModalAtom);
@@ -35,7 +36,7 @@ const EditUser = () => {
 
   const handleUserDelete = async () => {
     await API.delete(`user/${user.id}`);
-    console.log('회원탈퇴가 완료되었습니다.');
+    alert('회원탈퇴가 완료되었습니다.');
     setShowModal(false);
     setIsLogin(false);
     localStorage.clear();
@@ -54,9 +55,6 @@ const EditUser = () => {
           value={user.name}
           onChange={handleNameChange}
         />
-        <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500">
-          스터디원들에게 보여지는 정보입니다.
-        </p>
       </div>
       <div>
         <label className="block mb-2 text-base font-medium text-gray-900">
@@ -69,33 +67,30 @@ const EditUser = () => {
           placeholder="Leave a comment..."
           value={user.descriptiion}
           onChange={handleDescriptionChange}
-        ></textarea>
+        >
+          {user.descriptiion}
+        </textarea>
       </div>
-      <div>
-        <button
-          className="text-white py-2 px-4 mt-3 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
+      <div className="flex gap-3 my-3">
+        <Button
+          text="회원탈퇴"
           onClick={handleUserDelete}
+          color="bg-orange-400"
+        />
+        <div
+          id="helper-text-explanation"
+          className="mt-2 text-sm text-gray-500 decoration-solid italic"
         >
-          회원탈퇴
-        </button>
-        <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500">
           탈퇴 시 계정과 관련된 모든 정보가 삭제되며 복구되지 않습니다.
-        </p>
+        </div>
       </div>
-      <div className="flex flex-row justify-center space-x-2">
-        <button
-          type="submit"
-          className="text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
-          onClick={submitHandler}
-        >
-          수정
-        </button>
-        <button
-          className="text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
+      <div className="flex flex-row justify-center space-x-2 my-2">
+        <Button text="수정" onClick={submitHandler} color="" />
+        <Button
+          text="취소"
           onClick={() => setShowModal(false)}
-        >
-          취소
-        </button>
+          color="bg-orange-50 text-amber-400 border border-amber-400 hover:text-white"
+        />
       </div>
     </div>
   );
