@@ -27,9 +27,9 @@ const HomeBoardStudy = ({ profileURL }) => {
         </div>
       </div>
       <div className="px-10 md:px-15 lg:px-20">
-        <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[10rem]">
+        <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center p-1">
           {boardDatas &&
-            boardDatas.slice(0, 4).map((boardData, index) => {
+            boardDatas.slice(0, 3).map((boardData, index) => {
               return (
                 <BoardCard
                   key={index}

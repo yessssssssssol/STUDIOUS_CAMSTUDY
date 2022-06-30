@@ -6,10 +6,10 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
         {myStudyRoom.group === false ? (
           // "개인 스터디룸"
           <a href={`/studyroom/private`} aria-label="Article">
-            <div className="bg-blue-900 h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300">
-              <div className="mt-[130px] ml-2">
+            <div className=" h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
+              <div className="">
                 <img
-                  className="h-[60px] w-[60px] rounded-full"
+                  className="h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300"
                   src="img.jpeg"
                   alt="Rounded avatar"
                 />
@@ -29,7 +29,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
             aria-label="Article"
           >
             {/* <!-- card --> */}
-            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r from-purple-100 to-teal-50 rounded-2xl shadow-xl shadow-slate-300/60">
+            <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r from-amber-100 to-amber-50 rounded-2xl shadow-xl shadow-slate-300/60">
               {/* <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gray-200 rounded-2xl shadow-xl shadow-slate-300/60"> */}
               {/* <!-- img --> */}
               <img
@@ -39,7 +39,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
               />
               {/* <!-- text information --> */}
               <div className="px-4">
-                <small className="text-blue-400 text-xs">
+                <small className="text-amber-400 text-xs">
                   {myStudyRoom.members.length + '/' + myStudyRoom.membersNum}
                 </small>
                 {/* 제목 클릭하면 스터디룸 게시판(?) 연결  */}

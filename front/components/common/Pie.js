@@ -54,7 +54,7 @@ export default function Pie({ title, pieData, index }) {
             data={[
               {
                 value: pieData || 0,
-                color: '#3feaef',
+                color: '#fde68a',
               },
             ]}
             reveal={pieData}

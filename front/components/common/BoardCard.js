@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 
 export default function BoardCard({ boardData, profileURL }) {
   return (
-    <div className="w-96 h-full px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
+    <div className="w-96 h-full px-2 py-16 mx-auto sm:max-w-xl md:px-2 lg:px-8 lg:py-8">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
-        <div className="over-flow-hidden bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
+        <div className="over-flow-hidden bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg duration-300">
           <a href={`/board/detail/${boardData.roomId}`}>
             <img
               src={boardData.roomImg}
-              className="object-fill w-full h-48 rounded-md"
+              className="object-fill w-full h-48 rounded-t-md"
               alt="스터디 모집 이미지"
             />
           </a>
