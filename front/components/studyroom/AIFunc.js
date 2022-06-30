@@ -10,7 +10,6 @@ const AIFunc = (props) => {
   let trueList = [];
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
-  const canvasRef = useRef();
 
   // trueList에 true가 50번 찍히면 타이머 자동 재시작, trueList reset
   const trueCheck = () => {
@@ -103,8 +102,15 @@ const AIFunc = (props) => {
 
   return (
     <div className="w-full flex justify-center ">
-      <video className="rounded-xl" autoPlay playsInline muted ref={videoRef} width="100%" height="100%">
-      </video>
+      <video
+        className="rounded-xl"
+        autoPlay
+        playsInline
+        muted
+        ref={videoRef}
+        width="100%"
+        height="100%"
+      ></video>
     </div>
   );
 };
