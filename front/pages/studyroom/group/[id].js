@@ -4,7 +4,7 @@ import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
 import { isValidElement, useEffect, useState, useRef } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
@@ -102,6 +102,7 @@ export default function Group() {
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
   const stopWatchRef = useRef();
+  const userValue = useRecoilValue(userAtom);
 
   let roomId;
 
@@ -550,8 +551,8 @@ export default function Group() {
       <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
         <>
-          <div className="flex px-5">
-            <div className="lg:w-9/12">
+          <div className="grid lg:flex lg:mx-[10rem]">
+            <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
                   <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
@@ -655,75 +656,99 @@ export default function Group() {
                 </div>
               </div>
             </div>
-            <div className="lg:w-3/12 w-[100px] bg-purple-400">
-              <p>채팅</p>
+
+            {/* Chatting */}
+            {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-purple-400 rounded-xl">
+              {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
+              <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
+              <div className="relative w-full p-6 overflow-y-auto h-[72%]">
+                <ul className="space-y-2">
+                  {chat.map((chat) => {
+                    // if (href[leng - 1] === '/') {
+                    //   href = href.slice(0, leng - 1);
+                    // }
+                    let name = chat.split(' : ');
+                    console.log(name[0], 'name[0]');
+                    console.log('####################');
+                    console.log(name[0] == `${userValue?.name}`, 'compare 1번');
+                    console.log('+++++++++++++++++++');
+                    console.log(name[0] == `${userValue?.name}`, 'compare 2번');
+                    console.log('====================');
+                    // console.log(`${userValue?.name}`, '${userValue?.name}');
+
+                    console.log(name[1], 'name[1]');
+
+                    return (
+                      <>
+                        {name[0] === `${userValue?.name}` ? (
+                          // 나
+                          <li className="flex justify-end">
+                            <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
+                              <span className="block">{chat}</span>
+                            </div>
+                          </li>
+                        ) : (
+                          // 상대
+                          <li className="flex justify-start">
+                            <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
+                              <span className="block">{chat}</span>
+                            </div>
+                          </li>
+                        )}
+                      </>
+                    );
+                  })}
+                </ul>
+              </div>
+
               <form>
-                <input
-                  id="inputbox"
-                  placeholder="message"
-                  required
-                  type="text"
-                ></input>
-                <button onClick={sendChatHandler}>Send</button>
+                <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
+                  <input
+                    id="inputbox"
+                    placeholder="message"
+                    required
+                    type="text"
+                    className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                  ></input>
+                  <button onClick={sendChatHandler}>
+                    <svg
+                      className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    </svg>
+                  </button>
+                </div>
               </form>
-              <br />
-              <button id="cameraBtn" onClick={CameraOnOffClick}>
-                turnOn
-              </button>
-              <p></p>
-              <button id="muteBtn" onClick={MuteBtnClick}>
-                Unmute
-              </button>
-              <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
-                onClick={() => {
-                  stopWatchRef.current.handleClick();
-                }}
-              >
-                {' '}
-                나가기{' '}
-              </button>
-              {chat.map((i) => {
-                return <div>{i}</div>;
-              })}
-            </div>
-          </div>
-          <div class="flex flex-col w-1/4 h-screen px-4 py-8 bg-white border-r">
-            <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
-            <div className="relative w-full p-6 overflow-y-auto h-2/3">
-              <ul className="space-y-2">
-                {chat.map((chat) => {
-                  return (
-                    <li className="flex justify-start">
-                      <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-                        <span className="block">{chat}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <form>
-              <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
-                <input
-                  id="inputbox"
-                  placeholder="message"
-                  required
-                  type="text"
-                  className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                ></input>
-                <button onClick={sendChatHandler}>
-                  <svg
-                    className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+              {/*  */}
+              <div className="flex justify-between px-3 pt-5 ">
+                <div className="flex items-center">
+                  <button
+                    id="cameraBtn"
+                    className="mx-2"
+                    onClick={CameraOnOffClick}
                   >
-                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                  </svg>
+                    turnOn
+                  </button>
+                  <button id="muteBtn" onClick={MuteBtnClick}>
+                    Unmute
+                  </button>
+                </div>
+
+                <button
+                  className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                  onClick={() => {
+                    stopWatchRef.current.handleClick();
+                  }}
+                >
+                  {' '}
+                  나가기{' '}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </>
       ) : (
