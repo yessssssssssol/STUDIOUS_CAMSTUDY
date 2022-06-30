@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { createroomAtom } from '../../../core/atoms/createroomState';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  createroomAtom,
+  createhashtagAtom,
+} from '../../../core/atoms/createroomState';
 import * as API from '../../../pages/api/api';
 const CreateBoard = () => {
   const [room, setRoom] = useRecoilState(createroomAtom);
   const { roomTitle, roomDesc } = room;
-  const [hashTag, setHashTag] = useState('');
-
+  const setHashTag = useSetRecoilState(createhashtagAtom);
+  const [tag, setTag] = useState();
   const onTitleChange = (e) => {
     setRoom((prev) => {
       return {
@@ -21,17 +24,6 @@ const CreateBoard = () => {
       return {
         ...prev,
         roomDesc: e.target.value,
-      };
-    });
-  };
-
-  const onhashTagChange = (e) => {
-    setHashTag(e.target.value);
-    const hashTags = hashTag.split(' ');
-    setRoom((prev) => {
-      return {
-        ...prev,
-        hashTags: hashTags,
       };
     });
   };
@@ -106,8 +98,8 @@ const CreateBoard = () => {
             id="name"
             className="bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             placeholder="ex)#프론트 #백앤드"
-            value={hashTag}
-            onChange={onhashTagChange}
+            value={tag}
+            onChange={(e) => setHashTag(e.target.value)}
           />
         </div>
       </div>
