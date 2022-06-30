@@ -117,7 +117,9 @@ export default function Detail() {
     }
   };
 
-  useEffect(() => {}, [applicants]);
+  useEffect(() => {
+    applicantsCheck();
+  }, [applicants]);
 
   return (
     <>
