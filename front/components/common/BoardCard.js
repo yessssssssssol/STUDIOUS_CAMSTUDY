@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 export default function BoardCard({ boardData, profileURL }) {
   return (
-    <div className="w-96  px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
+    <div className="w-96 px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
         <div className="overflow-hidden transition-shadow duration-300 bg-white rounded  hover:scale-105 shadow-md">
           <a href={`/board/detail/${boardData.roomId}`}>
