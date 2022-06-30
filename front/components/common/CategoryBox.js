@@ -30,19 +30,19 @@ export default function CategoryBox({ myroomInfo, color }) {
       className={`flex justify-between bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl mx-[100px] h-[100px] my-[50px]`}
     >
       <Link href={myroomInfo.membersOnly ? privateRoom : openRoom}>
-        <a className="flex items-center ml-[30px] font-bold cursor-pointer">
+        <a className="flex items-center ml-[30px] text-xl font-bold cursor-pointer">
           <section className="">{myroomInfo.roomName}</section>
         </a>
       </Link>
       {myroomInfo.id === useratom.id ? (
         <section className="flex items-center mr-[30px] font-bold">
           <Link href={`/board/edit/${myroomInfo.roomId}`}>
-            <a className="cursor-pointer">
-              <RiEdit2Fill />
+            <a className="cursor-pointer mr-[15px]">
+              <RiEdit2Fill size="25" />
             </a>
           </Link>
           <button onClick={onClickHander}>
-            <BsTrashFill />
+            <BsTrashFill size="25" />
           </button>
           {open && (
             <DeleteModal
