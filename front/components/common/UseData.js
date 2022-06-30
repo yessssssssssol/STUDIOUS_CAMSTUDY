@@ -1,6 +1,6 @@
 export const items = [
-  ['오픈 스터디방', '/openroom'],
-  ['스터디 모집', '/board'],
+  ['Open Study', '/openroom'],
+  ['Privite Study', '/board'],
   ['프롤로그', '/prologue'],
   ['AboutUs', '/aboutus'],
   ['마이페이지', '/mypage'],
