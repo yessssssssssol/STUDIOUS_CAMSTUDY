@@ -699,11 +699,13 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {newState &&
-                      (findUserByKey(1)?.muteState ? (
+                      findUserByKey(1)?.muteState(
                         <GoMute color="white" size="30" />
-                      ) : (
+                      )}
+                    {!newState &&
+                      findUserByKey(1)?.muteState(
                         <GoUnmute color="white" size="30" />
-                      ))}
+                      )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
                     <h3
