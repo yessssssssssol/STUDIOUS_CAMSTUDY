@@ -1,9 +1,6 @@
 import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
 import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
 import Link from 'next/link';
-
-import DeleteModal from '../../../components/common/DeleteModal';
-
 import { useRouter } from 'next/router';
 import Helmet from '../../../components/layout/Helmet';
 import Comments from '../../../components/comment/Comments';
@@ -17,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../../core/atoms/userState';
 import MemberList from '../../../components/board/MemberList';
 import Button from '../../../components/common/Button';
+import DeleteModal from '../../../components/common/DeleteModal';
 
 export default function Detail() {
   let tempData = {};
