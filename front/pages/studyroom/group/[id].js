@@ -936,6 +936,7 @@ export default function Group() {
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
                 <ul className="space-y-2">
                   {chat.map((chat) => {
+                    let name = chat.split(' : ');
                     return (
                       <>
                         {name[0] === `${userValue?.name}` ? (
@@ -958,6 +959,7 @@ export default function Group() {
                   })}
                 </ul>
               </div>
+
               <form>
                 <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
                   <input
@@ -979,6 +981,7 @@ export default function Group() {
                   </button>
                 </div>
               </form>
+              {/*  */}
               <div className="flex justify-between px-3 pt-5 ">
                 <div className="flex items-center">
                   <button
@@ -992,6 +995,7 @@ export default function Group() {
                     Unmute
                   </button>
                 </div>
+
                 <button
                   className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
                   onClick={() => {
