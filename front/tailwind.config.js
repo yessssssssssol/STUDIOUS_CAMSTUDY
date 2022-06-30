@@ -11,6 +11,19 @@ module.exports = {
         220: '55rem',
         256: '64rem',
       },
+      keyframes: {
+        slider: {
+          '0%': {
+            height: '10rem',
+          },
+          '100%': {
+            height: '50rem',
+          },
+        },
+      },
+      animation: {
+        slider: 'slider 1s linear infinite',
+      },
     },
   },
   plugins: [],
