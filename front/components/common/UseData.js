@@ -1,9 +1,9 @@
 export const items = [
   ['Open Study', '/openroom'],
-  ['Private Study', '/board'],
-  ['프롤로그', '/prologue'],
+  ['Privite Study', '/board'],
+  ['Introduction', '/prologue'],
   ['AboutUs', '/aboutus'],
-  ['마이페이지', '/mypage'],
+  ['Mypage', '/mypage'],
 ];
 
 export const randomColor = [
