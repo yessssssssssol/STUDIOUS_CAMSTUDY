@@ -14,6 +14,7 @@ import {
   category_time,
   randomColor,
 } from '../components/common/UseData';
+import Heatmap from '../components/common/Heatmap';
 export default function mypage() {
   const [timeDatas, setTimeData] = useState(null);
   const useratom = useRecoilValue(userAtom);
@@ -23,9 +24,6 @@ export default function mypage() {
   const [getTimeGoal, setGetTimeGoal] = useState();
   const [pieData, setPieData] = useState([]);
   const [myroomInfos, setMyroomInfos] = useState([]);
-  const NoSSR = dynamic(() => import('../components/common/Heatmap'), {
-    ssr: false,
-  });
 
   function toMilliseconds(studyTimeADay) {
     const studyTimeADayNum =
@@ -113,7 +111,7 @@ export default function mypage() {
           <div className="pt-[20px] ">
             <BoldText text={`1년 공부 기록`} />
             <div className="pt-[10px] shadow-xl my-[10px]">
-              <NoSSR gittimes={gittime} />
+              <Heatmap gittimes={gittime} />
             </div>
           </div>
           <div className="flex flex-row justify-between">
