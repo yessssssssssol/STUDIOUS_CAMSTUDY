@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AIFunc = ({ width, height }) => {
+const AIFunc = (props) => {
   let person = false;
   let falseList = [];
   let trueList = [];
@@ -102,19 +102,12 @@ const AIFunc = ({ width, height }) => {
   };
 
   return (
-    <div className="w-[500px] py-10 flex justify-center ">
-      <video
-        autoPlay
-        playsInline
-        muted
-        ref={videoRef}
-        width={width}
-        height={height}
-      >
+    <div className="w-full py-10 flex justify-center ">
+      <video autoPlay playsInline muted ref={videoRef} width="500" height="350">
         {/* {ref
           ? console.log(`비디오 오케이 : ${autoPlay}`)
           : console.log('비디오 놉')} */}
-        <canvas ref={canvasRef} width={width} height={height} />
+        <canvas ref={canvasRef} width="600" height="500" />
       </video>
     </div>
   );
