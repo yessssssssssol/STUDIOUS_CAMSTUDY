@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
-import { getModuleBuildInfo } from 'next/dist/build/webpack/loaders/get-module-build-info';
+import Button from '../../components/common/Button';
 
 export default function Edit() {
   const router = useRouter();
@@ -141,7 +141,7 @@ export default function Edit() {
           />
           <div className="flex w-64 gap-x-3">
             <button
-              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg text-sm transition duration-200"
+              className="w-full text-white bg-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
               onClick={() => {
                 fileInput.current.click();
               }}
@@ -149,7 +149,7 @@ export default function Edit() {
               프로필 업로드
             </button>
             <button
-              className="w-full text-indigo-500 hover:text-white py-2 px-2 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg text-sm transition duration-200"
+              className="w-full text-amber-500 bg-white py-2 px-2 my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
               onClick={handleResetProfileChange}
             >
               프로필 삭제
@@ -168,21 +168,19 @@ export default function Edit() {
           <Alert title="error" content="대표 이미지를 설정해주세요!" />
         </div>
       )}
-      <div className="container mx-auto w-11/12 xl:w-full">
+      <div className="container mx-auto w-11/12 xl:w-full mt-10">
         <div className="w-full py-4 sm:px-0 bg-white  flex justify-center">
           <button
-            role="button"
-            aria-label="cancel form"
-            className="bg-gray-200 focus:outline-none transition duration-150 ease-in-out hover:bg-gray-300  rounded text-indigo-600  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+            className="text-white py-2.5 px-5 mr-2 mb-2 bg-amber-400 hover:text-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
             onClick={resetHandler}
           >
-            Cancel
+            취소
           </button>
           <button
-            className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 bg-indigo-700 focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-8 py-2 text-sm"
+            className="text-amber-500 py-2.5 px-5 mr-2 mb-2 bg-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
             onClick={submitHandler}
           >
-            Save
+            생성
           </button>
         </div>
       </div>
