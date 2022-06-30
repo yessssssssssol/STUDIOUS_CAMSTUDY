@@ -34,10 +34,10 @@ const HomeMyLogTime = () => {
           <div className="font-black text-3xl text-gray-700 text-center">{`${timeDatas}`}</div>
         </div>
         {/* 나의 프로필 */}
-        <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/3 ">
+        <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/3 drop-shadow-md">
           <div className="lg:max-w-lg">
             <Link href={'/mypage'}>
-              <button className="myBtn flex items-center bg-gray-200 p-8 rounded-lg">
+              <button className="myBtn flex items-center bg-amber-50 p-8 rounded-lg drop-shadow-md">
                 <img
                   className="w-8 h-8 rounded-full"
                   src={user?.profileUrl}
