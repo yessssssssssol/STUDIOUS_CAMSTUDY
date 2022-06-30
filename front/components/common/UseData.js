@@ -39,12 +39,6 @@ export const charts_color = [
   '#fbcfe8',
   '#fecdd3',
 ];
-export const category_time = [
-  ['수학', '13:10:03'],
-  ['과학', '5:31:21'],
-  ['경찰학개론', '10:31:22'],
-  ['헌법', '3:03:52'],
-];
 
 export const drop_item = [];
 
