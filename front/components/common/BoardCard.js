@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 
 export default function BoardCard({ boardData, profileURL }) {
   return (
-    <div className="inline-block w-96 h-64 px-2 py-16 m-1 sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
-      <div className="gap-5 sm:max-w-sm sm:mx-auto">
-        <div className=" duration-400 bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
+    <div className="w-96 h-64 px-2 py-16 mx-auto sm:max-w-xl  md:px-12 lg:px-8 lg:py-20">
+      <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
+        <div className="over-flow-hidden duration-400 bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
           <a href={`/board/detail/${boardData.roomId}`}>
             <img
               src={boardData.roomImg}

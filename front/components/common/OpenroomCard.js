@@ -2,7 +2,7 @@ export default function OpenroomCard({ openRoom }) {
   return (
     <a href={`/openroom/board/${openRoom.roomId}`} aria-label="Article">
       {/* <!-- card --> */}
-      <div class="mx-auto my-[3rem] flex h-[300px] w-[250px] flex-col justify-center bg-amber-50 rounded-2xl shadow-md shadow-amber-300/30 ">
+      <div class="mx-auto my-[3rem] flex h-[300px] w-[250px] flex-col justify-center rounded-2xl shadow-md shadow-amber-300/30 ">
         {/* <!-- img --> */}
         <img
           class="aspect-video w-96 h-full rounded-t-2xl object-cover object-center"

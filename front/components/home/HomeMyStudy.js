@@ -23,7 +23,7 @@ const HomeMyStudy = () => {
     <div className="mt-10 mb-20">
       <div className="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
         내 스터디방 ({myStudyRooms.length})
-        <div className="border-none bg-indigo-500 w-20 h-1 mt-2 rounded text-xm"></div>
+        <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
 
       <div className="px-10 md:px-15 lg:px-20">
