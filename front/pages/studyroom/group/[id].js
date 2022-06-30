@@ -15,7 +15,6 @@ import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
 import * as ReactDOM from 'react-dom/client';
-
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
 
@@ -133,6 +132,8 @@ export default function Group() {
   const [key3Mute, setKey3Mute] = useState(false);
   const [key3Camera, setKey3Camera] = useState(true);
   const [key3State, setKey3State] = useState(false);
+
+  const [newState, setNewState] = useState({});
 
   let roomId;
 
@@ -959,6 +960,7 @@ export default function Group() {
                   })}
                 </ul>
               </div>
+
               <form>
                 <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
                   <input
@@ -980,6 +982,7 @@ export default function Group() {
                   </button>
                 </div>
               </form>
+              {/*  */}
               <div className="flex justify-between px-3 pt-5 ">
                 <div className="flex items-center">
                   <button
@@ -993,6 +996,7 @@ export default function Group() {
                     Unmute
                   </button>
                 </div>
+
                 <button
                   className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
                   onClick={() => {

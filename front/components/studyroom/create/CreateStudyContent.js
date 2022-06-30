@@ -105,7 +105,7 @@ const CreateStudyContent = () => {
               onChange={onNameChange}
               type="text"
               id="name"
-              className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-600 "
+              className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-amber-400 bg-transparent placeholder-gray-500 text-gray-600 "
             />
           </div>
           <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">

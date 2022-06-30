@@ -4,12 +4,28 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
-    color: {
-      main: '#fbbf24', //amber-400
-      rightMain: '##fcd34d', //amber-300
-      darkMain: '#f59e0b', //amber-500
-      back: '#fffbeb',
+    extend: {
+      height: {
+        128: '32rem',
+        180: '45rem',
+        190: '47.5rem',
+        200: '50rem',
+        220: '55rem',
+        256: '64rem',
+      },
+      // keyframes: {
+      //   slider: {
+      //     '0%': {
+      //       height: '10rem',
+      //     },
+      //     '100%': {
+      //       height: '50rem',
+      //     },
+      //   },
+      // },
+      // animation: {
+      //   slider: 'slider 1s linear infinite',
+      // },
     },
   },
   plugins: [],

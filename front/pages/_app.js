@@ -1,5 +1,6 @@
 import { RecoilRoot } from 'recoil';
 import '../styles/globals.css';
+import '../components/common/heatmap.css';
 
 import NavBar from '../components/layout/NavBar';
 import Footer from '../components/layout/Footer';

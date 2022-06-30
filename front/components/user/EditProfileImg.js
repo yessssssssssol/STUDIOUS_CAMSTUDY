@@ -4,6 +4,7 @@ import { editProfileModalAtom } from '../../core/atoms/modalState';
 import { userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 import { userDefaultImg } from '../common/UseData';
+import Button from '../common/Button';
 
 const EditProfileImg = () => {
   const [show, setShowModal] = useRecoilState(editProfileModalAtom);
@@ -70,7 +71,7 @@ const EditProfileImg = () => {
       <div className="my-5">
         <div className="flex justify-center">
           <button
-            className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+            className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-amber-50 hover:text-amber-500 focus:z-10 focus:ring-4 focus:ring-gray-200"
             onClick={() => {
               fileInput.current.click();
             }}
@@ -78,18 +79,13 @@ const EditProfileImg = () => {
             프로필 업로드
           </button>
           <button
-            className="py-2.5 px-5  mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+            className="py-2.5 px-5  mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-amber-50 hover:text-amber-500 focus:z-10 focus:ring-4 focus:ring-gray-200"
             onClick={handleResetProfileChange}
           >
             프로필 삭제
           </button>
         </div>
-        <button
-          className="w-full text-white py-2.5 px-5 mr-2 mb-2 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
-          onClick={saveEdit}
-        >
-          저장
-        </button>
+        <Button onClick={saveEdit} text="저장" color={`w-full py-3`} />
       </div>
     </div>
   );

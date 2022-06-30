@@ -52,17 +52,29 @@ export default function mypage() {
         const datas = dailysheets.data;
         console.log(datas, 'dddd');
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
-        setPieData([
-          data.attendanceRate,
-          data.weekAchievementRate,
-          datas[datas.length - 1].bestStudyTime,
-        ]);
-        console.log(pieData, 'PieData');
+        if (datas[datas.length - 1].bestStudyTime == ' ') {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            '00:00:00',
+          ]);
+        } else {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            datas[datas.length - 1].bestStudyTime,
+          ]);
+        }
+
         datas.length == 0
           ? console.log('Git데이터', gittime)
           : datas.map((data) =>
-              gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
+              gittime.push([
+                data.date,
+                Math.floor(toMilliseconds(data.studyTimeADay) / 7200),
+              ])
             );
+        console.log(gittime, '이게 중요함');
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
         setPieData([0, 0, 0]);
@@ -108,12 +120,6 @@ export default function mypage() {
     <div className="">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
-          <div className="pt-[20px] ">
-            <BoldText text={`1년 공부 기록`} />
-            <div className="pt-[10px] shadow-xl my-[10px]">
-              <Heatmap gittimes={gittime} />
-            </div>
-          </div>
           <div className="flex flex-row justify-between">
             <div className="font-bold text-3xl lg:block text-left my-[50px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
@@ -138,6 +144,12 @@ export default function mypage() {
                 timeGoal={getTimeGoal}
               />
             ))}
+          </div>
+          <div className="py-[20px] ">
+            <BoldText text={`1년 공부 기록`} />
+            <div className="pt-[10px] shadow-xl my-[10px]">
+              <Heatmap gittimes={gittime} />
+            </div>
           </div>
 
           <div className=" pt-[50px]">
