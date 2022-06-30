@@ -52,17 +52,29 @@ export default function mypage() {
         const datas = dailysheets.data;
         console.log(datas, 'dddd');
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
-        setPieData([
-          data.attendanceRate,
-          data.weekAchievementRate,
-          datas[datas.length - 1].bestStudyTime,
-        ]);
-        console.log(pieData, 'PieData');
+        if (datas[datas.length - 1].bestStudyTime == ' ') {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            '00:00:00',
+          ]);
+        } else {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            datas[datas.length - 1].bestStudyTime,
+          ]);
+        }
+
         datas.length == 0
           ? console.log('Git데이터', gittime)
           : datas.map((data) =>
-              gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
+              gittime.push([
+                data.date,
+                Math.floor(toMilliseconds(data.studyTimeADay) / 7200),
+              ])
             );
+        console.log(gittime, '이게 중요함');
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
         setPieData([0, 0, 0]);
