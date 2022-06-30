@@ -33,13 +33,14 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const [endTime, setEndTime] = useState('yyyy-mm-dd HH:MM:SS');
 
   const router = useRouter();
-  const user = useRecoilValue(userAtom);
-
+  const useratom = useRecoilValue(userAtom);
+  const [user, setUser] = useState();
   // dayjs 한국 시간 설정
   dayjs.locale('ko');
 
   // 처음 카운트다운 할 때 쓰는 코드
   useEffect(() => {
+    setUser(useratom);
     let myInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);

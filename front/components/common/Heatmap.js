@@ -1,49 +1,39 @@
 import { useEffect } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
-import 'react-calendar-heatmap/dist/styles.css';
 
 export default function Heatmap({ gittimes }) {
   var result = [];
+  console.log(gittimes);
+  gittimes.length == 0
+    ? result.push({
+        date: 0,
+        count: 0,
+      })
+    : gittimes.map((gittime) => {
+        result.push({
+          date: gittime[0],
+          count: gittime[1],
+        });
+      });
 
-  //   gittimes.length == 0
-  //     ? result.push({
-  //         date: '2022-06-30',
-  //         total: 0,
-  //         details: [
-  //           {
-  //             name: '공부시간 ',
-  //             value: 0,
-  //           },
-  //         ],
-  //       })
-  //     : gittimes.map((gittime) => {
-  //         result.push({
-  //           date: gittime[0],
-  //           total: gittime[1],
-  //           details: [
-  //             {
-  //               name: '공부시간 ',
-  //               value: gittime[1],
-  //             },
-  //           ],
-  //         });
-  //       });
-
+  console.log(result);
   var data = result;
   const today = new Date();
 
   const randomValues = getRange(200).map((index) => {
     return {
       date: shiftDate(today, -index),
-      count: getRandomInt(1, 3),
+      count: getRandomInt(0, 5),
     };
   });
   return (
     <CalendarHeatmap
+      startDate={new Date('2022-1-01')}
+      endDate={new Date('2022-12-30')}
       showMonthLabels={false}
       showOutOfRangeDays={true}
       gutterSize={3}
-      values={randomValues}
+      values={result}
       classForValue={(value) => {
         if (!value) {
           return 'color-empty';

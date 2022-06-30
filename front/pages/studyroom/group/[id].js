@@ -15,7 +15,6 @@ import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
 import * as ReactDOM from 'react-dom/client';
-
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
 
@@ -135,6 +134,8 @@ export default function Group() {
   const [key3Mute, setKey3Mute] = useState(false);
   const [key3Camera, setKey3Camera] = useState(true);
   const [key3State, setKey3State] = useState(false);
+
+  const [newState, setNewState] = useState({});
 
   let roomId;
 
@@ -779,6 +780,7 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>

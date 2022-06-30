@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
-import { getModuleBuildInfo } from 'next/dist/build/webpack/loaders/get-module-build-info';
+import Button from '../../components/common/Button';
 
 export default function Edit() {
   const router = useRouter();
@@ -86,27 +86,13 @@ export default function Edit() {
   };
   return (
     <div>
-      <div className="container w-full mx-auto my-5 bg-white rounded">
-        <div className="w-full xl:w-full border-b border-gray-300  py-3 bg-white ">
-          <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
-            <p className="text-lg text-gray-800  font-bold">스터디방 생성</p>
-            <div className="ml-2 cursor-pointer text-gray-600 ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-              >
-                <path
-                  className="heroicon-ui"
-                  d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0v-4a1 1 0 0 1 1-1zm0-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
+      <div className="container flex-col justify-center w-full mx-72 my-5 bg-white rounded">
+        <div className="w-full xl:w-full border-b border-amber-400 py-3 bg-white ">
+          <div className="flex w-11/12 mx-24 xl:w-full xl:mx-0 items-center">
+            <p className="text-2xl text-amber-400  font-bold">스터디방 생성</p>
           </div>
         </div>
-        <div className="flex gap-x-6 mt-8">
+        <div className="flex gap-x-6 mt-8 w-full">
           <label
             htmlFor="name"
             className="pb-2 text-sm font-bold text-gray-800 "
@@ -141,7 +127,7 @@ export default function Edit() {
           />
           <div className="flex w-64 gap-x-3">
             <button
-              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg text-sm transition duration-200"
+              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-amber-400 hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={() => {
                 fileInput.current.click();
               }}
@@ -149,7 +135,7 @@ export default function Edit() {
               프로필 업로드
             </button>
             <button
-              className="w-full text-indigo-500 hover:text-white py-2 px-2 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg text-sm transition duration-200"
+              className="w-full text-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-amber-400 bg-white hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
               onClick={handleResetProfileChange}
             >
               프로필 삭제
@@ -168,21 +154,21 @@ export default function Edit() {
           <Alert title="error" content="대표 이미지를 설정해주세요!" />
         </div>
       )}
-      <div className="container mx-auto w-11/12 xl:w-full">
+      <div className="container mx-auto w-11/12 xl:w-full mt-10">
         <div className="w-full py-4 sm:px-0 bg-white  flex justify-center">
           <button
             role="button"
             aria-label="cancel form"
-            className="bg-gray-200 focus:outline-none transition duration-150 ease-in-out hover:bg-gray-300  rounded text-indigo-600  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+            className="bg-white focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 border-amber-400 hover:text-white border rounded text-amber-400  px-6 py-2 text-xs mr-4 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
             onClick={resetHandler}
           >
-            Cancel
+            취소
           </button>
           <button
-            className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 bg-indigo-700 focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-8 py-2 text-sm"
+            className="focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 bg-amber-400 focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 rounded text-white px-8 py-2 text-sm"
             onClick={submitHandler}
           >
-            Save
+            생성
           </button>
         </div>
       </div>

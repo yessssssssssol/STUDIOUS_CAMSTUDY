@@ -23,7 +23,7 @@ export default function Pie({ title, pieData, index }) {
               },
             ]}
             reveal={pieData}
-            lineWidth={10}
+            lineWidth={15}
             background="#fafafa"
             lengthAngle={360}
             rounded
