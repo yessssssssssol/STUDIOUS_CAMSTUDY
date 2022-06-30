@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../core/atoms/userState';
 import * as API from '../pages/api/api';
+import Link from 'next/link';
 import {
   charts_data,
   charts_color,
@@ -76,6 +77,7 @@ export default function mypage() {
     const getMyRoom = async () => {
       const res = await API.get('studyrooms', useratom.id);
       const data = res.data;
+      console.log(data);
       setMyroomInfos(data);
     };
     getTimeData();
@@ -106,11 +108,17 @@ export default function mypage() {
     <div className="">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
+          <div className="pt-[20px] ">
+            <BoldText text={`1년 공부 기록`} />
+            <div className="pt-[10px] shadow-xl my-[10px]">
+              <NoSSR gittimes={gittime} />
+            </div>
+          </div>
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl text-center lg:text-left my-[50px]">
+            <div className="font-bold text-3xl text-center lg:block text-left my-[50px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
-            <span className="hidden sm:block m-2">
+            <span className="hidden text-center sm:block m-2 lg:text-left my-[45px]">
               <span className="  py-1 px-2">오늘의 목표 공부</span>
               <input
                 className="text-center w-[70px] border border-amber-400 rounded-md "
@@ -130,12 +138,6 @@ export default function mypage() {
                 timeGoal={getTimeGoal}
               />
             ))}
-          </div>
-          <div className="pt-[50px] ">
-            <BoldText text={`1년 공부 기록`} />
-            <div className="pt-[10px] shadow-xl my-[30px]">
-              <NoSSR gittimes={gittime} />
-            </div>
           </div>
 
           <div className=" pt-[50px]">
@@ -158,11 +160,13 @@ export default function mypage() {
 
               <div>
                 {myroomInfos.map((myroomInfo, index) => (
-                  <CategoryBox
-                    key={index}
-                    myroomInfo={myroomInfo}
-                    color={randomColor[Math.ceil(Math.random() * 10) + 1]}
-                  />
+                  <>
+                    <CategoryBox
+                      key={index}
+                      myroomInfo={myroomInfo}
+                      color={randomColor[Math.ceil(Math.random() * 10) + 1]}
+                    />
+                  </>
                 ))}
               </div>
             </div>

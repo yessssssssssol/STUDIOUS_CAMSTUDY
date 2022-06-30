@@ -9,7 +9,7 @@ export default function Pie({ title, color, index, pieData }) {
           data={[
             {
               value: pieData[index],
-              color: color,
+              color: '#fde68a',
             },
           ]}
           reveal={pieData[index]}
@@ -20,7 +20,7 @@ export default function Pie({ title, color, index, pieData }) {
           animate
           startAngle={270}
           animationDuration={3000}
-          label={({ dataEntry }) => `${title}  ${dataEntry.value}%`}
+          label={({ dataEntry }) => `${title} ${dataEntry.value}%`}
           labelStyle={{
             fontSize: '7px',
             fontWeight: '500',
