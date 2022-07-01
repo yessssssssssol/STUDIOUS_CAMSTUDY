@@ -21,6 +21,8 @@ export default function Edit() {
   const [tempUrl, setTempURL] = useState(roomDefaultImg);
   const [error, setError] = useState(false);
   const [hashtag, setHashTag] = useRecoilState(createhashtagAtom);
+  const [imgCheck, setImgCheck] = useState(false);
+  let submitCheck = false;
 
   const fileInput = useRef(null);
 
@@ -33,12 +35,14 @@ export default function Edit() {
     });
     setTempURL(roomDefaultImg);
     setFile(roomDefaultImg);
+    setImgCheck(false);
   };
 
   const handleUpload = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
       setTempURL(URL.createObjectURL(e.target.files[0]));
+      setImgCheck(true);
     }
   };
 
@@ -48,7 +52,7 @@ export default function Edit() {
     const tag = hashtag.split(' ');
     const formD = new FormData();
     formD.append('roomImg', file);
-    if (file) {
+    if (imgCheck && !submitCheck) {
       try {
         const res = await API.post('studyroom', {
           roomName: room.roomName,
@@ -66,6 +70,7 @@ export default function Edit() {
         console.log(res.data);
         console.log('방이 생성되었습니다.');
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
+        submitCheck = true;
         console.log('이미지가 추가되었습니다.');
         if (room.membersOnly === 'false') {
           router.push(`/openroom/board/${res.data.roomId}`);
@@ -74,12 +79,14 @@ export default function Edit() {
         }
         resetRoom();
         resetHashtag();
+        setImgCheck(false);
       } catch (err) {
         console.log(err);
-        setError(true);
+        alert('필수 입력 정보를 입력해주세요.');
       }
     } else {
       setError(true);
+      alert('필수 입력 정보를 입력해주세요.');
     }
   };
 
@@ -93,7 +100,9 @@ export default function Edit() {
       <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
         <div className=" border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:mx-0 items-center">
-            <p className="text-2xl text-amber-400  font-bold">스터디방 만들기</p>
+            <p className="text-2xl text-amber-400  font-bold">
+              스터디방 만들기
+            </p>
           </div>
         </div>
         <div className="flex gap-x-6 mt-8 w-full">
