@@ -96,7 +96,7 @@ export default function Create() {
   return (
     <div className="container">
       <Helmet title="EDIT" />
-      <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
+      <div className=" min-w-[440px] flex-col justify-center mx-72 my-5 bg-white rounded">
         <div className=" border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:mx-0 items-center">
             <p className="text-2xl text-amber-400  font-bold">스터디방 수정</p>

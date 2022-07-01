@@ -25,15 +25,7 @@ export default function CategoryBox({ myroomInfo }) {
   }, [myroomInfo]);
   return (
     <>
-      {myroomInfo === undefined ? (
-        <div
-          className={`bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl h-[100px] my-[50px]`}
-        >
-          <section className="bg-red-300">
-            아직 내가 만든 방이나 참여한 방이 없습니다.
-          </section>
-        </div>
-      ) : (
+      {myroomInfo === false ? null : (
         <div
           className={`grid grid-cols-10 bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl h-[100px] my-[50px]`}
         >
