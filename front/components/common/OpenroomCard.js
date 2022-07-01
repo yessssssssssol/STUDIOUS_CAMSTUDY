@@ -11,7 +11,7 @@ export default function OpenroomCard({ openRoom }) {
             />
             <div className="py-5 px-4">
               <small className="text-amber-400 font-bold">
-                {openRoom.members.length + ' / ' + openRoom.membersNum}
+                {openRoom.headCount.length + ' / ' + openRoom.membersNum}
               </small>
               <p className="text-xl font-bold  text-black pb-2">
                 {openRoom.roomName}
