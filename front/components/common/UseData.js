@@ -40,6 +40,14 @@ export const charts_color = [
   '#fecdd3',
 ];
 
+export const heatmap_tip = [
+  ['bg-amber-100', '2시간 이하'],
+  ['bg-amber-200', '2~4시간'],
+  ['bg-amber-300', '4~6시간'],
+  ['bg-amber-400', '6~8시간'],
+  ['bg-amber-500', '8~10시간'],
+  ['bg-amber-600', '10시간 이상'],
+];
 export const drop_item = [];
 
 export const userDefaultImg =

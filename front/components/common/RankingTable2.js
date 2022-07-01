@@ -6,7 +6,7 @@ export default function RankingTable({ rankings, userDatas }) {
   const [count, setCount] = useState(0);
   const chartBox = useRef();
   const firstguy = userDatas.find(
-    (userData) => userData.id === rankings[0].user_id
+    (userData) => userData?.id === rankings[0]?.user_id
   );
 
   let count2 = 0;
