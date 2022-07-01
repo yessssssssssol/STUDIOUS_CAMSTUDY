@@ -1,8 +1,14 @@
 import StopWatchPrivate from '../../components/studyroom/StopWatchPrivate';
 import AIFunc from '../../components/studyroom/AIFunc';
 import AlertModal from '../../components/studyroom/AlertModal';
+import { useEffect } from 'react';
 
 export default function Private() {
+  useEffect(() => {
+    return () => {
+      location.reload();
+    };
+  }, []);
   return (
     <div className="w-full">
       <div>
