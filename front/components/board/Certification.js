@@ -6,6 +6,7 @@ const Certification = ({ applicant, isOwner }) => {
   const [isAccept, setIsAccept] = useState(false);
   const [memberList, setMemberList] = useState('');
   const [membersNum, setMembersNum] = useState(0);
+  const [memberInfo, setMemberInfo] = useState({});
 
   useEffect(() => {
     async function memberCheck() {
@@ -39,7 +40,7 @@ const Certification = ({ applicant, isOwner }) => {
       }
     }
     // 현재 사용자 리스트의 length가 membersNum보다 작을 때만 수락한다.
-    if (memberList.length > membersNum) {
+    if (memberList.length < membersNum) {
       console.log(memberList.length);
       console.log(membersNum);
       accept();
@@ -53,7 +54,8 @@ const Certification = ({ applicant, isOwner }) => {
 
   const getMembers = async () => {
     try {
-      await API.get(`studyroom/${roomId}`);
+      const members = await API.get(`studyroom/${roomId}`);
+      setMemberInfo(members);
     } catch (err) {
       console.log(err);
     }
@@ -86,6 +88,8 @@ const Certification = ({ applicant, isOwner }) => {
       rejectMember();
     }
   };
+
+  useEffect(() => {}, [memberInfo]);
 
   return (
     <>
