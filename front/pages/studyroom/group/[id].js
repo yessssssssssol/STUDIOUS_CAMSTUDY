@@ -965,29 +965,29 @@ export default function Group() {
                         {name[0] === `${userValue?.name}` ? (
                           // 나
                           <li className="flex justify-end">
-                            {/* <img
-                              className="rounded-full bg-cover w-10 h-10 "
-                              src={userValue?.profileUrl}
-                            /> */}
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
                               <span className="block">{name[1]}</span>
                             </div>
+                            <img
+                              className="rounded-full bg-cover w-10 h-10 ml-2"
+                              src={userValue?.profileUrl}
+                            />
                           </li>
                         ) : (
                           // 상대
                           <li className="flex justify-start">
-                            <div className="grid mr-2">
-                              <img
-                                className="rounded-full bg-cover w-10 h-10  "
-                                src={userI?.profileUrl}
-                                alt=""
-                              />
-                              <small className="block text-center">
+                            {/* <div className="grid mr-2"> */}
+                            <img
+                              className="rounded-full bg-cover w-10 h-10 mr-2"
+                              src={userI?.profileUrl}
+                              alt=""
+                            />
+                            {/* <small className="block text-center">
                                 {name[0]}
-                              </small>
-                            </div>
+                              </small> */}
+                            {/* </div> */}
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{name[1]}</span>
+                              <span className="block">{chat}</span>
                             </div>
                           </li>
                         )}
