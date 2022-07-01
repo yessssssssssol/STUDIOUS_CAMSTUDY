@@ -7,12 +7,12 @@ export default function team() {
             <p className="text-gray-500 text-lg text-center font-normal pb-3">
               BUILDING TEAM
             </p>
-            <h1 className="xl:text-4xl text-3xl text-center text-gray-800 font-extrabold pb-6 sm:w-4/6 w-5/6 mx-auto">
+            <h1 className="xl:text-4xl text-3xl text-center text-gray-800 font-extrabold pb-6 sm:w-4/6 w-5/6 mx-auto my-10">
               The Talented People Behind the Scenes of the Organization
             </h1>
           </div>
         </div>
-        <div className="w-full bg-gray-100 px-10 pt-10">
+        <div className="w-full bg-gray-100 px-10 pt-20">
           <div className="container mx-auto">
             <div
               role="list"
@@ -39,7 +39,7 @@ export default function team() {
                       이예슬
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      Chief Executive Officer
+                      Team Leader, Front-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
                       The CEO's role in raising a company's corporate IQ is to
@@ -134,7 +134,7 @@ export default function team() {
                       박예솔
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      Product Design Head
+                      Front-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
                       The emphasis on innovation and technology in our companies
@@ -229,7 +229,7 @@ export default function team() {
                       홍주완
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      Manager Development
+                      Front-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
                       Our services encompass the assessment and repair of
@@ -324,7 +324,7 @@ export default function team() {
                       김상민
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      Principal Software Engineer
+                      AI Developer, Front-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
                       An avid open-source developer who loves to be creative and
@@ -418,15 +418,14 @@ export default function team() {
                       윤여건
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      Product Design Head
+                      Back-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
-                      Product designer with interests in immersive computing and
-                      XR, political ventures, and emerging technologies. Able to
-                      take ideas and give them a life.
+                      사용자에게 다채로운 경험을 제공하여 삶의 질을 높이는
+                      프론트엔드 개발자로 성장하고 싶은 윤여건입니다.
                     </p>
                     <div className="w-full flex justify-center pt-5 pb-5">
-                      <a href="" className="mx-5">
+                      <a href="https://github.com/kunnyCode" className="mx-5">
                         <div aria-label="Github" role="img">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +443,7 @@ export default function team() {
                           </svg>
                         </div>
                       </a>
-                      <a href="" className="mx-5">
+                      <a href="https://github.com/kunnyCode" className="mx-5">
                         <div aria-label="Twitter" role="img">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -462,7 +461,7 @@ export default function team() {
                           </svg>
                         </div>
                       </a>
-                      <a href="" className="mx-5">
+                      <a href="https://github.com/kunnyCode" className="mx-5">
                         <div aria-label="Instagram" role="img">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -513,7 +512,7 @@ export default function team() {
                       송연석
                     </h1>
                     <p className="text-gray-800 text-sm text-center">
-                      UX Designer
+                      Back-end Developer
                     </p>
                     <p className="text-center text-gray-600 text-base pt-3 font-normal">
                       A UX designer is the voice of the customer. Our job is to

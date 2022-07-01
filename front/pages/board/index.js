@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import * as API from '../api/api';
 import BoldText from '../../components/common/BoldText';
-import { AiFillPlusCircle } from '@react-icons/all-files/ai/AiFillPlusCircle';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 export default function board({ profileURL }) {
   const [boardDatas, setBoardData] = useState();
@@ -31,7 +31,7 @@ export default function board({ profileURL }) {
   }, [inView]);
   return (
     <>
-      <div className="px-10 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
+      <div className="px-16 pt-16 pb-5 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
         <span className="flex">
           Private Study
           <span className="pt-1 ml-3">
