@@ -7,6 +7,7 @@ import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
 
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { RiTimerLine } from 'react-icons/ri';
 
 import * as API from '../../pages/api/api';

@@ -1,10 +1,12 @@
 import { User, UserDailySheet } from '../db';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { ChangeDate } from '../utils/changeDate';
 import { scheduleJob } from 'node-schedule';
 import { analyzeDate } from '../utils/analyzeDate';
 
 const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets());
+dayjs.locale('ko');
 
 class UserDailySheetService {
     // 5시 마다 새로운 데일리 시트 만들기

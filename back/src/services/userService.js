@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
@@ -109,7 +110,7 @@ class userAuthService {
             const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
-
+        dayjs.locale('ko');
         const date = dayjs();
         const updatedAt = date.format('YYYY-MM-DD HH:mm:ss');
 

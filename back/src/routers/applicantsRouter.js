@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { applicantsService } from '../services/applicantsService';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
 
 const applicantsRouter = Router();
+dayjs.locale('ko');
 
 // 맴버온니 스터디룸 신청
 applicantsRouter.post('/apply', login_required, async function (req, res, next) {

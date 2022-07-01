@@ -1,6 +1,6 @@
 const ChatHeader = ({ roomName, roomImg }) => {
   return (
-    <div className="border rounded">
+    <div className="border rounded-xl">
       <div className="relative flex items-center p-3 border-b border-gray-300">
         <img
           className="object-cover w-10 h-10 rounded-full"
