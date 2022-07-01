@@ -133,6 +133,7 @@ const OpenRoomBoard = () => {
                             <DeleteModal
                               myroomInfo={roomInfo}
                               setShow={setOpen}
+                              isBoard={true}
                               title={'해당 스터디를 지우시겠습니까?'}
                             />
                           )}

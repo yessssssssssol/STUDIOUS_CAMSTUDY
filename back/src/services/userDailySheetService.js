@@ -1,5 +1,6 @@
 import { User, UserDailySheet } from '../db';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { ChangeDate } from '../utils/changeDate';
 import { scheduleJob } from 'node-schedule';
 import { analyzeDate } from '../utils/analyzeDate';

@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 dayjs.locale('ko');
 const date = dayjs();

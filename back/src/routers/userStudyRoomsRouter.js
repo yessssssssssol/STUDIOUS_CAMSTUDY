@@ -4,6 +4,7 @@ import { checkRoomId } from '../middlewares/checkRoomId';
 import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
 import { json } from 'express/lib/response';
@@ -33,6 +34,9 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             roomDesc,
             hashTags,
         } = req.body;
+
+        if (membersOnly > 4)
+            return res.status(400).json({ message: '스터디 인원은 최대 4명까지만 가능합니다.' });
 
         //마감 날짜
         let expiredAt = new Date(endStudyDay + ' 23:59:59');

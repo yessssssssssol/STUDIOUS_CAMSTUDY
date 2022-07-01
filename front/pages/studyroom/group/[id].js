@@ -15,6 +15,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
+import {
+  TbDeviceComputerCamera,
+  TbDeviceComputerCameraOff,
+} from 'react-icons/tb';
+
 import * as ReactDOM from 'react-dom/client';
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -136,9 +141,23 @@ export default function Group() {
   const [key3Mute, setKey3Mute] = useState(false);
   const [key3Camera, setKey3Camera] = useState(true);
   const [key3State, setKey3State] = useState(false);
-  
+
   let aiInterval = null;
   let roomId;
+
+  // 채팅에 사용하는 유저 정보 리스트
+  const [userDatas, setUserDatas] = useState([]);
+  useEffect(() => {
+    async function getUserId() {
+      try {
+        const res = await API.get(`userlist`);
+        setUserDatas(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getUserId();
+  }, []);
 
   if (typeof window !== 'undefined') {
     const leng = window.location.href.length;
@@ -273,30 +292,30 @@ export default function Group() {
         .getAudioTracks()
         .forEach((track) => (track.enabled = !track.enabled));
       if (isMute == true) {
-        muteBtn.innerText = 'Unmute';
+        // muteBtn.innerText = 'Unmute';
         setMute(false);
 
         Object.keys(dataChannels).forEach((userId) => {
           let req = muteRes;
           req.data.userId = user.id;
           req.data.result = false;
-          if (dataChannels[userId].readyState == "open") {
+          if (dataChannels[userId].readyState == 'open') {
             dataChannels[userId].send(JSON.stringify(req));
           }
           // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
-        muteBtn.innerText = 'Mute';
+        // muteBtn.innerText = 'Mute';
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
-            let req = muteRes;
-            req.data.userId = user.id;
-            req.data.result = true;
-            if (dataChannels[userId].readyState == "open") {
-              dataChannels[userId].send(JSON.stringify(req));
-            }
-            // dataChannels[userId].send(JSON.stringify(req));
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          if (dataChannels[userId].readyState == 'open') {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       }
     }
@@ -311,27 +330,27 @@ export default function Group() {
         .forEach((track) => (track.enabled = !track.enabled));
       console.log(myStream.getVideoTracks());
       if (isCameraOn == true) {
-        cameraBtn.innerText = 'turnOff';
+        // cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
 
         Object.keys(dataChannels).forEach((userId) => {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = false;
-          if (dataChannels[userId].readyState == "open") {
+          if (dataChannels[userId].readyState == 'open') {
             dataChannels[userId].send(JSON.stringify(req));
           }
           // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
-        cameraBtn.innerText = 'turnOn';
+        // cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
 
         Object.keys(dataChannels).forEach((userId) => {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = true;
-          if (dataChannels[userId].readyState == "open") {
+          if (dataChannels[userId].readyState == 'open') {
             dataChannels[userId].send(JSON.stringify(req));
           }
           // dataChannels[userId].send(JSON.stringify(req));
@@ -348,7 +367,7 @@ export default function Group() {
       // 유저 데이터 저장 혹인 갱신
 
       // userList[res.data?.userId] = res.data;
-      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
+      addMessage(`  : ${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
       console.log(res.data);
@@ -541,7 +560,9 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
-          req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
+          req.data['userTime'] = stopWatchRef?.current?.getTime()
+            ? stopWatchRef?.current?.getTime()
+            : 0;
           req.data['muteState'] = false;
 
           myDataChannel.send(JSON.stringify(req));
@@ -576,7 +597,9 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
-            req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
+            req.data['userTime'] = stopWatchRef?.current?.getTime()
+              ? stopWatchRef?.current?.getTime()
+              : 0;
             req.data['muteState'] = false;
 
             myDataChannel.send(JSON.stringify(req));
@@ -617,7 +640,7 @@ export default function Group() {
 
   socket.on('bye', (leaveId, userName) => {
     // 나갔다는 메시지
-    addMessage(`${userName}님이 퇴장하셨습니다.!`);
+    addMessage(`  : ${userName}님이 퇴장하셨습니다.!`);
 
     const stopWatch = document.getElementById(leaveId);
     if (stopWatch != null) {
@@ -648,7 +671,6 @@ export default function Group() {
     const prevList = userList;
 
     Object.keys(prevList).forEach((v) => {
-      
       if (v.socketId === leaveId) {
         delete prevList[v];
       }
@@ -689,7 +711,7 @@ export default function Group() {
     Object.keys(dataChannels).forEach((userId) => {
       let req = chatRes;
       req.data = `${user.name} : ${input.value}`;
-      if (dataChannels[userId].readyState == "open") {
+      if (dataChannels[userId].readyState == 'open') {
         dataChannels[userId]?.send(JSON.stringify(req));
       }
       // dataChannels[userId]?.send(JSON.stringify(req));
@@ -698,22 +720,22 @@ export default function Group() {
   };
 
   function AlertNoHear(result) {
-    // 만약 현재 나의 스테이트값이 
+    // 만약 현재 나의 스테이트값이
     let req = stateRes;
     req.data.userId = user?.id;
     req.data.result = result;
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-          if (dataChannels[userId].readyState == "open") {
-            dataChannels[userId]?.send(JSON.stringify(req));
-          }
-          // console.log("datachannel : ", dataChannels[userId]);
-          // dataChannels[userId]?.send(JSON.stringify(req));
+        if (dataChannels[userId].readyState == 'open') {
+          dataChannels[userId]?.send(JSON.stringify(req));
+        }
+        // console.log("datachannel : ", dataChannels[userId]);
+        // dataChannels[userId]?.send(JSON.stringify(req));
       });
       console.log(result);
     }
-    console.log("send Data");
+    console.log('send Data');
   }
 
   function StartStopWatch(result) {
@@ -723,9 +745,9 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].readyState == "open") {
+        if (dataChannels[userId].readyState == 'open') {
           dataChannels[userId]?.send(JSON.stringify(req));
-        }  
+        }
       });
     }
 
@@ -762,11 +784,13 @@ export default function Group() {
 
   // todo: 나갔을때 상태관리
   return (
-    <div>
-      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
+    <div className="lg:grid lg:justify-center">
+      <p className="font-bold text-center text-4xl m-5 mb-10">
+        {room?.roomName}
+      </p>
       {isLoading === true ? (
         <>
-          <div className="grid lg:flex lg:mx-[10rem]">
+          <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                   <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
@@ -936,25 +960,47 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-purple-400 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
                 <ul className="space-y-2">
                   {chat.map((chat) => {
+                    console.log(chat, 'chat');
                     let name = chat.split(' : ');
+
+                    let userI = userDatas.find((userData) => {
+                      if (userData.name === name[0]) {
+                        return true;
+                      }
+                    });
+
                     return (
                       <>
                         {name[0] === `${userValue?.name}` ? (
                           // 나
                           <li className="flex justify-end">
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{chat}</span>
+                              <span className="block">{name[1]}</span>
                             </div>
+                            <img
+                              className="rounded-full bg-cover w-10 h-10 ml-2"
+                              src={userValue?.profileUrl}
+                            />
                           </li>
                         ) : (
                           // 상대
                           <li className="flex justify-start">
+                            {/* <div className="grid mr-2"> */}
+                            <img
+                              className="rounded-full bg-cover w-10 h-10 mr-2"
+                              src={userI?.profileUrl}
+                              alt=""
+                            />
+                            {/* <small className="block text-center">
+                                {name[0]}
+                              </small> */}
+                            {/* </div> */}
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
                               <span className="block">{chat}</span>
                             </div>
@@ -973,11 +1019,11 @@ export default function Group() {
                     placeholder="message"
                     required
                     type="text"
-                    className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                    className="block w-full py-2 pl-4 ml-1 mr-2 bg-gray-100 rounded-full outline-none focus:text-gray-700"
                   ></input>
-                  <button onClick={sendChatHandler}>
+                  <button onClick={sendChatHandler} clssName="py-2 p-4">
                     <svg
-                      className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+                      className="w-5 h-5 mr-1 ml-2 text-gray-500 origin-center transform rotate-90"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -987,7 +1033,7 @@ export default function Group() {
                   </button>
                 </div>
               </form>
-              {/*  */}
+
               <div className="flex justify-between px-3 pt-5 ">
                 <div className="flex items-center">
                   <button
@@ -995,10 +1041,18 @@ export default function Group() {
                     className="mx-2"
                     onClick={CameraOnOffClick}
                   >
-                    turnOn
+                    {isCameraOn == true ? (
+                      <TbDeviceComputerCamera color="white" size="30" />
+                    ) : (
+                      <TbDeviceComputerCameraOff color="white" size="30" />
+                    )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
-                    Unmute
+                    {isMute == true ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
                   </button>
                 </div>
 

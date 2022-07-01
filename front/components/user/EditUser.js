@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
 import { isloginAtom, userAtom } from '../../core/atoms/userState';
@@ -18,8 +19,10 @@ const EditUser = () => {
       description: user.description,
     });
     const updatedUser = await res.data;
+
     setUser(updatedUser);
     setShowModal(false);
+    alert('회원 정보가 수정되었습니다.');
   };
 
   const handleNameChange = (e) => {
@@ -42,7 +45,9 @@ const EditUser = () => {
     localStorage.clear();
     router.push('/');
   };
-
+  useEffect(() => {
+    console.log(user);
+  });
   return (
     <div>
       <div className="my-2">
@@ -65,10 +70,10 @@ const EditUser = () => {
           rows="4"
           className="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Leave a comment..."
-          value={user.descriptiion}
+          value={user.description}
           onChange={handleDescriptionChange}
         >
-          {user.descriptiion}
+          {user.description}
         </textarea>
       </div>
       <div className="flex gap-3 my-3">

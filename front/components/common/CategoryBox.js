@@ -23,10 +23,10 @@ export default function CategoryBox({ myroomInfo, color }) {
 
   return (
     <div
-      className={`flex justify-between bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl h-[100px] my-[50px]`}
+      className={`grid grid-cols-10 bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl h-[100px] my-[50px]`}
     >
       <Link href={myroomInfo.membersOnly ? privateRoom : openRoom}>
-        <a className="flex items-center ml-[30px] text-xl font-bold cursor-pointer">
+        <a className="col-span-9 py-9 items-center ml-[30px] text-xl font-bold cursor-pointer">
           <section className="">{myroomInfo.roomName}</section>
         </a>
       </Link>
