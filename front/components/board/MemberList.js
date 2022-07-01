@@ -1,6 +1,6 @@
 import Member from './Member';
 
-const MemberList = ({ members, isOwner, roomId }) => {
+const MemberList = ({ members, isOwner, roomId, owner }) => {
   return (
     <div className=" rounded-lg p-3 my-5 m-4 shadow-lg">
       <div className="flex items-center space-x-2 text-base">
@@ -14,6 +14,7 @@ const MemberList = ({ members, isOwner, roomId }) => {
               member={member}
               isOwner={isOwner}
               roomId={roomId}
+              owner={owner}
             />
           );
         })}

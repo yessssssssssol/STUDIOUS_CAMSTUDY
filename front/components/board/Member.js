@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import * as API from '../../pages/api/api';
 
-const Member = ({ member, isOwner, roomId }) => {
+const Member = ({ member, isOwner, roomId, owner }) => {
   // const { userName, roomId, applicantId, userURL } = applicant;
   const [isAccept, setIsAccept] = useState(false);
   const [userName, setUserName] = useState('');
   const [userProfile, setUserProfile] = useState();
+  const [ownerId, setOwnerId] = useState(owner.id);
 
   useEffect(() => {
     // 멤버 정보 가져오기
@@ -24,15 +25,19 @@ const Member = ({ member, isOwner, roomId }) => {
   }, [isAccept]);
 
   const handleReject = async () => {
-    // 승인 후 거절
-    console.log('거절');
-    try {
-      console.log('hi');
-      await API.delete(`appliant/${roomId}/${member}`);
-      setIsAccept(false);
-      console.log('해당 신청자가 거절되었습니다.');
-    } catch (err) {
-      console.log(err);
+    if (member !== ownerId) {
+      // 승인 후 거절
+      console.log('거절');
+      try {
+        console.log('hi');
+        await API.delete(`appliant/${roomId}/${member}`);
+        setIsAccept(false);
+        console.log('해당 신청자가 거절되었습니다.');
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      alert('방장은 탈퇴할 수 없습니다!');
     }
   };
 
