@@ -1,19 +1,18 @@
-const PrologueMid1 = () => {
+const PrologueMid3 = () => {
   return (
     <div className="container px-6 py-16 mx-auto">
       <div className="items-center lg:flex">
         <div className="w-full lg:w-1/2">
           <div className="lg:max-w-lg">
             <h1 className="text-2xl font-semibold text-gray-800 uppercase  lg:text-3xl">
-              캠공족들을 위한 최고의 선택 STUDIOUS
+              스터디를 개설하고 스터디원들을 모집해보세요!
             </h1>
             <p className="mt-2 text-gray-600 ">
-              온라인 독서실 STUDIOUS는 따로 설치가 필요하지 않은 비설치형
-              클라우드 서비스 방식으로 편리한 공부환경을 제공하고 있습니다. 또한
-              혼자하는 공부를 선호하는 유저들과 다른 사람들과 함께 모여서
-              공부하는 것을 선호하는 유저들 모두를 위해 개인 스터디룸과 단체
-              스터디룸을 모두 지원하고 있습니다. STUDIOUS로 꿈을 향해 함께
-              도전해보세요!
+              STUDIOUS는 원하는 주제의 스터디를 개설하고 스터디원들을 모집할 수
+              있습니다. 언제든 원하는 유저들이라면 모두 입장할 수 있는 Open
+              Study, 방장이 스터디원을 모집하고 모집한 스터디원들만 참여할 수
+              있는 Private Study의 두 종류의 스터디를 지원하고 있습니다. 원하는
+              스터디를 자유롭게 개설하고 참여해보세요!
             </p>
             <button className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
               STUDY WIHT AI
@@ -33,4 +32,4 @@ const PrologueMid1 = () => {
   );
 };
 
-export default PrologueMid1;
+export default PrologueMid3;
