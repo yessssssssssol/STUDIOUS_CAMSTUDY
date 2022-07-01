@@ -4,13 +4,16 @@ import * as API from '../../pages/api/api';
 const Certification = ({ applicant, isOwner }) => {
   const { userName, roomId, applicantId, userURL } = applicant;
   const [isAccept, setIsAccept] = useState(false);
+  const [memberList, setMemberList] = useState('');
+  const [membersNum, setMembersNum] = useState(0);
 
   useEffect(() => {
     async function memberCheck() {
       try {
         const res = await API.get(`studyroom/${roomId}`);
         const memberList = res.data.members;
-
+        setMembersNum(res.data.membersNum);
+        setMemberList(memberList);
         if (memberList.includes(applicantId)) {
           setIsAccept(true);
         } else {
@@ -35,8 +38,17 @@ const Certification = ({ applicant, isOwner }) => {
         console.log(err);
       }
     }
-    accept();
-    getMembers();
+    // 현재 사용자 리스트의 length가 membersNum보다 작을 때만 수락한다.
+    if (memberList.length > membersNum) {
+      console.log(memberList.length);
+      console.log(membersNum);
+      accept();
+      getMembers();
+    } else {
+      console.log(memberList.length);
+      console.log(membersNum);
+      alert('신청이 완료된 스터디입니다.');
+    }
   };
 
   const getMembers = async () => {
