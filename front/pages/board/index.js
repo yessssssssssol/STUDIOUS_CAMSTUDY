@@ -47,7 +47,7 @@ export default function board({ profileURL }) {
         <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
 
-      <div className="flex flex-raw flex-wrap lg:flex justify-center">
+      <div className="container flex flex-raw flex-wrap lg:flex justify-center">
         <Helmet title="board" />
         {boardDatas &&
           boardDatas.slice(0, count).map((boardData, index) => {
