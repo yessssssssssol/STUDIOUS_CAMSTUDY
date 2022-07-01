@@ -1,5 +1,5 @@
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { aiAtom } from '../../core/atoms/aiState';
+import { aiAtom, noUseAiAtom } from '../../core/atoms/aiState';
 import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
@@ -50,6 +50,7 @@ const StopWatch = forwardRef(
 
     if (myTimer === true) {
       const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+      const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
       if (ref != null) {
         useImperativeHandle(ref, () => ({
@@ -139,6 +140,8 @@ const StopWatch = forwardRef(
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
       timelogFunc();
+      setUserAiAtom(false);
+      location.reload();
       console.log('나가기');
       router.back();
     };
@@ -178,7 +181,7 @@ const StopWatch = forwardRef(
                         {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                       </h5>
                       <p className="mb-3 font-normal text-gray-700">
-                        10초 뒤에 타이머가 시작됩니다.
+                        5초 뒤에 타이머가 시작됩니다.
                         <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                       </p>
                       <svg

@@ -1,8 +1,8 @@
 import PrologueTop from '../../components/prologue/PrologueTop';
 import PrologueMid1 from '../../components/prologue/PrologueMid1';
 import PrologueMid2 from '../../components/prologue/PrologueMid2';
+import PrologueMid3 from '../../components/prologue/PrologueMid3';
 import PrologueBottom from '../../components/prologue/PrologueBottom';
-import PrologueSample from '../../components/prologue/PrologueSample';
 import { useEffect, useState } from 'react';
 
 import AOS from 'aos';
@@ -34,9 +34,11 @@ const Prologue = () => {
         <PrologueMid2 />
       </div>
       <div data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+        <PrologueMid3 />
+      </div>
+      <div data-aos="fade-up" data-aos-anchor-placement="top-bottom">
         <PrologueBottom />
       </div>
-      {/* <PrologueSample /> */}
     </div>
   );
 };
