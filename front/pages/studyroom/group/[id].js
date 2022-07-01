@@ -190,7 +190,7 @@ export default function Group() {
     //   router.push('/openroom');
     // }
 
-    console.log("mystream : " + myStream);
+    console.log('mystream : ' + myStream);
 
     socket.emit(
       'enter_room',
@@ -236,7 +236,6 @@ export default function Group() {
   }
 
   function FindUser(socketId) {
-
     Object.keys(userList).forEach((v) => {
       if (userList[v].socketId === socketId) {
         const data = userList[v];
@@ -261,19 +260,19 @@ export default function Group() {
 
     console.log(cameras);
     console.log(names);
-    console.log("datastream : ", data.stream);
+    console.log('datastream : ', data.stream);
 
     for (let i in cameras) {
       console.log(cameras[i]);
       if (cameras[i].id === 'none') {
-        console.log("findfindfind");
+        console.log('findfindfind');
         cameras[i].id = othersId;
         const video = document.createElement(video);
 
         if ('srcObject' in cameras[i]) {
-          try{
+          try {
             cameras[i].srcObject = data.stream;
-          } catch(err) {
+          } catch (err) {
             console.log(err);
           }
         }
@@ -399,7 +398,6 @@ export default function Group() {
       let prevList = userList;
       prevList[res.data?.userId] = res.data;
       setUserList(prevList);
-      
     } else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userList.hasOwnProperty(res.data?.userId) == false) {
@@ -506,18 +504,18 @@ export default function Group() {
             urls: [
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
-              "stun:stun2.l.google.com:19302",
-              "stun:stun3.l.google.com:19302",
-              "stun:stun4.l.google.com:19302",
-              "stun:stun.ekiga.net",
-              "stun:stun.ideasip.com",
-              "stun:stun.rixtelecom.se",
-              "stun:stun.schlund.de",
-              "stun:stun.stunprotocol.org:3478",
-              "stun:stun.voiparound.com",
-              "stun:stun.voipbuster.com",
-              "stun:stun.voipstunt.com",
-              "stun:stun.voxgratia.org"
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
             ],
           },
         ],
@@ -793,7 +791,8 @@ export default function Group() {
           <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
-                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                {isCamera ? (
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black border-amber-100 border-2 shadow-amber-400/10">
                     <StopWatch
                       cb={(result) => {
                         StartStopWatch(result);
@@ -818,9 +817,14 @@ export default function Group() {
                     />
                     <AlertModal />
                   </div>
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={1}></div>
-                  <div className="section w-full flex justify-center ">
+                ) : (
+                  <div>
+                    <p>카메라가 없습니다.</p>
+                  </div>
+                )}
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
+                  <div className="stopWatch absolute" id="none" key={1}></div>
+                  <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl bg-blue"
                       id="none"
@@ -830,9 +834,9 @@ export default function Group() {
                       playsInline
                       autoPlay
                     ></video>
-                    {key1Camera && findUserByKey(0)?.cameraOnState ? 
-                      ( <></> )
-                     : (
+                    {key1Camera && findUserByKey(0)?.cameraOnState ? (
+                      <></>
+                    ) : (
                       <>
                         {key1State && findUserByKey(0)?.state ? (
                           <img
@@ -850,9 +854,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key1Mute && findUserByKey(0)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -864,8 +868,8 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={4}></div>
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
+                  <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -896,9 +900,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key2Mute && findUserByKey(1)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -910,8 +914,8 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={7}></div>
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
+                  <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -942,9 +946,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key3Mute && findUserByKey(2)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -960,7 +964,7 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
@@ -1034,7 +1038,7 @@ export default function Group() {
                 </div>
               </form>
 
-              <div className="flex justify-between px-3 pt-5 ">
+              <div className="flex justify-between px-3">
                 <div className="flex items-center">
                   <button
                     id="cameraBtn"
@@ -1042,16 +1046,32 @@ export default function Group() {
                     onClick={CameraOnOffClick}
                   >
                     {isCameraOn == true ? (
-                      <TbDeviceComputerCamera color="white" size="30" />
+                      <TbDeviceComputerCamera
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <TbDeviceComputerCameraOff color="white" size="30" />
+                      <TbDeviceComputerCameraOff
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
                     {isMute == true ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                 </div>
