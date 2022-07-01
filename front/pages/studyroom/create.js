@@ -90,10 +90,10 @@ export default function Edit() {
   };
   return (
     <div className="container">
-      <div className="container flex-col justify-center w-full mx-72 my-5 bg-white rounded">
-        <div className="w-full xl:w-full border-b border-amber-400 py-3 bg-white ">
-          <div className="flex w-11/12 mx-24 xl:w-full xl:mx-0 items-center">
-            <p className="text-2xl text-amber-400  font-bold">스터디방 생성</p>
+      <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
+        <div className=" border-b border-amber-400 py-3 bg-white ">
+          <div className="flex w-11/12 mx-24 xl:mx-0 items-center">
+            <p className="text-2xl text-amber-400  font-bold">스터디방 만들기</p>
           </div>
         </div>
         <div className="flex gap-x-6 mt-8 w-full">
