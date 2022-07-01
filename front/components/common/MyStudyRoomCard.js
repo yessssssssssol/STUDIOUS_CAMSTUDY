@@ -45,24 +45,16 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
                 {/* 제목 클릭하면 스터디룸 게시판(?) 연결  */}
                 {myStudyRoom.membersOnly ? (
                   // 비공개룸
-                  <a
-                    href={`/board/detail/${myStudyRoom.roomId}`}
-                    aria-label="Article"
-                  >
-                    <p className="text-xl font-bold  text-slate-600 pb-2">
-                      {myStudyRoom.roomName}
-                    </p>
-                  </a>
+
+                  <p className="text-xl font-bold  text-slate-600 pb-2">
+                    {myStudyRoom.roomName}
+                  </p>
                 ) : (
                   // 오픈룸
-                  <a
-                    href={`/openroom/board/${myStudyRoom.roomId}`}
-                    aria-label="Article"
-                  >
-                    <p className="text-xl font-bold text-slate-600 pb-2 ">
-                      {myStudyRoom.roomName}
-                    </p>
-                  </a>
+
+                  <p className="text-xl font-bold text-slate-600 pb-2 ">
+                    {myStudyRoom.roomName}
+                  </p>
                 )}
                 <p className="text-sm font-medium text-slate-400 pb-2 ">
                   {myStudyRoom.focusTimeStart.slice(0, 5) +

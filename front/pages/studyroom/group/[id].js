@@ -168,6 +168,7 @@ export default function Group() {
     if (myStream == null) {
       rtcInit();
       location.reload();
+      setUserAiAtom(false);
       router.push('/openroom');
     }
 
@@ -765,8 +766,10 @@ export default function Group() {
     getRoomData();
 
     return () => {
-
-    }
+      rtcInit();
+      setUserAiAtom(false);
+      location.reload();
+    };
   }, []);
 
   

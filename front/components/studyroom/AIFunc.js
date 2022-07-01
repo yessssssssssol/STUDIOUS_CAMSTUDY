@@ -104,7 +104,7 @@ const AIFunc = (props) => {
   };
 
   return (
-    <div className="w-full flex justify-center ">
+    <div className="w-full flex justify-center item-center border rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50">
       <video
         className="rounded-xl"
         autoPlay

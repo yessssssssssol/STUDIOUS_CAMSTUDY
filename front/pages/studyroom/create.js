@@ -67,7 +67,11 @@ export default function Edit() {
         console.log('방이 생성되었습니다.');
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
         console.log('이미지가 추가되었습니다.');
-        router.back();
+        if (room.membersOnly === 'false') {
+          router.push(`/openroom/board/${res.data.roomId}`);
+        } else {
+          router.push(`/board/detail/${res.data.roomId}`);
+        }
         resetRoom();
         resetHashtag();
       } catch (err) {

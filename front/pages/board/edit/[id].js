@@ -47,6 +47,7 @@ export default function Create() {
       console.log(res);
       setRoom(res.data);
       setTempURL(res.data.roomImg);
+      // setFile(res.data.roomIm);
       var tag = res.data.hashTags;
       console.log();
       setHashTag(tag.join(' '));
@@ -63,29 +64,28 @@ export default function Create() {
     formD.append('roomImg', file);
     const tag = hashtag.split(' ');
     console.log(tag);
-    if (file) {
-      try {
-        const res = await API.put('studyroom', {
-          roomId: room.roomId,
-          roomName: room.roomName,
-          endStudyDay: room.endStudyDay,
-          focusTimeStart: room.focusTimeStart,
-          focusTimeEnd: room.focusTimeEnd,
-          roomTitle: room.roomTitle,
-          roomDesc: room.roomDesc,
-          hashTags: tag,
-        });
-        console.log(res.data);
-        console.log('방의 정보가 변경되었습니다.');
+
+    try {
+      const res = await API.put('studyroom', {
+        roomId: room.roomId,
+        roomName: room.roomName,
+        endStudyDay: room.endStudyDay,
+        focusTimeStart: room.focusTimeStart,
+        focusTimeEnd: room.focusTimeEnd,
+        roomTitle: room.roomTitle,
+        roomDesc: room.roomDesc,
+        hashTags: tag,
+      });
+      console.log(res.data);
+      console.log('방의 정보가 변경되었습니다.');
+      if (file) {
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
         console.log('이미지가 추가되었습니다.');
-        router.back();
-        resetRoom();
-      } catch (err) {
-        console.log(err);
-        setError(true);
       }
-    } else {
+      router.back();
+      resetRoom();
+    } catch (err) {
+      console.log(err);
       setError(true);
     }
   };

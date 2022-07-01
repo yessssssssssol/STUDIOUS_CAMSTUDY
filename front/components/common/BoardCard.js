@@ -19,15 +19,10 @@ export default function BoardCard({ boardData, profileURL }) {
                 {boardData.createdAt.slice(0, 10)} ~{' '}
                 {boardData.endStudyDay.slice(0, 10)}
               </p>
-              <a
-                href={`/board/detail/${boardData.roomId}`}
-                aria-label="Article"
-                className="inline-block mb-3 text-black transition-colors duration-200 hover:text-deep-purple-accent-700"
-              >
-                <p className="text-2xl font-bold leading-5">
-                  {boardData.roomName}
-                </p>
-              </a>
+
+              <p className="mb-3 text-2xl font-bold leading-5">
+                {boardData.roomName}
+              </p>
               <p className="mb-2 text-gray-700">
                 {boardData.roomDesc.slice(0, 20)}
               </p>

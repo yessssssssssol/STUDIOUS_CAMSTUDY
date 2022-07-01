@@ -13,10 +13,6 @@ export default function CategoryBox({ myroomInfo, color }) {
   const onClickHander = () => {
     setOpen(true);
   };
-  useEffect(() => {
-    console.log(useratom);
-    console.log(myroomInfo);
-  });
 
   const openRoom = `openroom/board/${myroomInfo.roomId}`;
   const privateRoom = `/board/detail/${myroomInfo.roomId}`;
@@ -34,7 +30,7 @@ export default function CategoryBox({ myroomInfo, color }) {
           <section className="">{myroomInfo.roomName}</section>
         </a>
       </Link>
-      {myroomInfo.id === useratom.id ? (
+      {myroomInfo?.id === useratom?.id ? (
         <section className="flex items-center mr-[30px] font-bold">
           <Link href={`/board/edit/${myroomInfo.roomId}`}>
             <a className="cursor-pointer mr-[15px]">
