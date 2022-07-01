@@ -30,12 +30,10 @@ export default function Detail() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log(isApplicants, 'applicants');
     async function getBoardDetail() {
       try {
         // 방 데이터 가져오기
         const res = await API.get('studyroom', router.query.id);
-        console.log(res, '방 데이터');
         setDetailData(res.data);
         tempData = res.data;
 
@@ -68,7 +66,6 @@ export default function Detail() {
   useEffect(() => {
     if (owner.id === currUser.id) {
       setIsOwner(true);
-      console.log('hi');
     } else if (owner.id !== currUser.id) {
       setIsOwner(false);
     }
@@ -84,15 +81,12 @@ export default function Detail() {
       console.log(err);
     }
     getApplicants();
-    console.log(applicants);
   };
 
   const getApplicants = async () => {
     try {
       const res = await API.get(`applicants/${detailData.roomId}`);
-      console.log(res.data);
       setApplicants(res.data);
-      console.log(applicants);
     } catch (err) {
       console.log(err);
     }
@@ -106,18 +100,14 @@ export default function Detail() {
   //applicants 명단 확인
   const applicantsCheck = () => {
     if (applicants) {
-      console.log(applicants);
       const checkList = applicants.map((applicant) => {
         return applicant.applicantId;
       });
-      console.log(checkList);
 
       if (!checkList.includes(currUser.id)) {
         setIsApplicants(false);
-        console.log('hi');
       } else {
         setIsApplicants(true);
-        console.log('hello');
       }
     }
   };

@@ -16,7 +16,6 @@ const Member = ({ member, isOwner, roomId, owner }) => {
         const memberInfo = res.data;
         setUserName(memberInfo.name);
         setUserProfile(memberInfo.profileUrl);
-        console.log(userName, userProfile);
       } catch (err) {
         console.log(err);
       }
@@ -27,9 +26,7 @@ const Member = ({ member, isOwner, roomId, owner }) => {
   const handleReject = async () => {
     if (member !== ownerId) {
       // 승인 후 거절
-      console.log('거절');
       try {
-        console.log('hi');
         await API.delete(`appliant/${roomId}/${member}`);
         setIsAccept(false);
         console.log('해당 신청자가 거절되었습니다.');

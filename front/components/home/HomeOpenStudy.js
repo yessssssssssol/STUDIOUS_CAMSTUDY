@@ -9,7 +9,6 @@ const HomeOpenStudy = () => {
     async function getOpenroom() {
       const res = await API.get('open/studyrooms');
       const data = res.data;
-      // console.log(data, 'openrooms');
       setOpenRooms(data);
     }
     getOpenroom();

@@ -37,7 +37,6 @@ const OpenRoomBoard = () => {
         const res = await API.get(`studyroom/${roomId}`);
         setRoomInfo(res.data);
         setHashTags(res.data.hashTags);
-        console.log(hashTags);
 
         // 방 만든 사람 정보 가져오기
         const ownerData = await API.get(`user/${res.data.id}`);
@@ -75,7 +74,6 @@ const OpenRoomBoard = () => {
       router.push(`/studyroom/group/${roomId}`);
     } else {
       setShow(true);
-      console.log('정원초과입니다.');
     }
   };
 
@@ -86,7 +84,6 @@ const OpenRoomBoard = () => {
   useEffect(() => {
     if (owner.id === currUser.id) {
       setIsOwner(true);
-      console.log('hi');
     } else if (owner.id !== currUser.id) {
       setIsOwner(false);
     }

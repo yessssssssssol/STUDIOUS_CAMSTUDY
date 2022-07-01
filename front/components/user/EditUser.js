@@ -45,9 +45,7 @@ const EditUser = () => {
     localStorage.clear();
     router.push('/');
   };
-  useEffect(() => {
-    console.log(user);
-  });
+  useEffect(() => {});
   return (
     <div>
       <div className="my-2">
