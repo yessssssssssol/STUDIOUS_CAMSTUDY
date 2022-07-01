@@ -236,8 +236,8 @@ userStudyRoomsRouter.put('/headcount', login_required, async function (req, res,
             if (curRoom.membersNum === curRoom.headCount.length)
                 return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
 
-            if (curRoom.headCount.includes(id))
-                return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
+            // if (curRoom.headCount.includes(id))
+            //     return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
 
             curRoom.headCount.push(id);
             const headCount = curRoom.headCount;

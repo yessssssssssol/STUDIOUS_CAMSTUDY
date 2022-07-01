@@ -19,7 +19,7 @@ const StopWatch = forwardRef(
     const { timer, handleStart, handlePause, handleRestart, getActiveTime } =
       useTimer(userT);
 
-    // 카운트다운 시간 설정: 10초
+    // 카운트다운 시간 설정: 5초
     const initialMinute = 0;
     const initialSeconds = 5;
     const [minutes, setMinutes] = useState(initialMinute);
@@ -34,6 +34,19 @@ const StopWatch = forwardRef(
 
     // dayjs 한국 시간 설정
     dayjs.locale('ko');
+
+    let Img = '/people-01.png';
+
+    useEffect(() => {
+      const ImgArr = ['/people-01.png', '/people-02.png'];
+
+      function randomImgPicker(arr) {
+        const random = Math.floor(Math.random() * arr.length);
+        return arr[random];
+      }
+
+      Img = randomImgPicker(ImgArr);
+    }, []);
 
     if (myTimer === true) {
       const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
@@ -159,11 +172,7 @@ const StopWatch = forwardRef(
               {minutes === 0 && seconds === 0 ? null : (
                 <div className="justify-center items-center text-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
-                    <img
-                      className="rounded-t-lg"
-                      src="/sampleImg.jpg"
-                      alt="증명사진"
-                    />
+                    <img className="rounded-t-lg" src={Img} alt="증명사진" />
                     <div className="p-5">
                       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
                         {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
