@@ -139,21 +139,7 @@ const StopWatch = forwardRef(
         handleStart();
       }, []);
     }
-
-    const timelogFunc = async () => {
-      try {
-        const res = await API.post('timelog', {
-          startTime,
-          endTime,
-        });
-        const updatedTimelog = await res.data;
-        console.log('timelog 성공');
-        console.log(updatedTimelog);
-      } catch (err) {
-        console.log('timelog 실패', err);
-      }
-    };
-
+    
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
       timelogFunc();
