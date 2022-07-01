@@ -376,7 +376,7 @@ export default function Group() {
       // 유저 데이터 저장 혹인 갱신
 
       // userList[res.data?.userId] = res.data;
-      addMessage(`  : ${res.data?.userName}님 입장하셨습니다!`);
+      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
       console.log(res.data);
@@ -648,7 +648,7 @@ export default function Group() {
 
   socket.on('bye', (leaveId, userName) => {
     // 나갔다는 메시지
-    addMessage(`  : ${userName}님이 퇴장하셨습니다.!`);
+    addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
     const stopWatch = document.getElementById(leaveId);
     if (stopWatch != null) {
