@@ -3,7 +3,6 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 
 export default function Heatmap({ gittimes }) {
   var result = [];
-  console.log(gittimes);
   gittimes.length == 0
     ? result.push({
         date: 0,
@@ -16,16 +15,27 @@ export default function Heatmap({ gittimes }) {
         });
       });
 
-  console.log(result);
-  var data = result;
-  const today = new Date();
+  //   const today = new Date();
 
-  const randomValues = getRange(200).map((index) => {
-    return {
-      date: shiftDate(today, -index),
-      count: getRandomInt(0, 5),
-    };
-  });
+  //   const randomValues = getRange(200).map((index) => {
+  //     return {
+  //       date: shiftDate(today, -index),
+  //       count: getRandomInt(0, 5),
+  //     };
+  //   });
+  // function shiftDate(date, numDays) {
+  //     const newDate = new Date(date);
+  //     newDate.setDate(newDate.getDate() + numDays);
+  //     return newDate;
+  //   }
+
+  //   function getRange(count) {
+  //     return Array.from({ length: count }, (_, i) => i);
+  //   }
+
+  //   function getRandomInt(min, max) {
+  //     return Math.floor(Math.random() * (max - min + 1)) + min;
+  //   }
   return (
     <CalendarHeatmap
       startDate={new Date('2022-1-01')}
@@ -42,17 +52,4 @@ export default function Heatmap({ gittimes }) {
       }}
     ></CalendarHeatmap>
   );
-  function shiftDate(date, numDays) {
-    const newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + numDays);
-    return newDate;
-  }
-
-  function getRange(count) {
-    return Array.from({ length: count }, (_, i) => i);
-  }
-
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 }

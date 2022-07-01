@@ -8,8 +8,8 @@ export default function Private() {
       <div>
         <StopWatchPrivate />
       </div>
-      <div className="grid justify-center items-center bg-green-200 w-full ">
-        <div className="w-[350px] h-[262px] items-center bg-yellow-200 lg:w-[600px] lg:h-[450px] rounded-xl ">
+      <div className="flex justify-center items-center w-full h-full ">
+        <div className="w-[850px] h-full items-center justify-center rounded-xl m-4 ">
           <AIFunc
             cb={() => {
               {
