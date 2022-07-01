@@ -790,7 +790,7 @@ export default function Group() {
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
-                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black border-amber-100 border-2 shadow-amber-400/10">
                     <StopWatch
                       cb={(result) => {
                         StartStopWatch(result);
@@ -820,7 +820,7 @@ export default function Group() {
                     <p>카메라가 없습니다.</p>
                   </div>
                 )}
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
                   <div className="stopWatch absolute" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -852,9 +852,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key1Mute && findUserByKey(0)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -866,7 +866,7 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
                   <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -898,9 +898,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key2Mute && findUserByKey(1)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -912,7 +912,7 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
                   <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -944,9 +944,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key3Mute && findUserByKey(2)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -962,7 +962,7 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
@@ -1036,7 +1036,7 @@ export default function Group() {
                 </div>
               </form>
 
-              <div className="flex justify-between px-3 pt-5 ">
+              <div className="flex justify-between px-3">
                 <div className="flex items-center">
                   <button
                     id="cameraBtn"
@@ -1044,16 +1044,32 @@ export default function Group() {
                     onClick={CameraOnOffClick}
                   >
                     {isCameraOn == true ? (
-                      <TbDeviceComputerCamera color="white" size="30" />
+                      <TbDeviceComputerCamera
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <TbDeviceComputerCameraOff color="white" size="30" />
+                      <TbDeviceComputerCameraOff
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
                     {isMute == true ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                 </div>
