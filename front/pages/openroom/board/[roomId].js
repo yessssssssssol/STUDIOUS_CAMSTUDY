@@ -144,7 +144,7 @@ const OpenRoomBoard = () => {
                       <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`스터디 기간: ${roomInfo.startStudyDay} ~ ${roomInfo.endStudyDay}`}</div>
                       <div className="inline-block px-3 py-1 font-bold text-gray-700 mr-2 mb-2">{`공부 집중시간: ${roomInfo.focusTimeStart} ~ ${roomInfo.focusTimeEnd}`}</div>
                     </div>
-                    <div className="border-l-4 border-gray-500 pl-4 pt-4 italic rounded w-full">
+                    <div className="border-l-4 text-xl shadow-md border-gray-500 pl-4 p-4  rounded w-full border-r-4 ">
                       {roomInfo.roomDesc}
                     </div>
                   </div>
