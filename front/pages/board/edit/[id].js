@@ -45,12 +45,14 @@ export default function Create() {
   useEffect(() => {
     const getInfo = async () => {
       const res = await API.get('studyroom', router.query.id);
-      console.log(res);
       setRoom(res.data);
       setTempURL(res.data.roomImg);
       // setFile(res.data.roomIm);
       var tag = res.data.hashTags;
-      console.log();
+      for (var i = 0; i < tag.length; i++) {
+        tag[i].replace(/(\s*)/g, '');
+        console.log(tag[i]);
+      }
       setHashTag(tag.join(' '));
     };
 
@@ -63,8 +65,12 @@ export default function Create() {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
-    const tag = hashtag.split(' ');
-
+    hashtag.replace(' ', '');
+    const tag = hashtag.split('#');
+    for (var i = 1; i < tag.length; i++) {
+      tag[i] = '#' + tag[i];
+    }
+    tag.shift();
     try {
       const res = await API.put('studyroom', {
         roomId: room.roomId,
