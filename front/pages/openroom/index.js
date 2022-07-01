@@ -5,7 +5,7 @@ import Helmet from '../../components/layout/Helmet';
 import { userAtom } from '../../core/atoms/userState';
 import * as API from '../api/api';
 import { useInView } from 'react-intersection-observer';
-import { AiFillPlusCircle } from '@react-icons/all-files/ai/AiFillPlusCircle';
+import { AiFillPlusCircle } from 'react-icons/ai';
 export default function Openroom() {
   const [count, setCount] = useState(10);
   const [openRooms, setOpenRooms] = useState([]);
@@ -30,7 +30,7 @@ export default function Openroom() {
   }, [inView]);
   return (
     <div>
-      <div className="px-10 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
+      <div className="px-10 py-16 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
         <span className="flex">
           Open Study
           <span className="pt-1 ml-3">

@@ -1,8 +1,8 @@
-import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
+import { RiEdit2Fill } from 'react-icons/ri';
 import Link from 'next/link';
 import DeleteModal from './DeleteModal';
 
-import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
+import { BsTrashFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { userAtom } from '../../core/atoms/userState';
 import { useRecoilValue } from 'recoil';
