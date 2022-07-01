@@ -142,7 +142,7 @@ export default function Group() {
   const [key3Mute, setKey3Mute] = useState(false);
   const [key3Camera, setKey3Camera] = useState(true);
   const [key3State, setKey3State] = useState(false);
-  
+
   let aiInterval = null;
   let roomId;
 
@@ -309,7 +309,7 @@ export default function Group() {
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
-          if (dataChannels[userId].readyState === "open") {
+          if (dataChannels[userId].readyState === 'open') {
             let req = muteRes;
             req.data.userId = user.id;
             req.data.result = true;
@@ -577,7 +577,9 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
-          req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
+          req.data['userTime'] = stopWatchRef?.current?.getTime()
+            ? stopWatchRef?.current?.getTime()
+            : 0;
           req.data['muteState'] = false;
 
           myDataChannel.send(JSON.stringify(req));
@@ -612,7 +614,9 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
-            req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
+            req.data['userTime'] = stopWatchRef?.current?.getTime()
+              ? stopWatchRef?.current?.getTime()
+              : 0;
             req.data['muteState'] = false;
 
             myDataChannel.send(JSON.stringify(req));
@@ -684,7 +688,6 @@ export default function Group() {
     const prevList = userList;
 
     Object.keys(prevList).forEach((v) => {
-      
       if (v.socketId === leaveId) {
         delete prevList[v];
       }
@@ -731,20 +734,20 @@ export default function Group() {
   };
 
   function AlertNoHear(result) {
-    // 만약 현재 나의 스테이트값이 
+    // 만약 현재 나의 스테이트값이
     let req = stateRes;
     req.data.userId = user?.id;
     req.data.result = result;
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === "open") {
+        if (dataChannels[userId].connectionState === 'open') {
           dataChannels[userId].send(JSON.stringify(req));
         }
       });
       console.log(result);
     }
-    console.log("send Data");
+    console.log('send Data');
   }
 
   function StartStopWatch(result) {
@@ -754,7 +757,7 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === "open") {
+        if (dataChannels[userId].connectionState === 'open') {
           dataChannels[userId].send(JSON.stringify(req));
         }
       });
@@ -791,19 +794,17 @@ export default function Group() {
     };
   }, []);
 
-  
-
   // useEffect(() => {
   //   if (myPeerConnection !== null && aiInterval == null) {
   //     aiInterval = setInterval(() => {
   //       if (Object.keys(dataChannels).length >= 1 && Object.keys(userList).length >= 1) {
   //         AlertNoHear(userIsHear);
   //       }
-  
+
   //       if(myPeerConnection == null || Object.keys(dataChannels).length < 1) {
   //         clearInterval(aiInterval);
   //       }
-  
+
   //     }, 1000);
   //   }
   // });
@@ -995,7 +996,7 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-purple-400 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
