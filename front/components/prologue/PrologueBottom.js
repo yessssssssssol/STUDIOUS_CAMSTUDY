@@ -4,7 +4,11 @@ const PrologueBottom = () => {
       <section className="bg-gray-100  lg:py-12 lg:flex lg:justify-center">
         <div className="bg-white  lg:mx-8 lg:flex lg:max-w-5xl lg:shadow-lg lg:rounded-lg">
           <div className="lg:w-1/2">
-            <div className='h-64 bg-cover lg:rounded-lg lg:h-full bg-[url("/sampleImg.jpg")]'></div>
+            <img
+              className="w-full h-full lg:max-w-2xl"
+              src="/groupExample.png"
+              alt="Catalogue-pana.svg"
+            />
           </div>
 
           <div className="max-w-xl px-6 py-12 lg:max-w-5xl lg:w-1/2">

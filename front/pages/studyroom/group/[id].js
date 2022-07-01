@@ -143,7 +143,7 @@ export default function Group() {
 
   let aiInterval = null;
   let roomId;
-
+  const scrollRef = useRef();
   // 채팅에 사용하는 유저 정보 리스트
   const [userDatas, setUserDatas] = useState([]);
   useEffect(() => {
@@ -178,7 +178,17 @@ export default function Group() {
     setChat([...chatAll, message]);
     chatAll.push(message);
   }
+  const chattingBoxRef = useRef();
+  const scrollToBottom = () => {
+    if (chattingBoxRef.current) {
+      const { scrollHeight, clientHeight } = chattingBoxRef.current;
+      chattingBoxRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
   async function initCall(data) {
     await getMedia();
 
@@ -187,8 +197,6 @@ export default function Group() {
       location.reload();
       router.push('/openroom');
     }
-
-    console.log("mystream : " + myStream);
 
     socket.emit(
       'enter_room',
@@ -234,7 +242,6 @@ export default function Group() {
   }
 
   function FindUser(socketId) {
-
     Object.keys(userList).forEach((v) => {
       if (userList[v].socketId === socketId) {
         const data = userList[v];
@@ -245,11 +252,7 @@ export default function Group() {
   }
 
   function handleAddStream(data, othersId) {
-    console.log('got an stream from my pear');
-    console.log("Peer's Stream", data.stream);
-    console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    console.log('othersId : ' + othersId);
 
     document.get;
 
@@ -257,21 +260,15 @@ export default function Group() {
     const names = document.getElementsByClassName('name');
     const timers = document.getElementsByClassName('stopWatch');
 
-    console.log(cameras);
-    console.log(names);
-    console.log("datastream : ", data.stream);
-
     for (let i in cameras) {
-      console.log(cameras[i]);
       if (cameras[i].id === 'none') {
-        console.log("findfindfind");
         cameras[i].id = othersId;
         const video = document.createElement(video);
 
         if ('srcObject' in cameras[i]) {
-          try{
+          try {
             cameras[i].srcObject = data.stream;
-          } catch(err) {
+          } catch (err) {
             console.log(err);
           }
         }
@@ -285,7 +282,6 @@ export default function Group() {
   function MuteBtnClick() {
     const muteBtn = document.getElementById('muteBtn');
     if (myStream !== null) {
-      console.log(myStream.getAudioTracks());
       myStream
         .getAudioTracks()
         .forEach((track) => (track.enabled = !track.enabled));
@@ -317,7 +313,6 @@ export default function Group() {
         });
       }
     }
-    console.log(userList);
   }
 
   function CameraOnOffClick() {
@@ -326,7 +321,6 @@ export default function Group() {
       myStream
         .getVideoTracks()
         .forEach((track) => (track.enabled = !track.enabled));
-      console.log(myStream.getVideoTracks());
       if (isCameraOn == true) {
         // cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
@@ -355,7 +349,6 @@ export default function Group() {
         });
       }
     }
-    console.log(userList);
   }
 
   function MessageParse(res) {
@@ -365,11 +358,9 @@ export default function Group() {
       // 유저 데이터 저장 혹인 갱신
 
       // userList[res.data?.userId] = res.data;
-      addMessage(`  : ${res.data?.userName}님 입장하셨습니다!`);
+      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
-      console.log(res.data);
-      console.log(res.data?.socketId);
 
       const names = document.getElementsByClassName('name');
 
@@ -397,7 +388,6 @@ export default function Group() {
       let prevList = userList;
       prevList[res.data?.userId] = res.data;
       setUserList(prevList);
-      
     } else if (res.type == 'state') {
       // 집중 여부 갱신
       if (userList.hasOwnProperty(res.data?.userId) == false) {
@@ -412,7 +402,6 @@ export default function Group() {
 
       setUserList(prevList);
 
-      console.log(prevList[res.data?.userId]);
       // userList[res.data?.userId].state = res.data?.result;
       const cameras = document.getElementsByClassName('camera');
 
@@ -442,8 +431,6 @@ export default function Group() {
       prevList[res.data?.userId] = prev;
 
       setUserList(prevList);
-      // userList[res.data?.userId].cameraOnState = res.data?.result;
-      //console.log(userList[res.data?.userId]);
 
       const cameras = document.getElementsByClassName('camera');
 
@@ -504,18 +491,18 @@ export default function Group() {
             urls: [
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
-              "stun:stun2.l.google.com:19302",
-              "stun:stun3.l.google.com:19302",
-              "stun:stun4.l.google.com:19302",
-              "stun:stun.ekiga.net",
-              "stun:stun.ideasip.com",
-              "stun:stun.rixtelecom.se",
-              "stun:stun.schlund.de",
-              "stun:stun.stunprotocol.org:3478",
-              "stun:stun.voiparound.com",
-              "stun:stun.voipbuster.com",
-              "stun:stun.voipstunt.com",
-              "stun:stun.voxgratia.org"
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
             ],
           },
         ],
@@ -547,8 +534,6 @@ export default function Group() {
           // req.data = `${user?.name}님 입장하셨습니다!`;
           // myDataChannel.send(req);
 
-          console.log(myPeerConnection);
-
           // 유저 데이터도 보내기?
           let req = userRes;
 
@@ -569,8 +554,6 @@ export default function Group() {
           const res = JSON.parse(event.data);
           MessageParse(res);
         });
-        // console.log("made data channel");
-        // console.log(myDataChannel);
 
         _offer = await myPeerConnection.createOffer();
         myPeerConnection.setLocalDescription(_offer);
@@ -581,13 +564,8 @@ export default function Group() {
         myPeerConnection.addEventListener('datachannel', (event) => {
           myDataChannel = event.channel;
           myDataChannel.addEventListener('open', (event) => {
-            // let req = chatRes;
-            // req.data = `${user?.name}님 입장하셨습니다!`;
-            // myDataChannel.send(req);
-
             // 유더 데이터도 보내기
             let req = userRes;
-            console.log(myPeerConnection);
 
             req.data['userId'] = user?.id;
             req.data['socketId'] = socket.id;
@@ -624,7 +602,6 @@ export default function Group() {
   socket.on('welcome', async (newUserId) => {
     const offer = await makeConnection(newUserId);
     socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
-    console.log('send the offer');
   });
 
   socket.on('refuse', (errorMessage) => {
@@ -637,7 +614,7 @@ export default function Group() {
 
   socket.on('bye', (leaveId, userName) => {
     // 나갔다는 메시지
-    addMessage(`  : ${userName}님이 퇴장하셨습니다.!`);
+    addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
     const stopWatch = document.getElementById(leaveId);
     if (stopWatch != null) {
@@ -661,7 +638,6 @@ export default function Group() {
     Object.keys(peerConnections).forEach((id, i) => {
       if (id === leaveId) {
         delete peerConnections[id];
-        console.log(peerConnections);
       }
     });
 
@@ -678,9 +654,6 @@ export default function Group() {
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
   socket.on('offer', async (offer, offersId) => {
-    console.log('receive the offer');
-    console.log(offer);
-
     const answer = await makeConnection(offersId, offer);
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
@@ -690,7 +663,6 @@ export default function Group() {
   });
 
   socket.on('answer', async (answer, newUserId) => {
-    console.log('receive the answer', newUserId);
     // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
     peerConnections[newUserId].setRemoteDescription(answer);
   });
@@ -698,7 +670,6 @@ export default function Group() {
   socket.on('ice', (ice, othersId) => {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
-    console.log(peerConnections);
   });
 
   const sendChatHandler = (e) => {
@@ -727,12 +698,8 @@ export default function Group() {
         if (dataChannels[userId].readyState == 'open') {
           dataChannels[userId]?.send(JSON.stringify(req));
         }
-        // console.log("datachannel : ", dataChannels[userId]);
-        // dataChannels[userId]?.send(JSON.stringify(req));
       });
-      console.log(result);
     }
-    console.log('send Data');
   }
 
   function StartStopWatch(result) {
@@ -747,8 +714,6 @@ export default function Group() {
         }
       });
     }
-
-    console.log(result);
   }
 
   function findUserByKey(key) {
@@ -789,7 +754,8 @@ export default function Group() {
           <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
-                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                {isCamera ? (
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black border-amber-100 border-2 shadow-amber-400/10">
                     <StopWatch
                       cb={(result) => {
                         StartStopWatch(result);
@@ -814,9 +780,14 @@ export default function Group() {
                     />
                     <AlertModal />
                   </div>
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={1}></div>
-                  <div className="section w-full flex justify-center ">
+                ) : (
+                  <div>
+                    <p>카메라가 없습니다.</p>
+                  </div>
+                )}
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
+                  <div className="stopWatch absolute" id="none" key={1}></div>
+                  <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl bg-blue"
                       id="none"
@@ -826,9 +797,9 @@ export default function Group() {
                       playsInline
                       autoPlay
                     ></video>
-                    {key1Camera && findUserByKey(0)?.cameraOnState ? 
-                      ( <></> )
-                     : (
+                    {key1Camera && findUserByKey(0)?.cameraOnState ? (
+                      <></>
+                    ) : (
                       <>
                         {key1State && findUserByKey(0)?.state ? (
                           <img
@@ -846,9 +817,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key1Mute && findUserByKey(0)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -860,8 +831,8 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={4}></div>
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
+                  <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -892,9 +863,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key2Mute && findUserByKey(1)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -906,8 +877,8 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={7}></div>
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
+                  <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -938,9 +909,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key3Mute && findUserByKey(2)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -956,13 +927,15 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
-              <div className="relative w-full p-6 overflow-y-auto h-[72%]">
+              <div
+                ref={chattingBoxRef}
+                className="relative w-full p-6 overflow-y-auto h-[72%]"
+              >
                 <ul className="space-y-2">
                   {chat.map((chat) => {
-                    console.log(chat, 'chat');
                     let name = chat.split(' : ');
 
                     let userI = userDatas.find((userData) => {
@@ -1030,7 +1003,7 @@ export default function Group() {
                 </div>
               </form>
 
-              <div className="flex justify-between px-3 pt-5 ">
+              <div className="flex justify-between px-3">
                 <div className="flex items-center">
                   <button
                     id="cameraBtn"
@@ -1038,16 +1011,32 @@ export default function Group() {
                     onClick={CameraOnOffClick}
                   >
                     {isCameraOn == true ? (
-                      <TbDeviceComputerCamera color="white" size="30" />
+                      <TbDeviceComputerCamera
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <TbDeviceComputerCameraOff color="white" size="30" />
+                      <TbDeviceComputerCameraOff
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
                     {isMute == true ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                 </div>

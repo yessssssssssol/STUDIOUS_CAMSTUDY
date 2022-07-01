@@ -19,7 +19,6 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     const res = await API.get('comments', roomId);
 
     setComments(res.data);
-    console.log(writerId);
   };
 
   return (

@@ -21,14 +21,13 @@ const PrologueMid1 = () => {
               스터디룸을 모두 지원하고 있습니다. STUDIOUS로 꿈을 향해 함께
               도전해보세요!
             </p>
-
           </div>
         </div>
 
         <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
           <img
             className="w-full h-full lg:max-w-2xl"
-            src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80"
+            src="/boardscreen.png"
             alt="Catalogue-pana.svg"
           />
         </div>

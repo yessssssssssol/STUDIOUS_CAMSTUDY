@@ -61,7 +61,6 @@ const StopWatch = forwardRef(
             timelogFunc();
             // setUserAiAtom(false);
             location.reload();
-            console.log('나가기');
             router.back();
           },
           getTime() {
@@ -95,11 +94,9 @@ const StopWatch = forwardRef(
       useEffect(() => {
         if (getReady && userIsHear) {
           handleRestart();
-          console.log('userIsHear', userIsHear);
           setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
         } else if (getReady && !userIsHear) {
           handlePause();
-          console.log('userIsHear', userIsHear);
           setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
         }
       }, [getReady, userIsHear]);
@@ -108,7 +105,6 @@ const StopWatch = forwardRef(
       useEffect(() => {
         if (getReady) {
           handleStart();
-          console.log('getReady가 true');
           setStartTime(startTime);
         }
       }, []);
@@ -128,11 +124,7 @@ const StopWatch = forwardRef(
             endTime,
           });
           const updatedTimelog = await res.data;
-          console.log('timelog 성공');
-          console.log(updatedTimelog);
-        } catch (err) {
-          console.log('timelog 실패', err);
-        }
+        } catch (err) {}
       };
     } else {
       useEffect(() => {
@@ -143,7 +135,6 @@ const StopWatch = forwardRef(
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
       location.reload();
-      console.log('나가기');
       router.back();
     };
 

@@ -63,7 +63,6 @@ export default function Create() {
     const formD = new FormData();
     formD.append('roomImg', file);
     const tag = hashtag.split(' ');
-    console.log(tag);
 
     try {
       const res = await API.put('studyroom', {
@@ -76,7 +75,6 @@ export default function Create() {
         roomDesc: room.roomDesc,
         hashTags: tag,
       });
-      console.log(res.data);
       console.log('방의 정보가 변경되었습니다.');
       if (file) {
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
@@ -92,7 +90,6 @@ export default function Create() {
 
   const resetHandler = () => {
     resetRoom();
-    console.log(room);
     router.back();
   };
   return (

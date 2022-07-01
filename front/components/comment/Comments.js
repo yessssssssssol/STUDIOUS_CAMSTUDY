@@ -11,7 +11,6 @@ function Comments({ roomId, writerId }) {
 
     API.get('comments', roomId).then((res) => setComments(res.data));
   }, [roomId]);
-  console.log(comments, '확인하고싶음');
 
   return (
     <div>

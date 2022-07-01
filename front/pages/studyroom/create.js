@@ -51,14 +51,10 @@ export default function Edit() {
       roomDesc
     ) {
       setDataCheck(true);
-      console.log(dataCheck);
     } else {
       setDataCheck(false);
-      console.log(dataCheck);
     }
   }, [room]);
-
-  console.log(dataCheck);
 
   const fileInput = useRef(null);
 
@@ -84,7 +80,6 @@ export default function Edit() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(room);
     const tag = hashtag.split(' ');
     const formD = new FormData();
     formD.append('roomImg', file);
@@ -105,7 +100,6 @@ export default function Edit() {
             hashTags: tag,
           });
           submitCheck = true;
-          console.log(res.data);
           console.log('방이 생성되었습니다.');
           await API.putImg(`roomimg/${res.data.roomId}`, formD);
           console.log('이미지가 추가되었습니다.');
@@ -132,7 +126,6 @@ export default function Edit() {
 
   const resetHandler = () => {
     resetRoom();
-    console.log(room);
     router.back();
   };
   return (

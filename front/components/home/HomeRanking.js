@@ -36,14 +36,6 @@ const HomeRanking = () => {
     getUserId();
   }, []);
 
-  // const timeSort = rankings.sort((a, b) => a.totalTime - b.totalTime);
-  // const timeSort = rankings.sort((a, b) =>
-  //   a.totalTime.toLowerCase() < b.totalTime.toLowerCase() ? 1 : -1
-  // );
-  // console.log('timeSort');
-  // console.log(timeSort);
-  // console.log(timeSort === rankings);
-
   return (
     <>
       {/* <div className="container"> */}
@@ -52,14 +44,7 @@ const HomeRanking = () => {
           Ranking Top 10
           <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
         </div>
-        {/* <div className="flex items-center justify-center w-full mt-8">
-          <RankingTable
-            rankings={rankings}
-            setRankings={setRankings}
-            userDatas={userDatas}
-            setUserDatas={setUserDatas}
-          />
-        </div> */}
+
         <div className="flex items-center justify-center w-full mt-8">
           <NoSSR rankings={rankings} userDatas={userDatas} />
         </div>
