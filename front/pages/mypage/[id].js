@@ -36,19 +36,27 @@ export default function mypage() {
   }
 
   useEffect(() => {
-    setUser(useratom);
     const getTimeData = async () => {
       try {
-        const totaltime = await API.get('totaltime', useratom.id);
+        try {
+          const res = await API.get('user', router.query.id);
+          console.log(res, '유저정보');
+          setUser(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+
+        const totaltime = await API.get('totaltime', router.query.id);
         const data = totaltime.data;
         var data2 = [
           data.studyTimeADay,
           data.weekStudyTime,
           data.totalStudyTime,
         ];
+        console.log(data2);
         setTimeData(data2);
 
-        const dailysheets = await API.get('dailysheets', useratom.id);
+        const dailysheets = await API.get('dailysheets', router.query.id);
         const datas = dailysheets.data;
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
         if (datas[datas.length - 1].bestStudyTime == ' ') {
@@ -78,10 +86,11 @@ export default function mypage() {
         setPieData([0, 0, 0]);
       }
     };
-
-    getTimeData();
-    setGitTime(gittime);
-  }, []);
+    if (router.isReady) {
+      getTimeData();
+      setGitTime(gittime);
+    }
+  }, [router.isReady]);
 
   async function clickHandler(e) {
     var res = '';
