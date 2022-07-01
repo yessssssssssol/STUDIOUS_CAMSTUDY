@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 class userStudyRoomsService {
     static createPrivateRoom({ id }) {
+        dayjs.locale('ko');
         const now = dayjs();
         const startStudyDay = ChangeDate.getCurrentDate();
 

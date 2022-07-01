@@ -8,8 +8,18 @@ class ChangeDate {
         // console.log(typeof startTime, typeof endTime);
         // console.log('슬라이스', startTime.slice(0, 4));
 
-        const convertStartTime = new Date(`${startTime.slice(0, 4)}/${startTime.slice(5, 7)}/${startTime.slice(8, 10)}/${startTime.slice(11, 13)}:${startTime.slice(14, 16)}:${startTime.slice(17)}`);
-        const convertEndTime = new Date(`${endTime.slice(0, 4)}/${endTime.slice(5, 7)}/${endTime.slice(8, 10)}/${endTime.slice(11, 13)}:${endTime.slice(14, 16)}:${endTime.slice(17)}`);
+        const convertStartTime = new Date(
+            `${startTime.slice(0, 4)}/${startTime.slice(5, 7)}/${startTime.slice(
+                8,
+                10,
+            )}/${startTime.slice(11, 13)}:${startTime.slice(14, 16)}:${startTime.slice(17)}`,
+        );
+        const convertEndTime = new Date(
+            `${endTime.slice(0, 4)}/${endTime.slice(5, 7)}/${endTime.slice(8, 10)}/${endTime.slice(
+                11,
+                13,
+            )}:${endTime.slice(14, 16)}:${endTime.slice(17)}`,
+        );
 
         // console.log(convertStartTime, convertEndTime);
 
@@ -26,6 +36,7 @@ class ChangeDate {
     // 오전 5시를 기준으로 오늘과 내일을 구분한다.
     // ex) 다음날 새벽 2시는 아직 오늘이다.
     static getCurrentDate(time = undefined) {
+        dayjs.locale('ko');
         const now = dayjs(time);
         let date = now.format('YYYY-MM-DD');
         if (now.get('hour') < 5) {
@@ -40,7 +51,10 @@ class ChangeDate {
         //시 * 60 * 60 * 1000
         //분 * 60 * 1000
         //초 * 1000
-        const studyTimeADayNum = Number(studyTimeADay.slice(0, 2)) * 60 * 60 * 1000 + Number(studyTimeADay.slice(3, 5)) * 60 * 1000 + Number(studyTimeADay.slice(6)) * 1000;
+        const studyTimeADayNum =
+            Number(studyTimeADay.slice(0, 2)) * 60 * 60 * 1000 +
+            Number(studyTimeADay.slice(3, 5)) * 60 * 1000 +
+            Number(studyTimeADay.slice(6)) * 1000;
         return studyTimeADayNum;
     }
 

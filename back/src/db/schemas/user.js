@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import dayjs from 'dayjs';
 
+dayjs.locale('ko');
 const date = dayjs();
 // console.log(date.format("YYYY-MM-DD HH:mm:ss"))
 // console.log(dayjs(new Date()).getTime())
@@ -31,7 +32,8 @@ const UserSchema = new Schema(
         profileUrl: {
             type: String,
             required: false,
-            default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            default:
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
         },
         // 하루 공부할 목표 시간 / 분단위로 들어오게
         // timeGoalADay: {

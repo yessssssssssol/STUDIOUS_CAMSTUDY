@@ -109,7 +109,7 @@ class userAuthService {
             const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
-
+        dayjs.locale('ko');
         const date = dayjs();
         const updatedAt = date.format('YYYY-MM-DD HH:mm:ss');
 

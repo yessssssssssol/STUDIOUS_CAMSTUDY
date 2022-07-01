@@ -11,6 +11,7 @@ import { json } from 'express/lib/response';
 // import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
+dayjs.locale('ko');
 
 // 스터디룸/게시글 생성
 userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res, next) {

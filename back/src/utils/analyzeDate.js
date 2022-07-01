@@ -31,6 +31,7 @@ class analyzeDate {
     //이번주 공부시간
     static weekPeriod(getSheets) {
         const curDate = ChangeDate.getCurrentDate();
+        dayjs.locale('ko');
         const now = dayjs(curDate);
         const thisSunday = now.set('day', 0).format('YYYY-MM-DD');
         const thisSaturday = now.set('day', 6).format('YYYY-MM-DD');

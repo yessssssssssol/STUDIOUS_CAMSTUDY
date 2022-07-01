@@ -6,6 +6,7 @@ import { userAuthService } from '../services/userService';
 import dayjs from 'dayjs';
 
 const commentsRouter = Router();
+dayjs.locale('ko');
 
 // 댓글 생성
 commentsRouter.post('/comment', login_required, async function (req, res, next) {
@@ -13,6 +14,8 @@ commentsRouter.post('/comment', login_required, async function (req, res, next) 
         if (is.emptyObject(req.body)) {
             throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
         }
+
+        dayjs.locale('ko');
         const now = dayjs();
         const writerId = req.currentUserId;
         const { targetId, roomId, content } = req.body;
@@ -82,13 +85,17 @@ commentsRouter.get('/comments/:roomId', login_required, async function (req, res
             commentList.map(async (comment) => {
                 // 댓글 쓴 사람 이름 가져오기
                 let user_id = comment.writerId;
-                const userName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                const userName = await userAuthService
+                    .getUserInfo({ user_id })
+                    .then((info) => info.name);
                 const userInfo = await userAuthService.getUserInfo({ user_id });
                 // 댓글 타겟이 된 사람 이름 적어오기
                 user_id = comment.targetId;
                 let targetName = null;
                 if (user_id) {
-                    targetName = await userAuthService.getUserInfo({ user_id }).then((info) => info.name);
+                    targetName = await userAuthService
+                        .getUserInfo({ user_id })
+                        .then((info) => info.name);
                 }
                 return { userName, targetName, ...comment.toObject(), userInfo };
             }),
