@@ -49,9 +49,9 @@ const Member = ({ member, isOwner, roomId, owner }) => {
           />
           <div className="mt-2 font-bold flex-1">{userName}</div>
           {isOwner && (
-            <div class="inline-flex">
+            <div className="inline-flex">
               <button
-                class="bg-red-100 hover:bg-red-200 text-gray-800 font-bold text-sm px-2 rounded"
+                className="bg-red-100 hover:bg-red-200 text-gray-800 font-bold text-sm px-2 rounded"
                 onClick={handleReject}
               >
                 퇴장

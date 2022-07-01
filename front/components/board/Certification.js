@@ -10,6 +10,7 @@ const Certification = ({ applicant, isOwner }) => {
       try {
         const res = await API.get(`studyroom/${roomId}`);
         const memberList = res.data.members;
+
         if (memberList.includes(applicantId)) {
           setIsAccept(true);
         } else {
@@ -85,15 +86,15 @@ const Certification = ({ applicant, isOwner }) => {
           />
           <div className="flex-1 mt-2 font-bold">{userName}</div>
           {isOwner && (
-            <div class="inline-flex">
+            <div className="inline-flex">
               <button
-                class="bg-blue-100 hover:bg-blue-200 text-gray-800  font-bold text-sm px-2 rounded-l"
+                className="bg-blue-100 hover:bg-blue-200 text-gray-800  font-bold text-sm px-2 rounded-l"
                 onClick={handleAccept}
               >
                 수락
               </button>
               <button
-                class="bg-red-100 hover:bg-red-200 text-gray-800  font-bold text-sm px-2 rounded-r"
+                className="bg-red-100 hover:bg-red-200 text-gray-800  font-bold text-sm px-2 rounded-r"
                 onClick={handleReject}
               >
                 거절

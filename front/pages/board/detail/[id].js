@@ -28,7 +28,6 @@ export default function Detail() {
   const [members, setMembers] = useState([]);
   const router = useRouter();
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     async function getBoardDetail() {
       try {
@@ -47,6 +46,7 @@ export default function Detail() {
         // 멤버이면 스터디방 입장하기 버튼 아니면 신청하기 버튼
         const membersRes = await API.get(`studyroom/${tempData.roomId}`);
         const memberList = membersRes.data.members;
+
         setMembers(memberList);
         if (memberList.includes(currUser.id)) {
           setIsMember(true);
@@ -114,7 +114,7 @@ export default function Detail() {
 
   useEffect(() => {
     applicantsCheck();
-  }, [applicants, members]);
+  }, [members]);
 
   const modalShowHandler = () => {
     setOpen(true);
