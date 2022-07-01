@@ -19,7 +19,6 @@ import * as API from '../../pages/api/api';
 
 const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
-  console.log(membersOnly);
 
   // 카운트다운 시간 설정: 5초
   const initialMinute = 0;
@@ -78,11 +77,9 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   useEffect(() => {
     if (getReady && userIsHear) {
       handleRestart();
-      console.log('userIsHear', userIsHear);
       setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     } else if (getReady && !userIsHear) {
       handlePause();
-      console.log('userIsHear', userIsHear);
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     }
   }, [getReady, userIsHear]);
@@ -91,7 +88,6 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   useEffect(() => {
     if (getReady) {
       handleStart();
-      console.log('getReady가 true');
       setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     }
   }, []);
@@ -111,11 +107,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
         endTime,
       });
       const updatedTimelog = await res.data;
-      console.log('timelog 성공');
-      console.log(updatedTimelog);
-    } catch (err) {
-      console.log('timelog 실패', err);
-    }
+    } catch (err) {}
   };
 
   // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
@@ -123,7 +115,6 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
 
-    console.log('나가기');
     router.back();
   };
 

@@ -42,7 +42,6 @@ const RegisterModal = () => {
   };
   const clickHanderVaild = async () => {
     setIsVaild(true);
-    console.log(isVaild);
 
     try {
       const res = await API.get('user/email', email);

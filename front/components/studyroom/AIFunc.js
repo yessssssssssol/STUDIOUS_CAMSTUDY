@@ -14,7 +14,6 @@ const AIFunc = (props) => {
   // trueList에 true가 50번 찍히면 타이머 자동 재시작, trueList reset
   const trueCheck = () => {
     if (trueList.length > 100) {
-      console.log('사람있음', userIsHear);
       setUserIsHear(true);
       props.cb(true);
       trueList = [];
@@ -25,7 +24,6 @@ const AIFunc = (props) => {
   const falseCheck = () => {
     if (falseList.length > 100) {
       if (userIsHear !== false) {
-        console.log('사람없음', userIsHear);
         setUserIsHear(false);
         props.cb(false);
       }
@@ -81,13 +79,11 @@ const AIFunc = (props) => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
         person = true;
-        console.log('ai true', person);
         trueList.push(true);
         trueCheck();
         //falseList = [];
       } else {
         person = false;
-        console.log('ai false', person);
         falseList.push(false);
         falseCheck();
         //trueList = [];
@@ -95,11 +91,9 @@ const AIFunc = (props) => {
     });
     if (predictions.length === 0) {
       person = false;
-      console.log('ai false', person);
       falseList.push(false);
       //trueList = [];
-      falseCheck(); 
-      
+      falseCheck();
     }
   };
 

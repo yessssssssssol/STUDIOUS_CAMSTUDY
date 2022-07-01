@@ -77,9 +77,7 @@ const CreateStudyContent = () => {
   };
 
   const onMembersNumChange = (e) => {
-    console.log(membersNum);
     if (isNaN(e.target.value) === true) {
-      console.log(isNaN(e.target.value), 'gsfs');
       alert('숫자만 입력이 가능합니다');
       e.target.value = 1;
     } else if (e.target.value > 4) {

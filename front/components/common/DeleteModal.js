@@ -25,7 +25,6 @@ const DeleteModal = (props) => {
   }
   const deleteClick = async (e) => {
     e.preventDefault();
-    console.log(isBoard);
 
     try {
       const res = API.delete('deleteroom', myroomInfo.roomId);
@@ -33,10 +32,8 @@ const DeleteModal = (props) => {
       setShow(false);
       if (isBoard === true) {
         router.push('/');
-        console.log(isBoard, 'true');
       } else {
         location.reload();
-        console.log(isBoard, 'false');
       }
     } catch (error) {
       alert('게시글 삭제에 실패했습니다.');

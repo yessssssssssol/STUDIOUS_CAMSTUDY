@@ -1,6 +1,11 @@
+import Helmet from "../components/layout/Helmet";
+
 export default function team() {
   return (
+    
     <div className="mb-16">
+      <Helmet title="About US" />
+
       <dh-component>
         <div className="container flex justify-center mx-auto ">
           <div>

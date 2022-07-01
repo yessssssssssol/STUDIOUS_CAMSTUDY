@@ -26,13 +26,11 @@ export default function RankingTable({ rankings, userDatas }) {
         setCount((prev) => prev === 0);
         clearInterval(interval);
       }
-      // console.log('count2', count2);
     }, 2000);
     return () => {
       clearInterval(interval);
     };
   }, [open]);
-  // console.log('count', count);
 
   function handleDone() {
     if (open) {

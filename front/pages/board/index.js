@@ -3,7 +3,6 @@ import Helmet from '../../components/layout/Helmet';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import * as API from '../api/api';
-import BoldText from '../../components/common/BoldText';
 import { AiFillPlusCircle } from 'react-icons/ai';
 
 export default function board({ profileURL }) {
@@ -31,6 +30,7 @@ export default function board({ profileURL }) {
   }, [inView]);
   return (
     <>
+
       <div className="px-16 pt-16 pb-5 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
         <span className="flex">
           Private Study
@@ -48,7 +48,7 @@ export default function board({ profileURL }) {
       </div>
 
       <div className="container flex flex-raw flex-wrap lg:flex justify-center">
-        <Helmet title="board" />
+        <Helmet title="Private Study" />
         {boardDatas &&
           boardDatas.slice(0, count).map((boardData, index) => {
             return (

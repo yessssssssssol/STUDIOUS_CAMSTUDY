@@ -123,7 +123,6 @@ export default function Group() {
   const [isCameraOn, setCameraOn] = useState(true);
 
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-  // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
   const userValue = useRecoilValue(userAtom);
   const stopWatchRef = useRef();
@@ -144,7 +143,7 @@ export default function Group() {
 
   let aiInterval = null;
   let roomId;
-
+  const scrollRef = useRef();
   // 채팅에 사용하는 유저 정보 리스트
   const [userDatas, setUserDatas] = useState([]);
   useEffect(() => {
@@ -179,18 +178,25 @@ export default function Group() {
     setChat([...chatAll, message]);
     chatAll.push(message);
   }
+  const chattingBoxRef = useRef();
+  const scrollToBottom = () => {
+    if (chattingBoxRef.current) {
+      const { scrollHeight, clientHeight } = chattingBoxRef.current;
+      chattingBoxRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
   async function initCall(data) {
     await getMedia();
 
-    // if (myStream == null) {
-    //   rtcInit();
-    //   location.reload();
-    //   setUserAiAtom(false);
-    //   router.push('/openroom');
-    // }
-
-    console.log('mystream : ' + myStream);
+    if (myStream == null) {
+      rtcInit();
+      location.reload();
+      router.push('/openroom');
+    }
 
     socket.emit(
       'enter_room',
@@ -246,11 +252,7 @@ export default function Group() {
   }
 
   function handleAddStream(data, othersId) {
-    console.log('got an stream from my pear');
-    console.log("Peer's Stream", data.stream);
-    console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
-    console.log('othersId : ' + othersId);
 
     document.get;
 
@@ -258,14 +260,8 @@ export default function Group() {
     const names = document.getElementsByClassName('name');
     const timers = document.getElementsByClassName('stopWatch');
 
-    console.log(cameras);
-    console.log(names);
-    console.log('datastream : ', data.stream);
-
     for (let i in cameras) {
-      console.log(cameras[i]);
       if (cameras[i].id === 'none') {
-        console.log('findfindfind');
         cameras[i].id = othersId;
         const video = document.createElement(video);
 
@@ -286,7 +282,6 @@ export default function Group() {
   function MuteBtnClick() {
     const muteBtn = document.getElementById('muteBtn');
     if (myStream !== null) {
-      console.log(myStream.getAudioTracks());
       myStream
         .getAudioTracks()
         .forEach((track) => (track.enabled = !track.enabled));
@@ -318,7 +313,6 @@ export default function Group() {
         });
       }
     }
-    console.log(userList);
   }
 
   function CameraOnOffClick() {
@@ -327,7 +321,6 @@ export default function Group() {
       myStream
         .getVideoTracks()
         .forEach((track) => (track.enabled = !track.enabled));
-      console.log(myStream.getVideoTracks());
       if (isCameraOn == true) {
         // cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
@@ -356,7 +349,6 @@ export default function Group() {
         });
       }
     }
-    console.log(userList);
   }
 
   function MessageParse(res) {
@@ -369,8 +361,6 @@ export default function Group() {
       addMessage(`${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
-      console.log(res.data);
-      console.log(res.data?.socketId);
 
       const names = document.getElementsByClassName('name');
 
@@ -412,7 +402,6 @@ export default function Group() {
 
       setUserList(prevList);
 
-      console.log(prevList[res.data?.userId]);
       // userList[res.data?.userId].state = res.data?.result;
       const cameras = document.getElementsByClassName('camera');
 
@@ -442,8 +431,6 @@ export default function Group() {
       prevList[res.data?.userId] = prev;
 
       setUserList(prevList);
-      // userList[res.data?.userId].cameraOnState = res.data?.result;
-      //console.log(userList[res.data?.userId]);
 
       const cameras = document.getElementsByClassName('camera');
 
@@ -547,8 +534,6 @@ export default function Group() {
           // req.data = `${user?.name}님 입장하셨습니다!`;
           // myDataChannel.send(req);
 
-          console.log(myPeerConnection);
-
           // 유저 데이터도 보내기?
           let req = userRes;
 
@@ -569,8 +554,6 @@ export default function Group() {
           const res = JSON.parse(event.data);
           MessageParse(res);
         });
-        // console.log("made data channel");
-        // console.log(myDataChannel);
 
         _offer = await myPeerConnection.createOffer();
         myPeerConnection.setLocalDescription(_offer);
@@ -581,13 +564,8 @@ export default function Group() {
         myPeerConnection.addEventListener('datachannel', (event) => {
           myDataChannel = event.channel;
           myDataChannel.addEventListener('open', (event) => {
-            // let req = chatRes;
-            // req.data = `${user?.name}님 입장하셨습니다!`;
-            // myDataChannel.send(req);
-
             // 유더 데이터도 보내기
             let req = userRes;
-            console.log(myPeerConnection);
 
             req.data['userId'] = user?.id;
             req.data['socketId'] = socket.id;
@@ -624,14 +602,12 @@ export default function Group() {
   socket.on('welcome', async (newUserId) => {
     const offer = await makeConnection(newUserId);
     socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
-    console.log('send the offer');
   });
 
   socket.on('refuse', (errorMessage) => {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
     rtcInit();
-    // setUserAiAtom(false);
     location.reload();
     router.push('/openroom');
   });
@@ -662,7 +638,6 @@ export default function Group() {
     Object.keys(peerConnections).forEach((id, i) => {
       if (id === leaveId) {
         delete peerConnections[id];
-        console.log(peerConnections);
       }
     });
 
@@ -679,9 +654,6 @@ export default function Group() {
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
   socket.on('offer', async (offer, offersId) => {
-    console.log('receive the offer');
-    console.log(offer);
-
     const answer = await makeConnection(offersId, offer);
     // 데이터 체널에 대한 이벤트 추가
     // 서버에서 받은 초대장 설정하기.
@@ -691,7 +663,6 @@ export default function Group() {
   });
 
   socket.on('answer', async (answer, newUserId) => {
-    console.log('receive the answer', newUserId);
     // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
     peerConnections[newUserId].setRemoteDescription(answer);
   });
@@ -699,7 +670,6 @@ export default function Group() {
   socket.on('ice', (ice, othersId) => {
     // 다른 사람에게 온 othersId를 myPeerConnection에 등록
     peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
-    console.log(peerConnections);
   });
 
   const sendChatHandler = (e) => {
@@ -728,12 +698,8 @@ export default function Group() {
         if (dataChannels[userId].readyState == 'open') {
           dataChannels[userId]?.send(JSON.stringify(req));
         }
-        // console.log("datachannel : ", dataChannels[userId]);
-        // dataChannels[userId]?.send(JSON.stringify(req));
       });
-      console.log(result);
     }
-    console.log('send Data');
   }
 
   function StartStopWatch(result) {
@@ -748,15 +714,13 @@ export default function Group() {
         }
       });
     }
-
-    console.log(result);
   }
 
   function findUserByKey(key) {
-    const cameras = document.getElementsByClassName('camera');
-    const camera = cameras[key];
+    const names = document.getElementsByClassName('name');
+    const name = names[key];
 
-    const user = FindUser(camera?.id);
+    const user = FindUser(name?.id);
     return user;
   }
 
@@ -775,7 +739,6 @@ export default function Group() {
 
     return () => {
       rtcInit();
-      // setUserAiAtom(false);
       location.reload();
     };
   }, []);
@@ -967,10 +930,12 @@ export default function Group() {
             <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
-              <div className="relative w-full p-6 overflow-y-auto h-[72%]">
+              <div
+                ref={chattingBoxRef}
+                className="relative w-full p-6 overflow-y-auto h-[72%]"
+              >
                 <ul className="space-y-2">
                   {chat.map((chat) => {
-                    console.log(chat, 'chat');
                     let name = chat.split(' : ');
 
                     let userI = userDatas.find((userData) => {

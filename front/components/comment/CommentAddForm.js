@@ -15,14 +15,23 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
     // roomId를 user_id 변수에 할당함.
     // const userName = writeId;
 
-    await Api.post('comment', {
-      // writerId,
-      roomId,
-      content,
-      // createdAt,
-    });
-    const res = await Api.get('comments', roomId);
-    setComments(res.data);
+    if (content.length === 0) {
+      alert('내용을 입력하세요.');
+    } else {
+      try {
+        await Api.post('comment', {
+          // writerId,
+          roomId,
+          content,
+          // createdAt,
+        });
+        const res = await Api.get('comments', roomId);
+        setComments(res.data);
+        setContent('');
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
   useEffect(() => {
     setUser(useratom);

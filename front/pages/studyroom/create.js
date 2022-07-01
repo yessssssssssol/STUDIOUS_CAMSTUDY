@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
-import Button from '../../components/common/Button';
+import Helmet from '../../components/layout/Helmet';
 
 export default function Edit() {
   const router = useRouter();
@@ -51,14 +51,10 @@ export default function Edit() {
       roomDesc
     ) {
       setDataCheck(true);
-      console.log(dataCheck);
     } else {
       setDataCheck(false);
-      console.log(dataCheck);
     }
   }, [room]);
-
-  console.log(dataCheck);
 
   const fileInput = useRef(null);
 
@@ -84,8 +80,13 @@ export default function Edit() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(room);
-    const tag = hashtag.split(' ');
+    hashtag.replace(' ', '');
+    const tag = hashtag.split('#');
+    for (var i = 1; i < tag.length; i++) {
+      tag[i] = '#' + tag[i];
+    }
+    tag.shift();
+    console.log(tag);
     const formD = new FormData();
     formD.append('roomImg', file);
     if (!submitCheck) {
@@ -105,7 +106,6 @@ export default function Edit() {
             hashTags: tag,
           });
           submitCheck = true;
-          console.log(res.data);
           console.log('방이 생성되었습니다.');
           await API.putImg(`roomimg/${res.data.roomId}`, formD);
           console.log('이미지가 추가되었습니다.');
@@ -132,12 +132,13 @@ export default function Edit() {
 
   const resetHandler = () => {
     resetRoom();
-    console.log(room);
     router.back();
   };
   return (
     <div className="container">
-      <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
+      <Helmet title="CREATE" />
+
+      <div className="min-w-[440px] flex-col justify-center mx-72 my-5 bg-white rounded">
         <div className=" border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:mx-0 items-center">
             <p className="text-2xl text-amber-400  font-bold">

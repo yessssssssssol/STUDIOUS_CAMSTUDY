@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../core/atoms/userState';
 import * as API from '../pages/api/api';
+import Helmet from '../components/layout/Helmet';
 import {
   charts_data,
   charts_color,
@@ -111,6 +112,8 @@ export default function mypage() {
   }
   return (
     <div className="container">
+      <Helmet title="My Page" />
+
       {user && (
         <div className="flex-col py-[25px]">
           <div className="flex flex-row justify-between">
@@ -188,7 +191,7 @@ export default function mypage() {
               <div>
                 {myroomInfos.length === 0 ? (
                   <div key={1}>
-                    <CategoryBox key={1} />
+                    <CategoryBox key={1} myroomInfo={false} />
                   </div>
                 ) : (
                   myroomInfos

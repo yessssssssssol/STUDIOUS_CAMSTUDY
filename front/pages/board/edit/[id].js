@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../../components/common/UseData';
 import Alert from '../../../components/common/Alert';
+import Helmet from '../../../components/layout/Helmet';
 
 export default function Create() {
   const router = useRouter();
@@ -44,12 +45,14 @@ export default function Create() {
   useEffect(() => {
     const getInfo = async () => {
       const res = await API.get('studyroom', router.query.id);
-      console.log(res);
       setRoom(res.data);
       setTempURL(res.data.roomImg);
       // setFile(res.data.roomIm);
       var tag = res.data.hashTags;
-      console.log();
+      for (var i = 0; i < tag.length; i++) {
+        tag[i].replace(/(\s*)/g, '');
+        console.log(tag[i]);
+      }
       setHashTag(tag.join(' '));
     };
 
@@ -62,9 +65,12 @@ export default function Create() {
     e.preventDefault();
     const formD = new FormData();
     formD.append('roomImg', file);
-    const tag = hashtag.split(' ');
-    console.log(tag);
-
+    hashtag.replace(' ', '');
+    const tag = hashtag.split('#');
+    for (var i = 1; i < tag.length; i++) {
+      tag[i] = '#' + tag[i];
+    }
+    tag.shift();
     try {
       const res = await API.put('studyroom', {
         roomId: room.roomId,
@@ -76,7 +82,6 @@ export default function Create() {
         roomDesc: room.roomDesc,
         hashTags: tag,
       });
-      console.log(res.data);
       console.log('방의 정보가 변경되었습니다.');
       if (file) {
         await API.putImg(`roomimg/${res.data.roomId}`, formD);
@@ -92,12 +97,12 @@ export default function Create() {
 
   const resetHandler = () => {
     resetRoom();
-    console.log(room);
     router.back();
   };
   return (
     <div className="container">
-      <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
+      <Helmet title="EDIT" />
+      <div className=" min-w-[440px] flex-col justify-center mx-72 my-5 bg-white rounded">
         <div className=" border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:mx-0 items-center">
             <p className="text-2xl text-amber-400  font-bold">스터디방 수정</p>

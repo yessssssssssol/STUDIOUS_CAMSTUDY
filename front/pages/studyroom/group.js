@@ -31,9 +31,6 @@ export default function Group() {
   const [chat, setChat] = useState([]);
   const [user, setUser] = useRecoilState(userAtom);
 
-  console.log(user);
-  console.log(room);
-
   const socket = io(url, {
     withCredentials: true,
     extraHeaders: {
@@ -74,9 +71,6 @@ export default function Group() {
   }
 
   function handleAddStream(data, othersId) {
-    console.log('got an stream from my pear');
-    console.log("Peer's Stream", data.stream);
-    console.log('my Stream', myStream);
     // 비디오 태그 추가한 뒤에 띄우기
     const others = document.getElementById('others');
     const video = document.createElement('video');
@@ -132,7 +126,6 @@ export default function Group() {
       myPeerConnection.addEventListener('addstream', (data) =>
         handleAddStream(data, userId)
       );
-      console.log(myStream.getTracks());
       myStream
         .getTracks()
         .forEach((track) => myPeerConnection.addTrack(track, myStream));
@@ -146,13 +139,9 @@ export default function Group() {
           myDataChannel.send(`닉네임님 입장하셨습니다!`);
         });
         myDataChannel.addEventListener('message', (event) => {
-          console.log(chat);
           setChat([...chatAll, event.data]);
           chatAll.push(event.data);
-          console.log(chat);
         });
-        console.log('made data channel');
-        console.log(myDataChannel);
 
         _offer = await myPeerConnection.createOffer();
         myPeerConnection.setLocalDescription(_offer);
@@ -166,10 +155,8 @@ export default function Group() {
             myDataChannel.send(`~~님 입장하셨습니다!`);
           });
           myDataChannel.addEventListener('message', (event) => {
-            console.log(chat);
             setChat([...chatAll, event.data]);
             chatAll.push(event.data);
-            console.log(chat);
           });
 
           dataChannels[userId] = myDataChannel;
@@ -189,16 +176,13 @@ export default function Group() {
   socket.on('welcome', async (newUserId) => {
     const offer = await makeConnection(newUserId);
     socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
-    console.log('send the offer');
   });
 
   socket.on('refuse', (errorMessage) => {
-    console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
   });
 
   socket.on('bye', (leaveId, userName) => {
-    console.log('leave user');
     // 나갔다는 메시지
     //addMessage(`${userName}님이 퇴장하셨습니다.!`);
 
@@ -216,9 +200,6 @@ export default function Group() {
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
   socket.on('offer', async (offer, offersId) => {
-    console.log('receive the offer');
-    console.log(offer);
-
     const answer = await makeConnection(offersId, offer);
     //todo: 메시지 전달
     // 데이터 체널에 대한 이벤트 추가
@@ -229,7 +210,6 @@ export default function Group() {
   });
 
   socket.on('answer', async (answer, newUserId) => {
-    console.log('receive the answer', newUserId);
     // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
     peerConnections[newUserId].setRemoteDescription(answer);
   });
@@ -245,7 +225,6 @@ export default function Group() {
     setChat([...chat, `${user.name} : ${input.value}`]);
     chatAll.push(`${user.name} : ${input.value}`);
     Object.keys(dataChannels).forEach((userId) => {
-      console.log(dataChannels[userId]);
       dataChannels[userId].send(`${user.name} : ${input.value}`);
     });
     input.value = '';

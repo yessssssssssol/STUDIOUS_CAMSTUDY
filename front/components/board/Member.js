@@ -16,7 +16,6 @@ const Member = ({ member, isOwner, roomId, owner }) => {
         const memberInfo = res.data;
         setUserName(memberInfo.name);
         setUserProfile(memberInfo.profileUrl);
-        console.log(userName, userProfile);
       } catch (err) {
         console.log(err);
       }
@@ -27,9 +26,7 @@ const Member = ({ member, isOwner, roomId, owner }) => {
   const handleReject = async () => {
     if (member !== ownerId) {
       // 승인 후 거절
-      console.log('거절');
       try {
-        console.log('hi');
         await API.delete(`appliant/${roomId}/${member}`);
         setIsAccept(false);
         console.log('해당 신청자가 거절되었습니다.');
@@ -52,9 +49,9 @@ const Member = ({ member, isOwner, roomId, owner }) => {
           />
           <div className="mt-2 font-bold flex-1">{userName}</div>
           {isOwner && (
-            <div class="inline-flex">
+            <div className="inline-flex">
               <button
-                class="bg-red-100 hover:bg-red-200 text-gray-800 font-bold text-sm px-2 rounded"
+                className="bg-red-100 hover:bg-red-200 text-gray-800 font-bold text-sm px-2 rounded"
                 onClick={handleReject}
               >
                 퇴장
