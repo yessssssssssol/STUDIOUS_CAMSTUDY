@@ -138,10 +138,9 @@ const StopWatch = forwardRef(
         handleStart();
       }, []);
     }
-    
+
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-      timelogFunc();
       location.reload();
       console.log('나가기');
       router.back();
