@@ -144,7 +144,7 @@ export default function Group() {
 
   let aiInterval = null;
   let roomId;
-
+  const scrollRef = useRef();
   // 채팅에 사용하는 유저 정보 리스트
   const [userDatas, setUserDatas] = useState([]);
   useEffect(() => {
@@ -179,7 +179,17 @@ export default function Group() {
     setChat([...chatAll, message]);
     chatAll.push(message);
   }
+  const chattingBoxRef = useRef();
+  const scrollToBottom = () => {
+    if (chattingBoxRef.current) {
+      const { scrollHeight, clientHeight } = chattingBoxRef.current;
+      chattingBoxRef.current.scrollTop = scrollHeight - clientHeight;
+    }
+  };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
   async function initCall(data) {
     await getMedia();
 
@@ -967,7 +977,10 @@ export default function Group() {
             <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
-              <div className="relative w-full p-6 overflow-y-auto h-[72%]">
+              <div
+                ref={chattingBoxRef}
+                className="relative w-full p-6 overflow-y-auto h-[72%]"
+              >
                 <ul className="space-y-2">
                   {chat.map((chat) => {
                     console.log(chat, 'chat');
