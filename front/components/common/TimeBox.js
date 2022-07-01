@@ -1,9 +1,7 @@
-import { randomColor } from '../common/UseData';
-
 export default function TimeBox({ timeData, index, timeGoal }) {
   const title = ['오늘 공부 시간', '이번주 공부 시간', '전체 공부 시간'];
   return (
-    <div className="flex-col box-border w-96 h-40 p-4 space-y-3 border-2 border-amber-400 shadow-xl rounded-xl">
+    <div className="flex-col box-border w-80 h-40 p-4 space-y-3 border-2 border-amber-400 shadow-xl rounded-xl">
       <div className="text-xl font-semibold text-gray-400 capitalize text-center">
         {title[index]}
       </div>

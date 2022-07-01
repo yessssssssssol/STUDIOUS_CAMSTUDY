@@ -63,7 +63,7 @@ export default function Detail() {
     if (router.isReady) {
       getBoardDetail();
     }
-  }, [router.isReady, members]);
+  }, [router.isReady]);
 
   useEffect(() => {
     if (owner.id === currUser.id) {
