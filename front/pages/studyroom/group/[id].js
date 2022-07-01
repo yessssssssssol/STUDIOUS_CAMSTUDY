@@ -123,7 +123,7 @@ export default function Group() {
   const [isCameraOn, setCameraOn] = useState(true);
 
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-  const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
+  // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
   const [myState, setMyState] = useState(false);
   const userValue = useRecoilValue(userAtom);
@@ -184,12 +184,12 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    if (myStream == null) {
-      rtcInit();
-      location.reload();
-      setUserAiAtom(false);
-      router.push('/openroom');
-    }
+    // if (myStream == null) {
+    //   rtcInit();
+    //   location.reload();
+    //   setUserAiAtom(false);
+    //   router.push('/openroom');
+    // }
 
     socket.emit(
       'enter_room',
@@ -256,33 +256,19 @@ export default function Group() {
     document.get;
 
     const cameras = document.getElementsByClassName('camera');
-    const names = document.getElementsByTagName('h3');
+    const names = document.getElementsByClassName('name');
     const timers = document.getElementsByClassName('stopWatch');
 
     console.log(cameras);
     console.log(names);
 
-    for (let camera of cameras) {
-      let key;
-      console.log(camera);
-      if (camera.id === 'none') {
-        camera.id = othersId;
-        camera.srcObject = data.stream;
-        key = camera.key;
-      }
-
-      for (let name of names) {
-        if (name.key === key) {
-          name.id = othersId;
-          break;
-        }
-      }
-
-      for (let timer of timers) {
-        if (timer.key === key) {
-          timer.id = othersId;
-          return;
-        }
+    for (let i in cameras) {
+      if (cameras[i].id === 'none') {
+        cameras[i].id = othersId;
+        cameras[i].srcObject = data.stream;
+        names[i].id = othersId;
+        timers[i].id = othersId;
+        break;
       }
     }
   }
@@ -302,19 +288,23 @@ export default function Group() {
           let req = muteRes;
           req.data.userId = user.id;
           req.data.result = false;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == 'open') {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
         muteBtn.innerText = 'Mute';
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
-          if (dataChannels[userId].readyState === 'open') {
-            let req = muteRes;
-            req.data.userId = user.id;
-            req.data.result = true;
+          let req = muteRes;
+          req.data.userId = user.id;
+          req.data.result = true;
+          if (dataChannels[userId].readyState == 'open') {
             dataChannels[userId].send(JSON.stringify(req));
           }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       }
     }
@@ -336,7 +326,10 @@ export default function Group() {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = false;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == 'open') {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
         cameraBtn.innerText = 'turnOn';
@@ -346,7 +339,10 @@ export default function Group() {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = true;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == 'open') {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       }
     }
@@ -495,23 +491,6 @@ export default function Group() {
           break;
         }
       }
-
-      // setNewState(userList[res.data?.userId].muteState);
-
-      // if (userList[res.data?.userId].key === 1) {
-      //   setKey1Mute(res.data?.result);
-      // }
-
-      // if (userList[res.data?.userId].key === 2) {
-      //   setKey2Mute(res.data?.result);
-      // }
-
-      // if (userList[res.data?.userId].key === 3) {
-      //   setKey3Mute(res.data?.result);
-      // }
-
-      // userList[res.data?.userId].muteState = res.data?.result;
-      // console.log(userList[res.data?.userId]);
     }
   }
 
@@ -650,7 +629,7 @@ export default function Group() {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
     rtcInit();
-    setUserAiAtom(false);
+    // setUserAiAtom(false);
     location.reload();
     router.push('/openroom');
   });
@@ -728,7 +707,10 @@ export default function Group() {
     Object.keys(dataChannels).forEach((userId) => {
       let req = chatRes;
       req.data = `${user.name} : ${input.value}`;
-      dataChannels[userId].send(JSON.stringify(req));
+      if (dataChannels[userId].readyState == 'open') {
+        dataChannels[userId]?.send(JSON.stringify(req));
+      }
+      // dataChannels[userId]?.send(JSON.stringify(req));
     });
     input.value = '';
   };
@@ -741,9 +723,11 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === 'open') {
-          dataChannels[userId].send(JSON.stringify(req));
+        if (dataChannels[userId].readyState == 'open') {
+          dataChannels[userId]?.send(JSON.stringify(req));
         }
+        // console.log("datachannel : ", dataChannels[userId]);
+        // dataChannels[userId]?.send(JSON.stringify(req));
       });
       console.log(result);
     }
@@ -757,8 +741,8 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === 'open') {
-          dataChannels[userId].send(JSON.stringify(req));
+        if (dataChannels[userId].readyState == 'open') {
+          dataChannels[userId]?.send(JSON.stringify(req));
         }
       });
     }
@@ -789,25 +773,10 @@ export default function Group() {
 
     return () => {
       rtcInit();
-      setUserAiAtom(false);
+      // setUserAiAtom(false);
       location.reload();
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (myPeerConnection !== null && aiInterval == null) {
-  //     aiInterval = setInterval(() => {
-  //       if (Object.keys(dataChannels).length >= 1 && Object.keys(userList).length >= 1) {
-  //         AlertNoHear(userIsHear);
-  //       }
-
-  //       if(myPeerConnection == null || Object.keys(dataChannels).length < 1) {
-  //         clearInterval(aiInterval);
-  //       }
-
-  //     }, 1000);
-  //   }
-  // });
 
   // todo: 나갔을때 상태관리
   return (
@@ -844,7 +813,7 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
-                    {noUseAi ? <></> : <AlertModal />}
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>
@@ -862,7 +831,6 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key1Camera && findUserByKey(0)?.cameraOnState ? (
                       <></>
@@ -909,13 +877,12 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key2Camera && findUserByKey(1)?.cameraOnState ? (
                       <></>
                     ) : (
                       <>
-                        {key2State && findUserByKey(0)?.state ? (
+                        {key2State && findUserByKey(1)?.state ? (
                           <img
                             className="absolute w-[100%] h-[100%]"
                             src={`/work.png`}
@@ -956,7 +923,6 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key3Camera && findUserByKey(2)?.cameraOnState ? (
                       <></>

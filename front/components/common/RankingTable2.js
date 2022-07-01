@@ -79,21 +79,23 @@ export default function RankingTable({ rankings, userDatas }) {
 
       return (
         <div key={index} className={`${css} ${color} ${margin}`}>
-          <div className="font-bold basis-1/12 text-center">{index + 1}</div>
-          <div className="font-semibold basis-1/12 text-center flex justify-center items-center">
+          <div className="font-bold basis-1/12 text-center pl-10 lg:pl-0">
+            {index + 1}
+          </div>
+          <div className="font-semibold text-center hidden lg:basis-1/12 lg:flex justify-center items-center">
             <img className="w-10 h-10 mr-5" src={medal}></img>
             <img
               className="rounded-full bg-cover w-10 h-10 "
               src={user?.profileUrl}
             />
           </div>
-          <div className="font-semibold basis-2/12 pl-10 truncate">
+          <div className="font-semibold truncate basis-8/12 text-center sm:basis-4/12 sm:text-left pl-20 md:basis-2/12 md:pl-10">
             {user?.name}
           </div>
-          <div className="basis-5/12 text-center ml-10 truncate">
+          <div className="hidden md:block md:basis-5/12 md:text-center md:ml-10 md:truncate ">
             {user?.description}
           </div>
-          <div className="font-semibold basis-3/12 text-center pl-10 truncate">
+          <div className="font-semibold text-center pl-20 truncate hidden sm:block basis-5/12 sm:mr-8 md:basis-3/12 md:pl-10 md:mr-6">
             {ranking.totalTime}
           </div>
         </div>
@@ -116,12 +118,14 @@ export default function RankingTable({ rankings, userDatas }) {
         <div className="font-semibold basis-1/12 text-center pl-3 bg-white">
           Ranking
         </div>
-        <div className="font-semibold basis-1/12 text-center bg-white"></div>
-        <div className="font-semibold basis-2/12 pl-10 bg-white">Name</div>
-        <div className="font-semibold basis-5/12 text-center ml-10 bg-white">
+        <div className="hidden bg-white md:basis-1/12 "></div>
+        <div className="font-semibold pl-10 bg-white text-center basis-8/12 ,sm:text-left sm:basis-2/12 md:pl-0 lg:basis-3/12 lg:pl-8">
+          Name
+        </div>
+        <div className="font-semibold text-center md:ml-12 bg-white hidden md:block md:basis-5/12 lg:ml-10">
           한 줄 소개
         </div>
-        <div className="font-semibold basis-3/12 text-center pl-20">
+        <div className="font-semibold hidden sm:block sm:basis-8/12 md:basis-3/12 text-center pl-20">
           TotalTime
         </div>
         <div className="animate-bounce ">

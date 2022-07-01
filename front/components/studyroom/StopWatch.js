@@ -5,6 +5,7 @@ import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { RiTimerLine } from 'react-icons/ri';
 
 import * as API from '../../pages/api/api';
@@ -50,15 +51,15 @@ const StopWatch = forwardRef(
 
     if (myTimer === true) {
       const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-      const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
+      // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
       if (ref != null) {
         useImperativeHandle(ref, () => ({
           // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
-          handleClick () {
+          handleClick() {
             setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
             timelogFunc();
-            setUserAiAtom(false);
+            // setUserAiAtom(false);
             location.reload();
             console.log('나가기');
             router.back();
@@ -138,21 +139,7 @@ const StopWatch = forwardRef(
         handleStart();
       }, []);
     }
-
-    const timelogFunc = async () => {
-      try {
-        const res = await API.post('timelog', {
-          startTime,
-          endTime,
-        });
-        const updatedTimelog = await res.data;
-        console.log('timelog 성공');
-        console.log(updatedTimelog);
-      } catch (err) {
-        console.log('timelog 실패', err);
-      }
-    };
-
+    
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
       timelogFunc();

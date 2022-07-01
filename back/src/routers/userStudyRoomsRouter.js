@@ -4,6 +4,7 @@ import { checkRoomId } from '../middlewares/checkRoomId';
 import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
 import { json } from 'express/lib/response';
@@ -11,6 +12,7 @@ import { json } from 'express/lib/response';
 // import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
+dayjs.locale('ko');
 
 // 스터디룸/게시글 생성
 userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res, next) {
