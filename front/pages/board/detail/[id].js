@@ -114,7 +114,7 @@ export default function Detail() {
 
   useEffect(() => {
     applicantsCheck();
-  }, [members]);
+  }, [members, applicants.length]);
 
   const modalShowHandler = () => {
     setOpen(true);
