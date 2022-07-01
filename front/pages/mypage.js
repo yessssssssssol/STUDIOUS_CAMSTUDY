@@ -191,7 +191,7 @@ export default function mypage() {
               <div>
                 {myroomInfos.length === 0 ? (
                   <div key={1}>
-                    <CategoryBox key={1} />
+                    <CategoryBox key={1} myroomInfo={false} />
                   </div>
                 ) : (
                   myroomInfos
