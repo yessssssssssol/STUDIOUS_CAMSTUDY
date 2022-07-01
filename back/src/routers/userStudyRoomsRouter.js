@@ -35,6 +35,9 @@ userStudyRoomsRouter.post('/studyroom', login_required, async function (req, res
             hashTags,
         } = req.body;
 
+        if (membersOnly > 4)
+            return res.status(400).json({ message: '스터디 인원은 최대 4명까지만 가능합니다.' });
+
         //마감 날짜
         let expiredAt = new Date(endStudyDay + ' 23:59:59');
         expiredAt.setHours(expiredAt.getHours() + 9);

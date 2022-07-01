@@ -77,6 +77,15 @@ const CreateStudyContent = () => {
   };
 
   const onMembersNumChange = (e) => {
+    console.log(membersNum);
+    if (isNaN(e.target.value) === true) {
+      console.log(isNaN(e.target.value), 'gsfs');
+      alert('숫자만 입력이 가능합니다');
+      e.target.value = 1;
+    } else if (e.target.value > 4) {
+      alert('입력 최대값은 4입니다 혹은 숫자만 입력 가능합니다');
+      e.target.value = 4;
+    }
     setRoom((prev) => {
       return {
         ...prev,
@@ -174,7 +183,7 @@ const CreateStudyContent = () => {
               className="border-2 rounded-md w-[40px]"
               min="0"
               max="4"
-              type="number"
+              size="15"
             ></input>
           </div>
           <div className="mt-8 flex flex-col w-full pb-5 border-b border-gray-300 border-dashed">

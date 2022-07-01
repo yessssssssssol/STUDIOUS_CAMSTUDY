@@ -122,13 +122,13 @@ export default function Detail() {
     }
   };
 
+  useEffect(() => {
+    applicantsCheck();
+  }, [applicants, members]);
+
   const modalShowHandler = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    applicantsCheck();
-  }, [applicants]);
 
   return (
     <>
@@ -170,6 +170,7 @@ export default function Detail() {
                             <DeleteModal
                               myroomInfo={detailData}
                               setShow={setOpen}
+                              isBoard={true}
                               title={'해당 스터디를 지우시겠습니까?'}
                             />
                           )}
@@ -229,6 +230,7 @@ export default function Detail() {
                       members={members}
                       isOwner={isOwner}
                       roomId={detailData.roomId}
+                      owner={owner}
                     />
                   )}
                 </div>

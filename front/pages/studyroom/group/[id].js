@@ -125,7 +125,6 @@ export default function Group() {
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
-  const [myState, setMyState] = useState(false);
   const userValue = useRecoilValue(userAtom);
   const stopWatchRef = useRef();
 
@@ -191,6 +190,8 @@ export default function Group() {
     //   router.push('/openroom');
     // }
 
+    console.log('mystream : ' + myStream);
+
     socket.emit(
       'enter_room',
       data?.roomId,
@@ -235,15 +236,13 @@ export default function Group() {
   }
 
   function FindUser(socketId) {
-    let data = null;
-
     Object.keys(userList).forEach((v) => {
       if (userList[v].socketId === socketId) {
-        data = userList[v];
-        return;
+        const data = userList[v];
+        return data;
       }
     });
-    return data;
+    return null;
   }
 
   function handleAddStream(data, othersId) {
@@ -261,11 +260,22 @@ export default function Group() {
 
     console.log(cameras);
     console.log(names);
+    console.log('datastream : ', data.stream);
 
     for (let i in cameras) {
+      console.log(cameras[i]);
       if (cameras[i].id === 'none') {
+        console.log('findfindfind');
         cameras[i].id = othersId;
-        cameras[i].srcObject = data.stream;
+        const video = document.createElement(video);
+
+        if ('srcObject' in cameras[i]) {
+          try {
+            cameras[i].srcObject = data.stream;
+          } catch (err) {
+            console.log(err);
+          }
+        }
         names[i].id = othersId;
         timers[i].id = othersId;
         break;
@@ -362,20 +372,19 @@ export default function Group() {
       console.log(res.data);
       console.log(res.data?.socketId);
 
-      const h3s = document.getElementsByTagName('h3');
+      const names = document.getElementsByClassName('name');
 
-      for (let h3 of h3s) {
-        if (h3.id === res.data?.socketId) {
-          h3.innerText = res.data?.userName;
-          break;
+      for (let i in names) {
+        if (names[i].id === res.data?.socketId) {
+          names[i].innerText = res.data?.userName;
         }
       }
 
       const timers = document.getElementsByClassName('stopWatch');
 
-      for (let timer of timers) {
-        if (timer.id === res.data?.socketId) {
-          const root = ReactDOM.createRoot(timer);
+      for (let i in timers) {
+        if (timers[i].id === res.data?.socketId) {
+          const root = ReactDOM.createRoot(timers[i]);
           const stopwatch = React.createElement(StopWatch, {
             myTimer: false,
             roomId: roomId,
@@ -383,21 +392,14 @@ export default function Group() {
             userT: res.data?.userTime,
           });
           root.render(stopwatch);
-          break;
         }
       }
 
       let prevList = userList;
-      let prev = res.data;
-
-      prevList[res.data?.userId] = prev;
+      prevList[res.data?.userId] = res.data;
       setUserList(prevList);
     } else if (res.type == 'state') {
       // 집중 여부 갱신
-      // if (userList.hasOwnProperty(res.data?.userId) == false) {
-      //   return;
-      // }
-
       if (userList.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
@@ -502,18 +504,18 @@ export default function Group() {
             urls: [
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
-              // "stun:stun2.l.google.com:19302",
-              // "stun:stun3.l.google.com:19302",
-              // "stun:stun4.l.google.com:19302",
-              // "stun:stun.ekiga.net",
-              // "stun:stun.ideasip.com",
-              // "stun:stun.rixtelecom.se",
-              // "stun:stun.schlund.de",
-              // "stun:stun.stunprotocol.org:3478",
-              // "stun:stun.voiparound.com",
-              // "stun:stun.voipbuster.com",
-              // "stun:stun.voipstunt.com",
-              // "stun:stun.voxgratia.org"
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
             ],
           },
         ],
@@ -751,7 +753,7 @@ export default function Group() {
   }
 
   function findUserByKey(key) {
-    const cameras = document.getElementsByClassName('name');
+    const cameras = document.getElementsByClassName('camera');
     const camera = cameras[key];
 
     const user = FindUser(camera?.id);
@@ -790,7 +792,7 @@ export default function Group() {
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
-                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black">
+                  <div className="rounded-xl w-[500px] h-[370px] relative bg-black border-amber-100 border-2 shadow-amber-400/10">
                     <StopWatch
                       cb={(result) => {
                         StartStopWatch(result);
@@ -820,11 +822,11 @@ export default function Group() {
                     <p>카메라가 없습니다.</p>
                   </div>
                 )}
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
                   <div className="stopWatch absolute" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
-                      className="camera rounded-xl"
+                      className="camera rounded-xl bg-blue"
                       id="none"
                       key={2}
                       width="100%"
@@ -852,21 +854,21 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key1Mute && findUserByKey(0)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
                     <h3
                       className="name font-medium text-lg"
                       id="none"
-                      name={3}
+                      key={3}
                     ></h3>
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
                   <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -898,9 +900,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key2Mute && findUserByKey(1)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -912,7 +914,7 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
+                <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
                   <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -944,9 +946,9 @@ export default function Group() {
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key3Mute && findUserByKey(2)?.muteState ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute color="#ea580c" size="30" />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute color="#ea580c" size="30" />
                     )}
                   </div>
                   <div className="bottom-[5px] right-[0px] absolute w-[50xp] h-[30px] bg-white rounded-xl text-center">
@@ -962,7 +964,7 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-400 shadow-2xl shadow-amber-400/50 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
@@ -1036,7 +1038,7 @@ export default function Group() {
                 </div>
               </form>
 
-              <div className="flex justify-between px-3 pt-5 ">
+              <div className="flex justify-between px-3">
                 <div className="flex items-center">
                   <button
                     id="cameraBtn"
@@ -1044,16 +1046,32 @@ export default function Group() {
                     onClick={CameraOnOffClick}
                   >
                     {isCameraOn == true ? (
-                      <TbDeviceComputerCamera color="white" size="30" />
+                      <TbDeviceComputerCamera
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <TbDeviceComputerCameraOff color="white" size="30" />
+                      <TbDeviceComputerCameraOff
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
                     {isMute == true ? (
-                      <GoMute color="white" size="30" />
+                      <GoMute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     ) : (
-                      <GoUnmute color="white" size="30" />
+                      <GoUnmute
+                        color="#ea580c"
+                        size="30"
+                        style={{ marginBottom: 10 }}
+                      />
                     )}
                   </button>
                 </div>
