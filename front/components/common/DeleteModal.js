@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import Button from './Button';
 import * as API from '../../pages/api/api';
+import { useRouter } from 'next/router';
 const DeleteModal = (props) => {
-  const { setShow, title, myroomInfo } = props;
+  const { setShow, title, myroomInfo, isBoard } = props;
   const ref = useRef(null);
-
+  const router = useRouter();
   useEffect(() => {
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
@@ -22,16 +23,25 @@ const DeleteModal = (props) => {
   function onClick() {
     setShow(false);
   }
-  async function deleteClick() {
+  const deleteClick = async (e) => {
+    e.preventDefault();
+    console.log(isBoard);
+
     try {
       const res = API.delete('deleteroom', myroomInfo.roomId);
       alert('게시글이 삭제 되었습니다.');
       setShow(false);
-      location.reload();
+      if (isBoard === true) {
+        router.push('/');
+        console.log(isBoard, 'true');
+      } else {
+        location.reload();
+        console.log(isBoard, 'false');
+      }
     } catch (error) {
       alert('게시글 삭제에 실패했습니다.');
     }
-  }
+  };
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
