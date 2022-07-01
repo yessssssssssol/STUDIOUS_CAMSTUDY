@@ -183,12 +183,12 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    // if (myStream == null) {
-    //   rtcInit();
-    //   location.reload();
-    //   setUserAiAtom(false);
-    //   router.push('/openroom');
-    // }
+    if (myStream == null) {
+      rtcInit();
+      location.reload();
+      setUserAiAtom(false);
+      router.push('/openroom');
+    }
 
     console.log("mystream : " + myStream);
 
@@ -755,10 +755,10 @@ export default function Group() {
   }
 
   function findUserByKey(key) {
-    const cameras = document.getElementsByClassName('camera');
-    const camera = cameras[key];
+    const names = document.getElementsByClassName('name');
+    const name = names[key];
 
-    const user = FindUser(camera?.id);
+    const user = FindUser(name?.id);
     return user;
   }
 
