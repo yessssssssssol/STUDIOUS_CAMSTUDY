@@ -77,19 +77,13 @@ export default function mypage() {
         setPieData([0, 0, 0]);
       }
     };
-    const getGitTimeData = async () => {
-      try {
-      } catch (error) {
-        console.log(error);
-      }
-    };
+
     const getMyRoom = async () => {
       const res = await API.get('studyrooms', useratom.id);
       const data = res.data;
       setMyroomInfos(data);
     };
     getTimeData();
-    getGitTimeData();
     setGitTime(gittime);
     getMyRoom();
   }, []);
@@ -113,11 +107,11 @@ export default function mypage() {
     setGetTimeGoal(res.data.timeGoal);
   }
   return (
-    <div className="">
+    <div className="container">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl lg:block text-left my-[50px]">
+            <div className="font-bold text-3xl lg:block text-left my-[20px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
             <span className="hidden text-center sm:block m-2 lg:text-left my-[45px]">
