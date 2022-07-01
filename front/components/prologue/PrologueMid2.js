@@ -11,7 +11,7 @@ const PrologueMid2 = () => {
         <div className="w-full lg:w-1/2">
           <img
             className="w-full h-full lg:max-w-2xl"
-            src="mainscreen.png"
+            src="/mainscreen.png"
             alt="Catalogue-pana.svg"
           />
         </div>
@@ -28,7 +28,6 @@ const PrologueMid2 = () => {
               마이페이지에서 확인할 수 있습니다. 랭킹 서비스를 통해 다른
               STUDIOUS 사용자들과 순공시간을 겨뤄보세요!
             </p>
-
           </div>
         </div>
       </div>

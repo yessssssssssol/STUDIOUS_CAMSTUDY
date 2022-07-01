@@ -8,7 +8,7 @@ const PrologueTop = () => {
   }
   return (
     <div>
-      <div className="w-full bg-center bg-cover h-screen bg-[url('https://inews.ewha.ac.kr/news/photo/202109/33069_10785_4858.jpg')]">
+      <div className="w-full bg-center bg-cover h-screen bg-[url('/groupExample2.jpg')]">
         <div className="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50">
           <div className="text-center">
             <h1 className="text-2xl font-semibold text-white uppercase lg:text-3xl">
