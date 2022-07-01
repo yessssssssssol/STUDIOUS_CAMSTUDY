@@ -820,7 +820,7 @@ export default function Group() {
                     <p>카메라가 없습니다.</p>
                   </div>
                 )}
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
                   <div className="stopWatch absolute" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -866,7 +866,7 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50">
                   <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
@@ -912,7 +912,7 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
+                <div className="bg-yellow-50 w-[500px] h-[370px] relative rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50 ">
                   <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
