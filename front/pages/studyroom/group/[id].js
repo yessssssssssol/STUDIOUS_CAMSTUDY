@@ -137,6 +137,20 @@ export default function Group() {
 
   let roomId;
 
+  // 채팅에 사용하는 유저 정보 리스트
+  const [userDatas, setUserDatas] = useState([]);
+  useEffect(() => {
+    async function getUserId() {
+      try {
+        const res = await API.get(`userlist`);
+        setUserDatas(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getUserId();
+  }, []);
+
   if (typeof window !== 'undefined') {
     const leng = window.location.href.length;
     let href = window.location.href;
@@ -334,7 +348,7 @@ export default function Group() {
       // 유저 데이터 저장 혹인 갱신
 
       // userList[res.data?.userId] = res.data;
-      addMessage(`${res.data?.userName}님 입장하셨습니다!`);
+      addMessage(`  : ${res.data?.userName}님 입장하셨습니다!`);
 
       // 여기서 카메라 만듬 대신 아이디를 유저 아이디로 한다.
       console.log(res.data);
@@ -623,7 +637,7 @@ export default function Group() {
 
   socket.on('bye', (leaveId, userName) => {
     // 나갔다는 메시지
-    addMessage(`${userName}님이 퇴장하셨습니다.!`);
+    addMessage(`  : ${userName}님이 퇴장하셨습니다.!`);
 
     const video = document.getElementById(leaveId);
     if (video != null) {
@@ -748,11 +762,11 @@ export default function Group() {
   //todo: 첫번째 영상 스탑워치
   // todo: 나갔을때 상태관리
   return (
-    <div>
+    <div className="lg:grid lg:justify-center">
       <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
       {isLoading === true ? (
         <>
-          <div className="grid lg:flex lg:mx-[10rem]">
+          <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[2rem] gap-y-[2rem]">
                 {isCamera ? (
@@ -931,27 +945,49 @@ export default function Group() {
 
             {/* Chatting */}
             {/* <div className=" lg:items-center lg:w-3/12 bg-purple-400"> */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-purple-400 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-purple-400 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room.roomName} roomImg={room.roomImg} />
               <div className="relative w-full p-6 overflow-y-auto h-[72%]">
                 <ul className="space-y-2">
                   {chat.map((chat) => {
+                    console.log(chat, 'chat');
                     let name = chat.split(' : ');
+
+                    let userI = userDatas.find((userData) => {
+                      if (userData.name === name[0]) {
+                        return true;
+                      }
+                    });
+
                     return (
                       <>
                         {name[0] === `${userValue?.name}` ? (
                           // 나
                           <li className="flex justify-end">
+                            {/* <img
+                              className="rounded-full bg-cover w-10 h-10 "
+                              src={userValue?.profileUrl}
+                            /> */}
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{chat}</span>
+                              <span className="block">{name[1]}</span>
                             </div>
                           </li>
                         ) : (
                           // 상대
                           <li className="flex justify-start">
+                            <div className="grid mr-2">
+                              <img
+                                className="rounded-full bg-cover w-10 h-10  "
+                                src={userI?.profileUrl}
+                                alt=""
+                              />
+                              <small className="block text-center">
+                                {name[0]}
+                              </small>
+                            </div>
                             <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{chat}</span>
+                              <span className="block">{name[1]}</span>
                             </div>
                           </li>
                         )}
@@ -982,7 +1018,7 @@ export default function Group() {
                   </button>
                 </div>
               </form>
-              {/*  */}
+
               <div className="flex justify-between px-3 pt-5 ">
                 <div className="flex items-center">
                   <button
