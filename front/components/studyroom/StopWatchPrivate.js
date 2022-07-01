@@ -108,22 +108,9 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const handleClick = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
-    if (!membersOnly) {
-      updateHeadCount();
-    }
+
     console.log('나가기');
     router.back();
-  };
-
-  const updateHeadCount = async () => {
-    try {
-      await API.put(`headcount`, {
-        roomId,
-        attend: false,
-      });
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (

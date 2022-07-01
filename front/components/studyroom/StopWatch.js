@@ -14,98 +14,97 @@ import { getClientBuildManifest } from 'next/dist/client/route-loader';
 // 아예 창을 나가면 stop하고 reset
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
-const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = null) => {
-  const { timer, handleStart, handlePause, handleRestart, getActiveTime } = useTimer(userT);
+const StopWatch = forwardRef(
+  ({ myTimer, roomId, membersOnly, userT, cb }, ref = null) => {
+    const { timer, handleStart, handlePause, handleRestart, getActiveTime } =
+      useTimer(userT);
 
-  // 카운트다운 시간 설정: 10초
-  const initialMinute = 0;
-  const initialSeconds = 5;
-  const [minutes, setMinutes] = useState(initialMinute);
-  const [seconds, setSeconds] = useState(initialSeconds);
-  const [getReady, setGetReady] = useState(false);
-  
-  // timelog 찍을 때 사용
-  const [startTime, setStartTime] = useState("0000-00-00 00:00:00");
-  const [endTime, setEndTime] = useState("0000-00-00 00:00:00");
+    // 카운트다운 시간 설정: 10초
+    const initialMinute = 0;
+    const initialSeconds = 5;
+    const [minutes, setMinutes] = useState(initialMinute);
+    const [seconds, setSeconds] = useState(initialSeconds);
+    const [getReady, setGetReady] = useState(false);
 
-  const router = useRouter();
+    // timelog 찍을 때 사용
+    const [startTime, setStartTime] = useState('0000-00-00 00:00:00');
+    const [endTime, setEndTime] = useState('0000-00-00 00:00:00');
 
-  // dayjs 한국 시간 설정
-  dayjs.locale('ko');
+    const router = useRouter();
 
-  if (myTimer === true) {
-    const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+    // dayjs 한국 시간 설정
+    dayjs.locale('ko');
 
-    if (ref != null) {
-      useImperativeHandle(ref, () => ({
-        // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
-        handleClick () {
-          setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-          timelogFunc();
-          if (!membersOnly) {
-            updateHeadCount();
-          }
+    if (myTimer === true) {
+      const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+
+      if (ref != null) {
+        useImperativeHandle(ref, () => ({
+          // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
+          handleClick() {
+            setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+            timelogFunc();
             console.log('나가기');
             router.back();
-        },
-        getTime () {
-          return getActiveTime();
-        }
-      }));
-    }
-  
-    // 처음 카운트다운 할 때 쓰는 코드
-    useEffect(() => {
-      let myInterval = setInterval(() => {
-        if (seconds > 0) {
-          setSeconds(seconds - 1);
-        }
-        if (seconds <= 0) {
-          if (minutes <= 0) {
-            clearInterval(myInterval);
-            setGetReady(true);
-          } else {
-            setMinutes(minutes - 1);
-            setSeconds(59);
+          },
+          getTime() {
+            return getActiveTime();
+          },
+        }));
+      }
+
+      // 처음 카운트다운 할 때 쓰는 코드
+      useEffect(() => {
+        let myInterval = setInterval(() => {
+          if (seconds > 0) {
+            setSeconds(seconds - 1);
           }
+          if (seconds <= 0) {
+            if (minutes <= 0) {
+              clearInterval(myInterval);
+              setGetReady(true);
+            } else {
+              setMinutes(minutes - 1);
+              setSeconds(59);
+            }
+          }
+        }, 1000);
+        return () => {
+          clearInterval(myInterval);
+        };
+      });
+
+      // startTime, endTime 기록
+      useEffect(() => {
+        if (getReady && userIsHear) {
+          handleRestart();
+          console.log('userIsHear', userIsHear);
+          setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+        } else if (getReady && !userIsHear) {
+          handlePause();
+          console.log('userIsHear', userIsHear);
+          setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
         }
-      }, 1000);
-      return () => {
-        clearInterval(myInterval);
-      };
-    });
-  
-    // startTime, endTime 기록
-    useEffect(() => {
-      if (getReady && userIsHear) {
-        handleRestart();
-        console.log('userIsHear', userIsHear);
-        setStartTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-      } else if (getReady && !userIsHear) {
-        handlePause();
-        console.log('userIsHear', userIsHear);
-        setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-      }
-    }, [getReady, userIsHear]);
-  
-    //카운트다운 끝나고 타이머 start 시작 시간을 기록
-    useEffect(() => {
-      if (getReady) {
-        handleStart();
-        console.log('getReady가 true');
-        setStartTime(startTime);
-      }
-    }, []);
-  
-    // endTime이 변경될 때마다 timelog
-    useEffect(() => {
-      if (getReady) {
-        timelogFunc();
-      }
-    }, [endTime]);
-  
-    // timelog 함수
-    const timelogFunc = async () => {
+      }, [getReady, userIsHear]);
+
+      //카운트다운 끝나고 타이머 start 시작 시간을 기록
+      useEffect(() => {
+        if (getReady) {
+          handleStart();
+          console.log('getReady가 true');
+          setStartTime(startTime);
+        }
+      }, []);
+
+      // endTime이 변경될 때마다 timelog
+      useEffect(() => {
+        if (getReady) {
+          timelogFunc();
+        }
+      }, [endTime]);
+
+      // timelog 함수
+      const timelogFunc = async () => {
         try {
           const res = await API.post('timelog', {
             startTime,
@@ -117,39 +116,23 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
         } catch (err) {
           console.log('timelog 실패', err);
         }
-    };
-  
-    const updateHeadCount = async () => {
-      try {
-        await API.put(`headcount`, {
-          roomId,
-          attend: false,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-  }
-  else {
-    useEffect(() => {
-      handleStart();
-    }, []);
-  }
-
-  const handleClick = () => {
-    setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-    timelogFunc();
-    if (!membersOnly) {
-      updateHeadCount();
+      };
+    } else {
+      useEffect(() => {
+        handleStart();
+      }, []);
     }
-    console.log('나가기');
-    router.back();
-  }
 
-  return (
-    <div>
-        {
-          myTimer === false ? 
+    const handleClick = () => {
+      setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+      timelogFunc();
+      console.log('나가기');
+      router.back();
+    };
+
+    return (
+      <div>
+        {myTimer === false ? (
           <div>
             <div className="absolute flex justify-around">
               <div>
@@ -160,7 +143,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
               </div>
             </div>
           </div>
-        : 
+        ) : (
           <>
             <div>
               <div className="absolute flex justify-around">
@@ -217,9 +200,10 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
               )}
             </div>
           </>
-        }
-    </div>
-  );
-});
+        )}
+      </div>
+    );
+  }
+);
 
 export default StopWatch;
