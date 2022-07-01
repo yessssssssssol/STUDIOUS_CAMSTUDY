@@ -13,10 +13,6 @@ export default function CategoryBox({ myroomInfo, color }) {
   const onClickHander = () => {
     setOpen(true);
   };
-  useEffect(() => {
-    console.log(useratom);
-    console.log(myroomInfo);
-  });
 
   const openRoom = `openroom/board/${myroomInfo.roomId}`;
   const privateRoom = `/board/detail/${myroomInfo.roomId}`;

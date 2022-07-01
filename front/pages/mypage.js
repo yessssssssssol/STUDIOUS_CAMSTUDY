@@ -40,7 +40,6 @@ export default function mypage() {
       try {
         const totaltime = await API.get('totaltime', useratom.id);
         const data = totaltime.data;
-        console.log(data, 'data');
         var data2 = [
           data.studyTimeADay,
           data.weekStudyTime,
@@ -50,7 +49,6 @@ export default function mypage() {
 
         const dailysheets = await API.get('dailysheets', useratom.id);
         const datas = dailysheets.data;
-        console.log(datas, 'dddd');
         setGetTimeGoal(datas[datas.length - 1].timeGoal);
         if (datas[datas.length - 1].bestStudyTime == ' ') {
           setPieData([
@@ -67,14 +65,13 @@ export default function mypage() {
         }
 
         datas.length == 0
-          ? console.log('Git데이터', gittime)
+          ? null
           : datas.map((data) =>
               gittime.push([
                 data.date,
                 Math.floor(toMilliseconds(data.studyTimeADay) / 7200),
               ])
             );
-        console.log(gittime, '이게 중요함');
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
         setPieData([0, 0, 0]);
@@ -89,7 +86,6 @@ export default function mypage() {
     const getMyRoom = async () => {
       const res = await API.get('studyrooms', useratom.id);
       const data = res.data;
-      console.log(data);
       setMyroomInfos(data);
     };
     getTimeData();
@@ -181,13 +177,13 @@ export default function mypage() {
                 {myroomInfos
                   .filter((myroomInfo) => myroomInfo.group === true)
                   .map((myroomInfo, index) => (
-                    <>
+                    <div key={index}>
                       <CategoryBox
                         key={index}
                         myroomInfo={myroomInfo}
                         color={randomColor[Math.ceil(Math.random() * 10) + 1]}
                       />
-                    </>
+                    </div>
                   ))}
               </div>
             </div>
