@@ -44,7 +44,7 @@ export default function Openroom() {
         </span>
         <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
-      <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[3rem]">
+      <div className="container h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[3rem]">
         <Helmet title="Openroom" />
         {openRooms &&
           openRooms.slice(0, count).map((openRoom, index) => {
