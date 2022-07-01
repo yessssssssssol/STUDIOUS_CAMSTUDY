@@ -8,7 +8,6 @@ const AlertModal = () => {
   const onClick = () => {
     // setUserAiAtom(true);
     setUserIsHear(true);
-    console.log(noUseAi);
   };
 
   return (

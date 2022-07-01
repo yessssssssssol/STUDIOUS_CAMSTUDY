@@ -165,12 +165,12 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    if (myStream == null) {
-      rtcInit();
-      location.reload();
-      setUserAiAtom(false);
-      router.push('/openroom');
-    }
+    // if (myStream == null) {
+    //   rtcInit();
+    //   location.reload();
+    //   setUserAiAtom(false);
+    //   router.push('/openroom');
+    // }
 
     socket.emit(
       'enter_room',
@@ -269,7 +269,10 @@ export default function Group() {
           let req = muteRes;
           req.data.userId = user.id;
           req.data.result = false;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == "open") {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
         muteBtn.innerText = 'Mute';
@@ -279,7 +282,10 @@ export default function Group() {
             let req = muteRes;
             req.data.userId = user.id;
             req.data.result = true;
-            dataChannels[userId].send(JSON.stringify(req));
+            if (dataChannels[userId].readyState == "open") {
+              dataChannels[userId].send(JSON.stringify(req));
+            }
+            // dataChannels[userId].send(JSON.stringify(req));
         });
       }
     }
@@ -301,7 +307,10 @@ export default function Group() {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = false;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == "open") {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
         cameraBtn.innerText = 'turnOn';
@@ -311,7 +320,10 @@ export default function Group() {
           let req = cameraRes;
           req.data.userId = user.id;
           req.data.result = true;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == "open") {
+            dataChannels[userId].send(JSON.stringify(req));
+          }
+          // dataChannels[userId].send(JSON.stringify(req));
         });
       }
     }
@@ -594,7 +606,7 @@ export default function Group() {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
     rtcInit();
-    setUserAiAtom(false);
+    // setUserAiAtom(false);
     location.reload();
     router.push('/openroom');
   });
@@ -673,7 +685,10 @@ export default function Group() {
     Object.keys(dataChannels).forEach((userId) => {
       let req = chatRes;
       req.data = `${user.name} : ${input.value}`;
-      dataChannels[userId]?.send(JSON.stringify(req));
+      if (dataChannels[userId].readyState == "open") {
+        dataChannels[userId]?.send(JSON.stringify(req));
+      }
+      // dataChannels[userId]?.send(JSON.stringify(req));
     });
     input.value = '';
   };
@@ -686,7 +701,11 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-          dataChannels[userId]?.send(JSON.stringify(req));
+          if (dataChannels[userId].readyState == "open") {
+            dataChannels[userId]?.send(JSON.stringify(req));
+          }
+          // console.log("datachannel : ", dataChannels[userId]);
+          // dataChannels[userId]?.send(JSON.stringify(req));
       });
       console.log(result);
     }
@@ -700,7 +719,9 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
+        if (dataChannels[userId].readyState == "open") {
           dataChannels[userId]?.send(JSON.stringify(req));
+        }  
       });
     }
 
@@ -730,27 +751,10 @@ export default function Group() {
 
     return () => {
       rtcInit();
-      setUserAiAtom(false);
+      // setUserAiAtom(false);
       location.reload();
     };
   }, []);
-
-  
-
-  // useEffect(() => {
-  //   if (myPeerConnection !== null && aiInterval == null) {
-  //     aiInterval = setInterval(() => {
-  //       if (Object.keys(dataChannels).length >= 1 && Object.keys(userList).length >= 1) {
-  //         AlertNoHear(userIsHear);
-  //       }
-  
-  //       if(myPeerConnection == null || Object.keys(dataChannels).length < 1) {
-  //         clearInterval(aiInterval);
-  //       }
-  
-  //     }, 1000);
-  //   }
-  // });
 
   // todo: 나갔을때 상태관리
   return (
@@ -785,7 +789,7 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
-                    {noUseAi ? <></> : <AlertModal />}
+                    <AlertModal />
                   </div>
                 ) : (
                   <div>

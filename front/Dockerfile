@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package*.json ./
 COPY yarn.lock ./
 
-RUN yarn upgrade
 RUN yarn install
 RUN yarn build
 
