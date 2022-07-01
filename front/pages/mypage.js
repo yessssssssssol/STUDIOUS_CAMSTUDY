@@ -143,14 +143,14 @@ export default function mypage() {
             <div className="pt-[10px] shadow-xl my-[10px]">
               <Heatmap gittimes={gittime} />
 
-              <div class="flex justify-center items-center h-[40px]">
-                {heatmap_tip.map((tip) => {
+              <div className="flex justify-center items-center h-[40px]">
+                {heatmap_tip.map((tip, index) => {
                   return (
-                    <p class="mr-3">
+                    <p key={index} className="mr-3">
                       <span
-                        class={`inline-block ${tip[0]} mt-2 bg-amber-100 h-4 w-4`}
+                        className={`inline-block ${tip[0]} mt-2 bg-amber-100 h-4 w-4`}
                       ></span>
-                      <span class="inline-block ml-1 text-xs text-gray-600">
+                      <span className="inline-block ml-1 text-xs text-gray-600">
                         {tip[1]}
                       </span>
                     </p>
@@ -186,17 +186,19 @@ export default function mypage() {
             <div className="pt-[50px]">
               <BoldText text={`최근 공부한 방`} />
               <div>
-                {myroomInfos
-                  .filter((myroomInfo) => myroomInfo.group === true)
-                  .map((myroomInfo, index) => (
-                    <div key={index}>
-                      <CategoryBox
-                        key={index}
-                        myroomInfo={myroomInfo}
-                        color={randomColor[Math.ceil(Math.random() * 10) + 1]}
-                      />
-                    </div>
-                  ))}
+                {myroomInfos.length === 0 ? (
+                  <div key={1}>
+                    <CategoryBox key={1} />
+                  </div>
+                ) : (
+                  myroomInfos
+                    .filter((myroomInfo) => myroomInfo.group === true)
+                    .map((myroomInfo, index) => (
+                      <div key={index}>
+                        <CategoryBox key={index} myroomInfo={myroomInfo} />
+                      </div>
+                    ))
+                )}
               </div>
             </div>
           </div>

@@ -125,7 +125,6 @@ export default function Group() {
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
-  const [myState, setMyState] = useState(false);
   const userValue = useRecoilValue(userAtom);
   const stopWatchRef = useRef();
 
@@ -191,6 +190,8 @@ export default function Group() {
     //   router.push('/openroom');
     // }
 
+    console.log('mystream : ' + myStream);
+
     socket.emit(
       'enter_room',
       data?.roomId,
@@ -235,15 +236,13 @@ export default function Group() {
   }
 
   function FindUser(socketId) {
-    let data = null;
-
     Object.keys(userList).forEach((v) => {
       if (userList[v].socketId === socketId) {
-        data = userList[v];
-        return;
+        const data = userList[v];
+        return data;
       }
     });
-    return data;
+    return null;
   }
 
   function handleAddStream(data, othersId) {
@@ -261,11 +260,22 @@ export default function Group() {
 
     console.log(cameras);
     console.log(names);
+    console.log('datastream : ', data.stream);
 
     for (let i in cameras) {
+      console.log(cameras[i]);
       if (cameras[i].id === 'none') {
+        console.log('findfindfind');
         cameras[i].id = othersId;
-        cameras[i].srcObject = data.stream;
+        const video = document.createElement(video);
+
+        if ('srcObject' in cameras[i]) {
+          try {
+            cameras[i].srcObject = data.stream;
+          } catch (err) {
+            console.log(err);
+          }
+        }
         names[i].id = othersId;
         timers[i].id = othersId;
         break;
@@ -362,20 +372,19 @@ export default function Group() {
       console.log(res.data);
       console.log(res.data?.socketId);
 
-      const h3s = document.getElementsByTagName('h3');
+      const names = document.getElementsByClassName('name');
 
-      for (let h3 of h3s) {
-        if (h3.id === res.data?.socketId) {
-          h3.innerText = res.data?.userName;
-          break;
+      for (let i in names) {
+        if (names[i].id === res.data?.socketId) {
+          names[i].innerText = res.data?.userName;
         }
       }
 
       const timers = document.getElementsByClassName('stopWatch');
 
-      for (let timer of timers) {
-        if (timer.id === res.data?.socketId) {
-          const root = ReactDOM.createRoot(timer);
+      for (let i in timers) {
+        if (timers[i].id === res.data?.socketId) {
+          const root = ReactDOM.createRoot(timers[i]);
           const stopwatch = React.createElement(StopWatch, {
             myTimer: false,
             roomId: roomId,
@@ -383,21 +392,14 @@ export default function Group() {
             userT: res.data?.userTime,
           });
           root.render(stopwatch);
-          break;
         }
       }
 
       let prevList = userList;
-      let prev = res.data;
-
-      prevList[res.data?.userId] = prev;
+      prevList[res.data?.userId] = res.data;
       setUserList(prevList);
     } else if (res.type == 'state') {
       // 집중 여부 갱신
-      // if (userList.hasOwnProperty(res.data?.userId) == false) {
-      //   return;
-      // }
-
       if (userList.hasOwnProperty(res.data?.userId) == false) {
         return;
       }
@@ -502,18 +504,18 @@ export default function Group() {
             urls: [
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
-              // "stun:stun2.l.google.com:19302",
-              // "stun:stun3.l.google.com:19302",
-              // "stun:stun4.l.google.com:19302",
-              // "stun:stun.ekiga.net",
-              // "stun:stun.ideasip.com",
-              // "stun:stun.rixtelecom.se",
-              // "stun:stun.schlund.de",
-              // "stun:stun.stunprotocol.org:3478",
-              // "stun:stun.voiparound.com",
-              // "stun:stun.voipbuster.com",
-              // "stun:stun.voipstunt.com",
-              // "stun:stun.voxgratia.org"
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
             ],
           },
         ],
@@ -751,7 +753,7 @@ export default function Group() {
   }
 
   function findUserByKey(key) {
-    const cameras = document.getElementsByClassName('name');
+    const cameras = document.getElementsByClassName('camera');
     const camera = cameras[key];
 
     const user = FindUser(camera?.id);
@@ -824,7 +826,7 @@ export default function Group() {
                   <div className="stopWatch absolute" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
-                      className="camera rounded-xl"
+                      className="camera rounded-xl bg-blue"
                       id="none"
                       key={2}
                       width="100%"
@@ -861,7 +863,7 @@ export default function Group() {
                     <h3
                       className="name font-medium text-lg"
                       id="none"
-                      name={3}
+                      key={3}
                     ></h3>
                   </div>
                 </div>
