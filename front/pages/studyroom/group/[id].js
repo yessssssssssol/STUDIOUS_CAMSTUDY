@@ -123,7 +123,6 @@ export default function Group() {
   const [isCameraOn, setCameraOn] = useState(true);
 
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-  // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
   const userValue = useRecoilValue(userAtom);
   const stopWatchRef = useRef();
@@ -186,7 +185,6 @@ export default function Group() {
     if (myStream == null) {
       rtcInit();
       location.reload();
-      setUserAiAtom(false);
       router.push('/openroom');
     }
 
@@ -633,7 +631,6 @@ export default function Group() {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
     rtcInit();
-    // setUserAiAtom(false);
     location.reload();
     router.push('/openroom');
   });
@@ -777,7 +774,6 @@ export default function Group() {
 
     return () => {
       rtcInit();
-      // setUserAiAtom(false);
       location.reload();
     };
   }, []);
