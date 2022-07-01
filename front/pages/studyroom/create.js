@@ -89,7 +89,7 @@ export default function Edit() {
     router.back();
   };
   return (
-    <div>
+    <div className="container">
       <div className="container flex-col justify-center w-full mx-72 my-5 bg-white rounded">
         <div className="w-full xl:w-full border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:w-full xl:mx-0 items-center">
