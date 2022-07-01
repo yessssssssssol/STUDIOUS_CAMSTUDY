@@ -9,7 +9,7 @@ const PrologueBottom = () => {
 
           <div className="max-w-xl px-6 py-12 lg:max-w-5xl lg:w-1/2">
             <h2 className="text-2xl font-bold text-gray-800  md:text-3xl">
-              <div className="text-blue-600 ">STUDIOUS는</div> 웹캠이 꼭 필요한
+              <div className="text-amber-400 ">STUDIOUS</div> 웹캠이 꼭 필요한
               서비스입니다.
             </h2>
             <p className="mt-4 text-gray-600 ">
@@ -22,8 +22,8 @@ const PrologueBottom = () => {
 
             <div className="mt-8">
               <a
-                href="#"
-                className="px-5 py-2 font-semibold text-gray-100 transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-700"
+                href="https://kdt-gitlab.elice.io/ai_track/class_04/ai_project/team4/ai_project_team4"
+                className="px-5 py-2 font-medium bg-amber-400 rounded-md hover:bg-amber-500 text-white shadow-md"
               >
                 서비스 GitHub 구경가기
               </a>
