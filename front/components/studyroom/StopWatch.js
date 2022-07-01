@@ -1,5 +1,5 @@
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { aiAtom } from '../../core/atoms/aiState';
+import { aiAtom, noUseAiAtom } from '../../core/atoms/aiState';
 import useTimer from '../../utils/hooks/useTimer';
 import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
@@ -35,6 +35,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
 
   if (myTimer === true) {
     const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+    const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
     if (ref != null) {
       useImperativeHandle(ref, () => ({
@@ -90,6 +91,14 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
   
     //카운트다운 끝나고 타이머 start 시작 시간을 기록
     useEffect(() => {
+      if (getReady || noUseAi) {
+        handleStart();
+        console.log('getReady가 true');
+        setStartTime(startTime);
+      }
+    }, [noUseAi]);
+
+    useEffect(() => {
       if (getReady) {
         handleStart();
         console.log('getReady가 true');
@@ -142,6 +151,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
     if (!membersOnly) {
       updateHeadCount();
     }
+    setUserAiAtom(false);
     console.log('나가기');
     router.back();
   }
@@ -186,7 +196,7 @@ const StopWatch = forwardRef(({myTimer, roomId, membersOnly, userT, cb}, ref = n
                         {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                       </h5>
                       <p className="mb-3 font-normal text-gray-700">
-                        10초 뒤에 타이머가 시작됩니다.
+                        5초 뒤에 타이머가 시작됩니다.
                         <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                       </p>
                       <svg

@@ -1,11 +1,14 @@
 import { useRecoilState } from 'recoil';
-import { aiAtom } from '../../core/atoms/aiState';
+import { aiAtom, noUseAiAtom } from '../../core/atoms/aiState';
 
 const AlertModal = () => {
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+  const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
   const onClick = () => {
+    setUserAiAtom(true);
     setUserIsHear(true);
+    console.log(noUseAi);
   };
 
   return (

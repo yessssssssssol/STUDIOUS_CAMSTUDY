@@ -170,7 +170,7 @@ wsServer.on("connection", (socket) => {
         socket.to(othersId).emit('ice', ice, myId);
     });
 
-    socket.on("disconnecting", () => {
+    socket.on("disconnecting", async () => {
         let findUser = null;
         let roomId;
         let index;
@@ -186,8 +186,19 @@ wsServer.on("connection", (socket) => {
         })
 
         //todo: 룸정보 받음
-
-        //todo: 룸 정보가 오픈방이면 headcount 뺀다
+        const room = await userStudyRoomsService.getRoom({roomId});
+        console.log(room);
+        if (room !== null) {
+            if (room.group == true && room.membersOnly == false) {
+                //todo: 룸 정보가 오픈방이면 headcount 뺀다
+                const headCount = room.headCount.filter((userId) => findUser?.id !== userId);
+                const updateChange = { headCount };
+                const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+                if (!newHeadCount) {
+                    console.log('headCount에 제거하지 못했습니다.');
+                }
+            }
+        }
         
         if (findUser != null) {
             socket.to(roomId).emit("bye", socket.id, findUser?.userName);
