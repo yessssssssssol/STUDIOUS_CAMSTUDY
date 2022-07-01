@@ -184,7 +184,7 @@ export default function mypage() {
               ))}
             </div>
             <div className="pt-[50px]">
-              <BoldText text={`최근 공부한 방`} />
+              <BoldText text={`참여중인 방`} />
               <div>
                 {myroomInfos
                   .filter((myroomInfo) => myroomInfo.group === true)
