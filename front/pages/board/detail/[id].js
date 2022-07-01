@@ -230,6 +230,7 @@ export default function Detail() {
                       members={members}
                       isOwner={isOwner}
                       roomId={detailData.roomId}
+                      owner={owner}
                     />
                   )}
                 </div>
