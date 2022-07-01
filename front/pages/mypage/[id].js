@@ -9,7 +9,7 @@ import { userAtom } from '../../core/atoms/userState';
 import { useRouter } from 'next/router';
 
 import * as API from '../api/api';
-import { charts_data, charts_color } from '../../components/common/UseData';
+import { charts_data, heatmap_tip } from '../../components/common/UseData';
 export default function mypage() {
   const useratom = useRecoilValue(userAtom);
 
@@ -142,6 +142,20 @@ export default function mypage() {
             <BoldText text={`1년 공부 기록`} />
             <div className="pt-[10px] shadow-xl my-[30px]">
               <NoSSR gittimes={gittime} />
+              <div class="flex justify-center items-center h-[40px]">
+                {heatmap_tip.map((tip) => {
+                  return (
+                    <p class="mr-3">
+                      <span
+                        class={`inline-block ${tip[0]} mt-2 bg-amber-100 h-4 w-4`}
+                      ></span>
+                      <span class="inline-block ml-1 text-xs text-gray-600">
+                        {tip[1]}
+                      </span>
+                    </p>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
