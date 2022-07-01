@@ -13,6 +13,7 @@ import {
   charts_color,
   category_time,
   randomColor,
+  heatmap_tip,
 } from '../components/common/UseData';
 import Heatmap from '../components/common/Heatmap';
 export default function mypage() {
@@ -91,7 +92,9 @@ export default function mypage() {
     var res = '';
     {
       if (e.type === 'click') {
-        if (Number(timeGoal) < '10') {
+        if (timeGoal === undefined) {
+          alert('시간을 입력하세요');
+        } else if (Number(timeGoal) < '10') {
           res = await API.put('dailysheet', {
             timeGoal: '0' + timeGoal + ':00:00',
           });
@@ -104,18 +107,18 @@ export default function mypage() {
         }
       }
     }
-    setGetTimeGoal(res.data.timeGoal);
+    res === '' ? null : setGetTimeGoal(res.data.timeGoal);
   }
   return (
     <div className="container">
       {user && (
-        <div className="flex-col py-[50px] lg:px-[200px]">
+        <div className="flex-col py-[25px]">
           <div className="flex flex-row justify-between">
             <div className="font-bold text-3xl lg:block text-left my-[20px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
-            <span className="hidden text-center sm:block m-2 lg:text-left my-[45px]">
-              <span className="  py-1 px-2">오늘의 목표 공부</span>
+            <span className="hidden text-center sm:block m-2 lg:text-left my-[20px]">
+              <span className="py-1 px-2">오늘의 목표 공부</span>
               <input
                 className="text-center w-[70px] border border-amber-400 rounded-md "
                 value={timeGoal}
@@ -139,6 +142,21 @@ export default function mypage() {
             <BoldText text={`1년 공부 기록`} />
             <div className="pt-[10px] shadow-xl my-[10px]">
               <Heatmap gittimes={gittime} />
+
+              <div class="flex justify-center items-center h-[40px]">
+                {heatmap_tip.map((tip) => {
+                  return (
+                    <p class="mr-3">
+                      <span
+                        class={`inline-block ${tip[0]} mt-2 bg-amber-100 h-4 w-4`}
+                      ></span>
+                      <span class="inline-block ml-1 text-xs text-gray-600">
+                        {tip[1]}
+                      </span>
+                    </p>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
