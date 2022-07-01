@@ -44,7 +44,7 @@ const CreateBoard = () => {
       <div className="xl:w-full border-b border-amber-400  py-3 bg-white ">
         <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
           <p className="text-2xl text-amber-400  font-bold">
-            스터디원 모집 게시글
+            스터디원 모집 게시글 수정
           </p>
         </div>
       </div>

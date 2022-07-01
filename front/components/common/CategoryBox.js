@@ -1,8 +1,8 @@
-import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
+import { RiEdit2Fill } from 'react-icons/ri';
 import Link from 'next/link';
 import DeleteModal from './DeleteModal';
 
-import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
+import { BsTrashFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { userAtom } from '../../core/atoms/userState';
 import { useRecoilValue } from 'recoil';
@@ -23,7 +23,7 @@ export default function CategoryBox({ myroomInfo, color }) {
 
   return (
     <div
-      className={`flex justify-between bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl mx-[100px] h-[100px] my-[50px]`}
+      className={`flex justify-between bg-amber-300  hover:bg-amber-400 shadow-amber-400/50 shadow-lg hover:shadow-2xl rounded-xl h-[100px] my-[50px]`}
     >
       <Link href={myroomInfo.membersOnly ? privateRoom : openRoom}>
         <a className="flex items-center ml-[30px] text-xl font-bold cursor-pointer">

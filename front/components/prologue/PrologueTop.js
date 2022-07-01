@@ -1,5 +1,11 @@
 import Link from 'next/link';
+import { useSetRecoilState } from 'recoil';
+import { registerModalState } from '../../core/atoms/modalState';
 const PrologueTop = () => {
+  const setShow = useSetRecoilState(registerModalState);
+  function clickHandler() {
+    setShow(true);
+  }
   return (
     <div>
       <div className="w-full bg-center bg-cover h-screen bg-[url('https://inews.ewha.ac.kr/news/photo/202109/33069_10785_4858.jpg')]">
@@ -9,7 +15,10 @@ const PrologueTop = () => {
               Study with <span className="text-blue-400 underline">AI</span>
             </h1>
 
-            <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+            <button
+              onClick={clickHandler}
+              className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+            >
               Start AI Study!
             </button>
           </div>

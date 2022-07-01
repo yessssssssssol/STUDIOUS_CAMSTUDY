@@ -1,4 +1,10 @@
+import { useSetRecoilState } from 'recoil';
+import { registerModalState } from '../../core/atoms/modalState';
 const PrologueMid3 = () => {
+  const setShow = useSetRecoilState(registerModalState);
+  function clickHandler() {
+    setShow(true);
+  }
   return (
     <div className="container px-6 py-16 mx-auto">
       <div className="items-center lg:flex">
@@ -14,7 +20,10 @@ const PrologueMid3 = () => {
               있는 Private Study의 두 종류의 스터디를 지원하고 있습니다. 원하는
               스터디를 자유롭게 개설하고 참여해보세요!
             </p>
-            <button className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+            <button
+              onClick={clickHandler}
+              className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+            >
               STUDY WIHT AI
             </button>
           </div>
