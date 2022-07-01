@@ -139,8 +139,8 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
             </p>
           </div>
 
-          <div className="w-1/3  text-center">
-            <p className="inline-flex bg-white text-amber-400 font-bold text-3xl justify-center items-center px-2.5 py-0.5 rounded border border-amber-400 mr-2 drop-shadow-lg shadow-amber-300/50">
+          <div className="w-1/3 flex">
+            <p className="inline-flex bg-white text-amber-400 font-bold text-3xl justify-center items-center ml-24 px-2.5 py-0.5 rounded border border-amber-400 drop-shadow-lg shadow-amber-300/50">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
