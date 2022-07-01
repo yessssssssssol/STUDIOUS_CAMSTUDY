@@ -1,6 +1,10 @@
+import Helmet from "../components/layout/Helmet";
+
 export default function NotFound() {
   return (
     <div>
+     <Helmet title="404" />
+
       <div class="h-screen w-screen bg-amber-50 flex items-center">
         <div class="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
           <div class="max-w-md flex-col">
