@@ -22,7 +22,43 @@ export default function Edit() {
   const [error, setError] = useState(false);
   const [hashtag, setHashTag] = useRecoilState(createhashtagAtom);
   const [imgCheck, setImgCheck] = useState(false);
+  const [dataCheck, setDataCheck] = useState(false);
   let submitCheck = false;
+
+  const {
+    roomName,
+    membersOnly,
+    startStudyDay,
+    endStudyDay,
+    focusTimeStart,
+    focusTimeEnd,
+    membersNum,
+    roomTitle,
+    roomDesc,
+  } = room;
+
+  useEffect(() => {
+    if (
+      roomName &&
+      membersOnly &&
+      startStudyDay &&
+      endStudyDay &&
+      focusTimeStart &&
+      focusTimeEnd &&
+      focusTimeEnd &&
+      membersNum &&
+      roomTitle &&
+      roomDesc
+    ) {
+      setDataCheck(true);
+      console.log(dataCheck);
+    } else {
+      setDataCheck(false);
+      console.log(dataCheck);
+    }
+  }, [room]);
+
+  console.log(dataCheck);
 
   const fileInput = useRef(null);
 
@@ -52,41 +88,45 @@ export default function Edit() {
     const tag = hashtag.split(' ');
     const formD = new FormData();
     formD.append('roomImg', file);
-    if (imgCheck && !submitCheck) {
-      try {
-        const res = await API.post('studyroom', {
-          roomName: room.roomName,
-          group: room.group,
-          membersOnly: room.membersOnly,
-          membersNum: room.membersNum,
-          startStudyDay: room.startStudyDay,
-          endStudyDay: room.endStudyDay,
-          focusTimeStart: room.focusTimeStart,
-          focusTimeEnd: room.focusTimeEnd,
-          roomTitle: room.roomTitle,
-          roomDesc: room.roomDesc,
-          hashTags: tag,
-        });
-        console.log(res.data);
-        console.log('방이 생성되었습니다.');
-        await API.putImg(`roomimg/${res.data.roomId}`, formD);
-        submitCheck = true;
-        console.log('이미지가 추가되었습니다.');
-        if (room.membersOnly === 'false') {
-          router.push(`/openroom/board/${res.data.roomId}`);
-        } else {
-          router.push(`/board/detail/${res.data.roomId}`);
+    if (!submitCheck) {
+      if (imgCheck) {
+        try {
+          const res = await API.post('studyroom', {
+            roomName: room.roomName,
+            group: room.group,
+            membersOnly: room.membersOnly,
+            membersNum: room.membersNum,
+            startStudyDay: room.startStudyDay,
+            endStudyDay: room.endStudyDay,
+            focusTimeStart: room.focusTimeStart,
+            focusTimeEnd: room.focusTimeEnd,
+            roomTitle: room.roomTitle,
+            roomDesc: room.roomDesc,
+            hashTags: tag,
+          });
+          submitCheck = true;
+          console.log(res.data);
+          console.log('방이 생성되었습니다.');
+          await API.putImg(`roomimg/${res.data.roomId}`, formD);
+          console.log('이미지가 추가되었습니다.');
+          if (room.membersOnly === 'false') {
+            router.push(`/openroom/board/${res.data.roomId}`);
+          } else {
+            router.push(`/board/detail/${res.data.roomId}`);
+          }
+          resetRoom();
+          resetHashtag();
+          setImgCheck(false);
+        } catch (err) {
+          console.log(err);
+          alert('필수 입력 정보를 입력해주세요.');
         }
-        resetRoom();
-        resetHashtag();
-        setImgCheck(false);
-      } catch (err) {
-        console.log(err);
+      } else {
+        setError(true);
         alert('필수 입력 정보를 입력해주세요.');
       }
     } else {
-      setError(true);
-      alert('필수 입력 정보를 입력해주세요.');
+      alert('방이 이미 생성되었습니다. ');
     }
   };
 
@@ -180,6 +220,7 @@ export default function Edit() {
           <button
             className="focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 bg-amber-400 focus:outline-none transition duration-150 ease-in-out hover:bg-amber-500 rounded text-white px-8 py-2 text-sm"
             onClick={submitHandler}
+            disabled={!dataCheck}
           >
             생성
           </button>
