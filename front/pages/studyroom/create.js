@@ -80,7 +80,13 @@ export default function Edit() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const tag = hashtag.split(' ');
+    hashtag.replace(' ', '');
+    const tag = hashtag.split('#');
+    for (var i = 1; i < tag.length; i++) {
+      tag[i] = '#' + tag[i];
+    }
+    tag.shift();
+    console.log(tag);
     const formD = new FormData();
     formD.append('roomImg', file);
     if (!submitCheck) {
