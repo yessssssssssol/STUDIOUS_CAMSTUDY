@@ -14,6 +14,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
+import {
+  TbDeviceComputerCamera,
+  TbDeviceComputerCameraOff,
+} from 'react-icons/tb';
+
 import * as ReactDOM from 'react-dom/client';
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
@@ -763,7 +768,9 @@ export default function Group() {
   // todo: 나갔을때 상태관리
   return (
     <div className="lg:grid lg:justify-center">
-      <p className="font-bold text-center text-4xl m-5">{room?.roomName}</p>
+      <p className="font-bold text-center text-4xl m-5 mb-10">
+        {room?.roomName}
+      </p>
       {isLoading === true ? (
         <>
           <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
@@ -1004,11 +1011,11 @@ export default function Group() {
                     placeholder="message"
                     required
                     type="text"
-                    className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                    className="block w-full py-2 pl-4 ml-1 mr-2 bg-gray-100 rounded-full outline-none focus:text-gray-700"
                   ></input>
-                  <button onClick={sendChatHandler}>
+                  <button onClick={sendChatHandler} clssName="py-2 p-4">
                     <svg
-                      className="w-5 h-5 text-gray-500 origin-center transform rotate-90"
+                      className="w-5 h-5 mr-1 ml-2 text-gray-500 origin-center transform rotate-90"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -1026,10 +1033,18 @@ export default function Group() {
                     className="mx-2"
                     onClick={CameraOnOffClick}
                   >
-                    turnOn
+                    {isCameraOn == true ? (
+                      <TbDeviceComputerCamera color="white" size="30" />
+                    ) : (
+                      <TbDeviceComputerCameraOff color="white" size="30" />
+                    )}
                   </button>
                   <button id="muteBtn" onClick={MuteBtnClick}>
-                    Unmute
+                    {isMute == true ? (
+                      <GoMute color="white" size="30" />
+                    ) : (
+                      <GoUnmute color="white" size="30" />
+                    )}
                   </button>
                 </div>
 
