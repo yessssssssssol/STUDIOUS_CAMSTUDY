@@ -10,3 +10,8 @@ export const readyAtom = atom({
   key: 'getReady',
   default: false,
 });
+
+export const noUseAiAtom = atom({
+  key: 'noUseAi',
+  default: false,
+});

@@ -9,8 +9,6 @@ function Label({ x, y, dx, dy, pieData, title }) {
 }
 
 export default function Pie({ title, pieData, index }) {
-  console.log(pieData);
-
   return (
     <>
       {pieData !== undefined &&

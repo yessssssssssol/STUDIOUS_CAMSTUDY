@@ -216,6 +216,7 @@ userStudyRoomsRouter.put('/headcount', login_required, async function (req, res,
         const id = req.currentUserId;
         const { roomId, attend } = req.body;
         if (!roomId) return res.status(400).json({ message: 'roomId값이 넘어오지 않았습니다.' });
+
         if (typeof attend !== 'boolean')
             return res.status(400).json({ message: 'attend값을 boolean형태로 보내주세요' });
 
@@ -233,11 +234,11 @@ userStudyRoomsRouter.put('/headcount', login_required, async function (req, res,
         // 스터디룸에 들어오는 경우
         if (attend === true) {
             // 정원 확인
-            if (curRoom.membersNum === curRoom.headCount.length)
-                return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
+            // if (curRoom.membersNum === curRoom.headCount.length)
+            //     return res.status(403).json({ message: '현재 인원이 다 찼습니다.' });
 
-            if (curRoom.headCount.includes(id))
-                return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
+            // if (curRoom.headCount.includes(id))
+            //     return res.status(400).json({ message: '이미 방에 들어와있는 id입니다.' });
 
             curRoom.headCount.push(id);
             const headCount = curRoom.headCount;
@@ -246,20 +247,24 @@ userStudyRoomsRouter.put('/headcount', login_required, async function (req, res,
             if (!newHeadCount)
                 return res.status(500).json({ message: 'headCount에 추가하지 못했습니다.' });
             return res.status(200).json(newHeadCount);
+        } else if (attend === false) {
+            return res
+                .status(400)
+                .json({ message: 'attend 값을 true로 보내야 인원에 추가할 수 있습니다.' });
         }
 
-        // 스터디룸에서 나가는 경우
-        if (curRoom.headCount.length === 0)
-            return res.status(400).json({ message: '이미 방에 아무도 없습니다.' });
+        // 스터디룸에서 나가는 경우 기능 이제 필요없어졌습니다.
+        // if (curRoom.headCount.length === 0)
+        //     return res.status(400).json({ message: '이미 방에 아무도 없습니다.' });
 
-        if (!curRoom.headCount.includes(id))
-            return res.status(400).json({ message: '방에 id가 존재하지 않습니다.' });
+        // if (!curRoom.headCount.includes(id))
+        //     return res.status(400).json({ message: '방에 id가 존재하지 않습니다.' });
 
-        const headCount = curRoom.headCount.filter((userId) => id !== userId);
-        const updateChange = { headCount };
-        const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
-        if (!newHeadCount)
-            return res.status(500).json({ message: 'headCount에 제거하지 못했습니다.' });
+        // const headCount = curRoom.headCount.filter((userId) => id !== userId);
+        // const updateChange = { headCount };
+        // const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+        // if (!newHeadCount)
+        //     return res.status(500).json({ message: 'headCount에 제거하지 못했습니다.' });
         return res.status(200).json(newHeadCount);
     } catch (error) {
         next(error);

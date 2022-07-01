@@ -13,21 +13,23 @@ const AIFunc = (props) => {
 
   // trueList에 true가 50번 찍히면 타이머 자동 재시작, trueList reset
   const trueCheck = () => {
-    if (trueList.length === 50) {
-      setUserIsHear(true);
+    if (trueList.length > 100) {
       console.log('사람있음', userIsHear);
+      setUserIsHear(true);
+      props.cb(true);
       trueList = [];
-      props.cb(userIsHear);
     }
   };
 
   //falseList에 false가 연속으로 50번 찍히면 타이머 자동 멈춤, trueList reset
   const falseCheck = () => {
-    if (falseList.length === 50) {
-      setUserIsHear(false);
-      console.log('사람없음', userIsHear);
-      trueList = [];
-      props.cb(userIsHear);
+    if (falseList.length > 100) {
+      if (userIsHear !== false) {
+        console.log('사람없음', userIsHear);
+        setUserIsHear(false);
+        props.cb(false);
+      }
+      falseList = [];
     }
   };
 
@@ -81,27 +83,28 @@ const AIFunc = (props) => {
         person = true;
         console.log('ai true', person);
         trueList.push(true);
-        falseList = [];
         trueCheck();
+        //falseList = [];
       } else {
         person = false;
         console.log('ai false', person);
         falseList.push(false);
-        // trueList = [];
         falseCheck();
+        //trueList = [];
       }
     });
     if (predictions.length === 0) {
       person = false;
       console.log('ai false', person);
       falseList.push(false);
-      trueList = [];
-      falseCheck();
+      //trueList = [];
+      falseCheck(); 
+      
     }
   };
 
   return (
-    <div className="w-full flex justify-center ">
+    <div className="w-full flex justify-center item-center border rounded-xl border-amber-400 shadow-2xl shadow-amber-400/50">
       <video
         className="rounded-xl"
         autoPlay

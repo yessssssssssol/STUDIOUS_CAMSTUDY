@@ -20,9 +20,9 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
   console.log(membersOnly);
 
-  // 카운트다운 시간 설정: 10초
+  // 카운트다운 시간 설정: 5초
   const initialMinute = 0;
-  const initialSeconds = 10;
+  const initialSeconds = 5;
   const [minutes, setMinutes] = useState(initialMinute);
   const [seconds, setSeconds] = useState(initialSeconds);
   const [getReady, setGetReady] = useState(false);
@@ -37,6 +37,19 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const [user, setUser] = useState();
   // dayjs 한국 시간 설정
   dayjs.locale('ko');
+
+  let Img = '/people-01.png';
+
+  useEffect(() => {
+    const ImgArr = ['/people-01.png', '/people-02.png'];
+
+    function randomImgPicker(arr) {
+      const random = Math.floor(Math.random() * arr.length);
+      return arr[random];
+    }
+
+    Img = randomImgPicker(ImgArr);
+  }, []);
 
   // 처음 카운트다운 할 때 쓰는 코드
   useEffect(() => {
@@ -108,36 +121,26 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   const handleClick = () => {
     setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
     timelogFunc();
-    if (!membersOnly) {
-      updateHeadCount();
-    }
+
     console.log('나가기');
     router.back();
-  };
-
-  const updateHeadCount = async () => {
-    try {
-      await API.put(`headcount`, {
-        roomId,
-        attend: false,
-      });
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
     <div>
       <div>
         <div className="mx-10 my-10 flex ">
-          <div className="w-1/3 text-center">
-            <h3 className="font-bold text-3xl">
-              {user?.name}님의 개인 스터디룸
-            </h3>
+          <div className="w-1/3 text-center flex flex-row ml-20">
+            <p className="flex font-semibold text-amber-400 text-3xl">
+              {user?.name}
+            </p>
+            <p className="flex font-medium text-slate-700 text-xl pt-1">
+              's Private Study ROOM
+            </p>
           </div>
 
-          <div className="w-1/3 text-center">
-            <p className="bg-gray-100 text-gray-800 font-bold text-3xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+          <div className="w-1/3 flex justify-center">
+            <p className="inline-flex bg-white text-amber-400 font-bold text-3xl justify-center items-center px-2.5 py-0.5 rounded border border-amber-400 drop-shadow-lg shadow-amber-300/50">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
@@ -145,7 +148,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
 
           <div className="w-1/3 text-center">
             <button
-              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+              className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border shadow-lg border-gray-200 hover:text-white hover:bg-amber-400 hover:shadow-amber-300/50"
               onClick={handleClick}
             >
               나가기
@@ -157,11 +160,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
         {minutes === 0 && seconds === 0 ? null : (
           <div className="justify-center items-center text-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
-              <img
-                className="rounded-t-lg"
-                src="/sampleImg.jpg"
-                alt="증명사진"
-              />
+              <img className="rounded-t-lg" src={Img} alt="증명사진" />
               <div className="p-5">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
                   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
@@ -172,7 +171,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
                 </p>
                 <svg
                   role="status"
-                  className="inline w-8 h-8 mr-2 text-gray-200 animate-spin fill-blue-600"
+                  className="inline w-8 h-8 mr-2 text-white animate-spin fill-amber-400"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +187,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
                 </svg>
               </div>
               <button
-                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+                className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:shadow-lg hover:bg-amber-400 hover:text-white hover:shadow-amber-300/50 focus:z-10 focus:ring-4 focus:ring-gray-200"
                 onClick={handleClick}
               >
                 나가기

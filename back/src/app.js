@@ -170,10 +170,11 @@ wsServer.on("connection", (socket) => {
         socket.to(othersId).emit('ice', ice, myId);
     });
 
-    socket.on("disconnecting", () => {
+    socket.on("disconnecting", async () => {
         let findUser = null;
         let roomId;
         let index;
+
         Object.keys(roomList).forEach((v, i) => {
             roomList[v].forEach((data, i) => {
                 if (data.socketId === socket.id) {
@@ -184,12 +185,27 @@ wsServer.on("connection", (socket) => {
                 }
             })
         })
-
-        //todo: 룸정보 받음
-
-        //todo: 룸 정보가 오픈방이면 headcount 뺀다
         
-        if (findUser != null) {
+        if (findUser) {
+
+            //todo: 룸정보 받음
+            const room = await userStudyRoomsService.getRoom({roomId});
+            console.log(room);
+            if (room) {
+                if (room.group === true && room.membersOnly === false) {
+                    //todo: 룸 정보가 오픈방이면 headcount 뺀다
+                    console.log(findUser);
+                    const headCount = room.headCount.filter((userId) => findUser?.userId != userId);
+                    console.log("delete : ", headCount);
+                    const updateChange = { headCount };
+
+                    const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
+                    if (!newHeadCount) {
+                        console.log('headCount에 제거하지 못했습니다.');
+                    }
+                }
+            }
+
             socket.to(roomId).emit("bye", socket.id, findUser?.userName);
             // 룸 리스트 내 제거
             roomList[roomId]?.splice(index, 1);

@@ -36,54 +36,52 @@ export default function mypage() {
   }
 
   useEffect(() => {
-    async function getTime() {
-      console.log(router.query.id);
-      try {
-        const res = await API.get('user', router.query.id);
-        console.log(res, '유저정보');
-        setUser(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    setUser(useratom);
     const getTimeData = async () => {
       try {
-        const res = await API.get('totaltime', router.query.id);
-        const data = res.data;
+        const totaltime = await API.get('totaltime', useratom.id);
+        const data = totaltime.data;
         var data2 = [
           data.studyTimeADay,
           data.weekStudyTime,
           data.totalStudyTime,
         ];
-        setPieData([
-          data.attendanceRate,
-          data.weekAchievementRate,
-          data.totalAchievementRate,
-        ]);
         setTimeData(data2);
+
+        const dailysheets = await API.get('dailysheets', useratom.id);
+        const datas = dailysheets.data;
+        setGetTimeGoal(datas[datas.length - 1].timeGoal);
+        if (datas[datas.length - 1].bestStudyTime == ' ') {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            '00:00:00',
+          ]);
+        } else {
+          setPieData([
+            data.attendanceRate,
+            datas[datas.length - 1].achievementRate,
+            datas[datas.length - 1].bestStudyTime,
+          ]);
+        }
+
+        datas.length == 0
+          ? null
+          : datas.map((data) =>
+              gittime.push([
+                data.date,
+                Math.floor(toMilliseconds(data.studyTimeADay) / 7200),
+              ])
+            );
       } catch (err) {
         setTimeData(['00:00:00', '00:00:00', '00:00:00']);
+        setPieData([0, 0, 0]);
       }
     };
-    const getGitTimeData = async () => {
-      const res = await API.get('dailysheets', router.query.id);
-      const datas = res.data;
-      console.log(datas);
-      setGetTimeGoal(datas[datas.length - 1].timeGoal);
-      datas.length == 0
-        ? console.log('Git데이터', gittime)
-        : datas.map((data) =>
-            gittime.push([data.date, toMilliseconds(data.studyTimeADay)])
-          );
-    };
 
-    if (router.isReady) {
-      getTime();
-      getTimeData();
-      getGitTimeData();
-      setGitTime(gittime);
-    }
-  }, [router.isReady]);
+    getTimeData();
+    setGitTime(gittime);
+  }, []);
 
   async function clickHandler(e) {
     var res = '';
@@ -105,11 +103,11 @@ export default function mypage() {
     setGetTimeGoal(res.data.timeGoal);
   }
   return (
-    <div>
+    <div className="container">
       {user && (
         <div className="flex-col py-[50px] lg:px-[200px]">
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-3xl text-center lg:text-left my-[50px]">
+            <div className="font-bold text-3xl text-center lg:text-left my-[20px]">
               <BoldText text={`${user.name}님의 최근 공부 기록`} />
             </div>
 
@@ -150,15 +148,23 @@ export default function mypage() {
           <div className=" pt-[50px]">
             <BoldText text={`공부 기록 통계`} />
             <div className="flex flex-col items-center  lg:flex-row justify-evenly">
-              {charts_data.map((title, index) => (
+              {pieData.map((data, index) => (
                 <div key={index} className="py-8 lg:mr-[30px]">
-                  <Pie
-                    key={index}
-                    title={title}
-                    index={index}
-                    pieData={pieData}
-                    color={charts_color[Math.ceil(Math.random() * 10) + 1]}
-                  />
+                  {index === 2 ? (
+                    <Pie
+                      key={index}
+                      title={charts_data[index]}
+                      index={index}
+                      pieData={data}
+                    />
+                  ) : (
+                    <Pie
+                      key={index}
+                      title={charts_data[index]}
+                      index={index}
+                      pieData={data}
+                    />
+                  )}
                 </div>
               ))}
             </div>

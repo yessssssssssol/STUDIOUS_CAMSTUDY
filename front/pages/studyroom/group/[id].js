@@ -3,6 +3,7 @@ import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
 import { io } from 'socket.io-client';
+import { aiAtom, noUseAiAtom } from '../../../core/atoms/aiState';
 import React, {
   isValidElement,
   useEffect,
@@ -121,8 +122,12 @@ export default function Group() {
   const [isMute, setMute] = useState(false);
   const [isCameraOn, setCameraOn] = useState(true);
 
+  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+  const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
+
+  const [myState, setMyState] = useState(false);
   const userValue = useRecoilValue(userAtom);
-  const stopWatchRef = useRef(null);
+  const stopWatchRef = useRef();
 
   const [userList, setUserList] = useState({});
 
@@ -137,9 +142,8 @@ export default function Group() {
   const [key3Mute, setKey3Mute] = useState(false);
   const [key3Camera, setKey3Camera] = useState(true);
   const [key3State, setKey3State] = useState(false);
-
-  const [newState, setNewState] = useState({});
-
+  
+  let aiInterval = null;
   let roomId;
 
   // 채팅에 사용하는 유저 정보 리스트
@@ -180,10 +184,12 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    // if (myStream == null) {
-    //   rtcInit();
-    //   router.push('/openroom');
-    // }
+    if (myStream == null) {
+      rtcInit();
+      location.reload();
+      setUserAiAtom(false);
+      router.push('/openroom');
+    }
 
     socket.emit(
       'enter_room',
@@ -237,7 +243,6 @@ export default function Group() {
         return;
       }
     });
-    console.log(data);
     return data;
   }
 
@@ -304,10 +309,12 @@ export default function Group() {
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
-          let req = muteRes;
-          req.data.userId = user.id;
-          req.data.result = true;
-          dataChannels[userId].send(JSON.stringify(req));
+          if (dataChannels[userId].readyState === "open") {
+            let req = muteRes;
+            req.data.userId = user.id;
+            req.data.result = true;
+            dataChannels[userId].send(JSON.stringify(req));
+          }
         });
       }
     }
@@ -406,6 +413,8 @@ export default function Group() {
       prevList[res.data?.userId] = prev;
 
       setUserList(prevList);
+
+      console.log(prevList[res.data?.userId]);
       // userList[res.data?.userId].state = res.data?.result;
       const cameras = document.getElementsByClassName('camera');
 
@@ -568,7 +577,7 @@ export default function Group() {
           req.data['userName'] = user?.name;
           req.data['streamId'] = myStream?.id;
           req.data['cameraOnState'] = true;
-          req.data['userTime'] = stopWatchRef.current.getTime();
+          req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
           req.data['muteState'] = false;
 
           myDataChannel.send(JSON.stringify(req));
@@ -603,7 +612,7 @@ export default function Group() {
             req.data['userName'] = user?.name;
             req.data['streamId'] = myStream?.id;
             req.data['cameraOnState'] = true;
-            req.data['userTime'] = stopWatchRef.current.getTime();
+            req.data['userTime'] = stopWatchRef?.current?.getTime() ? stopWatchRef?.current?.getTime() : 0;
             req.data['muteState'] = false;
 
             myDataChannel.send(JSON.stringify(req));
@@ -637,12 +646,20 @@ export default function Group() {
     console.log(errorMessage);
     // 들어가지 못한다는 에러페이지 출력
     rtcInit();
+    setUserAiAtom(false);
+    location.reload();
     router.push('/openroom');
   });
 
   socket.on('bye', (leaveId, userName) => {
     // 나갔다는 메시지
     addMessage(`  : ${userName}님이 퇴장하셨습니다.!`);
+
+    const stopWatch = document.getElementById(leaveId);
+    if (stopWatch != null) {
+      stopWatch.id = 'none';
+      stopWatch.childNodes[0].remove();
+    }
 
     const video = document.getElementById(leaveId);
     if (video != null) {
@@ -664,11 +681,16 @@ export default function Group() {
       }
     });
 
-    Object.keys(userList).forEach((v) => {
+    const prevList = userList;
+
+    Object.keys(prevList).forEach((v) => {
+      
       if (v.socketId === leaveId) {
-        delete userList[v];
+        delete prevList[v];
       }
     });
+
+    setUserList(prevList);
   });
 
   // 이건 방에 접속한 사람이 실행된다. (Peer B)
@@ -701,7 +723,6 @@ export default function Group() {
     const input = document.getElementById('inputbox');
     addMessage(`${user.name} : ${input.value}`);
     Object.keys(dataChannels).forEach((userId) => {
-      console.log(dataChannels[userId]);
       let req = chatRes;
       req.data = `${user.name} : ${input.value}`;
       dataChannels[userId].send(JSON.stringify(req));
@@ -710,17 +731,20 @@ export default function Group() {
   };
 
   function AlertNoHear(result) {
+    // 만약 현재 나의 스테이트값이 
     let req = stateRes;
     req.data.userId = user?.id;
     req.data.result = result;
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        dataChannels[userId].send(JSON.stringify(req));
+        if (dataChannels[userId].connectionState === "open") {
+          dataChannels[userId].send(JSON.stringify(req));
+        }
       });
+      console.log(result);
     }
-
-    console.log(result);
+    console.log("send Data");
   }
 
   function StartStopWatch(result) {
@@ -730,7 +754,9 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        dataChannels[userId].send(JSON.stringify(req));
+        if (dataChannels[userId].connectionState === "open") {
+          dataChannels[userId].send(JSON.stringify(req));
+        }
       });
     }
 
@@ -739,14 +765,9 @@ export default function Group() {
 
   function findUserByKey(key) {
     const cameras = document.getElementsByClassName('name');
-    console.log(key);
-    console.log(cameras);
-
     const camera = cameras[key];
-    console.log(camera);
 
     const user = FindUser(camera?.id);
-    console.log(user);
     return user;
   }
 
@@ -762,9 +783,31 @@ export default function Group() {
       }
     }
     getRoomData();
+
+    return () => {
+      rtcInit();
+      setUserAiAtom(false);
+      location.reload();
+    };
   }, []);
 
-  //todo: 첫번째 영상 스탑워치
+  
+
+  // useEffect(() => {
+  //   if (myPeerConnection !== null && aiInterval == null) {
+  //     aiInterval = setInterval(() => {
+  //       if (Object.keys(dataChannels).length >= 1 && Object.keys(userList).length >= 1) {
+  //         AlertNoHear(userIsHear);
+  //       }
+  
+  //       if(myPeerConnection == null || Object.keys(dataChannels).length < 1) {
+  //         clearInterval(aiInterval);
+  //       }
+  
+  //     }, 1000);
+  //   }
+  // });
+
   // todo: 나갔을때 상태관리
   return (
     <div className="lg:grid lg:justify-center">
@@ -800,7 +843,7 @@ export default function Group() {
                         AlertNoHear(result);
                       }}
                     />
-                    <AlertModal />
+                    {noUseAi ? <></> : <AlertModal />}
                   </div>
                 ) : (
                   <div>
@@ -808,7 +851,7 @@ export default function Group() {
                   </div>
                 )}
                 <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={1}></div>
+                  <div className="stopWatch absolute" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -855,7 +898,7 @@ export default function Group() {
                 </div>
 
                 <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={4}></div>
+                  <div className="stopWatch absolute" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -871,7 +914,7 @@ export default function Group() {
                       <></>
                     ) : (
                       <>
-                        {key2State && findUserByKey(1)?.state ? (
+                        {key2State && findUserByKey(0)?.state ? (
                           <img
                             className="absolute w-[100%] h-[100%]"
                             src={`/work.png`}
@@ -902,7 +945,7 @@ export default function Group() {
                 </div>
 
                 <div className="bg-yellow-200 w-[500px] h-[370px] relative rounded-xl ">
-                  <div className="stopWatch" id="none" key={7}></div>
+                  <div className="stopWatch absolute" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
