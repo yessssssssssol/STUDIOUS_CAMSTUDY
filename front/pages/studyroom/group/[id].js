@@ -118,7 +118,7 @@ export default function Group() {
   const [isCameraOn, setCameraOn] = useState(true);
 
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-  const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
+  // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
   const [myState, setMyState] = useState(false);
   const userValue = useRecoilValue(userAtom);
@@ -673,7 +673,7 @@ export default function Group() {
     Object.keys(dataChannels).forEach((userId) => {
       let req = chatRes;
       req.data = `${user.name} : ${input.value}`;
-      dataChannels[userId].send(JSON.stringify(req));
+      dataChannels[userId]?.send(JSON.stringify(req));
     });
     input.value = '';
   };
@@ -803,7 +803,6 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key1Camera && findUserByKey(0)?.cameraOnState ? (
                       <></>
@@ -850,7 +849,6 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key2Camera && findUserByKey(1)?.cameraOnState ? (
                       <></>
@@ -897,7 +895,6 @@ export default function Group() {
                       height="100%"
                       playsInline
                       autoPlay
-                      muted
                     ></video>
                     {key3Camera && findUserByKey(2)?.cameraOnState ? (
                       <></>

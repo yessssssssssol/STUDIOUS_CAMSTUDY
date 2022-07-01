@@ -50,7 +50,7 @@ const StopWatch = forwardRef(
 
     if (myTimer === true) {
       const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-      const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
+      // const [noUseAi, setUserAiAtom] = useRecoilState(noUseAiAtom);
 
       if (ref != null) {
         useImperativeHandle(ref, () => ({
@@ -58,7 +58,7 @@ const StopWatch = forwardRef(
           handleClick () {
             setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
             timelogFunc();
-            setUserAiAtom(false);
+            // setUserAiAtom(false);
             location.reload();
             console.log('나가기');
             router.back();
