@@ -3,6 +3,7 @@ import PrologueMid1 from '../../components/prologue/PrologueMid1';
 import PrologueMid2 from '../../components/prologue/PrologueMid2';
 import PrologueMid3 from '../../components/prologue/PrologueMid3';
 import PrologueBottom from '../../components/prologue/PrologueBottom';
+import Helmet from '../../components/layout/Helmet';
 import { useEffect, useState } from 'react';
 
 import AOS from 'aos';
@@ -24,6 +25,8 @@ const Prologue = () => {
   }, []);
   return (
     <div>
+      <Helmet title="Introduction" />
+
       <div data-aos="fade-up" data-aos-anchor-placement="top-bottom">
         <PrologueTop />
       </div>

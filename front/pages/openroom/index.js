@@ -32,7 +32,7 @@ export default function Openroom() {
     <div>
       <div className="px-10 py-16 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
         <span className="flex">
-          Open Study
+          Public Study
           <span className="pt-1 ml-3">
             <a href={'../studyroom/create'}>
               <AiFillPlusCircle fill="#fbbf24" />
@@ -45,7 +45,7 @@ export default function Openroom() {
         <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
       <div className="container h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[3rem]">
-        <Helmet title="Openroom" />
+        <Helmet title="Public Study" />
         {openRooms &&
           openRooms.slice(0, count).map((openRoom, index) => {
             return (

@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { roomDefaultImg } from '../../../components/common/UseData';
 import Alert from '../../../components/common/Alert';
+import Helmet from '../../../components/layout/Helmet';
 
 export default function Create() {
   const router = useRouter();
@@ -94,6 +95,7 @@ export default function Create() {
   };
   return (
     <div className="container">
+      <Helmet title="EDIT" />
       <div className="flex-col justify-center mx-72 my-5 bg-white rounded">
         <div className=" border-b border-amber-400 py-3 bg-white ">
           <div className="flex w-11/12 mx-24 xl:mx-0 items-center">

@@ -16,7 +16,7 @@ const HomeOpenStudy = () => {
   return (
     <div className="mb-20">
       <div className="p-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
-        Open STUDY
+        Public STUDY
         <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
       </div>
       <div className="px-10 md:px-15 lg:px-20">
