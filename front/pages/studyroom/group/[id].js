@@ -743,6 +743,10 @@ export default function Group() {
       }
     }
     getRoomData();
+
+    return () => {
+      location.reload();
+    };
   }, []);
 
   //todo: 첫번째 영상 스탑워치
