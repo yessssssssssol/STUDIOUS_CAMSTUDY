@@ -14,6 +14,7 @@ export default function Pie({ title, pieData, index }) {
       {pieData !== undefined &&
         (index === 2 ? (
           <PieChart
+            key={index}
             data={[
               {
                 value: 0,
@@ -31,6 +32,7 @@ export default function Pie({ title, pieData, index }) {
             label={({}) => {
               return (
                 <Label
+                  key={index}
                   x={13}
                   y={53}
                   dx={0}
@@ -49,6 +51,7 @@ export default function Pie({ title, pieData, index }) {
           />
         ) : (
           <PieChart
+            key={index}
             data={[
               {
                 value: pieData || 0,
