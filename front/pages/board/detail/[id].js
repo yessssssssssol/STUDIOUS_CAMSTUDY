@@ -1,5 +1,5 @@
-import { RiEdit2Fill } from '@react-icons/all-files/Ri/RiEdit2Fill';
-import { BsTrashFill } from '@react-icons/all-files/Bs/BsTrashFill';
+import { RiEdit2Fill } from 'react-icons/ri';
+import { BsTrashFill } from 'react-icons/bs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Helmet from '../../../components/layout/Helmet';

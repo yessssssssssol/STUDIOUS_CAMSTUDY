@@ -1,5 +1,5 @@
 import Helmet from '../components/layout/Helmet';
-import PrologueTop from '../components/prologue/PrologueTop';
+import Prologue from '../pages/prologue/index';
 import { isloginAtom } from '../core/atoms/userState';
 import { useRecoilState } from 'recoil';
 import IsLoginHome from '../pages/home/index';
@@ -19,7 +19,7 @@ export default function Home() {
     return (
       <div>
         <Helmet title="HOME" />
-        <PrologueTop />
+        <Prologue />
       </div>
     );
   }

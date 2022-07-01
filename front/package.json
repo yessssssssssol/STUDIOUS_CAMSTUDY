@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-icons/all-files": "^4.1.0",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow/tfjs": "^3.3.0",
     "aos": "^3.0.0-beta.6",

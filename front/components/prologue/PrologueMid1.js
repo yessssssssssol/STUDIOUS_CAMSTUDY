@@ -1,4 +1,10 @@
+import { useSetRecoilState } from 'recoil';
+import { registerModalState } from '../../core/atoms/modalState';
 const PrologueMid1 = () => {
+  const setShow = useSetRecoilState(registerModalState);
+  function clickHandler() {
+    setShow(true);
+  }
   return (
     <div className="container px-6 py-16 mx-auto">
       <div className="items-center lg:flex">
@@ -15,7 +21,10 @@ const PrologueMid1 = () => {
               스터디룸을 모두 지원하고 있습니다. STUDIOUS로 꿈을 향해 함께
               도전해보세요!
             </p>
-            <button className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+            <button
+              onClick={clickHandler}
+              className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+            >
               STUDY WIHT AI
             </button>
           </div>
