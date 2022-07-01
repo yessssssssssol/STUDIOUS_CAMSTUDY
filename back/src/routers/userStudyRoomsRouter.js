@@ -4,6 +4,7 @@ import { checkRoomId } from '../middlewares/checkRoomId';
 import { uploadRoomImgHandler } from '../utils/multerForRoom';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
 import { json } from 'express/lib/response';

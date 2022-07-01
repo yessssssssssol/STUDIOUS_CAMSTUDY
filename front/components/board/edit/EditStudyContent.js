@@ -7,6 +7,7 @@
 import { useRecoilState } from 'recoil';
 import { editroomAtom } from '../../../core/atoms/createroomState';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 const EditStudyContent = () => {
   const [room, setRoom] = useRecoilState(editroomAtom);

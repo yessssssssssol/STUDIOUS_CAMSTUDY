@@ -1,5 +1,6 @@
 import { ChangeDate } from './changeDate';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 

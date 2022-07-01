@@ -3,6 +3,7 @@ import { applicantsService } from './applicantsService';
 import { v4 as uuid } from 'uuid';
 import { ChangeDate } from '../utils/changeDate';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 class userStudyRoomsService {
     static createPrivateRoom({ id }) {

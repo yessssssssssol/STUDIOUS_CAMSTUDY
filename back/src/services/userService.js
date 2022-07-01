@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';

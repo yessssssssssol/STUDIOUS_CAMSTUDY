@@ -5,6 +5,7 @@ import { formatTime } from '../../utils/utils';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { RiTimerLine } from 'react-icons/ri';
 
 import * as API from '../../pages/api/api';
@@ -55,7 +56,7 @@ const StopWatch = forwardRef(
       if (ref != null) {
         useImperativeHandle(ref, () => ({
           // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
-          handleClick () {
+          handleClick() {
             setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
             timelogFunc();
             // setUserAiAtom(false);

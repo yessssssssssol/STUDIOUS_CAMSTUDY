@@ -4,6 +4,7 @@ import { login_required } from '../middlewares/login_required';
 import { commentsService } from '../services/commentsService';
 import { userAuthService } from '../services/userService';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 const commentsRouter = Router();
 dayjs.locale('ko');
