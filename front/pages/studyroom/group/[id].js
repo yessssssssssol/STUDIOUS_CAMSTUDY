@@ -281,7 +281,7 @@ export default function Group() {
         .getAudioTracks()
         .forEach((track) => (track.enabled = !track.enabled));
       if (isMute == true) {
-        muteBtn.innerText = 'Unmute';
+        // muteBtn.innerText = 'Unmute';
         setMute(false);
 
         Object.keys(dataChannels).forEach((userId) => {
@@ -294,7 +294,7 @@ export default function Group() {
           // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
-        muteBtn.innerText = 'Mute';
+        // muteBtn.innerText = 'Mute';
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
@@ -319,7 +319,7 @@ export default function Group() {
         .forEach((track) => (track.enabled = !track.enabled));
       console.log(myStream.getVideoTracks());
       if (isCameraOn == true) {
-        cameraBtn.innerText = 'turnOff';
+        // cameraBtn.innerText = 'turnOff';
         setCameraOn(false);
 
         Object.keys(dataChannels).forEach((userId) => {
@@ -332,7 +332,7 @@ export default function Group() {
           // dataChannels[userId].send(JSON.stringify(req));
         });
       } else {
-        cameraBtn.innerText = 'turnOn';
+        // cameraBtn.innerText = 'turnOn';
         setCameraOn(true);
 
         Object.keys(dataChannels).forEach((userId) => {
