@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 class ChangeDate {
     static findDate(startTime, endTime) {

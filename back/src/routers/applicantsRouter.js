@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { login_required } from '../middlewares/login_required';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { applicantsService } from '../services/applicantsService';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
