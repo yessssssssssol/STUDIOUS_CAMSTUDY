@@ -28,12 +28,7 @@ const PrologueMid2 = () => {
               마이페이지에서 확인할 수 있습니다. 랭킹 서비스를 통해 다른
               STUDIOUS 사용자들과 순공시간을 겨뤄보세요!
             </p>
-            <button
-              onClick={clickHandler}
-              className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-blue-600 rounded-md lg:w-auto hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-            >
-              STUDY WIHT AI
-            </button>
+
           </div>
         </div>
       </div>
