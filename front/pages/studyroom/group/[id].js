@@ -237,33 +237,19 @@ export default function Group() {
     document.get;
 
     const cameras = document.getElementsByClassName('camera');
-    const names = document.getElementsByTagName('h3');
+    const names = document.getElementsByClassName('name');
     const timers = document.getElementsByClassName('stopWatch');
 
     console.log(cameras);
     console.log(names);
 
-    for (let camera of cameras) {
-      let key;
-      console.log(camera);
-      if (camera.id === 'none') {
-        camera.id = othersId;
-        camera.srcObject = data.stream;
-        key = camera.key;
-      }
-
-      for (let name of names) {
-        if (name.key === key) {
-          name.id = othersId;
-          break;
-        }
-      }
-
-      for (let timer of timers) {
-        if (timer.key === key) {
-          timer.id = othersId;
-          return;
-        }
+    for (let i in cameras) {
+      if (cameras[i].id === 'none') {
+        cameras[i].id = othersId;
+        cameras[i].srcObject = data.stream;
+        names[i].id = othersId;
+        timers[i].id = othersId;
+        break;
       }
     }
   }
@@ -290,12 +276,10 @@ export default function Group() {
         setMute(true);
 
         Object.keys(dataChannels).forEach((userId) => {
-          if (dataChannels[userId].readyState === "open") {
             let req = muteRes;
             req.data.userId = user.id;
             req.data.result = true;
             dataChannels[userId].send(JSON.stringify(req));
-          }
         });
       }
     }
@@ -476,23 +460,6 @@ export default function Group() {
           break;
         }
       }
-
-      // setNewState(userList[res.data?.userId].muteState);
-
-      // if (userList[res.data?.userId].key === 1) {
-      //   setKey1Mute(res.data?.result);
-      // }
-
-      // if (userList[res.data?.userId].key === 2) {
-      //   setKey2Mute(res.data?.result);
-      // }
-
-      // if (userList[res.data?.userId].key === 3) {
-      //   setKey3Mute(res.data?.result);
-      // }
-
-      // userList[res.data?.userId].muteState = res.data?.result;
-      // console.log(userList[res.data?.userId]);
     }
   }
 
@@ -719,9 +686,7 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === "open") {
-          dataChannels[userId].send(JSON.stringify(req));
-        }
+          dataChannels[userId]?.send(JSON.stringify(req));
       });
       console.log(result);
     }
@@ -735,9 +700,7 @@ export default function Group() {
 
     if (Object.keys(dataChannels).length > 0) {
       Object.keys(dataChannels).forEach((userId) => {
-        if (dataChannels[userId].connectionState === "open") {
-          dataChannels[userId].send(JSON.stringify(req));
-        }
+          dataChannels[userId]?.send(JSON.stringify(req));
       });
     }
 
@@ -893,7 +856,7 @@ export default function Group() {
                       <></>
                     ) : (
                       <>
-                        {key2State && findUserByKey(0)?.state ? (
+                        {key2State && findUserByKey(1)?.state ? (
                           <img
                             className="absolute w-[100%] h-[100%]"
                             src={`/work.png`}

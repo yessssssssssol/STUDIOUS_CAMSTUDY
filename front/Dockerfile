@@ -4,9 +4,12 @@ COPY . /app
 WORKDIR /app
 
 COPY package*.json ./
+COPY yarn.lock ./
 
-RUN npm install --force
-RUN npm run build
+RUN yarn upgrade
+RUN yarn install
+RUN yarn build
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
+
