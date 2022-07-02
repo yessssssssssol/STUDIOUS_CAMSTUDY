@@ -34,7 +34,7 @@ const Certification = ({ applicant, isOwner }) => {
           roomId,
           applicantId,
         });
-        console.log('해당 신청자가 승인되었습니다.');
+        alert('해당 신청자가 승인되었습니다.');
       } catch (err) {
         console.log(err);
       }
@@ -66,7 +66,7 @@ const Certification = ({ applicant, isOwner }) => {
     async function rejectMember() {
       try {
         await API.delete(`apply/${roomId}/${applicantId}`);
-        console.log('해당 신청자가 거절되었습니다.');
+        alert('해당 신청자가 거절되었습니다.');
       } catch (err) {
         console.log(err);
       }
@@ -76,7 +76,7 @@ const Certification = ({ applicant, isOwner }) => {
     async function deleteMember() {
       try {
         await API.delete(`appliant/${roomId}/${applicantId}`);
-        console.log('해당 신청자가 거절되었습니다.');
+        alert('해당 신청자가 거절되었습니다.');
       } catch (err) {
         console.log(err);
       }

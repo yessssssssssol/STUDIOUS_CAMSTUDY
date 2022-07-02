@@ -29,7 +29,7 @@ const Member = ({ member, isOwner, roomId, owner }) => {
       try {
         await API.delete(`appliant/${roomId}/${member}`);
         setIsAccept(false);
-        console.log('해당 신청자가 거절되었습니다.');
+        alert('해당 신청자가 거절되었습니다.');
       } catch (err) {
         console.log(err);
       }
