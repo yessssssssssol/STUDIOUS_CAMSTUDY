@@ -192,11 +192,11 @@ export default function Group() {
   async function initCall(data) {
     await getMedia();
 
-    if (myStream == null) {
-      rtcInit();
-      location.reload();
-      router.push('/openroom');
-    }
+    // if (myStream == null) {
+    //   rtcInit();
+    //   location.reload();
+    //   router.push('/openroom');
+    // }
 
     socket.emit(
       'enter_room',
@@ -786,7 +786,7 @@ export default function Group() {
                   </div>
                 )}
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
-                  <div className="stopWatch absolute" id="none" key={1}></div>
+                  <div className="stopWatch" id="none" key={1}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl bg-blue"
@@ -797,7 +797,7 @@ export default function Group() {
                       playsInline
                       autoPlay
                     ></video>
-                    {key1Camera && findUserByKey(0)?.cameraOnState ? (
+                    {/* {key1Camera && findUserByKey(0)?.cameraOnState ? (
                       <></>
                     ) : (
                       <>
@@ -813,7 +813,7 @@ export default function Group() {
                           ></img>
                         )}
                       </>
-                    )}
+                    )} */}
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key1Mute && findUserByKey(0)?.muteState ? (
@@ -832,7 +832,7 @@ export default function Group() {
                 </div>
 
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
-                  <div className="stopWatch absolute" id="none" key={4}></div>
+                  <div className="stopWatch" id="none" key={4}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -843,7 +843,7 @@ export default function Group() {
                       playsInline
                       autoPlay
                     ></video>
-                    {key2Camera && findUserByKey(1)?.cameraOnState ? (
+                    {/* {key2Camera && findUserByKey(1)?.cameraOnState ? (
                       <></>
                     ) : (
                       <>
@@ -859,7 +859,7 @@ export default function Group() {
                           ></img>
                         )}
                       </>
-                    )}
+                    )} */}
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key2Mute && findUserByKey(1)?.muteState ? (
@@ -878,7 +878,7 @@ export default function Group() {
                 </div>
 
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
-                  <div className="stopWatch absolute" id="none" key={7}></div>
+                  <div className="stopWatch" id="none" key={7}></div>
                   <div className="w-full flex justify-center ">
                     <video
                       className="camera rounded-xl"
@@ -889,7 +889,7 @@ export default function Group() {
                       playsInline
                       autoPlay
                     ></video>
-                    {key3Camera && findUserByKey(2)?.cameraOnState ? (
+                    {/* {key3Camera && findUserByKey(2)?.cameraOnState ? (
                       <></>
                     ) : (
                       <>
@@ -905,7 +905,7 @@ export default function Group() {
                           ></img>
                         )}
                       </>
-                    )}
+                    )} */}
                   </div>
                   <div className="absolute bottom-[5px] left-[8px]">
                     {key3Mute && findUserByKey(2)?.muteState ? (
