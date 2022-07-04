@@ -1,5 +1,10 @@
 node_modules
 .env
+<<<<<<< HEAD
 
 cert.pem
 privkey.pem
+=======
+/src/cert.pem
+/src/privkey.pem
+>>>>>>> dev

@@ -1,3 +1,11 @@
+export const items = [
+  ['Public Study', '/openroom'],
+  ['Private Study', '/board'],
+  ['Introduction', '/prologue'],
+  ['About Us', '/aboutus'],
+  ['Mypage', '/mypage'],
+];
+
 export const randomColor = [
   'bg-red-200',
   'bg-blue-200',
@@ -31,22 +39,18 @@ export const charts_color = [
   '#fbcfe8',
   '#fecdd3',
 ];
-export const category_time = [
-  ['수학', '13:10:03'],
-  ['과학', '5:31:21'],
-  ['경찰학개론', '10:31:22'],
-  ['헌법', '3:03:52'],
-];
-export const items = [
-  ['스터디 모집', '/board'],
-  ['프롤로그', '/prologue'],
-  ['AboutUs', '/aboutus'],
-  ['마이페이지', '/mypage'],
+
+export const heatmap_tip = [
+  ['bg-amber-100', '2시간 이하'],
+  ['bg-amber-200', '2~4시간'],
+  ['bg-amber-300', '4~6시간'],
+  ['bg-amber-400', '6~8시간'],
+  ['bg-amber-500', '8~10시간'],
+  ['bg-amber-600', '10시간 이상'],
 ];
 export const drop_item = [];
 
 export const userDefaultImg =
   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
-export const roomDefaultImg =
-  'https://www.teahub.io/photos/full/59-599093_samsung-chromebook-3-background.jpg';
+export const roomDefaultImg = '/studious_logo-01.png';

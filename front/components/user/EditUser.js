@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
 import { isloginAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
+import Button from '../common/Button';
 
 const EditUser = () => {
   const setShowModal = useSetRecoilState(editUserModalAtom);
@@ -17,8 +19,10 @@ const EditUser = () => {
       description: user.description,
     });
     const updatedUser = await res.data;
+
     setUser(updatedUser);
     setShowModal(false);
+    alert('회원 정보가 수정되었습니다.');
   };
 
   const handleNameChange = (e) => {
@@ -35,70 +39,64 @@ const EditUser = () => {
 
   const handleUserDelete = async () => {
     await API.delete(`user/${user.id}`);
-    console.log('회원탈퇴가 완료되었습니다.');
+    alert('회원탈퇴가 완료되었습니다.');
     setShowModal(false);
     setIsLogin(false);
     localStorage.clear();
     router.push('/');
   };
-
+  useEffect(() => {});
   return (
     <div>
       <div className="my-2">
-        <label className="block mb-2 text-base font-medium text-gray-900 dark:text-gray-300">
+        <label className="block mb-2 text-base font-medium text-gray-900 ">
           이름
         </label>
         <input
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="이름을 입력해주세요"
           value={user.name}
           onChange={handleNameChange}
         />
-        <p
-          id="helper-text-explanation"
-          className="mt-2 text-sm text-gray-500 dark:text-gray-400"
-        >
-          스터디원들에게 보여지는 정보입니다.
-        </p>
       </div>
       <div>
-        <label className="block mb-2 text-base font-medium text-gray-900 dark:text-gray-400">
+        <label className="block mb-2 text-base font-medium text-gray-900">
           한 줄 소개
         </label>
         <textarea
           id="message"
           rows="4"
-          className="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block p-2.5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Leave a comment..."
-          value={user.descriptiion}
+          value={user.description}
           onChange={handleDescriptionChange}
-        ></textarea>
-      </div>
-      <div>
-        <button
-          className="text-white py-2 px-4 mt-3 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
-          onClick={handleUserDelete}
         >
-          회원탈퇴
-        </button>
-        <p
+          {user.description}
+        </textarea>
+      </div>
+      <div className="flex gap-3 my-3">
+        <Button
+          text="회원탈퇴"
+          onClick={handleUserDelete}
+          color="bg-amber-500 py-2.5 shadow hover:shadow-lg"
+        />
+        <div
           id="helper-text-explanation"
-          className="mt-2 text-sm text-gray-500 dark:text-gray-400"
+          className="mt-2 text-sm text-gray-500 decoration-solid italic"
         >
           탈퇴 시 계정과 관련된 모든 정보가 삭제되며 복구되지 않습니다.
-        </p>
+        </div>
       </div>
-      <div className="flex flex-row justify-center space-x-2">
+      <div className="flex flex-row justify-center space-x-2 my-2">
         <button
-          type="submit"
-          className="text-white py-2 px-4 my-1 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={submitHandler}
+          className="text-white py-2.5 px-5 mr-2 mb-2 bg-amber-400 hover:text-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
         >
           수정
         </button>
         <button
-          className="text-indigo-500 hover:text-white py-2 px-4 my-1 uppercase rounded border border-indigo-500 bg-white hover:bg-indigo-500 shadow hover:shadow-lg font-medium transition duration-200"
           onClick={() => setShowModal(false)}
+          className="text-amber-500 py-2.5 px-5 mr-2 mb-2 bg-white my-1 uppercase rounded border border-gray-200 shadow hover:shadow-lg text-sm transition duration-200 font-semibold"
         >
           취소
         </button>

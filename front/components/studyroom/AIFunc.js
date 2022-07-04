@@ -4,29 +4,30 @@ import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
 
-const AIFunc = () => {
+const AIFunc = (props) => {
   let person = false;
   let falseList = [];
   let trueList = [];
   const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
-  const canvasRef = useRef();
 
   // trueList에 true가 50번 찍히면 타이머 자동 재시작, trueList reset
   const trueCheck = () => {
-    if (trueList.length === 50) {
+    if (trueList.length > 100) {
       setUserIsHear(true);
-      console.log('사람있음', userIsHear);
+      props.cb(true);
       trueList = [];
     }
   };
 
   //falseList에 false가 연속으로 50번 찍히면 타이머 자동 멈춤, trueList reset
   const falseCheck = () => {
-    if (falseList.length === 50) {
-      setUserIsHear(false);
-      console.log('사람없음', userIsHear);
-      trueList = [];
+    if (falseList.length > 100) {
+      if (userIsHear !== false) {
+        setUserIsHear(false);
+        props.cb(false);
+      }
+      falseList = [];
     }
   };
 
@@ -58,6 +59,7 @@ const AIFunc = () => {
           console.error(error);
         });
     }
+    // return
   }, []);
 
   const detectFrame = (video, model) => {
@@ -77,35 +79,35 @@ const AIFunc = () => {
     predictions.forEach((prediction) => {
       if (prediction.class === 'person') {
         person = true;
-        console.log('ai true', person);
         trueList.push(true);
-        falseList = [];
         trueCheck();
+        //falseList = [];
       } else {
         person = false;
-        console.log('ai false', person);
         falseList.push(false);
-        // trueList = [];
         falseCheck();
+        //trueList = [];
       }
     });
     if (predictions.length === 0) {
       person = false;
-      console.log('ai false', person);
       falseList.push(false);
-      trueList = [];
+      //trueList = [];
       falseCheck();
     }
   };
 
   return (
-    <div className="w-full py-10 flex justify-center ">
-      <video autoPlay playsInline muted ref={videoRef} width="600" height="500">
-        {/* {ref
-          ? console.log(`비디오 오케이 : ${autoPlay}`)
-          : console.log('비디오 놉')} */}
-        <canvas ref={canvasRef} width="600" height="500" />
-      </video>
+    <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
+      <video
+        className="rounded-xl object-cover"
+        autoPlay
+        playsInline
+        muted
+        ref={videoRef}
+        width="100%"
+        height="100%"
+      ></video>
     </div>
   );
 };

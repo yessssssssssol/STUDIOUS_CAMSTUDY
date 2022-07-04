@@ -1,4 +1,3 @@
-import Mypage from '../../pages/mypage';
 import * as API from '../../pages/api/api';
 import { userAtom } from '../../core/atoms/userState';
 import { useRecoilValue } from 'recoil';
@@ -29,24 +28,29 @@ const HomeMyLogTime = () => {
       <div className="items-center lg:flex">
         {/* 누적 공부시간 */}
         <div className="w-full text-center lg:w-2/3">
-          <div className="font-bold text-3xl text-center">
+          <div className="font-bold text-4xl text-gray-500 text-center mb-5">
             {`${user?.name}님의 누적 공부시간`}
           </div>
-          <div className="font-bold text-3xl text-center">{`${timeDatas}`}</div>
+          <div className="font-black text-3xl text-gray-700 text-center">{`${timeDatas}`}</div>
         </div>
         {/* 나의 프로필 */}
-        <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/3">
+        <div className="flex items-center justify-center w-full mt-2 lg:mt-0 lg:w-1/3 drop-shadow-md hover:scale-105">
           <div className="lg:max-w-lg">
             <Link href={'/mypage'}>
-              <button className="myBtn flex items-center ">
+              <button className="myBtn flex items-center bg-white p-4 rounded-lg drop-shadow-md">
                 <img
-                  className="w-8 h-8 rounded-full"
+                  className="w-20 h-20 object-fill rounded-full"
                   src={user?.profileUrl}
                   alt="user photo"
                 />
-                <p className="ml-6 text-left text-gray-600 dark:text-gray-400">
-                  {user?.name} <br /> {user?.description}
-                </p>
+                <div className="flex-col">
+                  <p className="ml-6 text-left text-amber-400 font-bold">
+                    {user?.name}
+                  </p>
+                  <p className="ml-6 text-left text-gray-600 font-semibold">
+                    {user?.description}
+                  </p>
+                </div>
               </button>
             </Link>
           </div>

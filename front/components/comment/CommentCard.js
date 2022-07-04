@@ -12,8 +12,6 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
     // 부모 엘리먼트에게 이벤트 전달을 중단해야 할 때 쓰이는 함수
     e.stopPropagation();
 
-    // const userId = roomId;
-    // const userName = writeId;
     // comment.id로 조회하여 데이터 삭제
     await API.delete(`comment/${comment._id}`);
 
@@ -24,28 +22,39 @@ function CommentCard({ roomId, writerId, comment, setComments }) {
   };
 
   return (
-    <div className="my-2 mx-1 max-w-xl flex gap-3 rounded-md bg-white p-2 text-black shadow">
-      <div className="mt-2">
-        <img className="w-16 rounded-full shadow" src={profileUrl} alt="" />
+    <div className="my-2 mx-1 max-w-l flex gap-3 rounded-md bg-white p-2 text-black shadow">
+      <div className="mt-2 ">
+        <a href={`../../../mypage/${writerId}`}>
+          <img
+            className="w-16 h-16  rounded-full shadow"
+            src={comment.userInfo.profileUrl}
+            alt=""
+          />
+        </a>
       </div>
-      <div className="flex">
+      <div className="flex ">
         <div className="flex flex-row items-center justify-between py-1 pr-2">
           <div>
-            <a href="#" className="text-blue-400 hover:underline">
+            <a
+              href={`../../../mypage/${writerId}`}
+              className="text-amber-400 hover:underline"
+            >
               {comment.userName}
             </a>
-            <span className="text-sm font-thin text-gray-500">
+            <span className="text-sm font-thin text-gray-500 mx-5">
               {comment.createdAt}
             </span>
           </div>
-          <div className="p-1">
-            <p className="text-gray-900 border-l-2 px-1 border-blue-500 bg-gray-100 rounded">
+          <div className="p-1 inline-flex">
+            <a className="text-gray-900 border-l-2 px-1 border-amber-400 bg-amber-50 rounded mx-5">
               {comment.content}
-            </p>
+            </a>
           </div>
-          <button onClick={handleDelete} className=" mr-3 align-items-center">
-            x
-          </button>
+          {user.id === writerId ? (
+            <button onClick={handleDelete} className=" mr-3 align-items-center">
+              x
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

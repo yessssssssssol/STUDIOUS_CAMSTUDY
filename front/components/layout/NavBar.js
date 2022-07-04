@@ -69,9 +69,9 @@ export default function NavBar() {
         return (
           <Link href={item[1]}>
             <a
-              className={`hidden md:block font-bold rounded-lg  text-orange-300 px-2  `}
+              className={`hidden md:block mt-4 font-semibold rounded-lg  text-amber-400 px-2  `}
             >
-              {item[0]}👑
+              {item[0]}
             </a>
           </Link>
         );
@@ -79,7 +79,7 @@ export default function NavBar() {
         return (
           <Link href={item[1]}>
             <a
-              className={`hidden md:block px-2 rounded-lg hover:bg-sky-100 contrast-100`}
+              className={`hidden md:block px-2 mt-4 rounded-lg hover:text-amber-400  contrast-100`}
             >
               {item[0]}
             </a>
@@ -119,7 +119,11 @@ export default function NavBar() {
         <Link href="/">
           <a className="ml-[15px]">
             <span className="center text-3xl font-bold whitespace-nowrap">
-              의자왕👑
+              <img
+                src="/studious_logo-01.png"
+                alt="studious 로고"
+                className="object-fill w-32"
+              />
             </span>
           </a>
         </Link>
@@ -180,8 +184,8 @@ export default function NavBar() {
                     </span>
                   </div>
                   <ul className="py-1">
-                    <li key={1} className="text-center">
-                      <a className="block text-sm text-center text-gray-700 hover:bg-gray-100">
+                    <li key={1}>
+                      <a className="block text-sm  text-gray-700 hover:bg-gray-100">
                         <UserEditModal />
                       </a>
                     </li>

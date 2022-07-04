@@ -3,6 +3,8 @@ import Helmet from '../../components/layout/Helmet';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import * as API from '../api/api';
+import { AiFillPlusCircle } from 'react-icons/ai';
+
 export default function board({ profileURL }) {
   const [boardDatas, setBoardData] = useState();
   const [count, setCount] = useState(10);
@@ -12,9 +14,7 @@ export default function board({ profileURL }) {
     async function getBoardData() {
       try {
         const res = await API.get('memberonly/studyrooms');
-        const res2 = await API.get(`open/studyrooms`);
-        // const resList = [...res.data, ...res2.data];
-        setBoardData(res);
+        setBoardData(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -29,21 +29,36 @@ export default function board({ profileURL }) {
     }
   }, [inView]);
   return (
-    <div className="flex flex-raw flex-wrap lg:flex justify-center">
-      <Helmet title="board" />
-      {boardDatas &&
-        boardDatas.slice(0, count).map((boardData, index) => {
-          return (
-            <div key={index}>
-              <BoardCard
-                key={index}
-                boardData={boardData}
-                profileURL={profileURL}
-              />
-              <div ref={ref} />
-            </div>
-          );
-        })}
-    </div>
+    <>
+
+      <div className="px-16 pt-16 pb-5 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
+        <span className="flex">
+          Private Study
+          <span className="pt-1 ml-3">
+            <a href={'../studyroom/create'}>
+              <AiFillPlusCircle fill="#fbbf24" />
+            </a>
+          </span>
+          <span className="pt-1 text-sm ml-[20px] text-gray-300">
+            목표가 비슷한 사람을 찾아서 스터디 해보세요!{' '}
+          </span>
+        </span>
+
+        <div className="border-none bg-amber-400 w-20 h-1 mt-2 rounded text-xm"></div>
+      </div>
+
+      <div className="container flex flex-raw flex-wrap lg:flex justify-center">
+        <Helmet title="Private Study" />
+        {boardDatas &&
+          boardDatas.slice(0, count).map((boardData, index) => {
+            return (
+              <div key={index}>
+                <BoardCard boardData={boardData} profileURL={profileURL} />
+                <div ref={ref} />
+              </div>
+            );
+          })}
+      </div>
+    </>
   );
 }

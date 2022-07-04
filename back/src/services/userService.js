@@ -1,8 +1,9 @@
-import { Comments, TimeLog, User, UserDailySheet } from '../db';
+import { Applicants, Comments, TimeLog, User, UserDailySheet, UserStudyRooms } from '../db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { gcsBucket } from '../utils/multer';
 import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
@@ -109,7 +110,7 @@ class userAuthService {
             const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
         }
-
+        dayjs.locale('ko');
         const date = dayjs();
         const updatedAt = date.format('YYYY-MM-DD HH:mm:ss');
 
@@ -216,16 +217,23 @@ class userAuthService {
     }
 
     static async deleteUser({ id }) {
-        const roomAr = userStudyRoomsService.getRooms({ id });
-
+        const roomAr = await userStudyRoomsService.getRooms({ id });
+        const otherRoomAr = await userStudyRoomsService.getOtherRooms({ id });
         Promise.all([
             User.deleteUser({ id }),
             TimeLog.deleteUser({ id }),
             TotalTime.deleteUser({ id }),
             UserDailySheet.deleteUser({ id }),
-            (await roomAr).map((room) => {
+            Applicants.deleteManyById({ id }),
+            roomAr.map(async (room) => {
                 const { roomId, id } = room;
-                userStudyRoomsService.delRoom({ id, roomId });
+                await userStudyRoomsService.delRoom({ id, roomId });
+            }),
+            otherRoomAr.map(async (room) => {
+                const { members, roomId } = room;
+                const delAr = members.filter((userId) => userId !== id);
+                const updateChange = { delAr };
+                await userStudyRoomsService.updateRoom({ roomId, updateChange });
             }),
         ]);
         await Comments.changeWithdrawalComments({ id });

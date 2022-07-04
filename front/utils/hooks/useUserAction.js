@@ -43,7 +43,6 @@ export function useUserActions() {
       setDescription(description);
       setProfileUrl(profileUrl);
       setIsLogin(true);
-      console.log('로그인 성공');
 
       // 일단 로그인 시 메인 페이지로 가게 해 놓음
       // 추후 변경 예정

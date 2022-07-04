@@ -3,9 +3,11 @@ import { applicantsService } from './applicantsService';
 import { v4 as uuid } from 'uuid';
 import { ChangeDate } from '../utils/changeDate';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 class userStudyRoomsService {
     static createPrivateRoom({ id }) {
+        dayjs.locale('ko');
         const now = dayjs();
         const startStudyDay = ChangeDate.getCurrentDate();
 
@@ -51,10 +53,11 @@ class userStudyRoomsService {
     }
 
     static delRoom({ id, roomId }) {
-        return Promise.all(
-            [UserStudyRooms.deleteRoom({ id, roomId }), Comments.deleteComments({ roomId })],
+        return Promise.all([
+            UserStudyRooms.deleteRoom({ id, roomId }),
+            Comments.deleteComments({ roomId }),
             applicantsService.deleteApplicants({ roomId }),
-        );
+        ]);
     }
 
     static addMember({ roomId, updateChange }) {

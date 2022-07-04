@@ -1,16 +1,30 @@
-import StopWatch from '../../components/studyroom/StopWatch';
+import StopWatchPrivate from '../../components/studyroom/StopWatchPrivate';
 import AIFunc from '../../components/studyroom/AIFunc';
 import AlertModal from '../../components/studyroom/AlertModal';
+import { useEffect } from 'react';
 
 export default function Private() {
+  useEffect(() => {
+    return () => {
+      location.reload();
+    };
+  }, []);
   return (
     <div className="w-full">
       <div>
-        <StopWatch />
+        <StopWatchPrivate />
       </div>
-      <div>
-        <AIFunc />
-        <AlertModal />
+      <div className="flex justify-center items-center w-full h-full ">
+        <div className="w-[850px] h-full items-center justify-center rounded-xl m-4 ">
+          <AIFunc
+            cb={() => {
+              {
+                null;
+              }
+            }}
+          />
+          <AlertModal />
+        </div>
       </div>
     </div>
   );
