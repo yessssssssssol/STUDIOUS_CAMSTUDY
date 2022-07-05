@@ -54,6 +54,15 @@ let myDataChannel;
 let peerConnections = {};
 let dataChannels = {};
 
+function rtcInit() {
+  myStream = null;
+  room = null;
+  myPeerConnection = null;
+  myDataChannel = null;
+  peerConnections = {};
+  dataChannels = {};
+}
+
 export default function Group () {
 
     const roomId = parseRoomId();
@@ -62,6 +71,7 @@ export default function Group () {
     const [isCamera, setIsCamera] = useState(true);
     const [isState, setIsState] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [userDatas, setUserDatas] = useState([]);
 
     const chattingBoxRef = useRef();
     const stopWatchRef = useRef();
@@ -72,6 +82,7 @@ export default function Group () {
 
     const [user, setUser] = useRecoilState(userAtom);
     const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
+    
 
     const socket = io(url, {
       withCredentials: true,
@@ -427,6 +438,7 @@ export default function Group () {
     socket.on('refuse', (errorMessage) => {
         console.log(errorMessage);
         // 들어가지 못한다는 에러페이지 출력
+        rtcInit();
         location.reload();
         router.back();
     });
@@ -473,21 +485,38 @@ export default function Group () {
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    useEffect(async () => {
-        const res = await API.get(`studyroom/${roomId}`);
-        room = res.data;
+    useEffect(() => {
+        async function init() {
+          const res = await API.get(`studyroom/${roomId}`);
+          room = res.data;
 
-        myStream = await getMedia();
+          myStream = await getMedia();
 
-        console.log("my first socket : ", socket.id);
-        socketId.current = socket.id;
-        console.log("input socketID : ", socketId.current);
-        socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => { setIsLoading(true); });
+          console.log("my first socket : ", socket.id);
+          socketId.current = socket.id;
+          console.log("input socketID : ", socketId.current);
+          socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => { setIsLoading(true); });
+        }
+        
+        init();
         
         return () => {
           location.reload();
+          rtcInit();
         };
 
+    }, []);
+
+    useEffect(() => {
+      async function getUserId() {
+        try {
+          const res = await API.get(`userlist`);
+          setUserDatas(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      getUserId();
     }, []);
 
     return (
@@ -529,49 +558,47 @@ export default function Group () {
                   >
                   <ul className="space-y-2">
                       {chatAll?.map((chat) => {
+                      
                       let name = chat.split(' : ');
 
-                      // let user = userDatas.find((userData) => {
-                      //     if (userData.name === name[0]) {
-                      //     return true;
-                      //     }
-                      // });
-
+                      let userI = userDatas.find((userData) => {
+                        if (userData.name === name[0]) {
+                          return true;
+                        }
+                      });
+  
                       return (
-                          <>
-                            <span className="block">{chat}</span>
-                          </>
-                          // <>
-                          // {name[0] === `${userValue?.name}` ? (
-                          //     // 나
-                          //     <li className="flex justify-end">
-                          //     <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                          //         <span className="block">{name[1]}</span>
-                          //     </div>
-                          //     <img
-                          //         className="rounded-full bg-cover w-10 h-10 ml-2"
-                          //         src={userValue?.profileUrl}
-                          //     />
-                          //     </li>
-                          // ) : (
-                          //     // 상대
-                          //     <li className="flex justify-start">
-                          //     {/* <div className="grid mr-2"> */}
-                          //     <img
-                          //         className="rounded-full bg-cover w-10 h-10 mr-2"
-                          //         src={user?.profileUrl}
-                          //         alt=""
-                          //     />
-                          //     {/* <small className="block text-center">
-                          //         {name[0]}
-                          //         </small> */}
-                          //     {/* </div> */}
-                          //     <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                          //         <span className="block">{chat}</span>
-                          //     </div>
-                          //     </li>
-                          // )}
-                          // </>
+                        <>
+                          {name[0] === `${user?.name}` ? (
+                            // 나
+                            <li className="flex justify-end">
+                              <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
+                                <span className="block">{name[1]}</span>
+                              </div>
+                              <img
+                                className="rounded-full bg-cover w-10 h-10 ml-2"
+                                src={user?.profileUrl}
+                              />
+                            </li>
+                          ) : (
+                            // 상대
+                            <li className="flex justify-start">
+                              {/* <div className="grid mr-2"> */}
+                              <img
+                                className="rounded-full bg-cover w-10 h-10 mr-2"
+                                src={userI?.profileUrl}
+                                alt=""
+                              />
+                              {/* <small className="block text-center">
+                                  {name[0]}
+                                </small> */}
+                              {/* </div> */}
+                              <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
+                                <span className="block">{chat}</span>
+                              </div>
+                            </li>
+                          )}
+                        </>
                       );
                       })}
                   </ul>
@@ -639,6 +666,7 @@ export default function Group () {
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
               onClick={() => {
+                rtcInit();
                 stopWatchRef.current.handleClick();
               }}
             >
