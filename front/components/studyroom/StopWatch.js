@@ -26,6 +26,7 @@ const StopWatch = forwardRef(
     const [minutes, setMinutes] = useState(initialMinute);
     const [seconds, setSeconds] = useState(initialSeconds);
     const [getReady, setGetReady] = useState(false);
+    const [isPassTime, setIsPassTime] = useState(true);
 
     // timelog 찍을 때 사용
     const [startTime, setStartTime] = useState('0000-00-00 00:00:00');
@@ -59,7 +60,6 @@ const StopWatch = forwardRef(
           handleClick() {
             setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
             timelogFunc();
-            // setUserAiAtom(false);
             location.reload();
             router.back();
           },
@@ -126,11 +126,26 @@ const StopWatch = forwardRef(
           const updatedTimelog = await res.data;
         } catch (err) {}
       };
-    } else {
+    } 
+    else {
+
+      useImperativeHandle(ref, () => ({
+        // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
+        setPassTime(time) {
+          setIsPassTime(time);
+        }
+      }));
+
       useEffect(() => {
-        handleStart();
-      }, []);
+        if (isPassTime === true) {
+          handleStart();
+        }
+        else {
+          handlePause();
+        }
+      }, [isPassTime]);
     }
+    
 
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));

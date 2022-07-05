@@ -71,7 +71,7 @@ function isUserInRoom(obj, roomId, userId) {
 }
 
 function isEmptyObj(obj)  {
-    if(obj.constructor === Object
+    if(obj?.constructor === Object
         && Object.keys(obj).length === 0)  {
         return true;
     }        
@@ -101,14 +101,15 @@ function deleteUserInRoom(obj, userId) {
 }
 
 wsServer.on("connection", (socket) => {
-    socket.onAny((event) => {
-        console.log(`socket event: ${event}`);
-    });
-
     socket.on("enter_room", async (roomId, newUserId, userId, userName, done) => {
+
+        console.log("enter_room");
+        console.log("roomId : ", roomId);
+        console.log("username : ", userName);
+        console.log("userId : ", userId);
         let getInfo = {};
         getInfo = await userStudyRoomsService.getRoom({roomId}); // 이부분이 아직임.
-
+        console.log("roomInfo : ", getInfo);
         if (isEmptyObj(getInfo) == false) {
             if (!roomList[roomId]) {
                 roomList[roomId] = [];
@@ -122,7 +123,7 @@ wsServer.on("connection", (socket) => {
 
         if (getInfo?.membersOnly == true) {
             //맴버 방
-            if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo.membersNum) {
+            if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo?.membersNum) {
                 // 유저 토큰이 있는지 확인
                 const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
                 socket.emit("refuse", errorMessage);
@@ -131,7 +132,7 @@ wsServer.on("connection", (socket) => {
         }
         else {
             // 오픈 방
-            if (roomList[roomId]?.length >= getInfo.membersNum) {
+            if (roomList[roomId]?.length >= getInfo?.membersNum) {
                 // 유저 토큰이 있는지 확인
                 const errorMessage = "입장 인원을 초과하여 입장하실 수 없습니다."
                 socket.emit("refuse", errorMessage);
@@ -155,22 +156,28 @@ wsServer.on("connection", (socket) => {
         });
 
         socket.join(roomId);
-        done();
-        socket.to(roomId).emit("welcome", newUserId); // 방에 접속하는 모든 사람에게 인사
+        // done();
+        socket.to(roomId).emit("welcome", userId, userName, newUserId); // 방에 접속하는 모든 사람에게 인사
     });
 
     socket.on('offer', (offer, newUserId, offersId) => {
+        console.log("userSocketId : ", newUserId);
+        console.log("send Offer : ", offer);
         socket.to(newUserId).emit('offer', offer, offersId);
     });
     socket.on('answer', (answer, newUserId, offersId) => {
+        console.log("userSocketId : ", newUserId);
+        console.log("send answer : ", answer);
         socket.to(offersId).emit('answer', answer, newUserId);
     });
     socket.on('ice', (ice, othersId, myId) => {
         // 다른 사람에게 나의 icecandidate 전달
         socket.to(othersId).emit('ice', ice, myId);
+        console.log(`send ${othersId} ice candidate`, ice);
     });
 
     socket.on("disconnecting", async () => {
+        
         let findUser = null;
         let roomId;
         let index;
@@ -205,12 +212,20 @@ wsServer.on("connection", (socket) => {
                     }
                 }
             }
-
-            socket.to(roomId).emit("bye", socket.id, findUser?.userName);
-            // 룸 리스트 내 제거
-            roomList[roomId]?.splice(index, 1);
         }
+        // console.log(`disconnect ${roomId}`);
+        
+        // 새로고침하면 나갔다가 다시 들어감.
+        console.log(`disconnect user's socketId : `, socket.id)
+        console.log(`rooms : `, socket.rooms);
+        socket.to(socket.rooms).emit("bye", socket.id);
+        // 룸 리스트 내 제거
+        // roomList[roomId]?.splice(index, 1);
     })
+
+    socket.on("disconnect", (reason) => {
+        console.log(`disconnect ${socket.id} due to ${reason}`);
+    });
 })
 
 
