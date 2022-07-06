@@ -31,7 +31,8 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname : '';
 
-const url = 'http://' + hostname + ':' + backendPortNumber;
+//const url = 'http://' + hostname + ':' + backendPortNumber;
+const url = 'https://' + hostname;
 
 const parseRoomId = () => {
   if (typeof window !== 'undefined') {
