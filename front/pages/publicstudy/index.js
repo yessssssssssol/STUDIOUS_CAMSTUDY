@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
-import OpenroomCard from '../../components/common/OpenroomCard';
+import PublicCard from '../../components/common/PublicCard';
 import Helmet from '../../components/layout/Helmet';
 import { userAtom } from '../../core/atoms/userState';
 import * as API from '../api/api';
@@ -50,7 +50,7 @@ export default function Openroom() {
           openRooms.slice(0, count).map((openRoom, index) => {
             return (
               <div key={index}>
-                <OpenroomCard key={index} openRoom={openRoom} />
+                <PublicCard key={index} openRoom={openRoom} />
                 <div ref={ref} />
               </div>
             );

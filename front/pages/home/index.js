@@ -1,6 +1,6 @@
 import HomeMyLogTime from '../../components/home/HomeMyLogTime';
 import HomeMyStudy from '../../components/home/HomeMyStudy';
-import HomeOpenStudy from '../../components/home/HomeOpenStudy';
+import HomePublicStudy from '../../components/home/HomePublicStudy';
 import HomePrivateStudy from '../../components/home/HomePrivateStudy';
 import HomeRanking from '../../components/home/HomeRanking';
 import Helmet from '../../components/layout/Helmet';
@@ -12,7 +12,7 @@ const Home = () => {
       <HomeMyLogTime />
       <HomeMyStudy />
       <HomeRanking />
-      <HomeOpenStudy />
+      <HomePublicStudy />
       <HomePrivateStudy />
     </div>
   );

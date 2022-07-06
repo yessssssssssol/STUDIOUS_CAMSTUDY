@@ -1,5 +1,5 @@
 export const items = [
-  ['Public Study', '/openroom'],
+  ['Public Study', '/publicstudy'],
   ['Private Study', '/privatestudy'],
   ['Introduction', '/prologue'],
   ['About Us', '/aboutus'],

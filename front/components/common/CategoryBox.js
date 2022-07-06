@@ -14,7 +14,7 @@ export default function CategoryBox({ myroomInfo }) {
     setOpen(true);
   };
 
-  const openRoom = `openroom/board/${myroomInfo?.roomId}`;
+  const openRoom = `publicstudy/board/${myroomInfo?.roomId}`;
   const privateRoom = `/privatestudy/board/${myroomInfo?.roomId}`;
 
   //myroomInfo.group === false 이면
