@@ -487,11 +487,17 @@ export default function Group () {
 
     useEffect(() => {
         async function init() {
-          const res = await API.get(`studyroom/${roomId}`);
-          room = res.data;
-
           myStream = await getMedia();
 
+          if (myStream == null) {
+            location.reload();
+            rtcInit();
+            router.back();
+          }
+
+          const res = await API.get(`studyroom/${roomId}`);
+          room = res.data;
+          
           console.log("my first socket : ", socket.id);
           socketId.current = socket.id;
           console.log("input socketID : ", socketId.current);
