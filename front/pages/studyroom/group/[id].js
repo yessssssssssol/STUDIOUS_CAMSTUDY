@@ -63,6 +63,7 @@ const getMedia = async (deviceId) => {
       // if (!deviceId) {
       //     await selectCamera();
       // }
+      console.log(myStream);
       return myStream;
     } 
 
@@ -165,7 +166,18 @@ export default function Group () {
         addMessage(res.message);
         // 데이터 안에 넣기
         if (otherCameras.current.hasOwnProperty(res.id)) {
-          otherCameras.current[res.id].time = res.data;
+          otherCameras.current[res.id].state = res.data.state;
+          otherCameras.current[res.id].camera = res.data.camera;
+          otherCameras.current[res.id].mute = res.data.mute;
+          otherCameras.current[res.id].time = res.data.time;
+        }
+        else {
+          otherCameras.current[res.id] = {
+            state : res.data.state,
+            camera : res.data.camera,
+            mute : res.data.mute,
+            time : res.data.time,
+          }
         }
 
       } else if (res.type == 'state') {
@@ -375,31 +387,11 @@ export default function Group () {
               console.log("userId : ", userId);
               otherCameras.current[userId] = {
                 stream : data.streams[0],
-                state : true,
-                camera : true,
-                mute : false,
-                time: 0,
               }
             }
-
-            console.log("otherCameras : ", otherCameras);
-
-            data.track.addEventListener("mute", () => {
-              console.log("mute event");
-              console.log(otherCameras);
-              if (dataChannels.hasOwnProperty(userId))  {
-                otherCameras.current[userId].mute = true;
-              }
-              
-            })
-
-            data.track.addEventListener("unmute", () => {
-              console.log("unmute event");
-              console.log(otherCameras);
-              if (dataChannels.hasOwnProperty(userId))  {
-                otherCameras.current[userId].mute = false;
-              }
-            })
+            else {
+              otherCameras.current[userId].stream = data.streams[0]
+            }
             
           })
 
@@ -424,7 +416,12 @@ export default function Group () {
                 type: "enter",
                 id: socket.id,
                 message: `${user?.name}님이 입장하셨습니다.`,
-                data : stopWatchRef.current.getTime() // 시간 가져옴
+                data : {
+                  state : isState,
+                  camera : isCamera,
+                  mute : isMute,
+                  time: stopWatchRef.current.getTime() // 시간 가져옴
+                }
               }
               myDataChannel.send(JSON.stringify(req));
             });
@@ -451,7 +448,12 @@ export default function Group () {
                   type: "enter",
                   id: socket.id,
                   message: `${user?.name}님이 입장하셨습니다.`,
-                  data : stopWatchRef.current.getTime() // 시간 가져옴
+                  data : {
+                    state : isState,
+                    camera : isCamera,
+                    mute : isMute,
+                    time: stopWatchRef.current.getTime() // 시간 가져옴
+                  } 
                 }
 
                 myDataChannel.send(JSON.stringify(req));
@@ -498,21 +500,39 @@ export default function Group () {
         router.back();
     });
 
-    socket.on('bye', (leaveId) => {
+    socket.on('bye', (leaveId, name) => {
         // 나갔다는 메시지
-        addMessage(`${leaveId}님이 퇴장하셨습니다.!`);
+        addMessage(`${name}님이 퇴장하셨습니다.!`);
+        console.log("leaveId : ", leaveId);
 
         Object.keys(dataChannels).forEach((v) => {
-          if (dataChannels[v].readyState !== "open") {
+          if (v === leaveId) {
+            console.log("delete dataChannel : ", v);
             delete dataChannels[v];
           }
         });
 
         Object.keys(peerConnections).forEach((v) => {
-          if (peerConnections[v].connectionState !== "connected") {
+          if (v === leaveId) {
+            console.log("delete peerConnection : ", v);
             delete peerConnections[v];
           }
         });
+
+        Object.keys(otherCameras.current).forEach((v) => {
+          if(v === leaveId) {
+            
+            // const temp = otherCameras.current;
+            // delete temp[v];
+            // otherCameras.current = temp;
+            delete otherCameras.current[v];
+            console.log("delete otherCamera", otherCameras.current);
+          }
+        })
+
+        console.log(otherCameras);
+        console.log(dataChannels);
+        console.log(peerConnections);
     });
 
     socket.on('offer', async (offer, offersId) => {
@@ -544,11 +564,11 @@ export default function Group () {
         async function init() {
           myStream = await getMedia();
 
-          if (myStream == null) {
-            location.reload();
-            rtcInit();
-            router.back();
-          }
+          // if (myStream == null) {
+          //   location.reload();
+          //   rtcInit();
+          //   router.back();
+          // }
 
           const res = await API.get(`studyroom/${roomId}`);
           room = res.data;

@@ -120,34 +120,6 @@ wsServer.on("connection", (socket) => {
             socket.emit("refuse", errorMessage);
             return;
         }
-
-        if (getInfo?.membersOnly == true) {
-            //맴버 방
-            if (getInfo?.members?.includes(userId) == false || roomList[roomId]?.length >= getInfo?.membersNum) {
-                // 유저 토큰이 있는지 확인
-                const errorMessage = "스터디를 참여하셔야 방에 입장하실 수 있습니다."
-                socket.emit("refuse", errorMessage);
-                return;
-            }
-        }
-        else {
-            // 오픈 방
-            if (roomList[roomId]?.length >= getInfo?.membersNum) {
-                // 유저 토큰이 있는지 확인
-                const errorMessage = "입장 인원을 초과하여 입장하실 수 없습니다."
-                socket.emit("refuse", errorMessage);
-                return;
-            }
-        }
-
-        const anotherMe = isUserInRoom(roomList, roomId, userId);
-
-        if (anotherMe != false) {
-            
-            const errorMessage = "스터디룸에 중복 참여하실 수 없습니다."
-            socket.to(anotherMe.socketId).emit("refuse", errorMessage)
-            deleteUserInRoom(roomList, userId);
-        }
         
         roomList[roomId].push({
             "userName" : userName,
@@ -193,34 +165,12 @@ wsServer.on("connection", (socket) => {
             })
         })
         
-        if (findUser) {
-
-            //todo: 룸정보 받음
-            const room = await userStudyRoomsService.getRoom({roomId});
-            console.log(room);
-            if (room) {
-                if (room.group === true && room.membersOnly === false) {
-                    //todo: 룸 정보가 오픈방이면 headcount 뺀다
-                    console.log(findUser);
-                    const headCount = room.headCount.filter((userId) => findUser?.userId != userId);
-                    console.log("delete : ", headCount);
-                    const updateChange = { headCount };
-
-                    const newHeadCount = await userStudyRoomsService.updateRoom({ roomId, updateChange });
-                    if (!newHeadCount) {
-                        console.log('headCount에 제거하지 못했습니다.');
-                    }
-                }
-            }
-        }
-        // console.log(`disconnect ${roomId}`);
-        
         // 새로고침하면 나갔다가 다시 들어감.
         console.log(`disconnect user's socketId : `, socket.id)
         console.log(`rooms : `, socket.rooms);
-        socket.to(socket.rooms).emit("bye", socket.id);
+        socket.to(roomId).emit("bye", socket.id, findUser?.userName);
         // 룸 리스트 내 제거
-        // roomList[roomId]?.splice(index, 1);
+        roomList[roomId]?.splice(index, 1);
     })
 
     socket.on("disconnect", (reason) => {
