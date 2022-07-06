@@ -110,6 +110,13 @@ let myDataChannel;
 let peerConnections = {};
 let dataChannels = {};
 
+const socket = io(url, {
+  withCredentials: true,
+  extraHeaders: {
+    checkMyService: "asdasd",
+  },
+});
+
 function rtcInit() {
   myStream = null;
   room = null;
@@ -138,14 +145,6 @@ export default function Group () {
 
     const [user, setUser] = useRecoilState(userAtom);
     const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
-    
-
-    const socket = io(url, {
-      withCredentials: true,
-      extraHeaders: {
-        checkMyService: user?.id,
-      },
-    });
 
     // ================== function =====================
 
@@ -388,6 +387,8 @@ export default function Group () {
               otherCameras.current[userId] = {
                 stream : data.streams[0],
               }
+              console.log("current otherCamera : ", otherCameras.current);
+
             }
             else {
               otherCameras.current[userId].stream = data.streams[0]
@@ -480,108 +481,117 @@ export default function Group () {
         }
     }
 
-    socket.on('welcome', async (userId, userName, newUserId) => {
-        console.log("enter user : ", userName);
-        console.log("other userId : ", userId);
-        console.log("other userSocketId : ", newUserId);
-        const offer = await makeConnection(newUserId);
-        console.log("--------------------------------------");
-        console.log("make - peerconnections", peerConnections);
-        console.log(`${userName} send offer`, userId);
-
-        socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
-    });
-
-    socket.on('refuse', (errorMessage) => {
-        console.log(errorMessage);
-        // 들어가지 못한다는 에러페이지 출력
-        rtcInit();
-        location.reload();
-        router.back();
-    });
-
-    socket.on('bye', (leaveId, name) => {
-        // 나갔다는 메시지
-        addMessage(`${name}님이 퇴장하셨습니다.!`);
-        console.log("leaveId : ", leaveId);
-
-        Object.keys(dataChannels).forEach((v) => {
-          if (v === leaveId) {
-            console.log("delete dataChannel : ", v);
-            delete dataChannels[v];
-          }
-        });
-
-        Object.keys(peerConnections).forEach((v) => {
-          if (v === leaveId) {
-            console.log("delete peerConnection : ", v);
-            delete peerConnections[v];
-          }
-        });
-
-        Object.keys(otherCameras.current).forEach((v) => {
-          if(v === leaveId) {
-            
-            // const temp = otherCameras.current;
-            // delete temp[v];
-            // otherCameras.current = temp;
-            delete otherCameras.current[v];
-            console.log("delete otherCamera", otherCameras.current);
-          }
-        })
-
-        console.log(otherCameras);
-        console.log(dataChannels);
-        console.log(peerConnections);
-    });
-
-    socket.on('offer', async (offer, offersId) => {
-        // 데이터 체널에 대한 이벤트 추가
-        // 서버에서 받은 초대장 설정하기.
-        // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
-        const answer = await makeConnection(offersId, offer);
-        socket.emit('answer', answer, socket.id, offersId);
-    });
-    
-        socket.on('answer', async (answer, newUserId) => {
-        // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
-        peerConnections[newUserId].setRemoteDescription(answer);
-    });
-    
-    socket.on('ice', (ice, othersId) => {
-        // 다른 사람에게 온 othersId를 myPeerConnection에 등록
-        peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
-        console.log("add IceCandidate");
-        console.log("ice owner : ", othersId);
-        console.log(peerConnections)
-    });
-
-    
-
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+    async function init() {
+
+      myStream = await getMedia();
+
+      if (myStream !== null) {
+        console.log("find Camera");
+      }
+      // if (myStream == null) {
+      //   location.reload();
+      //   rtcInit();
+      //   router.back();
+      // }
+
+      const res = await API.get(`studyroom/${roomId}`);
+      room = res.data;
+
+      console.log("my first socket : ", socket.id);
+      socketId.current = socket.id;
+      console.log("input socketID : ", socketId.current);
+      socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => { setIsLoading(true); });
+    }
+
     useEffect(() => {
-        async function init() {
-          myStream = await getMedia();
-
-          // if (myStream == null) {
-          //   location.reload();
-          //   rtcInit();
-          //   router.back();
-          // }
-
-          const res = await API.get(`studyroom/${roomId}`);
-          room = res.data;
-
-          console.log("my first socket : ", socket.id);
-          socketId.current = socket.id;
-          console.log("input socketID : ", socketId.current);
-          socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => { setIsLoading(true); });
-        }
         
         init();
         
+        socket.on('welcome', async (userId, userName, newUserId) => {
+          console.log("enter user : ", userName);
+          console.log("other userId : ", userId);
+          console.log("other userSocketId : ", newUserId);
+          const offer = await makeConnection(newUserId);
+          console.log("--------------------------------------");
+          console.log("make - peerconnections", peerConnections);
+          console.log(`${userName} send offer`, userId);
+  
+          socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
+        });
+    
+        socket.on('refuse', (errorMessage) => {
+            console.log(errorMessage);
+            // 들어가지 못한다는 에러페이지 출력
+            rtcInit();
+            location.reload();
+            router.back();
+        });
+    
+        socket.on('bye', (leaveId, name) => {
+            // 나갔다는 메시지
+            addMessage(`${name}님이 퇴장하셨습니다.!`);
+            console.log("leaveId : ", leaveId);
+    
+            Object.keys(dataChannels).forEach((v) => {
+              if (v === leaveId) {
+                console.log("delete dataChannel : ", v);
+                delete dataChannels[v];
+              }
+            });
+    
+            Object.keys(peerConnections).forEach((v) => {
+              if (v === leaveId) {
+                console.log("delete peerConnection : ", v);
+                delete peerConnections[v];
+              }
+            });
+    
+            Object.keys(otherCameras.current).forEach((v) => {
+              if(v === leaveId) {
+                
+                // const temp = otherCameras.current;
+                // delete temp[v];
+                // otherCameras.current = temp;
+                delete otherCameras.current[v];
+                console.log("delete otherCamera", otherCameras.current);
+              }
+            })
+    
+            console.log(otherCameras);
+            console.log(dataChannels);
+            console.log(peerConnections);
+        });
+    
+        socket.on('offer', async (offer, offersId) => {
+            // 데이터 체널에 대한 이벤트 추가
+            // 서버에서 받은 초대장 설정하기.
+            // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
+            const answer = await makeConnection(offersId, offer);
+            socket.emit('answer', answer, socket.id, offersId);
+        });
+        
+        socket.on('answer', async (answer, newUserId) => {
+            // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
+            peerConnections[newUserId].setRemoteDescription(answer);
+        });
+        
+        socket.on('ice', (ice, othersId) => {
+            // 다른 사람에게 온 othersId를 myPeerConnection에 등록
+            peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
+            console.log("add IceCandidate");
+            console.log("ice owner : ", othersId);
+            console.log(peerConnections)
+        });
+  
         return () => {
+          socket.off('welcome');
+          socket.off('refuse');
+          socket.off('bye');
+          socket.off('offer');
+          socket.off('answer');
+          socket.off('ice');
           location.reload();
           rtcInit();
         };
