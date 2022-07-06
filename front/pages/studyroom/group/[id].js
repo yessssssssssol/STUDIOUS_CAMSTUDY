@@ -50,16 +50,17 @@ const parseRoomId = () => {
 const getMedia = async (deviceId) => {
   const initialConstraints = {
     audio: true,
-    video: { facingMode: 'user' },
+    video: true,
   };
-  const cameraConstraints = {
-    audio: true,
-    video: { deviceId: { exact: deviceId } },
-  };
+  // const cameraConstraints = {
+  //   audio: true,
+  //   video: { deviceId: { exact: deviceId } },
+  // };
   try {
     if (navigator.mediaDevices) {
       const myStream = await navigator.mediaDevices.getUserMedia(
-        deviceId ? cameraConstraints : initialConstraints
+        // deviceId ? cameraConstraints : initialConstraints
+        initialConstraints
       );
       // if (!deviceId) {
       //     await selectCamera();
@@ -398,11 +399,10 @@ export default function Group () {
           })
 
           // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
-          if (myStream != null) {
-            myStream
-              .getTracks()
-              .forEach((track) => myPeerConnection.addTrack(track, myStream));
-          }
+          myStream
+            .getTracks()
+            .forEach((track) => myPeerConnection.addTrack(track, myStream));
+          
 
           // 내 피어컨넥션을 추가
           peerConnections[userId] = myPeerConnection;
