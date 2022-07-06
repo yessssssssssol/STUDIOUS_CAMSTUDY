@@ -58,14 +58,12 @@ const getMedia = async (deviceId) => {
   };
   try {
     if (navigator.mediaDevices) {
-      const myStream = await navigator.mediaDevices.getUserMedia(
+      myStream = await navigator.mediaDevices.getUserMedia(
         deviceId ? cameraConstraints : initialConstraints
       );
-      // if (!deviceId) {
-      //     await selectCamera();
-      // }
-      console.log(myStream);
-      return myStream;
+      if (!deviceId) {
+          await selectCamera();
+      }
     } 
 
   } catch (e) {
@@ -74,7 +72,8 @@ const getMedia = async (deviceId) => {
   }
 };
 
-async function selectCamera(myStream) {
+async function selectCamera() {
+  const camearasSelect = document.getElementById("cameras");
   try {
 
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -86,16 +85,16 @@ async function selectCamera(myStream) {
       if (myStream) {
           currentCamera = myStream.getVideoTracks()[0]; 
       }
-      // 카메라 선택창 추가
-      // cameras.forEach((camera) => {
-      //     const option = document.createElement("option")
-      //     option.value = camera.deviceId;
-      //     option.innerText = camera.label;
-      //     if (currentCamera.label === camera.label) {
-      //         option.selected = true;
-      //     }
-      //     camearasSelect.appendChild(option);
-      // })
+      //  카메라 선택창 추가
+      cameras.forEach((camera) => {
+          const option = document.createElement("option")
+          option.value = camera.deviceId;
+          option.innerText = camera.label;
+          if (currentCamera.label === camera.label) {
+              option.selected = true;
+          }
+          camearasSelect.appendChild(option);
+      })
 
       return currentCamera;
 
@@ -149,13 +148,38 @@ export default function Group () {
 
     // ================== function =====================
 
+    /**
+     * useState인 chatAll 배열에 채팅 추가
+     * @param {string} message - 상대방에게서 받아온 채팅 문자열
+     */
     function addMessage(message) {
         console.log(chatAll);
         setChatAll(chatAll => [...chatAll, message]);
         console.log(chatAll);
     }
-    // 버튼 갱신.
 
+    /**
+     * 카메라 선택창의 클릭 이벤트 함수
+     */
+    async function CameraSelectClick() {
+      const camearasSelect = document.getElementById("cameras");
+      await getMedia(camearasSelect.value);
+      if (myPeerConnection) {
+          const videoTrack = myStream.getVideoTracks()[0];
+          const videoSender = myPeerConnection.getSenders().find((sender) => {
+              sender.track.kind === "video"
+          });
+          videoSender.replaceTrack(videoTrack); 
+          // sender => 다른 브라우저로 보내진 비디오, 오디오 데이터를 컨트롤 하는 방법이다.
+          // 만약 카메라가 바꼈을 경우 다른 브라우저에 있는 스트림 정보를 수정해줘야 함.
+          // 이럴 때 사용하는 게 sender
+      }
+    }
+
+    /**
+     * 상대방으로부터 온 데이터를 파싱한다.
+     * @param {Object} res 
+     */
     function MessageParse(res) {
       if (res.type === 'message') {
         console.log("message : ", res.data);
@@ -222,7 +246,9 @@ export default function Group () {
       }
     }
 
-    
+    /**
+     * 채팅창이 넘어가면 자동 스크롤
+     */
     const scrollToBottom = () => {
       if (chattingBoxRef.current) {
         const { scrollHeight, clientHeight } = chattingBoxRef.current;
@@ -230,38 +256,49 @@ export default function Group () {
       }
     };
 
-    function MuteBtnClick() {
-        if (myStream !== null) {
-          myStream
-            .getAudioTracks()
-            .forEach((track) => (track.enabled = !track.enabled));
+    useEffect(() => {
+      scrollToBottom();
+    }, [chatAll]);
+
+    /**
+     * mute 버튼 클릭 이벤트함수
+     */
+    function MuteBtnClick(e) {
+      e.preventDefault();
+      if (myStream !== null) {
+        myStream
+          .getAudioTracks()
+          .forEach((track) => (track.enabled = !track.enabled));
 
 
-          let req = {
-            type: "mute",
-            id: socketId.current,
-          };
+        let req = {
+          type: "mute",
+          id: socketId.current,
+        };
 
-          if (isMute == true) {
-            setIsMute(false);
-            req["data"] = false;
-          } else {
-            setIsMute(true);
-            req["data"] = true;
-          }
-
-          if (Object.keys(dataChannels).length > 0) {
-            Object.keys(dataChannels).forEach((userId) => {
-              if (dataChannels[userId].readyState == 'open') {
-                dataChannels[userId]?.send(JSON.stringify(req));
-              }
-            });
-          }
-
+        if (isMute == true) {
+          setIsMute(false);
+          req["data"] = false;
+        } else {
+          setIsMute(true);
+          req["data"] = true;
         }
+
+        if (Object.keys(dataChannels).length > 0) {
+          Object.keys(dataChannels).forEach((userId) => {
+            if (dataChannels[userId].readyState == 'open') {
+              dataChannels[userId]?.send(JSON.stringify(req));
+            }
+          });
+        }
+      }
     }
 
-    function CameraOnOffClick() {
+    /**
+     * 카메라 on / off 클릭 이벤트 함수
+     */
+    function CameraOnOffClick(e) {
+      e.preventDefault();
       if (myStream !== null) {
         myStream
           .getVideoTracks()
@@ -291,8 +328,11 @@ export default function Group () {
       }
     }
     
+    /**
+     * AI로부터 사람유무를 체크 후 상대방에게 전달하는 함수
+     * @param {bool} result 
+     */
     function AlertNoHear(result) {
-        // 만약 현재 나의 스테이트값이
         setIsState(result);
 
         const req = {
@@ -310,6 +350,9 @@ export default function Group () {
         }
     }
 
+    /**
+     * 채팅 입력시 실행되는 이벤트 함수
+     */
     const sendChatHandler = (e) => {
         e.preventDefault();
         const input = document.getElementById('inputbox');
@@ -329,15 +372,15 @@ export default function Group () {
         input.value = '';
     };
 
-    function handleIce(data, othersId) {
-        // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
-        console.log(`send my ice : `, data);
-        socket.emit('ice', data.candidate, othersId, socket.id); // send ice candidate
-
-    }
-
     // ================== socket =======================
 
+    /**
+     * 유저와 유저끼리 연결을 만들어내는 함수
+     * 유저마다 peer로 연결해야 하기 때문에 자신을 제외한 유저의 숫자마다 반복
+     * @param {string} userId 
+     * @param {object} offer 
+     * @returns 
+     */
     async function makeConnection(userId, offer = null) {
         if (RTCPeerConnection != undefined) {
 
@@ -365,9 +408,11 @@ export default function Group () {
           });
     
           // ice 후보를 수집합니다.
-          myPeerConnection.addEventListener('icecandidate', (data) =>
-            handleIce(data, userId)
-          );
+          myPeerConnection.addEventListener('icecandidate', (data) =>{
+            // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
+            console.log(`send my ice : `, data);
+            socket.emit('ice', data.candidate, othersId, socket.id); // send ice candidate
+          });
           myPeerConnection.addEventListener('iceconnectionstatechange', (data) => {
             if (myPeerConnection.iceConnectionState === "failed") {
               myPeerConnection.restartIce();
@@ -398,9 +443,12 @@ export default function Group () {
           })
 
           // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
-          myStream
-            .getTracks()
-            .forEach((track) => myPeerConnection.addTrack(track, myStream));
+          if (myStream !== null) {
+            myStream
+              .getTracks()
+              .forEach((track) => myPeerConnection.addTrack(track, myStream));
+          }
+          
           
 
           // 내 피어컨넥션을 추가
@@ -481,11 +529,12 @@ export default function Group () {
         }
     }
 
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
+    /**
+     * 그룹 룸에 들어오면 맨 처음 시작하는 함수
+     */
     async function init() {
 
-      myStream = await getMedia();
+      await getMedia();
 
       if (myStream !== null) {
         console.log("find Camera");
@@ -753,6 +802,9 @@ export default function Group () {
                 )}
               </button>
             </div>
+
+            <select id="cameras" onClick={CameraSelectClick}>
+            </select>
 
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
