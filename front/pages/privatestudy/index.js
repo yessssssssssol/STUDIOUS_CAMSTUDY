@@ -1,4 +1,4 @@
-import BoardCard from '../../components/common/BoardCard';
+import PrivateCard from '../../components/common/PrivateCard';
 import Helmet from '../../components/layout/Helmet';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -30,7 +30,6 @@ export default function board({ profileURL }) {
   }, [inView]);
   return (
     <>
-
       <div className="px-16 pt-16 pb-5 md:px-15 lg:px-[60px] font-bold text-2xl text-gray-800">
         <span className="flex">
           Private Study
@@ -53,7 +52,7 @@ export default function board({ profileURL }) {
           boardDatas.slice(0, count).map((boardData, index) => {
             return (
               <div key={index}>
-                <BoardCard boardData={boardData} profileURL={profileURL} />
+                <PrivateCard boardData={boardData} profileURL={profileURL} />
                 <div ref={ref} />
               </div>
             );

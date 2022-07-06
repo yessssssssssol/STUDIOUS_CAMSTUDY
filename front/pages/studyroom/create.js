@@ -112,7 +112,7 @@ export default function Edit() {
           if (room.membersOnly === 'false') {
             router.push(`/openroom/board/${res.data.roomId}`);
           } else {
-            router.push(`/board/detail/${res.data.roomId}`);
+            router.push(`/privatestudy/board/${res.data.roomId}`);
           }
           resetRoom();
           resetHashtag();
