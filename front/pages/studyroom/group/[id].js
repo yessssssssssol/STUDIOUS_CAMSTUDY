@@ -50,17 +50,16 @@ const parseRoomId = () => {
 const getMedia = async (deviceId) => {
   const initialConstraints = {
     audio: true,
-    video: true,
+    video: { facingMode: 'user' },
   };
-  // const cameraConstraints = {
-  //   audio: true,
-  //   video: { deviceId: { exact: deviceId } },
-  // };
+  const cameraConstraints = {
+    audio: true,
+    video: { deviceId: { exact: deviceId } },
+  };
   try {
     if (navigator.mediaDevices) {
       const myStream = await navigator.mediaDevices.getUserMedia(
-        // deviceId ? cameraConstraints : initialConstraints
-        initialConstraints
+        deviceId ? cameraConstraints : initialConstraints
       );
       // if (!deviceId) {
       //     await selectCamera();
@@ -383,7 +382,7 @@ export default function Group () {
             console.log("userId : ", userId);
             
             // 이작업이 끝나면 아래 화면 출력
-            if (!dataChannels.hasOwnProperty(userId)) {
+            if (!otherCameras.hasOwnProperty(userId)) {
               console.log("add other camera");
               console.log("userId : ", userId);
               otherCameras.current[userId] = {
