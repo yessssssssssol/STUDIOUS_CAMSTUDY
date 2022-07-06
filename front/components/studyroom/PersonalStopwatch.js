@@ -17,7 +17,7 @@ import * as API from '../../pages/api/api';
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
 
-const StopWatchPrivate = ({ roomId, membersOnly }) => {
+const PersonalStopwatch = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
 
   // 카운트다운 시간 설정: 5초
@@ -127,7 +127,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
               {user?.name}
             </p>
             <p className="flex font-medium text-slate-700 text-xl pt-1">
-              's Private Study ROOM
+              's Personal Study ROOM
             </p>
           </div>
 
@@ -192,4 +192,4 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   );
 };
 
-export default StopWatchPrivate;
+export default PersonalStopwatch;

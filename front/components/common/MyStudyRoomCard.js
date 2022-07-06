@@ -5,7 +5,7 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
         {/* 바로 스터디룸으로 연결하기  */}
         {myStudyRoom.group === false ? (
           // "개인 스터디룸"
-          <a href={`/studyroom/private`} aria-label="Article">
+          <a href={`/studyroom/personal`} aria-label="Article">
             <div className="relative h-[300px] w-[250px] rounded-xl overflow-hidden transition-shadow duration-300 hover:scale-105 hover:shadow-amber-300/50 shadow-lg">
               <div className="">
                 <img
