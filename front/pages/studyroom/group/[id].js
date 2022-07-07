@@ -411,7 +411,7 @@ export default function Group () {
           myPeerConnection.addEventListener('icecandidate', (data) =>{
             // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
             console.log(`send my ice : `, data);
-            socket.emit('ice', data.candidate, othersId, socket.id); // send ice candidate
+            socket.emit('ice', data.candidate, userId, socket.id); // send ice candidate
           });
           myPeerConnection.addEventListener('iceconnectionstatechange', (data) => {
             if (myPeerConnection.iceConnectionState === "failed") {
