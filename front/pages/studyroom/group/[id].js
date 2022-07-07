@@ -32,8 +32,8 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname : '';
 
-//const url = 'http://' + hostname + ':' + backendPortNumber;
-const url = 'https://' + hostname;
+const url = 'http://' + hostname + ':' + backendPortNumber;
+//const url = 'https://' + hostname;
 
 /**
  * 방 url에서 roomId를 추출한다.
@@ -52,6 +52,7 @@ const parseRoomId = () => {
   return null;
 }
 
+let myStream;
 let room;
 let myPeerConnection;
 let myDataChannel;
@@ -66,6 +67,7 @@ const socket = io(url, {
 });
 
 function rtcInit() {
+  myStream = null;
   room = null;
   myPeerConnection = null;
   myDataChannel = null;
@@ -82,7 +84,6 @@ export default function Group () {
     const [isState, setIsState] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [userDatas, setUserDatas] = useState([]);
-    const [myStream, setMyStream] = useState(null);
 
     const chattingBoxRef = useRef();
     const stopWatchRef = useRef();
@@ -382,8 +383,6 @@ export default function Group () {
               .forEach((track) => myPeerConnection.addTrack(track, myStream));
           }
           
-          
-
           // 내 피어컨넥션을 추가
           peerConnections[userId] = myPeerConnection;
     
@@ -472,21 +471,21 @@ export default function Group () {
       console.log("my first socket : ", socket.id);
       socketId.current = socket.id;
       console.log("input socketID : ", socketId.current);
+
+      console.log(myStream);
+      console.log(videoRef.current.className);
+      videoRef.current.srcObject = myStream;
+      console.log("enter room");
+      socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {  });
     }
 
     useEffect(() => {
       if (isLoading) {
-        console.log(myStream);
-        console.log(videoRef.current.className);
-        videoRef.current.srcObject = myStream;
-        console.log("enter room");
-        socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {  });
+        init(); 
       }
     }, [isLoading])
 
     useEffect(() => {
-        
-        init();
         
         socket.on('welcome', async (userId, userName, newUserId) => {
           console.log("enter user : ", userName);
@@ -760,7 +759,8 @@ export default function Group () {
           </div>
           </div>
         : <Loading cb={(stream) => {
-          setMyStream(stream);
+          myStream = stream;
+          console.log(myStream);
           setIsLoading(true)
         }}/>
         }

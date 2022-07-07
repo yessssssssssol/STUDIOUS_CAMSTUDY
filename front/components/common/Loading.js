@@ -132,7 +132,7 @@ const Loading = ({ cb }) => {
 
   return (
     <div className="w-full h-screen flex text-center justify-center items-center">
-      <div className='flex-col '>
+      <div className='flex-col'>
         <svg
           role="status"
           className="inline w-8 h-8 mr-2 text-gray-200 animate-spin  fill-blue-600"
@@ -152,8 +152,12 @@ const Loading = ({ cb }) => {
         <p className="text-lg text-gray-800  font-bold my-5">
           카메라와 마이크를 선택해주세요.
         </p>
-        <select id="cameras" onClick={CameraSelectClick}></select>
-        <select id="mics" onClick={MicSelectClick}></select>
+        <div>
+          <select id="cameras" onClick={CameraSelectClick}></select>
+        </div>
+        <div>
+          <select id="mics" onClick={MicSelectClick}></select>
+        </div>
         <div>
           <button onClick={settingHandle}>선택완료</button>
         </div>
