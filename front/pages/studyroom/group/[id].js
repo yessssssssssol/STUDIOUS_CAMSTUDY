@@ -32,8 +32,8 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname : '';
 
-const url = 'http://' + hostname + ':' + backendPortNumber;
-//const url = 'https://' + hostname;
+//const url = 'http://' + hostname + ':' + backendPortNumber;
+const url = 'https://' + hostname;
 
 /**
  * 방 url에서 roomId를 추출한다.
