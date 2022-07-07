@@ -16,6 +16,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
 import { GoUnmute, GoMute } from 'react-icons/go';
+
 import {
   TbDeviceComputerCamera,
   TbDeviceComputerCameraOff,
@@ -31,9 +32,13 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname : '';
 
-//const url = 'http://' + hostname + ':' + backendPortNumber;
-const url = 'https://' + hostname;
+const url = 'http://' + hostname + ':' + backendPortNumber;
+//const url = 'https://' + hostname;
 
+/**
+ * 방 url에서 roomId를 추출한다.
+ * @returns string
+ */
 const parseRoomId = () => {
   if (typeof window !== 'undefined') {
       const leng = window.location.href.length;
@@ -47,63 +52,6 @@ const parseRoomId = () => {
   return null;
 }
 
-const getMedia = async (deviceId) => {
-  const initialConstraints = {
-    audio: true,
-    video: { facingMode: 'user' },
-  };
-  const cameraConstraints = {
-    audio: true,
-    video: { deviceId: { exact: deviceId } },
-  };
-  try {
-    if (navigator.mediaDevices) {
-      myStream = await navigator.mediaDevices.getUserMedia(
-        deviceId ? cameraConstraints : initialConstraints
-      );
-      if (!deviceId) {
-          await selectCamera();
-      }
-    } 
-
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-};
-
-async function selectCamera() {
-  const camearasSelect = document.getElementById("cameras");
-  try {
-
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const cameras = devices.filter(device => device.kind === "videoinput");
-      let currentCamera;
-
-      // 현재 카메라
-      
-      if (myStream) {
-          currentCamera = myStream.getVideoTracks()[0]; 
-      }
-      //  카메라 선택창 추가
-      cameras.forEach((camera) => {
-          const option = document.createElement("option")
-          option.value = camera.deviceId;
-          option.innerText = camera.label;
-          if (currentCamera.label === camera.label) {
-              option.selected = true;
-          }
-          camearasSelect.appendChild(option);
-      })
-
-      return currentCamera;
-
-  } catch(e) {
-      console.log(e);
-  }
-}
-
-let myStream;
 let room;
 let myPeerConnection;
 let myDataChannel;
@@ -118,7 +66,6 @@ const socket = io(url, {
 });
 
 function rtcInit() {
-  myStream = null;
   room = null;
   myPeerConnection = null;
   myDataChannel = null;
@@ -135,11 +82,15 @@ export default function Group () {
     const [isState, setIsState] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [userDatas, setUserDatas] = useState([]);
+    const [myStream, setMyStream] = useState(null);
 
     const chattingBoxRef = useRef();
     const stopWatchRef = useRef();
     const socketId = useRef();
     const otherCameras = useRef({});
+    const videoRef = useRef({
+      srcObject : null,
+    });
 
     const router = useRouter();
 
@@ -156,24 +107,6 @@ export default function Group () {
         console.log(chatAll);
         setChatAll(chatAll => [...chatAll, message]);
         console.log(chatAll);
-    }
-
-    /**
-     * 카메라 선택창의 클릭 이벤트 함수
-     */
-    async function CameraSelectClick() {
-      const camearasSelect = document.getElementById("cameras");
-      await getMedia(camearasSelect.value);
-      if (myPeerConnection) {
-          const videoTrack = myStream.getVideoTracks()[0];
-          const videoSender = myPeerConnection.getSenders().find((sender) => {
-              sender.track.kind === "video"
-          });
-          videoSender.replaceTrack(videoTrack); 
-          // sender => 다른 브라우저로 보내진 비디오, 오디오 데이터를 컨트롤 하는 방법이다.
-          // 만약 카메라가 바꼈을 경우 다른 브라우저에 있는 스트림 정보를 수정해줘야 함.
-          // 이럴 때 사용하는 게 sender
-      }
     }
 
     /**
@@ -533,26 +466,23 @@ export default function Group () {
      * 그룹 룸에 들어오면 맨 처음 시작하는 함수
      */
     async function init() {
-
-      await getMedia();
-
-      if (myStream !== null) {
-        console.log("find Camera");
-      }
-      // if (myStream == null) {
-      //   location.reload();
-      //   rtcInit();
-      //   router.back();
-      // }
-
       const res = await API.get(`studyroom/${roomId}`);
       room = res.data;
 
       console.log("my first socket : ", socket.id);
       socketId.current = socket.id;
       console.log("input socketID : ", socketId.current);
-      socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => { setIsLoading(true); });
     }
+
+    useEffect(() => {
+      if (isLoading) {
+        console.log(myStream);
+        console.log(videoRef.current.className);
+        videoRef.current.srcObject = myStream;
+        console.log("enter room");
+        socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {  });
+      }
+    }, [isLoading])
 
     useEffect(() => {
         
@@ -660,7 +590,9 @@ export default function Group () {
     }, []);
 
     return (
-        <div className="lg:grid lg:justify-center">
+      <>
+        {isLoading ? 
+          <div className="lg:grid lg:justify-center">
           <p className="font-bold text-center text-4xl m-5 mb-10">
             {room?.roomName}
           </p>
@@ -671,10 +603,22 @@ export default function Group () {
             ref={stopWatchRef}
             userT={0}
           />
+          <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
+            <video
+              className="rounded-xl object-cover"
+              autoPlay
+              playsInline
+              muted
+              ref={videoRef}
+              width="100%"
+              height="100%"
+            ></video>
+          </div>
           <AIFunc
             cb={(result) => {
               AlertNoHear(result);
             }}
+            camera = {videoRef}
           />
           <AlertModal />
           {
@@ -688,7 +632,7 @@ export default function Group () {
                 </>
             )})
           }
-          
+
           <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room?.roomName} roomImg={room?.roomImg} />
@@ -706,7 +650,7 @@ export default function Group () {
                           return true;
                         }
                       });
-  
+
                       return (
                         <>
                           {name[0] === `${user?.name}` ? (
@@ -803,9 +747,6 @@ export default function Group () {
               </button>
             </div>
 
-            <select id="cameras" onClick={CameraSelectClick}>
-            </select>
-
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
               onClick={() => {
@@ -817,7 +758,13 @@ export default function Group () {
               나가기{' '}
             </button>
           </div>
-        </div>
+          </div>
+        : <Loading cb={(stream) => {
+          setMyStream(stream);
+          setIsLoading(true)
+        }}/>
+        }
+      </>
     )
 }
   
