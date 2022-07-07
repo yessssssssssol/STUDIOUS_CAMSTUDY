@@ -1,8 +1,11 @@
+import { now } from 'mongoose';
 import { UserDailySheetModel } from '../schemas/userDailySheet';
+import dayjs from 'dayjs';
 
 class UserDailySheet {
     // 회원가입할 때 최초로 처음 데일리 시트를 만들어야 함
     static addSheet({ id, date }) {
+        const now = dayjs();
         const newSheet = {
             id,
             date,
@@ -12,6 +15,7 @@ class UserDailySheet {
             bestStudyTime: ' ',
             beginStudyTime: ' ',
             finishStudyTime: ' ',
+            createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
         };
         return UserDailySheetModel.create(newSheet);
     }

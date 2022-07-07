@@ -33,6 +33,10 @@ const UserDailySheetSchema = new Schema({
         type: String,
         required: true,
     },
+    createdAt: {
+        type: String,
+        required: true,
+    },
 });
 
 const UserDailySheetModel = model('UserDailySheet', UserDailySheetSchema);

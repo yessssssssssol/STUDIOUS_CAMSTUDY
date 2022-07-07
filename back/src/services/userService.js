@@ -9,7 +9,6 @@ import { ChangeDate } from '../utils/changeDate';
 import sendMail from '../utils/sendMail';
 import { userStudyRoomsService } from './userStudyRoomsService';
 import { TotalTime } from '../db/models/TotalTime';
-import res from 'express/lib/response';
 
 class userAuthService {
     static async addUser({ name, email, password }) {
@@ -22,20 +21,16 @@ class userAuthService {
         // 비밀번호 해쉬화
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // id 는 유니크 값 부여
-        const id = uuidv4();
-        const newUser = { id, name, email, password: hashedPassword };
-
-        // db에 저장
-        // const createdNewUser = await User.create({ newUser });
-
         //날짜 생성
+        dayjs.locale('ko');
+        const now = dayjs();
+        const createdAt = now.format('YYYY-MM-DD HH:mm:ss');
+        const updatedAt = now.format('YYYY-MM-DD HH:mm:ss');
         const date = ChangeDate.getCurrentDate();
 
-        // 총 공부시간 생성
-        // await TotalTime.create({ id });
-
-        // const createdNewUserSheet = await UserDailySheet.addSheet({ id, date });
+        // id 는 유니크 값 부여
+        const id = uuidv4();
+        const newUser = { id, name, email, password: hashedPassword, createdAt, updatedAt };
 
         let resultPromise = undefined;
         await Promise.all([
