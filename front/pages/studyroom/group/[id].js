@@ -2,15 +2,12 @@ import StopWatch from '../../../components/studyroom/StopWatch';
 import AIFunc from '../../../components/studyroom/AIFunc';
 import AlertModal from '../../../components/studyroom/AlertModal';
 import Loading from '../../../components/common/Loading';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { aiAtom, noUseAiAtom } from '../../../core/atoms/aiState';
-import React, {
-  isValidElement,
+import React, {  
   useEffect,
   useState,
   useRef,
-  useDebugValue,
-  createRef,
 } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
@@ -32,11 +29,11 @@ const hostname =
   typeof window !== 'undefined' && window.location.hostname
     ? window.location.hostname : '';
 
-//const url = 'http://' + hostname + ':' + backendPortNumber;
-const url = 'https://' + hostname;
+const url = 'http://' + hostname + ':' + backendPortNumber;
+//const url = 'https://' + hostname;
 
 /**
- * 방 url에서 roomId를 추출한다.
+ * @description 방 url에서 roomId를 추출한다.
  * @returns string
  */
 const parseRoomId = () => {
@@ -52,20 +49,32 @@ const parseRoomId = () => {
   return null;
 }
 
+/** @type {MediaStream} */
 let myStream;
+
+/** @type {Object} */
 let room;
+
+/** @type {RTCPeerConnection} */
 let myPeerConnection;
+
+/** @type {RTCDataChannel} */
 let myDataChannel;
+
+/** @type {Object} */
 let peerConnections = {};
+
 let dataChannels = {};
 
+/** @type {Socket} */
 const socket = io(url, {
   withCredentials: true,
   extraHeaders: {
-    checkMyService: "asdasd",
+    checkMyService: "connection",
   },
 });
 
+/** @description 전역변수 초기화 */
 function rtcInit() {
   myStream = null;
   room = null;
@@ -77,18 +86,38 @@ function rtcInit() {
 
 export default function Group () {
 
+    /** @type {String} */
     const roomId = parseRoomId();
+
+    /** @type {List[string]} */
     const [chatAll, setChatAll] = useState([]);
+
+    /** @type {boolean} */
     const [isMute, setIsMute] = useState(false);
+
+    /** @type {boolean} */
     const [isCamera, setIsCamera] = useState(true);
+
+    /** @type {boolean} */
     const [isState, setIsState] = useState(true);
+
+    /** @type {boolean} */
     const [isLoading, setIsLoading] = useState(false);
+
+    /** @type {List[Object]} */
     const [userDatas, setUserDatas] = useState([]);
 
     const chattingBoxRef = useRef();
     const stopWatchRef = useRef();
     const socketId = useRef();
+
+    /** 
+     * @type {{userId : Object, ...}}
+     * @description 다른 유저의 비디오태그 (element) Map
+     */
     const otherCameras = useRef({});
+
+    /** @description 내 비디오 태그(element) */
     const videoRef = useRef({
       srcObject : null,
     });
@@ -101,7 +130,7 @@ export default function Group () {
     // ================== function =====================
 
     /**
-     * useState인 chatAll 배열에 채팅 추가
+     * @description useState인 chatAll 배열에 채팅 추가
      * @param {string} message - 상대방에게서 받아온 채팅 문자열
      */
     function addMessage(message) {
@@ -111,7 +140,7 @@ export default function Group () {
     }
 
     /**
-     * 상대방으로부터 온 데이터를 파싱한다.
+     * @description 데이터체널로 받은 메시지 파싱.
      * @param {Object} res 
      */
     function MessageParse(res) {
@@ -181,7 +210,7 @@ export default function Group () {
     }
 
     /**
-     * 채팅창이 넘어가면 자동 스크롤
+     * @description 채팅창이 넘어가면 자동 스크롤
      */
     const scrollToBottom = () => {
       if (chattingBoxRef.current) {
@@ -190,12 +219,16 @@ export default function Group () {
       }
     };
 
+    /**
+     * @description 채팅메시지 추가 시 화면이 꽉차면 스크롤을 자동으로 내림
+     */
     useEffect(() => {
       scrollToBottom();
     }, [chatAll]);
 
     /**
-     * mute 버튼 클릭 이벤트함수
+     * @description 마이크 비활성화
+     * @event button#muteBtn
      */
     function MuteBtnClick(e) {
       e.preventDefault();
@@ -229,7 +262,8 @@ export default function Group () {
     }
 
     /**
-     * 카메라 on / off 클릭 이벤트 함수
+     * @description 카메라 on / off
+     * @event button#cameraBtn
      */
     function CameraOnOffClick(e) {
       e.preventDefault();
@@ -263,8 +297,10 @@ export default function Group () {
     }
     
     /**
-     * AI로부터 사람유무를 체크 후 상대방에게 전달하는 함수
-     * @param {bool} result 
+     * @description AI로부터 사람유무를 체크 후 상대방에게 전달하는 함수
+     * @param {boolean} result
+     * ? true => 사람 있음
+     * ? false => 사람 없음
      */
     function AlertNoHear(result) {
         setIsState(result);
@@ -285,7 +321,9 @@ export default function Group () {
     }
 
     /**
-     * 채팅 입력시 실행되는 이벤트 함수
+     * @description 채팅 입력시 실행되는 이벤트 함수
+     * @param {event} e
+     * @event button
      */
     const sendChatHandler = (e) => {
         e.preventDefault();
@@ -309,11 +347,10 @@ export default function Group () {
     // ================== socket =======================
 
     /**
-     * 유저와 유저끼리 연결을 만들어내는 함수
-     * 유저마다 peer로 연결해야 하기 때문에 자신을 제외한 유저의 숫자마다 반복
+     * @description 유저와 유저끼리 연결을 만들어내는 함수
      * @param {string} userId 
-     * @param {object} offer 
-     * @returns 
+     * @param {RTCPeerConnection} offer 
+     * @return {RTCPeerConnection} 
      */
     async function makeConnection(userId, offer = null) {
         if (RTCPeerConnection != undefined) {
@@ -462,7 +499,7 @@ export default function Group () {
     }
 
     /**
-     * 그룹 룸에 들어오면 맨 처음 시작하는 함수
+     * @description 그룹 룸에 들어오면 처음 시작될 함수
      */
     async function init() {
       const res = await API.get(`studyroom/${roomId}`);
@@ -479,12 +516,18 @@ export default function Group () {
       socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {  });
     }
 
+    /**
+     * @description 로딩 완료 시 방에 입장
+     */
     useEffect(() => {
       if (isLoading) {
         init(); 
       }
     }, [isLoading])
 
+    /**
+     * @description 소켓 이벤트 정의
+     */
     useEffect(() => {
         
         socket.on('welcome', async (userId, userName, newUserId) => {
@@ -496,19 +539,17 @@ export default function Group () {
           console.log("make - peerconnections", peerConnections);
           console.log(`${userName} send offer`, userId);
   
-          socket.emit('offer', offer, newUserId, socket.id); // 초대장 서버로 보내기
+          socket.emit('offer', offer, newUserId, socket.id);
         });
     
         socket.on('refuse', (errorMessage) => {
             console.log(errorMessage);
-            // 들어가지 못한다는 에러페이지 출력
             rtcInit();
             location.reload();
             router.back();
         });
     
         socket.on('bye', (leaveId, name) => {
-            // 나갔다는 메시지
             addMessage(`${name}님이 퇴장하셨습니다.!`);
             console.log("leaveId : ", leaveId);
     
@@ -529,9 +570,6 @@ export default function Group () {
             Object.keys(otherCameras.current).forEach((v) => {
               if(v === leaveId) {
                 
-                // const temp = otherCameras.current;
-                // delete temp[v];
-                // otherCameras.current = temp;
                 delete otherCameras.current[v];
                 console.log("delete otherCamera", otherCameras.current);
               }
@@ -543,26 +581,36 @@ export default function Group () {
         });
     
         socket.on('offer', async (offer, offersId) => {
-            // 데이터 체널에 대한 이벤트 추가
-            // 서버에서 받은 초대장 설정하기.
-            // peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
+            /**
+             * @description 
+             * peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
+             * 데이터 체널에 대한 이벤트 추가
+             * 서버에서 받은 초대장 설정하기.
+             */
             const answer = await makeConnection(offersId, offer);
             socket.emit('answer', answer, socket.id, offersId);
         });
         
         socket.on('answer', async (answer, newUserId) => {
-            // 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
+            /**
+             * @description 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다. 
+             */
             peerConnections[newUserId].setRemoteDescription(answer);
         });
         
         socket.on('ice', (ice, othersId) => {
-            // 다른 사람에게 온 othersId를 myPeerConnection에 등록
-            peerConnections[othersId].addIceCandidate(ice); // recv icecandidate
+            /**
+             * @description 다른 사람에게 온 othersId를 myPeerConnection에 등록
+             */
+            peerConnections[othersId].addIceCandidate(ice);
             console.log("add IceCandidate");
             console.log("ice owner : ", othersId);
             console.log(peerConnections)
         });
-  
+
+        /**
+         * @description unmount시 소켓 초기화
+        */
         return () => {
           socket.off('welcome');
           socket.off('refuse');
@@ -576,6 +624,9 @@ export default function Group () {
 
     }, []);
 
+    /**
+     * @description 방에 입장한 유저데이터 수집
+    */
     useEffect(() => {
       async function getUserId() {
         try {
@@ -592,45 +643,45 @@ export default function Group () {
       <>
         {isLoading ? 
           <div className="lg:grid lg:justify-center">
-          <p className="font-bold text-center text-4xl m-5 mb-10">
-            {room?.roomName}
-          </p>
-          <StopWatch
-            myTimer={true}
-            roomId={roomId}
-            membersOnly={room?.membersOnly}
-            ref={stopWatchRef}
-            userT={0}
-          />
-          <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
-            <video
-              className="rounded-xl object-cover"
-              autoPlay
-              playsInline
-              muted
-              ref={videoRef}
-              width="100%"
-              height="100%"
-            ></video>
-          </div>
-          <AIFunc
-            cb={(result) => {
-              AlertNoHear(result);
-            }}
-            camera = {videoRef}
-          />
-          <AlertModal />
-          {
-            Object.keys(otherCameras.current).map((user) => {
-              console.log("userId : ", user);
-              console.log("usercamera : ", otherCameras.current[user].stream);
-              console.log(otherCameras.current[user].mute);
-              return(
-                <>
-                  <Other time={otherCameras.current[user].time} userId={user} stream={otherCameras.current[user].stream} ref={otherCameras.current[user]}></Other>
-                </>
-            )})
-          }
+            <p className="font-bold text-center text-4xl m-5 mb-10">
+              {room?.roomName}
+            </p>
+            <StopWatch
+              myTimer={true}
+              roomId={roomId}
+              membersOnly={room?.membersOnly}
+              ref={stopWatchRef}
+              userT={0}
+            />
+            <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
+              <video
+                className="rounded-xl object-cover"
+                autoPlay
+                playsInline
+                muted
+                ref={videoRef}
+                width="100%"
+                height="100%"
+              ></video>
+            </div>
+            <AIFunc
+              cb={(result) => {
+                AlertNoHear(result);
+              }}
+              camera = {videoRef}
+            />
+            <AlertModal />
+            {
+              Object.keys(otherCameras.current).map((user) => {
+                console.log("userId : ", user);
+                console.log("usercamera : ", otherCameras.current[user].stream);
+                console.log(otherCameras.current[user].mute);
+                return(
+                  <>
+                    <Other time={otherCameras.current[user].time} userId={user} stream={otherCameras.current[user].stream} ref={otherCameras.current[user]}></Other>
+                  </>
+              )})
+            }
 
           <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}

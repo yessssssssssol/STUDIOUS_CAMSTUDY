@@ -1,4 +1,5 @@
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import Button from '../../components/common/Button';
 
 let myStream
 
@@ -12,7 +13,7 @@ const Loading = ({ cb }) => {
   }, []);
 
   /**
-   * 자신의 media를 찾아 myStream에 전달한다.
+   * @description 자신의 media를 찾아 myStream에 전달한다.
    * @param {string} deviceId 
    * @returns null
    */
@@ -39,7 +40,7 @@ const Loading = ({ cb }) => {
   };
 
   /**
-   * 사용할 카메라를 선택한다.
+   * @description 사용할 카메라를 선택한다.
    * @returns media
    */
    async function selectInit() {
@@ -73,7 +74,7 @@ const Loading = ({ cb }) => {
   }
 
   /**
-   * 사용할 카메라를 선택한다.
+   * @description 사용할 카메라를 선택한다.
    * @returns media
    */
   // async function selectCamera() {
@@ -108,7 +109,8 @@ const Loading = ({ cb }) => {
   // }
 
   /**
-   * 카메라 선택창의 클릭 이벤트 함수
+   * @description 카메라 선택
+   * @event select#cameras
    */
   async function CameraSelectClick() {
     const camearasSelect = document.getElementById("cameras");
@@ -117,7 +119,8 @@ const Loading = ({ cb }) => {
   }
 
   /**
-   * 카메라 선택창의 클릭 이벤트 함수
+   * @description 마이크 선택
+   * @event select#mics
    */
    async function MicSelectClick() {
     const micsSelect = document.getElementById("mics");
@@ -135,7 +138,7 @@ const Loading = ({ cb }) => {
       <div className='flex-col'>
         <svg
           role="status"
-          className="inline w-8 h-8 mr-2 text-gray-200 animate-spin  fill-blue-600"
+          className="inline w-20 h-20 mr-2 text-gray-200 animate-spin  fill-blue-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -149,17 +152,17 @@ const Loading = ({ cb }) => {
             fill="currentFill"
           />
         </svg>
-        <p className="text-lg text-gray-800  font-bold my-5">
+        <p className="mt-20 text-lg text-gray-800  font-bold my-5">
           카메라와 마이크를 선택해주세요.
         </p>
-        <div>
-          <select id="cameras" onClick={CameraSelectClick}></select>
+        <div className='mb-3'>
+          <select className='border-2 rounded-md' id="cameras" onClick={CameraSelectClick}></select>
         </div>
-        <div>
-          <select id="mics" onClick={MicSelectClick}></select>
+        <div className='mb-10'>
+          <select className='border-2 rounded-md' id="mics" onClick={MicSelectClick}></select>
         </div>
-        <div>
-          <button onClick={settingHandle}>선택완료</button>
+        <div className='mb-10'>
+          <Button text={'입장하기'} onClick={settingHandle} ></Button>
         </div>
       </div>
       
