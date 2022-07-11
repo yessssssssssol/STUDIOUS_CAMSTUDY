@@ -268,9 +268,9 @@ export default function Group () {
     function CameraOnOffClick(e) {
       e.preventDefault();
       if (myStream !== null) {
-        myStream
-          .getVideoTracks()
-          .forEach((track) => (track.enabled = !track.enabled));
+        // myStream
+        //   .getVideoTracks()
+        //   .forEach((track) => (track.enabled = !track.enabled));
 
         let req = {
           type: "camera",
