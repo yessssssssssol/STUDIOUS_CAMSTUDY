@@ -121,8 +121,8 @@ const PersonalStopwatch = ({ roomId, membersOnly }) => {
   return (
     <div>
       <div>
-        <div className="mx-10 my-10 flex ">
-          <div className="w-1/3 text-center flex flex-row ml-20">
+        <div className="mx-10 my-5 lg:my-10 lg:flex ">
+          <div className="w-full lg:w-1/3 text-center flex flex-row justify-center">
             <p className="flex font-semibold text-amber-400 text-3xl">
               {user?.name}
             </p>
@@ -131,14 +131,14 @@ const PersonalStopwatch = ({ roomId, membersOnly }) => {
             </p>
           </div>
 
-          <div className="w-1/3 flex justify-center">
+          <div className="w-full my-3 lg:w-1/3 flex justify-center">
             <p className="inline-flex bg-white text-amber-400 font-bold text-3xl justify-center items-center px-2.5 py-0.5 rounded border border-amber-400 drop-shadow-lg shadow-amber-300/50">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
           </div>
 
-          <div className="w-1/3 text-center">
+          <div className="w-full lg:w-1/3 text-center">
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border shadow-lg border-gray-200 hover:text-white hover:bg-amber-400 hover:shadow-amber-300/50"
               onClick={handleClick}
@@ -158,7 +158,7 @@ const PersonalStopwatch = ({ roomId, membersOnly }) => {
                   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                 </h5>
                 <p className="mb-3 font-normal text-gray-700">
-                  10초 뒤에 타이머가 시작됩니다.
+                  5초 뒤에 타이머가 시작됩니다.
                   <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                 </p>
                 <svg
