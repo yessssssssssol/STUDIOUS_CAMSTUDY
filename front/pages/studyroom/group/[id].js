@@ -669,6 +669,7 @@ export default function Group () {
                 AlertNoHear(result);
               }}
               camera = {videoRef}
+              isGroup = {true}
             />
             <AlertModal />
             {

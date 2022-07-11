@@ -22,6 +22,7 @@ export default function Private() {
                 null;
               }
             }}
+            isGroup = {false}
           />
           <AlertModal />
         </div>
