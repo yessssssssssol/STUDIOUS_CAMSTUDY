@@ -22,6 +22,7 @@ export default function Personal() {
                 null;
               }
             }}
+            isGroup = {false}
           />
           <AlertModal />
         </div>

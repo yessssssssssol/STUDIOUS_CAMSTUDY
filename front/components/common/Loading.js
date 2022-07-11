@@ -1,13 +1,144 @@
-const Loading = () => {
+import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import Button from '../../components/common/Button';
+
+let myStream
+
+const Loading = ({ cb }) => {
+
+  const [currentCamera, setCurrentCamera] = useState(null);
+  const [currentMic, setCurrentMic] = useState(null);
+
+  useEffect(() => {
+    selectInit();  
+  }, []);
+
+  /**
+   * @description 자신의 media를 찾아 myStream에 전달한다.
+   * @param {string} deviceId 
+   * @returns null
+   */
+  const getMedia = async (videoId=null, micId=null) => {
+    const initialConstraints = {
+      audio: true,
+      video: true,
+    };
+    const cameraConstraints = {
+      audio: { deviceId: { exact: micId } },
+      video: { deviceId: { exact: videoId } },
+    };
+    try {
+      if (navigator.mediaDevices) {
+        myStream = await navigator.mediaDevices.getUserMedia(
+          videoId && micId ? cameraConstraints : initialConstraints
+        );
+      } 
+
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  /**
+   * @description 사용할 카메라를 선택한다.
+   * @returns media
+   */
+   async function selectInit() {
+    const camearasSelect = document.getElementById("cameras");
+    const micsSelect = document.getElementById("mics");
+    try {
+
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const cameras = devices.filter(device => device.kind === "videoinput");
+        const mics = devices.filter(device => device.kind === "audioinput");
+
+        // 현재 카메라
+        //  카메라 선택창 추가
+        cameras.forEach((camera) => {
+            const option = document.createElement("option")
+            option.value = camera.deviceId;
+            option.innerText = camera.label;
+            camearasSelect.appendChild(option);
+        })
+
+        mics.forEach((mic) => {
+          const option = document.createElement("option")
+          option.value = mic.deviceId;
+          option.innerText = mic.label;
+          micsSelect.appendChild(option);
+      })
+
+    } catch(e) {
+        console.log(e);
+    }
+  }
+
+  /**
+   * @description 사용할 카메라를 선택한다.
+   * @returns media
+   */
+  // async function selectCamera() {
+  //   const camearasSelect = document.getElementById("cameras");
+  //   try {
+
+  //       const devices = await navigator.mediaDevices.enumerateDevices();
+  //       const cameras = devices.filter(device => device.kind === "videoinput");
+  //       let currentCamera;
+
+  //       // 현재 카메라
+        
+  //       if (myStream) {
+  //           currentCamera = myStream.getVideoTracks()[0]; 
+  //       }
+  //       //  카메라 선택창 추가
+  //       cameras.forEach((camera) => {
+  //           const option = document.createElement("option")
+  //           option.value = camera.deviceId;
+  //           option.innerText = camera.label;
+  //           if (currentCamera.label === camera.label) {
+  //               option.selected = true;
+  //           }
+  //           camearasSelect.appendChild(option);
+  //       })
+
+  //       return currentCamera;
+
+  //   } catch(e) {
+  //       console.log(e);
+  //   }
+  // }
+
+  /**
+   * @description 카메라 선택
+   * @event select#cameras
+   */
+  async function CameraSelectClick() {
+    const camearasSelect = document.getElementById("cameras");
+    setCurrentCamera(camearasSelect.value);
+    console.log(camearasSelect.value);
+  }
+
+  /**
+   * @description 마이크 선택
+   * @event select#mics
+   */
+   async function MicSelectClick() {
+    const micsSelect = document.getElementById("mics");
+    setCurrentMic(micsSelect.value);
+    console.log(micsSelect.value);
+  }
+
+  async function settingHandle() {
+    await getMedia(currentCamera, currentMic);
+    cb(myStream);
+  }
+
   return (
     <div className="w-full h-screen flex text-center justify-center items-center">
-      <div>
-        <p className="text-lg text-gray-800  font-bold my-5">
-          잠시만 기다려주세요!
-        </p>
+      <div className='flex-col'>
         <svg
           role="status"
-          className="inline w-8 h-8 mr-2 text-gray-200 animate-spin  fill-blue-600"
+          className="inline w-20 h-20 mr-2 text-gray-200 animate-spin  fill-blue-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,8 +152,22 @@ const Loading = () => {
             fill="currentFill"
           />
         </svg>
+        <p className="mt-20 text-lg text-gray-800  font-bold my-5">
+          카메라와 마이크를 선택해주세요.
+        </p>
+        <div className='mb-3'>
+          <select className='border-2 rounded-md' id="cameras" onClick={CameraSelectClick}></select>
+        </div>
+        <div className='mb-10'>
+          <select className='border-2 rounded-md' id="mics" onClick={MicSelectClick}></select>
+        </div>
+        <div className='mb-10'>
+          <Button text={'입장하기'} onClick={settingHandle} ></Button>
+        </div>
       </div>
+      
     </div>
   );
-};
+  }
+
 export default Loading;
