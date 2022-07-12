@@ -5,6 +5,9 @@ import PublicCard from '../common/PublicCard';
 
 const HomePublicStudy = () => {
   const [openRooms, setOpenRooms] = useState([]);
+  /**
+   * @description Public Study Rooms list
+   */
   useEffect(() => {
     async function getOpenroom() {
       const res = await API.get('open/studyrooms');

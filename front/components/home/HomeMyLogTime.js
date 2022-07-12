@@ -9,6 +9,9 @@ const HomeMyLogTime = () => {
   const [timeDatas, setTimeData] = useState(null);
   const [user, setUser] = useState();
 
+  /**
+   * @description 유저의 전체 누적 공부시간을 불러옴
+   */
   useEffect(() => {
     setUser(useratom);
     const getTotalTime = async () => {

@@ -12,6 +12,9 @@ const HomeRanking = () => {
   const [rankings, setRankings] = useState([]);
   const [userDatas, setUserDatas] = useState([]);
 
+  /**
+   * @description Top 10 user_id List
+   */
   useEffect(() => {
     async function getRanking() {
       try {
@@ -24,6 +27,9 @@ const HomeRanking = () => {
     getRanking();
   }, []);
 
+  /**
+   * @description userlist
+   */
   useEffect(() => {
     async function getUserId() {
       try {
@@ -38,7 +44,6 @@ const HomeRanking = () => {
 
   return (
     <>
-      {/* <div className="container"> */}
       <div className="mb-20">
         <div className="px-10 md:px-15 lg:px-20 font-bold text-2xl text-gray-800">
           Ranking Top 10

@@ -10,6 +10,9 @@ const HomeMyStudy = () => {
   const [myStudyRooms, setMyStudyRooms] = useState([]);
   const user = useRecoilValue(userAtom);
 
+  /**
+   * @description 내가 생성하거나 참여중인 스터디룸
+   */
   useEffect(() => {
     async function getMyStudyRooms() {
       const res = await API.get(`studyrooms/${user?.id}`);

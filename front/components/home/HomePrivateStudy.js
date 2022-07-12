@@ -6,6 +6,9 @@ import PrivateCard from '../../components/common/PrivateCard';
 const HomeBoardStudy = ({ profileURL }) => {
   const [boardDatas, setBoardData] = useState();
 
+  /**
+   * @description Private Study Rooms List
+   */
   useEffect(() => {
     async function getBoardData() {
       try {
