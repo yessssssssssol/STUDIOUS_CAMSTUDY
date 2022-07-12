@@ -8,23 +8,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import * as API from '../../api/api';
 import { useRouter } from 'next/router';
-import { GoUnmute, GoMute } from 'react-icons/go';
 
-import {
-  TbDeviceComputerCamera,
-  TbDeviceComputerCameraOff,
-} from 'react-icons/tb';
 import Other from '../other';
-import * as ReactDOM from 'react-dom/client';
 import { userAtom } from '../../../core/atoms/userState';
 import ChatHeader from '../../../components/studyroom/chat/ChatHeader';
+import ChatMainText from '../../../components/studyroom/chat/ChatMainText';
+import ChatSendPart from '../../../components/studyroom/chat/ChatSendPart';
+import ChatFooter from '../../../components/studyroom/chat/ChatFooter';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
-const hostname =
-  typeof window !== 'undefined' && window.location.hostname
-    ? window.location.hostname
-    : '';
+const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
 
 const url = 'http://' + hostname + ':' + backendPortNumber;
 //const url = 'https://' + hostname;
@@ -136,7 +130,7 @@ export default function Group() {
   }
 
   /**
-   * @description 데이터체널로 받은 메시지 파싱.
+   * @description 데이터채널로 받은 메시지 파싱.
    * @param {Object} res
    */
   function MessageParse(res) {
@@ -218,9 +212,7 @@ export default function Group() {
   function MuteBtnClick(e) {
     e.preventDefault();
     if (myStream !== null) {
-      myStream
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = !track.enabled));
+      myStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
 
       let req = {
         type: 'mute',
@@ -394,9 +386,7 @@ export default function Group() {
 
       // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
       if (myStream !== null) {
-        myStream
-          .getTracks()
-          .forEach((track) => myPeerConnection.addTrack(track, myStream));
+        myStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, myStream));
       }
 
       // 내 피어컨넥션을 추가
@@ -489,14 +479,7 @@ export default function Group() {
     console.log(videoRef.current.className);
     videoRef.current.srcObject = myStream;
     console.log('enter room');
-    socket.emit(
-      'enter_room',
-      roomId,
-      socket.id,
-      user?.id,
-      user?.name,
-      () => {}
-    );
+    socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {});
   }
 
   /**
@@ -623,13 +606,9 @@ export default function Group() {
     <>
       {isLoading ? (
         <div className="lg:grid lg:justify-center">
-          <p className="font-bold text-center text-4xl m-5 mb-10">
-            {room?.roomName}
-          </p>
-          {/*  */}
+          <p className="font-bold text-center text-4xl m-5 mb-10">{room?.roomName}</p>
           <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
-              {/*  */}
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[1rem] gap-y-[2.5rem]">
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
                   <StopWatch
@@ -663,10 +642,7 @@ export default function Group() {
                 {/* 다른 사람들 웹캠 */}
                 {Object.keys(otherCameras.current).map((user) => {
                   console.log('userId : ', user);
-                  console.log(
-                    'usercamera : ',
-                    otherCameras.current[user].stream
-                  );
+                  console.log('usercamera : ', otherCameras.current[user].stream);
                   console.log(otherCameras.current[user].mute);
                   return (
                     <>
@@ -682,130 +658,18 @@ export default function Group() {
               </div>
             </div>
 
+            {/* Chat */}
             <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-3 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
-              {/* <div className="my-[5%] mx-[20%] w-[60%] h-full grid items-center lg:w-3/12 bg-purple-400"></div> */}
               <ChatHeader roomName={room?.roomName} roomImg={room?.roomImg} />
-              <div
-                ref={chattingBoxRef}
-                className="relative w-full p-6 overflow-y-auto h-[72%]"
-              >
-                <ul className="space-y-2">
-                  {chatAll?.map((chat) => {
-                    let name = chat.split(' : ');
-
-                    let userI = userDatas.find((userData) => {
-                      if (userData.name === name[0]) {
-                        return true;
-                      }
-                    });
-
-                    return (
-                      <>
-                        {name[0] === `${user?.name}` ? (
-                          // 나
-                          <li className="flex justify-end">
-                            <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{name[1]}</span>
-                            </div>
-                            <img
-                              className="rounded-full bg-cover w-10 h-10 ml-2"
-                              src={user?.profileUrl}
-                            />
-                          </li>
-                        ) : (
-                          // 상대
-                          <li className="flex justify-start">
-                            {/* <div className="grid mr-2"> */}
-                            <img
-                              className="rounded-full bg-cover w-10 h-10 mr-2"
-                              src={userI?.profileUrl}
-                              alt=""
-                            />
-                            {/* <small className="block text-center">
-                                  {name[0]}
-                                </small> */}
-                            {/* </div> */}
-                            <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-amber-50 rounded shadow">
-                              <span className="block">{chat}</span>
-                            </div>
-                          </li>
-                        )}
-                      </>
-                    );
-                  })}
-                </ul>
-              </div>
-
-              <form>
-                <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
-                  <input
-                    id="inputbox"
-                    placeholder="message"
-                    required
-                    type="text"
-                    className="block w-full py-2 pl-4 ml-1 mr-2 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                  ></input>
-                  <button onClick={sendChatHandler} clssName="py-2 p-4">
-                    <svg
-                      className="w-5 h-5 mr-1 ml-2 text-gray-500 origin-center transform rotate-90"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                    </svg>
-                  </button>
-                </div>
-              </form>
-              <div className="flex justify-between px-3">
-                <div className="flex items-center">
-                  <button
-                    id="cameraBtn"
-                    className="mx-2"
-                    onClick={CameraOnOffClick}
-                  >
-                    {isCamera == true ? (
-                      <TbDeviceComputerCamera
-                        color="#ea580c"
-                        size="30"
-                        style={{ marginBottom: 10 }}
-                      />
-                    ) : (
-                      <TbDeviceComputerCameraOff
-                        color="#ea580c"
-                        size="30"
-                        style={{ marginBottom: 10 }}
-                      />
-                    )}
-                  </button>
-                  <button id="muteBtn" onClick={MuteBtnClick}>
-                    {isMute == true ? (
-                      <GoMute
-                        color="#ea580c"
-                        size="30"
-                        style={{ marginBottom: 10 }}
-                      />
-                    ) : (
-                      <GoUnmute
-                        color="#ea580c"
-                        size="30"
-                        style={{ marginBottom: 10 }}
-                      />
-                    )}
-                  </button>
-                </div>
-
-                <button
-                  className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border shadow-lg border-gray-200 hover:text-white hover:bg-amber-400 hover:shadow-amber-300/50 focus:z-10 focus:ring-4 focus:ring-gray-200"
-                  onClick={() => {
-                    rtcInit();
-                    stopWatchRef.current.handleClick();
-                  }}
-                >
-                  {' '}
-                  나가기{' '}
-                </button>
-              </div>
+              <ChatMainText chattingBoxRef={chattingBoxRef} chatAll={chatAll} userDatas={userDatas} user={user} />
+              <ChatSendPart sendChatHandler={sendChatHandler} />
+              <ChatFooter
+                isCamera={isCamera}
+                isMute={isMute}
+                CameraOnOffClick={CameraOnOffClick}
+                MuteBtnClick={MuteBtnClick}
+                stopWatchRef={stopWatchRef}
+              />
             </div>
           </div>
         </div>
