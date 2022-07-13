@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import * as API from '../../pages/api/api';
-import BoardCard from '../../components/common/BoardCard';
+import PrivateCard from '../../components/common/PrivateCard';
 
 const HomeBoardStudy = ({ profileURL }) => {
   const [boardDatas, setBoardData] = useState();
@@ -31,7 +31,7 @@ const HomeBoardStudy = ({ profileURL }) => {
           {boardDatas &&
             boardDatas.slice(0, 3).map((boardData, index) => {
               return (
-                <BoardCard
+                <PrivateCard
                   key={index}
                   boardData={boardData}
                   profileURL={profileURL}
@@ -41,7 +41,7 @@ const HomeBoardStudy = ({ profileURL }) => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full">
-        <Link href={'/board'}>
+        <Link href={'/privatestudy'}>
           <button className="px-4 py-1 bg-amber-400 text-white rounded font-semibold shadow-lg hover:bg-amber-500 hover:scale-110 hover:shadow-amber-300/50 mx-5">
             View All
           </button>

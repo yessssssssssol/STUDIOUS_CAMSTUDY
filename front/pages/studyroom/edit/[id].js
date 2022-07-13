@@ -1,4 +1,4 @@
-import * as API from '../../../pages/api/api';
+import * as API from '../../api/api';
 import EditBoard from '../../../components/board/edit/EditBoard';
 import EditStudyContent from '../../../components/board/edit/EditStudyContent';
 import { useState, useRef, useEffect } from 'react';

@@ -1,8 +1,8 @@
-export default function OpenroomCard({ openRoom }) {
+export default function PublicCard({ openRoom }) {
   return (
     <div className="w-80 h-full px-2 py-16 mx-auto sm:max-w-xl md:px-2 lg:px-8 lg:py-8">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
-        <a href={`/openroom/board/${openRoom.roomId}`} aria-label="Article">
+        <a href={`/publicstudy/board/${openRoom.roomId}`} aria-label="Article">
           <div className="over-flow-hidden bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg duration-300">
             <img
               className="w-full h-48 object-fill rounded-t-md"

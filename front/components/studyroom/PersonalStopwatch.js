@@ -17,7 +17,7 @@ import * as API from '../../pages/api/api';
 // 이 때 멈출 때마다 데이터를 저장한다.
 // 저장한 데이터를 백엔드로 넘기기
 
-const StopWatchPrivate = ({ roomId, membersOnly }) => {
+const PersonalStopwatch = ({ roomId, membersOnly }) => {
   const { timer, handleStart, handlePause, handleRestart } = useTimer(0);
 
   // 카운트다운 시간 설정: 5초
@@ -121,24 +121,24 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   return (
     <div>
       <div>
-        <div className="mx-10 my-10 flex ">
-          <div className="w-1/3 text-center flex flex-row ml-20">
+        <div className="mx-10 my-5 lg:my-10 lg:flex ">
+          <div className="w-full lg:w-1/3 text-center flex flex-row justify-center">
             <p className="flex font-semibold text-amber-400 text-3xl">
               {user?.name}
             </p>
             <p className="flex font-medium text-slate-700 text-xl pt-1">
-              's Private Study ROOM
+              's Personal Study ROOM
             </p>
           </div>
 
-          <div className="w-1/3 flex justify-center">
+          <div className="w-full my-3 lg:w-1/3 flex justify-center">
             <p className="inline-flex bg-white text-amber-400 font-bold text-3xl justify-center items-center px-2.5 py-0.5 rounded border border-amber-400 drop-shadow-lg shadow-amber-300/50">
               <RiTimerLine className="mr-3" />
               {formatTime(timer)}
             </p>
           </div>
 
-          <div className="w-1/3 text-center">
+          <div className="w-full lg:w-1/3 text-center">
             <button
               className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border shadow-lg border-gray-200 hover:text-white hover:bg-amber-400 hover:shadow-amber-300/50"
               onClick={handleClick}
@@ -158,7 +158,7 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
                   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                 </h5>
                 <p className="mb-3 font-normal text-gray-700">
-                  10초 뒤에 타이머가 시작됩니다.
+                  5초 뒤에 타이머가 시작됩니다.
                   <br /> 웹 캠에 눈, 코 입이 잘 보이도록 설정해주세요.
                 </p>
                 <svg
@@ -192,4 +192,4 @@ const StopWatchPrivate = ({ roomId, membersOnly }) => {
   );
 };
 
-export default StopWatchPrivate;
+export default PersonalStopwatch;

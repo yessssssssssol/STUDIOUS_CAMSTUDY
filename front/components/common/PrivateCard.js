@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function BoardCard({ boardData, profileURL }) {
+export default function PrivateCard({ boardData, profileURL }) {
   return (
     <div className="w-96 h-full px-2 py-16 mx-auto sm:max-w-xl md:px-2 lg:px-8 lg:py-8">
       <div className="grid gap-5 sm:max-w-sm sm:mx-auto">
-        <a href={`/board/detail/${boardData.roomId}`}>
+        <a href={`/privatestudy/board/${boardData.roomId}`}>
           <div className="over-flow-hidden bg-white rounded-md hover:scale-105 hover:shadow-amber-300/50 shadow-lg duration-300">
             <img
               src={boardData.roomImg}

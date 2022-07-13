@@ -1,22 +1,22 @@
-import BoldText from '../components/common/BoldText';
-import TimeBox from '../components/common/TimeBox';
-import CategoryBox from '../components/common/CategoryBox';
+import BoldText from '../../components/common/BoldText';
+import TimeBox from '../../components/common/TimeBox';
+import CategoryBox from '../../components/common/CategoryBox';
 import dynamic from 'next/dynamic';
-import Pie from '../components/common/Pie';
-import Button from '../components/common/Button';
+import Pie from '../../components/common/Pie';
+import Button from '../../components/common/Button';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userAtom } from '../core/atoms/userState';
-import * as API from '../pages/api/api';
-import Helmet from '../components/layout/Helmet';
+import { userAtom } from '../../core/atoms/userState';
+import * as API from '../api/api';
+import Helmet from '../../components/layout/Helmet';
 import {
   charts_data,
   charts_color,
   category_time,
   randomColor,
   heatmap_tip,
-} from '../components/common/UseData';
-import Heatmap from '../components/common/Heatmap';
+} from '../../components/common/UseData';
+import Heatmap from '../../components/common/Heatmap';
 export default function mypage() {
   const [timeDatas, setTimeData] = useState(null);
   const useratom = useRecoilValue(userAtom);

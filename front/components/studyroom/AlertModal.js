@@ -11,7 +11,7 @@ const AlertModal = () => {
   };
 
   return (
-    <div className="mx-10 my-10 flex justify-center">
+    <div>
       {!userIsHear && (
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative p-4 w-full max-w-md h-full md:h-auto">
