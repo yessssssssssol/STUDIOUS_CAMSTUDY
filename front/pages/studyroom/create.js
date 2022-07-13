@@ -12,6 +12,10 @@ import { roomDefaultImg } from '../../components/common/UseData';
 import Alert from '../../components/common/Alert';
 import Helmet from '../../components/layout/Helmet';
 
+/** 스터디룸 create 페이지
+ * @component
+ * @return studyroom/create 페이지
+ */
 export default function Edit() {
   const router = useRouter();
   const [room, setRoom] = useRecoilState(createroomAtom);

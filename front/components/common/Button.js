@@ -1,3 +1,11 @@
+/**button 공통 컴포넌트
+ *
+ * @component
+ * @param {string} text - 버튼 이름
+ * @param {string} onClick - onclick function
+ * @param {boolean} disable
+ * @param {string} color - 버튼 색
+ */
 export default function Button({ text, onClick, disable, color }) {
   return (
     <button

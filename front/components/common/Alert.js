@@ -1,3 +1,9 @@
+/**alert 공통 컴포넌트
+ *
+ * @component
+ * @param {string} title - alert 제목
+ * @param {string} content - alert 내용
+ */
 const Alert = ({ title, content }) => {
   return (
     <div

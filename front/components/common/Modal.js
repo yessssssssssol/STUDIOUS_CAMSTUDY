@@ -6,6 +6,12 @@ import {
   editProfileModalAtom,
 } from '../../core/atoms/modalState';
 import { useEffect, useRef } from 'react';
+
+/** 모달 공통 컴포넌트
+ *
+ * @component
+ * @param {object} props
+ */
 export default function Modal(props) {
   const setLoginModal = useSetRecoilState(loginModalState);
   const setRegisterModal = useSetRecoilState(registerModalState);

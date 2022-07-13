@@ -1,11 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useEffect, useState } from 'react';
 import PublicCard from '../../components/common/PublicCard';
 import Helmet from '../../components/layout/Helmet';
-import { userAtom } from '../../core/atoms/userState';
 import * as API from '../api/api';
 import { useInView } from 'react-intersection-observer';
 import { AiFillPlusCircle } from 'react-icons/ai';
+
+/** Openstudyroom 게시판 페이지
+ *
+ * @component
+ * @return Openroom List
+ */
 export default function Openroom() {
   const [count, setCount] = useState(10);
   const [openRooms, setOpenRooms] = useState([]);

@@ -1,5 +1,11 @@
 import Certification from './Certification';
 
+/**신청자 목록을 나타내는 컴포넌트
+ *
+ * @component
+ * @param {object} applicants -신청자 정보
+ * @param {boolean} isOwner - 해당 게시글의 주인인지 여부를 알려주는 데이터 true이면 게시글 주인 아니면 false
+ */
 const CertificationList = ({ applicants, isOwner }) => {
   return (
     <div className=" rounded-lg p-3 my-5 m-4 shadow-lg">

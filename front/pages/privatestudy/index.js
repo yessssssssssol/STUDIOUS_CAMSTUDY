@@ -5,6 +5,11 @@ import { useInView } from 'react-intersection-observer';
 import * as API from '../api/api';
 import { AiFillPlusCircle } from 'react-icons/ai';
 
+/** Privatestudyroom 게시판 페이지
+ *
+ * @component
+ * @return Privatestudyroom List
+ */
 export default function board({ profileURL }) {
   const [boardDatas, setBoardData] = useState();
   const [count, setCount] = useState(10);
