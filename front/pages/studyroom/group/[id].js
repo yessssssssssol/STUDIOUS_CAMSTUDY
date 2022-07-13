@@ -18,7 +18,10 @@ import ChatFooter from '../../../components/studyroom/chat/ChatFooter';
 
 const backendPortNumber = process.env.REACT_APP_SERVER_PORT || 5000;
 
-const hostname = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
+const hostname =
+  typeof window !== 'undefined' && window.location.hostname
+    ? window.location.hostname
+    : '';
 
 const url = 'http://' + hostname + ':' + backendPortNumber;
 //const url = 'https://' + hostname;
@@ -212,7 +215,9 @@ export default function Group() {
   function MuteBtnClick(e) {
     e.preventDefault();
     if (myStream !== null) {
-      myStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+      myStream
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = !track.enabled));
 
       let req = {
         type: 'mute',
@@ -386,7 +391,9 @@ export default function Group() {
 
       // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
       if (myStream !== null) {
-        myStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, myStream));
+        myStream
+          .getTracks()
+          .forEach((track) => myPeerConnection.addTrack(track, myStream));
       }
 
       // 내 피어컨넥션을 추가
@@ -479,7 +486,14 @@ export default function Group() {
     console.log(videoRef.current.className);
     videoRef.current.srcObject = myStream;
     console.log('enter room');
-    socket.emit('enter_room', roomId, socket.id, user?.id, user?.name, () => {});
+    socket.emit(
+      'enter_room',
+      roomId,
+      socket.id,
+      user?.id,
+      user?.name,
+      () => {}
+    );
   }
 
   /**
@@ -606,7 +620,9 @@ export default function Group() {
     <>
       {isLoading ? (
         <div className="lg:grid lg:justify-center">
-          <p className="font-bold text-center text-4xl m-5 mb-10">{room?.roomName}</p>
+          <p className="font-bold text-center text-4xl m-5 mb-10">
+            {room?.roomName}
+          </p>
           <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[1rem] gap-y-[2.5rem]">
@@ -635,6 +651,7 @@ export default function Group() {
                       AlertNoHear(result);
                     }}
                     camera={videoRef}
+                    isGroup={true}
                   />
                 </div>
                 <AlertModal />
@@ -642,7 +659,10 @@ export default function Group() {
                 {/* 다른 사람들 웹캠 */}
                 {Object.keys(otherCameras.current).map((user) => {
                   console.log('userId : ', user);
-                  console.log('usercamera : ', otherCameras.current[user].stream);
+                  console.log(
+                    'usercamera : ',
+                    otherCameras.current[user].stream
+                  );
                   console.log(otherCameras.current[user].mute);
                   return (
                     <>
@@ -661,7 +681,12 @@ export default function Group() {
             {/* Chat */}
             <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-3 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               <ChatHeader roomName={room?.roomName} roomImg={room?.roomImg} />
-              <ChatMainText chattingBoxRef={chattingBoxRef} chatAll={chatAll} userDatas={userDatas} user={user} />
+              <ChatMainText
+                chattingBoxRef={chattingBoxRef}
+                chatAll={chatAll}
+                userDatas={userDatas}
+                user={user}
+              />
               <ChatSendPart sendChatHandler={sendChatHandler} />
               <ChatFooter
                 isCamera={isCamera}
@@ -669,6 +694,7 @@ export default function Group() {
                 CameraOnOffClick={CameraOnOffClick}
                 MuteBtnClick={MuteBtnClick}
                 stopWatchRef={stopWatchRef}
+                rtcInit={rtcInit}
               />
             </div>
           </div>
