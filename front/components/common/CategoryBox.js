@@ -14,8 +14,8 @@ export default function CategoryBox({ myroomInfo }) {
     setOpen(true);
   };
 
-  const openRoom = `openroom/board/${myroomInfo?.roomId}`;
-  const privateRoom = `/board/detail/${myroomInfo?.roomId}`;
+  const openRoom = `publicstudy/board/${myroomInfo?.roomId}`;
+  const privateRoom = `/privatestudy/board/${myroomInfo?.roomId}`;
 
   //myroomInfo.group === false 이면
   // 링크 연결 바로 공부방으로
@@ -36,7 +36,7 @@ export default function CategoryBox({ myroomInfo }) {
           </Link>
           {myroomInfo?.id === useratom?.id ? (
             <section className="flex items-center mr-[30px] font-bold">
-              <Link href={`/board/edit/${myroomInfo.roomId}`}>
+              <Link href={`/studyroom/edit/${myroomInfo.roomId}`}>
                 <a className="cursor-pointer mr-[15px]">
                   <RiEdit2Fill size="25" />
                 </a>

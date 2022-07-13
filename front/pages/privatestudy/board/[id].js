@@ -9,7 +9,7 @@ import ProfileCard from '../../../components/common/ProfileCard';
 import CertificationList from '../../../components/board/CertificationList';
 
 import { useEffect, useState } from 'react';
-import * as API from '../../../pages/api/api';
+import * as API from '../../api/api';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../../core/atoms/userState';
 import MemberList from '../../../components/board/MemberList';
@@ -148,7 +148,7 @@ export default function Detail() {
                       </div>
                       {isOwner && (
                         <section className="flex items-center gap-x-2 mr-[30px] font-bold">
-                          <Link href={`/board/edit/${detailData.roomId}`}>
+                          <Link href={`/studyroom/edit/${detailData.roomId}`}>
                             <a className="cursor-pointer">
                               <RiEdit2Fill size="24" color="#fbbf24" />
                             </a>

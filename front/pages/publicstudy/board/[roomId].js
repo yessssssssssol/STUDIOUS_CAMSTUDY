@@ -118,7 +118,7 @@ const OpenRoomBoard = () => {
                       </div>
                       {isOwner && (
                         <section className="flex items-center gap-x-2 mr-[30px] font-bold">
-                          <Link href={`/board/edit/${roomInfo.roomId}`}>
+                          <Link href={`/studyroom/edit/${roomInfo.roomId}`}>
                             <a className="cursor-pointer">
                               <RiEdit2Fill size="24" color="#fbbf24" />
                             </a>

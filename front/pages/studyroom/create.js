@@ -110,9 +110,9 @@ export default function Edit() {
           await API.putImg(`roomimg/${res.data.roomId}`, formD);
           console.log('이미지가 추가되었습니다.');
           if (room.membersOnly === 'false') {
-            router.push(`/openroom/board/${res.data.roomId}`);
+            router.push(`/publicstudy/board/${res.data.roomId}`);
           } else {
-            router.push(`/board/detail/${res.data.roomId}`);
+            router.push(`/privatestudy/board/${res.data.roomId}`);
           }
           resetRoom();
           resetHashtag();

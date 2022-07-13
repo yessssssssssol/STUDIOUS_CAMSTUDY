@@ -4,6 +4,7 @@ import 'dayjs/locale/ko';
 import { ChangeDate } from '../utils/changeDate';
 import { scheduleJob } from 'node-schedule';
 import { analyzeDate } from '../utils/analyzeDate';
+import { userAuthService } from './userService';
 
 const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets());
 dayjs.locale('ko');
@@ -22,7 +23,8 @@ class UserDailySheetService {
         }
         // 이미 데일리 시트가 만들어졌는지 확인
         const checkAlreadyCreated = await UserDailySheet.checkSheetsFromDate({ today });
-        if (checkAlreadyCreated.length !== 0) {
+        const users = await userAuthService.getUsers();
+        if (checkAlreadyCreated.length >= users.length) {
             const errorMessage = '이미 금일 시트가 생성되어 있습니다.';
             return { errorMessage };
         }
@@ -48,6 +50,7 @@ class UserDailySheetService {
                     bestStudyTime: ' ',
                     beginStudyTime: ' ',
                     finishStudyTime: ' ',
+                    createdAt: now.format('YYYY:MM:DD HH:mm:ss'),
                 };
             } else {
                 return {
@@ -59,6 +62,7 @@ class UserDailySheetService {
                     bestStudyTime: ' ',
                     beginStudyTime: ' ',
                     finishStudyTime: ' ',
+                    createdAt: now.format('YYYY:MM:DD HH:mm:ss'),
                 };
             }
         });

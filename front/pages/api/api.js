@@ -7,6 +7,7 @@ const hostname =
     ? window.location.hostname
     : '';
 const serverUrl = 'http://' + hostname + ':' + backendPortNumber + '/api/';
+//const serverUrl = 'https://' + hostname + '/api/';
 
 async function get(endpoint, params = '') {
   console.log(

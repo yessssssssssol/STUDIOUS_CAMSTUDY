@@ -3,13 +3,14 @@ import '@tensorflow/tfjs';
 import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { aiAtom } from '../../core/atoms/aiState';
+import { FaRobot } from 'react-icons/fa';
 
 const AIFunc = (props) => {
   let person = false;
   let falseList = [];
   let trueList = [];
-  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
   const videoRef = useRef();
+  const [userIsHear, setUserIsHear] = useRecoilState(aiAtom);
 
   // trueList에 true가 50번 찍히면 타이머 자동 재시작, trueList reset
   const trueCheck = () => {
@@ -31,35 +32,48 @@ const AIFunc = (props) => {
     }
   };
 
+  async function init() {
+      const model = await cocoSsd.load();
+      console.log(model);
+      detectFrame(props.camera.current, model);
+  }
+
   useEffect(() => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      const webCamPromise = navigator.mediaDevices
-        .getUserMedia({
-          audio: false,
-          video: {
-            facingMode: 'user',
-          },
-        })
-        .then((stream) => {
-          //window.stream = stream;
-          videoRef.current.srcObject = stream;
-          return new Promise((resolve, reject) => {
-            videoRef.current.onloadedmetadata = () => {
-              resolve();
-            };
-          });
-        });
-      const modelPromise = cocoSsd.load();
-      console.log(webCamPromise);
-      Promise.all([modelPromise, webCamPromise])
-        .then((values) => {
-          detectFrame(videoRef.current, values[0]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    console.log(props.isGroup);
+    if (props.isGroup === true) {
+      console.log("ai cameracheck :", props.camera);
+      init();
     }
-    // return
+    else {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const webCamPromise = navigator.mediaDevices
+          .getUserMedia({
+            audio: false,
+            video: {
+              facingMode: 'user',
+            },
+          })
+          .then((stream) => {
+            //window.stream = stream;
+            console.log(videoRef);
+            videoRef.current.srcObject = stream;
+            return new Promise((resolve, reject) => {
+              videoRef.current.onloadedmetadata = () => {
+                resolve();
+              };
+            });
+          });
+        const modelPromise = cocoSsd.load();
+        console.log(webCamPromise);
+        Promise.all([modelPromise, webCamPromise])
+          .then((values) => {
+            detectFrame(videoRef.current, values[0]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }
   }, []);
 
   const detectFrame = (video, model) => {
@@ -98,17 +112,23 @@ const AIFunc = (props) => {
   };
 
   return (
-    <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
-      <video
-        className="rounded-xl object-cover"
-        autoPlay
-        playsInline
-        muted
-        ref={videoRef}
-        width="100%"
-        height="100%"
-      ></video>
-    </div>
+    <>
+      {
+        props.isGroup === false ? 
+        <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
+          <video
+            className="rounded-xl object-cover"
+            autoPlay
+            playsInline
+            muted
+            ref={videoRef}
+            width="100%"
+            height="100%"
+          ></video>
+        </div>
+         : <FaRobot color="#ea580c" size="30" style={{ marginBottom: 10 }} />
+      }
+    </>
   );
 };
 

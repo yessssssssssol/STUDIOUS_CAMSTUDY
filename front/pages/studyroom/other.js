@@ -73,7 +73,6 @@ const Other = forwardRef(({userId, stream, time}, ref) => {
                     isMute ? <GoMute color="#ea580c" size="30" /> : <GoUnmute color="#ea580c" size="30" />
                 }
             </div>
-            
         </div>
     )
 })

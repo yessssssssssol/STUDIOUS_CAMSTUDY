@@ -1,10 +1,5 @@
 node_modules
 .env
-<<<<<<< HEAD
-
-cert.pem
-privkey.pem
-=======
 /src/cert.pem
 /src/privkey.pem
->>>>>>> dev
+zeroto100-352907-98dbcd3bed92.json
