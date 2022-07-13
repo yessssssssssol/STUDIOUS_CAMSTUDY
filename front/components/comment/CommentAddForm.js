@@ -60,6 +60,7 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
                   className="border p-2 rounded w-full mx-5"
                   placeholder="댓글을 입력하세요."
                   value={content}
+                  maxLength="40"
                   onChange={(e) => setContent(e.target.value)}
                 ></input>
               </div>
