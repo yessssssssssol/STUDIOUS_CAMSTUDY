@@ -327,65 +327,13 @@ export default function Group() {
   };
 
   // ================== socket =======================
-
-  /**
-   * @description 그룹 룸 데이터
-   */
-  async function roomData() {
-    const res = await API.get(`studyroom/${roomId}`);
-    room = res.data;
-  }
-
-  /**
-   * @description 그룹 룸에 들어오면 처음 시작될 함수
-   */
-  function init() {
-    // const res = await API.get(`studyroom/${roomId}`);
-    // room = res.data;
-
-    console.log('my first socket : ', socket.id);
-    socketId.current = socket.id;
-    console.log('input socketID : ', socketId.current);
-
-    console.log(myStream);
-    console.log(videoRef.current.className);
-    videoRef.current.srcObject = myStream;
-    console.log('enter room');
-    socket.emit(
-      'enter_room',
-      roomId,
-      socket.id,
-      user?.id,
-      user?.name,
-      () => {}
-    );
-  }
-
-  /**
-   * @description 로딩 완료 시 방에 입장
-   */
-  useEffect(() => {
-    {
-      roomData();
-    }
-    if (isLoading) {
-      if (myStream !== null) {
-        init();
-      } else {
-        rtcInit();
-        location.reload();
-        router.back();
-      }
-    }
-  }, [isLoading]);
-
   /**
    * @description 유저와 유저끼리 연결을 만들어내는 함수
    * @param {string} userId
    * @param {RTCPeerConnection} offer
    * @return {RTCPeerConnection}
    */
-  async function makeConnection(userId, offer = null) {
+   async function makeConnection(userId, offer = null) {
     if (RTCPeerConnection != undefined) {
       myPeerConnection = new RTCPeerConnection({
         iceServers: [
@@ -528,6 +476,57 @@ export default function Group() {
       return answer || _offer;
     }
   }
+
+  /**
+   * @description 그룹 룸 데이터
+   */
+  async function roomData() {
+    const res = await API.get(`studyroom/${roomId}`);
+    room = res.data;
+  }
+
+  /**
+   * @description 그룹 룸에 들어오면 처음 시작될 함수
+   */
+  function init() {
+    // const res = await API.get(`studyroom/${roomId}`);
+    // room = res.data;
+
+    console.log('my first socket : ', socket.id);
+    socketId.current = socket.id;
+    console.log('input socketID : ', socketId.current);
+
+    console.log(myStream);
+    console.log(videoRef.current.className);
+    videoRef.current.srcObject = myStream;
+    console.log('enter room');
+    socket.emit(
+      'enter_room',
+      roomId,
+      socket.id,
+      user?.id,
+      user?.name,
+      () => {}
+    );
+  }
+
+  /**
+   * @description 로딩 완료 시 방에 입장
+   */
+  useEffect(() => {
+    {
+      roomData();
+    }
+    if (isLoading) {
+      if (myStream !== null) {
+        init();
+      } else {
+        rtcInit();
+        location.reload();
+        router.back();
+      }
+    }
+  }, [isLoading]);
   
   /**
    * @description 소켓 이벤트 정의
@@ -594,7 +593,7 @@ export default function Group() {
       socket.emit('answer', answer, socket.id, offersId);
     });
 
-    socket.on('answer', async (answer, newUserId) => {
+    socket.on('answer', (answer, newUserId) => {
       /**
        * @description 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
        */
