@@ -27,7 +27,7 @@ import { CommentsModel } from '../schemas/comments';
 /**
  * 댓글 리스트
  * @typedef CommentsArray
- * @property {CommentsArray[]} CommentsArray
+ * @property {NewCommentObj[]} CommentsArray
  */
 
 class Comments {
