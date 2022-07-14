@@ -16,7 +16,7 @@ import { ApplicantsModel } from '../schemas/aplicants';
 
 /**
  * 스터디 신청자 정보
- * @typedef {{roomId: string, appicantId: string, status: boolean, createdAt: string, __v: number}} ApplicantsObject
+ * @typedef {{roomId: string, appicantId: string, status: boolean, createdAt: string, _id: string, __v: number}} ApplicantsObject
  */
 
 /**
@@ -55,7 +55,7 @@ class Applicants {
 
     /**
      * room 삭제시 신청한 사용자들 리스트도 같이 삭제
-     * @param {string} roomId - 방 아이디
+     * @param {{roomId: string}} roomId - 방 아이디
      * @return {Promise<ApplicantsArray>}
      */
     static deleteMany({ roomId }) {
@@ -64,7 +64,7 @@ class Applicants {
 
     /**
      * 계정 삭제시 해당 계정이 스터디룸 신청한 리스트도 같이 삭제
-     * @param {string} id - 유저 고유 아이디
+     * @param {{id: string}} id - 유저 고유 아이디
      * @return {Promise<ApplicantsArray>}
      */
     static deleteManyById({ id }) {
@@ -73,7 +73,7 @@ class Applicants {
 
     /**
      * 해당하는 스터디룸 신청자 리스트 가져오기
-     * @param {string} roomId - 방 아이디
+     * @param {{roomId: string}} roomId - 방 아이디
      * @return {Promise<ApplicantsArray>}
      */
     static getLists({ roomId }) {

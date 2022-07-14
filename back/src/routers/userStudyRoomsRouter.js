@@ -7,9 +7,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { userStudyRoomsService } from '../services/userStudyRoomsService';
 import { userAuthService } from '../services/userService';
-import { json } from 'express/lib/response';
-// import { commentsService } from '../services/commentsService';
-// import { get } from 'express/lib/request';
 
 const userStudyRoomsRouter = Router();
 dayjs.locale('ko');
