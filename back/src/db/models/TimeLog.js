@@ -51,6 +51,7 @@ class TimeLog {
     /**
      * 회원탈퇴 시 타임로그 삭제
      * @param {{id: string}} id - 유저 아이디
+     * @returns {Promise<TimeLogArray>}
      */
     static deleteUser({ id }) {
         return TimeLogModel.deleteMany({ id });
