@@ -1,6 +1,6 @@
 import * as API from '../../api/api';
 import EditBoard from '../../../components/board/edit/EditBoard';
-import Edit from '../../../components/board/edit/Edit';
+import EditStudyContent from '../../../components/board/edit/EditStudyContent';
 import { useState, useRef, useEffect } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import {
@@ -111,7 +111,7 @@ export default function Create() {
       <Helmet title="EDIT" />
       <div className="flex justify-center">
         <div className="container mx-72 bg-white rounded min-w-[440px]">
-          <div className="w-11/12 border-b border-amber-400  py-3 bg-white ">
+          <div className="w-full border-b border-amber-400  py-3 bg-white ">
             <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
               <p className="text-2xl text-amber-400 font-bold">스터디방 수정</p>
             </div>
@@ -171,9 +171,9 @@ export default function Create() {
         </div>
       </div>
       <div className="flex justify-center">
-        <Edit />
+        <EditStudyContent />
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-2">
         <EditBoard />
       </div>
       {error && (
