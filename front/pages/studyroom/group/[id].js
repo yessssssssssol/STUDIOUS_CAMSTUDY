@@ -329,6 +329,58 @@ export default function Group() {
   // ================== socket =======================
 
   /**
+   * @description 그룹 룸 데이터
+   */
+  async function roomData() {
+    const res = await API.get(`studyroom/${roomId}`);
+    room = res.data;
+  }
+
+  /**
+   * @description 그룹 룸에 들어오면 처음 시작될 함수
+   */
+  function init() {
+    // const res = await API.get(`studyroom/${roomId}`);
+    // room = res.data;
+
+    console.log('my first socket : ', socket.id);
+    socketId.current = socket.id;
+    console.log('input socketID : ', socketId.current);
+
+    console.log(myStream);
+    console.log(videoRef.current.className);
+    videoRef.current.srcObject = myStream;
+    console.log('enter room');
+    socket.emit(
+      'enter_room',
+      roomId,
+      socket.id,
+      user?.id,
+      user?.name,
+      () => {}
+    );
+  }
+
+  /**
+   * @description 로딩 완료 시 방에 입장
+   */
+  useEffect(() => {
+    {
+      roomData();
+    }
+    if (isLoading) {
+      if (myStream !== null) {
+        init();
+      } else {
+        rtcInit();
+        location.reload();
+        router.back();
+      }
+    }
+  }, [isLoading]);
+
+
+  /**
    * @description 유저와 유저끼리 연결을 만들어내는 함수
    * @param {string} userId
    * @param {RTCPeerConnection} offer
@@ -429,7 +481,7 @@ export default function Group() {
         });
 
         _offer = await myPeerConnection.createOffer();
-        myPeerConnection.setLocalDescription(_offer);
+        await myPeerConnection.setLocalDescription(_offer);
         // 자신의 로컬 목적지에 offer 설정
 
         dataChannels[userId] = myDataChannel;
@@ -464,10 +516,10 @@ export default function Group() {
           console.log('add DataChannels');
           console.log(dataChannels);
         });
-        myPeerConnection.setRemoteDescription(_offer);
+        await myPeerConnection.setRemoteDescription(_offer);
         // 상대방 목적지로 전달받은 offer를 설정
         answer = await myPeerConnection.createAnswer();
-        myPeerConnection.setLocalDescription(answer);
+        await myPeerConnection.setLocalDescription(answer);
         // 내 로컬 목적지에 answer 설정
       }
 
@@ -476,65 +528,15 @@ export default function Group() {
   }
 
   /**
-   * @description 그룹 룸 데이터
-   */
-  async function roomData() {
-    const res = await API.get(`studyroom/${roomId}`);
-    room = res.data;
-  }
-
-  /**
-   * @description 그룹 룸에 들어오면 처음 시작될 함수
-   */
-  function init() {
-    // const res = await API.get(`studyroom/${roomId}`);
-    // room = res.data;
-
-    console.log('my first socket : ', socket.id);
-    socketId.current = socket.id;
-    console.log('input socketID : ', socketId.current);
-
-    console.log(myStream);
-    console.log(videoRef.current.className);
-    videoRef.current.srcObject = myStream;
-    console.log('enter room');
-    socket.emit(
-      'enter_room',
-      roomId,
-      socket.id,
-      user?.id,
-      user?.name,
-      () => {}
-    );
-  }
-
-  /**
-   * @description 로딩 완료 시 방에 입장
-   */
-  useEffect(() => {
-    {
-      roomData();
-    }
-    if (isLoading) {
-      if (myStream !== null) {
-        init();
-      } else {
-        rtcInit();
-        location.reload();
-        router.back();
-      }
-    }
-  }, [isLoading]);
-
-  /**
    * @description 소켓 이벤트 정의
    */
   useEffect(() => {
-    socket.on('welcome', async (userId, userName, newUserId) => {
+
+    socket.on('welcome', (userId, userName, newUserId) => {
       console.log('enter user : ', userName);
       console.log('other userId : ', userId);
       console.log('other userSocketId : ', newUserId);
-      const offer = await makeConnection(newUserId);
+      const offer = makeConnection(newUserId);
       console.log('--------------------------------------');
       console.log('make - peerconnections', peerConnections);
       console.log(`${userName} send offer`, userId);
@@ -579,14 +581,14 @@ export default function Group() {
       console.log(peerConnections);
     });
 
-    socket.on('offer', async (offer, offersId) => {
+    socket.on('offer', (offer, offersId) => {
       /**
        * @description
        * peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
        * 데이터 체널에 대한 이벤트 추가
        * 서버에서 받은 초대장 설정하기.
        */
-      const answer = await makeConnection(offersId, offer);
+      const answer = makeConnection(offersId, offer);
       socket.emit('answer', answer, socket.id, offersId);
     });
 
@@ -594,17 +596,24 @@ export default function Group() {
       /**
        * @description 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
        */
-      peerConnections[newUserId].setRemoteDescription(answer);
+      console.log("answer envent : ", peerConnections);
+      console.log("newUserId", newUserId);
+      if (peerConnections.hasOwnProperty(newUserId)) {
+        peerConnections[newUserId].setRemoteDescription(answer);
+      }
     });
 
     socket.on('ice', (ice, othersId) => {
       /**
        * @description 다른 사람에게 온 othersId를 myPeerConnection에 등록
        */
-      peerConnections[othersId].addIceCandidate(ice);
-      console.log('add IceCandidate');
-      console.log('ice owner : ', othersId);
-      console.log(peerConnections);
+       if (peerConnections.hasOwnProperty(othersId)) {
+        peerConnections[othersId].addIceCandidate(ice);
+        console.log('add IceCandidate');
+        console.log('ice owner : ', othersId);
+        console.log(peerConnections);
+      }
+
     });
 
     /**
