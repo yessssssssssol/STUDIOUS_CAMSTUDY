@@ -472,11 +472,19 @@ export default function Group() {
   }
 
   /**
-   * @description 그룹 룸에 들어오면 처음 시작될 함수
+   * @description 그룹 룸 데이터
    */
-  async function init() {
+  async function roomData() {
     const res = await API.get(`studyroom/${roomId}`);
     room = res.data;
+  }
+
+  /**
+   * @description 그룹 룸에 들어오면 처음 시작될 함수
+   */
+  function init() {
+    // const res = await API.get(`studyroom/${roomId}`);
+    // room = res.data;
 
     console.log('my first socket : ', socket.id);
     socketId.current = socket.id;
@@ -500,6 +508,9 @@ export default function Group() {
    * @description 로딩 완료 시 방에 입장
    */
   useEffect(() => {
+    {
+      roomData();
+    }
     if (isLoading) {
       init();
     }
@@ -619,11 +630,11 @@ export default function Group() {
   return (
     <>
       {isLoading ? (
-        <div className="lg:grid lg:justify-center">
+        <div className="w-full lg:grid lg:justify-center">
           <p className="font-bold text-center text-4xl m-5 mb-10">
             {room?.roomName}
           </p>
-          <div className="grid justify-between lg:flex lg:mx-[10rem] lg:max-w-[1600px]  ">
+          <div className="grid justify-between lg:flex lg:mx-[2rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[1rem] gap-y-[2.5rem]">
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
@@ -679,7 +690,7 @@ export default function Group() {
             </div>
 
             {/* Chat */}
-            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:mx-3 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
+            <div className=" my-[5%] mx-[15%] w-[70%] h-[60vh] items-center lg:h-[770px] min-w-[380px] max-w-[500px] lg:my-0 lg:ml-[2rem] lg:mr-0 lg:items-center lg:w-3/12 bg-white border-amber-100 border-2 shadow-2xl shadow-amber-400/10 rounded-xl">
               <ChatHeader roomName={room?.roomName} roomImg={room?.roomImg} />
               <ChatMainText
                 chattingBoxRef={chattingBoxRef}
