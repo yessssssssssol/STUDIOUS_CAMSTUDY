@@ -55,7 +55,7 @@ const Other = forwardRef(({userId, stream, time}, ref) => {
     }));
 
     return (
-        <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
+        <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10">
             <StopWatch myTimer={false} 
                 ref={timerRef}
                 userT={time}
