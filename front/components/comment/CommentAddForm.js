@@ -3,27 +3,23 @@ import { userAtom } from '../../core/atoms/userState';
 import * as Api from '../../pages/api/api';
 import { useEffect, useState } from 'react';
 
-const CommentAddForm = ({ roomId, setComments, writerId }) => {
+const CommentAddForm = ({ roomId, setComments }) => {
   const [content, setContent] = useState('');
-  const [wirterId, setWriterId] = useState('');
+  const [writerId, setWriterId] = useState('');
   const [user, setUser] = useState();
   const useratom = useRecoilValue(userAtom);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // roomId를 user_id 변수에 할당함.
-    // const userName = writeId;
 
     if (content.length === 0) {
       alert('내용을 입력하세요.');
     } else {
       try {
         await Api.post('comment', {
-          // writerId,
           roomId,
           content,
-          // createdAt,
         });
         const res = await Api.get('comments', roomId);
         setComments(res.data);
@@ -60,6 +56,7 @@ const CommentAddForm = ({ roomId, setComments, writerId }) => {
                   className="border p-2 rounded w-full mx-5"
                   placeholder="댓글을 입력하세요."
                   value={content}
+                  maxLength="50"
                   onChange={(e) => setContent(e.target.value)}
                 ></input>
               </div>

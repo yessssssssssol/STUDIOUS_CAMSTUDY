@@ -7,8 +7,7 @@ function Comments({ roomId, writerId }) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    // "comments/유저id"로 GET 요청하고, response의 data로 comments를 세팅함.
-
+    // "comments/roomId"로 GET 요청하고, response의 data로 comments를 세팅함.
     API.get('comments', roomId).then((res) => setComments(res.data));
   }, [roomId]);
 
