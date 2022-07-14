@@ -6,11 +6,24 @@ import { scheduleJob } from 'node-schedule';
 import { analyzeDate } from '../utils/analyzeDate';
 import { userAuthService } from './userService';
 
+/**
+ * @typedef {object} newLogObj
+ * @property {object} newLogObj.newLog
+ * @property {string} newLogObj.newLog.startTime
+ * @property {string} newLogObj.newLog.endTime
+ * @property {string} newLogObj.newLog.studyTimeNum
+ * @property {string} newLogObj.newLog.studyTimeStr
+ */
+
 const job = scheduleJob('0 0 5 * * * ', () => UserDailySheetService.createSheets());
 dayjs.locale('ko');
 
 class UserDailySheetService {
-    // 5시 마다 새로운 데일리 시트 만들기
+    /**
+     * 5시 마다 새로운 데일리 시트 만들기
+     * @param {string|undefined} date
+     * @returns {string}
+     */
     static async createSheets(date = undefined) {
         // 날짜 가져오기
         const now = dayjs();
@@ -70,7 +83,10 @@ class UserDailySheetService {
         return '금일 사용자 데일리 시트가 성공적으로 생성 되었습니다.';
     }
 
-    // 공부로그req가 들어오면 동시에 해당 사용자 데일리 시트도 업데이트하기
+    /**
+     * 공부로그req가 들어오면 동시에 해당 사용자 데일리 시트도 업데이트하기
+     * @param {newLogObj} newLog
+     */
     static async updateSheet({ newLog }) {
         const { id, startTime, endTime, studyTimeNum, studyTimeStr } = newLog;
 
@@ -133,6 +149,10 @@ class UserDailySheetService {
         return updatedSheet;
     }
 
+    /**
+     * 해당 id의 전체 데일리 시트 가져오기
+     * @param {id: string} id
+     */
     static async getSheets({ id }) {
         const getSheets = await UserDailySheet.getSheets({ id });
         return getSheets;
@@ -172,6 +192,10 @@ class UserDailySheetService {
         };
     }
 
+    /**
+     * 목표시간 변경
+     * @param {{id: string, timeGoal: string}} idAndTimeGoal
+     */
     static async updateTimeGoal({ id, timeGoal }) {
         const date = ChangeDate.getCurrentDate();
         const getSheet = await UserDailySheet.getSheet({ id, date });
