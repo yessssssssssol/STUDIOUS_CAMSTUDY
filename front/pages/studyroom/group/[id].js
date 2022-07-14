@@ -428,6 +428,7 @@ export default function Group() {
         });
 
         _offer = await myPeerConnection.createOffer();
+        console.log("create offer", _offer);
         myPeerConnection.setLocalDescription(_offer);
         // 자신의 로컬 목적지에 offer 설정
 
@@ -466,6 +467,7 @@ export default function Group() {
         myPeerConnection.setRemoteDescription(_offer);
         // 상대방 목적지로 전달받은 offer를 설정
         answer = await myPeerConnection.createAnswer();
+        console.log("create answer", answer);
         myPeerConnection.setLocalDescription(answer);
         // 내 로컬 목적지에 answer 설정
       }
@@ -573,7 +575,7 @@ export default function Group() {
           console.log('delete otherCamera', otherCameras.current);
         }
       });
-
+      console.log("delete result");
       console.log(otherCameras);
       console.log(dataChannels);
       console.log(peerConnections);
