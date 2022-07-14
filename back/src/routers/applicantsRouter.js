@@ -9,7 +9,7 @@ import { userAuthService } from '../services/userService';
 const applicantsRouter = Router();
 dayjs.locale('ko');
 
-// 맴버온니 스터디룸 신청
+//맴버온니 스터디룸 신청
 applicantsRouter.post('/apply', login_required, async function (req, res, next) {
     try {
         const now = dayjs();
