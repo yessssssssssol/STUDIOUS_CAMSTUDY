@@ -335,30 +335,28 @@ export default function Group() {
    */
    async function makeConnection(userId, offer = null) {
     if (RTCPeerConnection != undefined) {
-      if (myPeerConnection === null) {
-        myPeerConnection = new RTCPeerConnection({
-          iceServers: [
-            {
-              urls: [
-                'stun:stun.l.google.com:19302',
-                'stun:stun1.l.google.com:19302',
-                'stun:stun2.l.google.com:19302',
-                'stun:stun3.l.google.com:19302',
-                'stun:stun4.l.google.com:19302',
-                'stun:stun.ekiga.net',
-                'stun:stun.ideasip.com',
-                'stun:stun.rixtelecom.se',
-                'stun:stun.schlund.de',
-                'stun:stun.stunprotocol.org:3478',
-                'stun:stun.voiparound.com',
-                'stun:stun.voipbuster.com',
-                'stun:stun.voipstunt.com',
-                'stun:stun.voxgratia.org',
-              ],
-            },
-          ],
-        });
-      }
+      myPeerConnection = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              'stun:stun.l.google.com:19302',
+              'stun:stun1.l.google.com:19302',
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
+            ],
+          },
+        ],
+      });
       // ice 후보를 수집합니다.
       myPeerConnection.addEventListener('icecandidate', (data) => {
         // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
@@ -629,7 +627,7 @@ export default function Group() {
       location.reload();
       rtcInit();
     };
-  }, [peerConnections]);
+  }, []);
 
   /**
    * @description 방에 입장한 유저데이터 수집
