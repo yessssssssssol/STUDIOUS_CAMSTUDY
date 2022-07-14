@@ -165,20 +165,17 @@ const CreateStudyContent = () => {
         </div>
       </div>
       <div className="flex gap-x-6 m-2">
-        <label
-          htmlFor="name"
-          className="pt-2 text-sm font-bold text-gray-800 pt-2"
-        >
-          스터디인원
+        <label htmlFor="name" className="pt-2 text-sm font-bold text-gray-800 ">
+          스터디 인원
         </label>
-        <p className="pt-2 text-sm text-gray-800 pt-2">
+        <p className="pt-2 text-sm text-gray-800">
           스터디 참여 인원을 입력해주세요. (최대 4명)
         </p>
       </div>
       <input
         value={membersNum}
         onChange={onMembersNumChange}
-        className="border-2 rounded-md w-[40px] mx-5"
+        className="border border-gray-300 w-[40px] mx-5 p-2 shadow-sm rounded text-sm focus:outline-none focus:border-amber-500 bg-transparent placeholder-gray-500 text-gray-600 "
         min="0"
         max="4"
         size="15"
