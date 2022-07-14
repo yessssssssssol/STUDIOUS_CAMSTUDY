@@ -29,6 +29,11 @@ class ChangeDate {
         const studyTimeNum = endTimeNum - startTimeNum;
         // console.log(startTimeNum, endTimeNum);
 
+        //공부한 시간이 0초인 경우
+        if (startTimeNum === 0) {
+            return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr: '00:00:00' };
+        }
+
         const studyTimeStr = this.toStringTime(studyTimeNum);
 
         return { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr };
