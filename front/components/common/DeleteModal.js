@@ -2,6 +2,12 @@ import { useEffect, useRef } from 'react';
 import Button from './Button';
 import * as API from '../../pages/api/api';
 import { useRouter } from 'next/router';
+
+/**삭제 모달
+ *
+ * @component
+ * @param {object} props
+ */
 const DeleteModal = (props) => {
   const { setShow, title, myroomInfo, isBoard } = props;
   const ref = useRef(null);

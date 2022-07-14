@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import * as API from '../../pages/api/api';
 
+/**해당 스터디 멤버를 나타내는 컴포넌트
+ *
+ * @component
+ * @param {object} member -멤버 정보
+ * @param {string} roomId
+ * @param {object} owner - 해당 게시글 주인의 정보
+ * @param {boolean} isOwner - 해당 게시글의 주인인지 여부를 알려주는 데이터 true이면 게시글 주인 아니면 false
+ */
 const Member = ({ member, isOwner, roomId, owner }) => {
   // const { userName, roomId, applicantId, userURL } = applicant;
   const [isAccept, setIsAccept] = useState(false);

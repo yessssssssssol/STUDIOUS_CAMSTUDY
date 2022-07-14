@@ -4,10 +4,16 @@ import PrologueMid2 from '../../components/prologue/PrologueMid2';
 import PrologueMid3 from '../../components/prologue/PrologueMid3';
 import PrologueBottom from '../../components/prologue/PrologueBottom';
 import Helmet from '../../components/layout/Helmet';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
+/** 서비스 소개 페이지 컴포넌트
+ *
+ * @component
+ * @return Prologue
+ */
 const Prologue = () => {
   let boxStyle = {
     width: '40%',

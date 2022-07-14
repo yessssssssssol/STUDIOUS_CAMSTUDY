@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+/**작은 모달
+ *
+ * @component
+ * @param {object} props
+ */
 const SmallModal = (props) => {
   const { setShow, title, children } = props;
   const ref = useRef(null);

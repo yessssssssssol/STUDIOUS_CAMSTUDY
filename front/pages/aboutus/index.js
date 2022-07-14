@@ -1,5 +1,10 @@
 import Helmet from '../../components/layout/Helmet';
 
+/** 스터디원 소개 페이지 컴포넌트입니다.
+ *
+ * @component
+ * @return About us
+ */
 export default function team() {
   return (
     <div className="mb-16">
