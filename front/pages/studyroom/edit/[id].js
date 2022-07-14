@@ -109,6 +109,7 @@ export default function Create() {
   return (
     <div className="container">
       <Helmet title="EDIT" />
+
       <div className="flex justify-center">
         <div className="container mx-72 bg-white rounded min-w-[440px]">
           <div className="w-full border-b border-amber-400  py-3 bg-white ">
@@ -170,10 +171,11 @@ export default function Create() {
           </div>
         </div>
       </div>
+
       <div className="flex justify-center">
         <EditStudyContent />
       </div>
-      <div className="flex justify-center mt-2">
+      <div className="flex justify-center">
         <EditBoard />
       </div>
       {error && (

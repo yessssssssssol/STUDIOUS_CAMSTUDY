@@ -89,6 +89,7 @@ const CreateBoard = () => {
               Character Limit: 200
             </p>
           </div>
+
           <div className="mt-2 flex flex-col gap-x-6 mx-2">
             <label
               htmlFor="name"
