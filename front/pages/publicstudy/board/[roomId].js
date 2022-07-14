@@ -15,6 +15,11 @@ import SmallModal from '../../../components/common/SmallModal';
 import Button from '../../../components/common/Button';
 import DeleteModal from '../../../components/common/DeleteModal';
 
+/** Openstudyroom 게시판 디테일 페이지
+ *
+ * @component
+ * @return Openroom Detail
+ */
 const OpenRoomBoard = () => {
   const router = useRouter();
   const { roomId } = router.query;

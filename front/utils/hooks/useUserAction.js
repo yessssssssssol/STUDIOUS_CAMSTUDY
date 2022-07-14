@@ -12,6 +12,11 @@ import {
 } from '../../core/atoms/userState';
 import { createroomAtom } from '../../core/atoms/createroomState';
 
+/** 유저 관련 hook(로그인, 로그아웃)
+ *
+ * @hook
+ * @return Prologue
+ */
 export function useUserActions() {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenAtom);

@@ -1,3 +1,8 @@
+/**프로필 카드 컴포넌트
+ *
+ * @component
+ * @param {object} owner -프로필 주인의 정보
+ */
 export default function ProfileCard({ owner }) {
   const { name, description, profileUrl } = owner;
   return (

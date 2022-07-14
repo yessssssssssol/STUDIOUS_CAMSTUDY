@@ -16,6 +16,12 @@ import MemberList from '../../../components/board/MemberList';
 import Button from '../../../components/common/Button';
 import DeleteModal from '../../../components/common/DeleteModal';
 
+/** private study 게시판의 게시글 페이지 컴포넌트입니다.
+ *
+ * @component
+ * @return Private Study Detail Page
+ */
+
 export default function Detail() {
   let tempData = {};
   const currUser = useRecoilValue(userAtom);
@@ -63,6 +69,7 @@ export default function Detail() {
     }
   }, [router.isReady]);
 
+  // 게시글 주인을 check
   useEffect(() => {
     if (owner.id === currUser.id) {
       setIsOwner(true);
@@ -71,6 +78,7 @@ export default function Detail() {
     }
   }, [owner]);
 
+  // 신청을 완료할 경우 applicants를 다시 get 해온다.
   const submitHandler = async () => {
     try {
       await API.post(`apply`, {
@@ -83,6 +91,7 @@ export default function Detail() {
     getApplicants();
   };
 
+  // applicants를 get 해오는 함수
   const getApplicants = async () => {
     try {
       const res = await API.get(`applicants/${detailData.roomId}`);
@@ -112,6 +121,7 @@ export default function Detail() {
     }
   };
 
+  // 멤버와 신청자 수가 바뀔 때마다 applicant의 명단을 다시 확인한다.
   useEffect(() => {
     applicantsCheck();
   }, [members, applicants.length]);
@@ -186,7 +196,7 @@ export default function Detail() {
                         />
                         {isApplicants && (
                           <p className="px-5 py-2.5 mr-2 mb-2 italic font-semibold text-red-500">
-                            이미 신청한 스터디입니다.
+                            신청이 완료되었습니다.
                           </p>
                         )}
                       </div>

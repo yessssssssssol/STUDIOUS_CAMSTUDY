@@ -2,7 +2,7 @@ import * as API from '../../api/api';
 import EditBoard from '../../../components/board/edit/EditBoard';
 import EditStudyContent from '../../../components/board/edit/EditStudyContent';
 import { useState, useRef, useEffect } from 'react';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import {
   editroomAtom,
   edithashtagAtom,
@@ -12,6 +12,10 @@ import { roomDefaultImg } from '../../../components/common/UseData';
 import Alert from '../../../components/common/Alert';
 import Helmet from '../../../components/layout/Helmet';
 
+/** 스터디룸 edit 페이지
+ * @component
+ * @return studyroom/edit 페이지
+ */
 export default function Create() {
   const router = useRouter();
   const [room, setRoom] = useRecoilState(editroomAtom);
@@ -24,6 +28,7 @@ export default function Create() {
 
   const fileInput = useRef(null);
 
+  // 프로필 이미지를 리셋하는 함수
   const handleResetProfileChange = (e) => {
     setRoom((prev) => {
       return {
@@ -35,6 +40,7 @@ export default function Create() {
     setFile(roomDefaultImg);
   };
 
+  // 프로필 이미지 미리보기
   const handleUpload = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -61,6 +67,7 @@ export default function Create() {
     }
   }, [router.isReady]);
 
+  // 프로필 이미지 저장
   const submitHandler = async (e) => {
     e.preventDefault();
     const formD = new FormData();
