@@ -504,7 +504,14 @@ export default function Group() {
    */
   useEffect(() => {
     if (isLoading) {
-      init();
+      if (myStream !== null) {
+        init();
+      }
+      else {
+        rtcInit();
+        location.reload();
+        router.back();
+      }
     }
   }, [isLoading]);
 
@@ -592,7 +599,13 @@ export default function Group() {
     /**
      * @description unmount시 소켓 초기화
      */
-    return () => {
+    return async () => {
+
+      await API.put(`headcount`, {
+        roomId,
+        attend: false,
+      });
+
       socket.off('welcome');
       socket.off('refuse');
       socket.off('bye');
@@ -656,6 +669,7 @@ export default function Group() {
                       AlertNoHear(result);
                     }}
                     camera={videoRef}
+                    isGroup={true}
                   />
                 </div>
                 <AlertModal />
