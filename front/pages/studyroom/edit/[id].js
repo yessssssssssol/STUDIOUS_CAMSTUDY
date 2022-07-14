@@ -109,62 +109,64 @@ export default function Create() {
   return (
     <div className="container">
       <Helmet title="EDIT" />
-      <div className="flex-row justify-center mx-72 bg-white rounded min-w-[440px]">
-        <div className="w-11/12 border-b border-amber-400  py-3 bg-white ">
-          <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
-            <p className="text-2xl text-amber-400 font-bold">스터디방 수정</p>
-          </div>
-        </div>
-        <div className="flex gap-x-6 m-2 rounded min-w-[440px]">
-          <label
-            htmlFor="name"
-            className="pt-2 text-sm font-bold text-gray-800 "
-          >
-            대표 이미지 설정
-          </label>
-          {!error ? (
-            <p className="pt-2 text-sm text-gray-800 ">
-              대표 이미지를 설정해주세요.
-            </p>
-          ) : (
-            <p className="pt-2 text-sm text-red-500 ">
-              대표 이미지를 설정해주세요.
-            </p>
-          )}
-        </div>
-        <div className="container w-full mx-auto my-3 bg-white rounded flex-row justify-center">
-          {tempUrl && (
-            <div className="my-3">
-              <img
-                className="object-fill h-48 w-96 rounded-md "
-                src={tempUrl}
-                alt="Rounded avatar"
-              />
+      <div className="flex justify-center">
+        <div className="container mx-72 bg-white rounded min-w-[440px]">
+          <div className="w-11/12 border-b border-amber-400  py-3 bg-white ">
+            <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
+              <p className="text-2xl text-amber-400 font-bold">스터디방 수정</p>
             </div>
-          )}
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            accept="image/jpg,image/png,image/jpeg"
-            name="profile_img"
-            onChange={handleUpload}
-            ref={fileInput}
-          />
-          <div className="flex w-64 gap-x-3">
-            <button
-              className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-amber-400 hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
-              onClick={() => {
-                fileInput.current.click();
-              }}
+          </div>
+          <div className="flex gap-x-6 m-2 rounded min-w-[440px]">
+            <label
+              htmlFor="name"
+              className="pt-2 text-sm font-bold text-gray-800 "
             >
-              프로필 업로드
-            </button>
-            <button
-              className="w-full text-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-amber-400 bg-white hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
-              onClick={handleResetProfileChange}
-            >
-              프로필 삭제
-            </button>
+              대표 이미지 설정
+            </label>
+            {!error ? (
+              <p className="pt-2 text-sm text-gray-800 ">
+                대표 이미지를 설정해주세요.
+              </p>
+            ) : (
+              <p className="pt-2 text-sm text-red-500 ">
+                대표 이미지를 설정해주세요.
+              </p>
+            )}
+          </div>
+          <div className="container w-full mx-auto my-3 bg-white rounded flex-row justify-center">
+            {tempUrl && (
+              <div className="my-3">
+                <img
+                  className="object-fill h-48 w-96 rounded-md "
+                  src={tempUrl}
+                  alt="Rounded avatar"
+                />
+              </div>
+            )}
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/jpg,image/png,image/jpeg"
+              name="profile_img"
+              onChange={handleUpload}
+              ref={fileInput}
+            />
+            <div className="flex w-64 gap-x-3">
+              <button
+                className="w-full text-white py-2 px-2 my-1 uppercase rounded bg-amber-400 hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
+                onClick={() => {
+                  fileInput.current.click();
+                }}
+              >
+                프로필 업로드
+              </button>
+              <button
+                className="w-full text-amber-400 hover:text-white py-2 px-2 my-1 uppercase rounded border border-amber-400 bg-white hover:bg-amber-500 shadow hover:shadow-lg text-sm transition duration-200"
+                onClick={handleResetProfileChange}
+              >
+                프로필 삭제
+              </button>
+            </div>
           </div>
         </div>
       </div>
