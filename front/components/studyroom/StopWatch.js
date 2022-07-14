@@ -126,26 +126,22 @@ const StopWatch = forwardRef(
           const updatedTimelog = await res.data;
         } catch (err) {}
       };
-    } 
-    else {
-
+    } else {
       useImperativeHandle(ref, () => ({
         // 뒤로 가기, 페이지를 나갈때도 timelogFunc 실행
         setPassTime(time) {
           setIsPassTime(time);
-        }
+        },
       }));
 
       useEffect(() => {
         if (isPassTime === true) {
           handleStart();
-        }
-        else {
+        } else {
           handlePause();
         }
       }, [isPassTime]);
     }
-    
 
     const handleClick = () => {
       setEndTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
@@ -157,7 +153,7 @@ const StopWatch = forwardRef(
       <div>
         {myTimer === false ? (
           <div>
-            <div className="absolute flex justify-around">
+            <div className="absolute z-10 flex justify-around">
               <div>
                 <p className="bg-gray-100 text-gray-800 font-bold text-2xl inline-flex items-center px-2.5 py-0.5 rounded mr-2">
                   <RiTimerLine className="mr-3" />

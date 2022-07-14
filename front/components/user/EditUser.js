@@ -2,14 +2,14 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { editUserModalAtom } from '../../core/atoms/modalState';
-import { isloginAtom, userAtom } from '../../core/atoms/userState';
+import { isLoginAtom, userAtom } from '../../core/atoms/userState';
 import * as API from '../../pages/api/api';
 import Button from '../common/Button';
 
 const EditUser = () => {
   const setShowModal = useSetRecoilState(editUserModalAtom);
   const [user, setUser] = useRecoilState(userAtom);
-  const setIsLogin = useSetRecoilState(isloginAtom);
+  const setIsLogin = useSetRecoilState(isLoginAtom);
   const router = useRouter();
 
   const submitHandler = async (e) => {
