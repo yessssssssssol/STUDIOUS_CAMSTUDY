@@ -40,8 +40,8 @@ const CreateBoard = () => {
   };
 
   return (
-    <div className="container mx-72 bg-white rounded">
-      <div className="xl:w-full border-b border-amber-400  py-3 bg-white ">
+    <div className="container mx-72 bg-white rounded min-w-[440px]">
+      <div className="xl:w-full border-b  py-3 bg-white ">
         <div className="flex w-11/12 mx-auto xl:w-full xl:mx-0 items-center">
           <p className="text-2xl text-amber-400  font-bold">
             스터디원 모집 게시글 수정
@@ -49,8 +49,8 @@ const CreateBoard = () => {
         </div>
       </div>
       <div className="mx-auto">
-        <div className="xl:w-9/12 w-11/12 mx-auto xl:mx-0">
-          <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full ">
+        <div className="xl:w-11/12 w-11/12 mx-auto">
+          <div className="mt-8 flex flex-col w-full ">
             <label
               htmlFor="title"
               className="pb-2 text-sm font-bold text-gray-800 "
@@ -62,11 +62,11 @@ const CreateBoard = () => {
               id="title"
               value={roomTitle}
               onChange={onTitleChange}
-              className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-amber-400 bg-transparent placeholder-gray-500 text-gray-600 "
+              className="border border-gray-300 w-full pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-amber-400 bg-transparent placeholder-gray-500 text-gray-600 "
               placeholder="스터디 모집 합니다."
             />
           </div>
-          <div className="mt-8 flex flex-col xl:w-3/5 lg:w-1/2 md:w-1/2 w-full">
+          <div className="mt-8 flex flex-col w-full">
             <label
               htmlFor="about"
               className="pb-2 text-sm font-bold text-gray-800 "
@@ -81,6 +81,7 @@ const CreateBoard = () => {
               required
               className="bg-transparent border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-amber-400 resize-none placeholder-gray-500 text-gray-600 "
               placeholder="스터디 모집에 관한 자세한 이야기를 적어주세요!"
+              maxLength="200"
               rows="5"
             ></textarea>
             <p className="w-full text-right text-xs pt-1 text-gray-600 ">
