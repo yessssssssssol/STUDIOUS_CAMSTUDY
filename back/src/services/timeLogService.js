@@ -4,7 +4,14 @@ import { ChangeDate } from '../utils/changeDate';
 import { UserDailySheetService } from './userDailySheetService';
 import { TotalTimeService } from './totalTimeService';
 
+/**
+ *  시간 트래킹, 저장 관련 기능
+ */
 class timeLogService {
+    /**
+     * 타임로그 생성
+     * @param {{user_id: string, beginTime: string, finishTime: string}} IdBeginAndFinish - (user_id, beginTime, finishTime)
+     */
     static async addTimeLog({ user_id, startTime, endTime }) {
         const userId = await User.findById({ user_id });
         if (!userId) {
@@ -12,7 +19,10 @@ class timeLogService {
             return { errorMessage };
         }
 
-        const { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr } = ChangeDate.findDate(startTime, endTime);
+        const { startTimeNum, endTimeNum, studyTimeNum, studyTimeStr } = ChangeDate.findDate(
+            startTime,
+            endTime,
+        );
 
         const newLog = {
             id: user_id,
@@ -44,6 +54,10 @@ class timeLogService {
         return { timeLog, updatedSheet };
     }
 
+    /**
+     * 타임로그 리스트 불러오기 (하루치)
+     * @param {{user_id: string, date: string}} IdAndDate - (user_id, date)
+     */
     static async getTimeLogs({ user_id, date }) {
         const userId = await User.findById({ user_id });
         if (!userId) {
@@ -51,7 +65,9 @@ class timeLogService {
             return { errorMessage };
         }
 
-        const beginTime = new Date(`${date.slice(0, 4)}/${date.slice(5, 7)}/${date.slice(8)}/05:00:00`).getTime();
+        const beginTime = new Date(
+            `${date.slice(0, 4)}/${date.slice(5, 7)}/${date.slice(8)}/05:00:00`,
+        ).getTime();
         const finishTime = beginTime + 86400000;
 
         const studyLogADay = await TimeLog.findAllADay({ user_id, beginTime, finishTime });
