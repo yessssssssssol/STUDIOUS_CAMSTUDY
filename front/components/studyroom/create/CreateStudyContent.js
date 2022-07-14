@@ -116,6 +116,7 @@ const CreateStudyContent = () => {
             <input
               value={roomName}
               onChange={onNameChange}
+              maxLength="20"
               type="text"
               id="name"
               className="border border-gray-300  pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-amber-500 bg-transparent placeholder-gray-500 text-gray-600 "
