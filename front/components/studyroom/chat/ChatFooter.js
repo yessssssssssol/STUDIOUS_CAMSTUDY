@@ -20,6 +20,7 @@ const ChatFooter = ({
   MuteBtnClick,
   stopWatchRef,
   rtcInit,
+  router,
 }) => {
   return (
     <div className="flex justify-between px-3">
@@ -54,6 +55,8 @@ const ChatFooter = ({
         className="py-2.5 px-2.5 mr-2 mb-2 text-sm font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border shadow-lg border-gray-200 hover:text-white hover:bg-amber-400 hover:shadow-amber-300/50 focus:z-10 focus:ring-4 focus:ring-gray-200"
         onClick={() => {
           rtcInit();
+          location.reload();
+          router.back();
           stopWatchRef.current.handleClick();
         }}
       >

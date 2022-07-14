@@ -514,8 +514,7 @@ export default function Group() {
     if (isLoading) {
       if (myStream !== null) {
         init();
-      }
-      else {
+      } else {
         rtcInit();
         location.reload();
         router.back();
@@ -608,7 +607,6 @@ export default function Group() {
      * @description unmount시 소켓 초기화
      */
     return async () => {
-
       await API.put(`headcount`, {
         roomId,
         attend: false,
@@ -719,6 +717,7 @@ export default function Group() {
                 MuteBtnClick={MuteBtnClick}
                 stopWatchRef={stopWatchRef}
                 rtcInit={rtcInit}
+                router={router}
               />
             </div>
           </div>
