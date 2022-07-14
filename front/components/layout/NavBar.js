@@ -4,7 +4,7 @@ import LoginModal from '../user/LoginModal';
 import RegisterModal from '../user/RegisterModal';
 import UserEditModal from '../user/UserEditModal';
 import { useRouter } from 'next/router';
-import { isloginAtom, tokenAtom } from '../../core/atoms/userState';
+import { isLoginAtom, tokenAtom } from '../../core/atoms/userState';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useUserActions } from '../../utils/hooks/useUserAction';
 import { userAtom } from '../../core/atoms/userState';
@@ -20,7 +20,7 @@ export default function NavBar() {
   const [token, setToken] = useState();
   const user = useRecoilValue(userAtom);
   const userActions = useUserActions();
-  const [islogin, setIsLogin] = useRecoilState(isloginAtom);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);
   const [element, setElement] = useState(null);
 
   const resetUser = useResetRecoilState(tokenAtom);
@@ -39,7 +39,7 @@ export default function NavBar() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [islogin]);
+  }, [isLogin]);
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -129,7 +129,7 @@ export default function NavBar() {
         </Link>
         {items.map((item, index) => NavItem(item, index))}
         <div>
-          {islogin && element ? (
+          {isLogin && element ? (
             <div className="relative flex items-center md:order-2" ref={ref}>
               <button
                 onClick={handleMenuBar}

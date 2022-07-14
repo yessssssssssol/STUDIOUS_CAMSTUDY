@@ -16,8 +16,8 @@ export const tokenAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const isloginAtom = atom({
-  key: 'islogin',
+export const isLoginAtom = atom({
+  key: 'isLogin',
   default: { login: false },
   effects_UNSTABLE: [persistAtom],
 });

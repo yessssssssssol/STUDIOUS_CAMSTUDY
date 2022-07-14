@@ -8,7 +8,7 @@ import {
   userNameAtom,
   userDescriptionAtom,
   profileUrlAtom,
-  isloginAtom,
+  isLoginAtom,
 } from '../../core/atoms/userState';
 import { createroomAtom } from '../../core/atoms/createroomState';
 
@@ -20,7 +20,7 @@ export function useUserActions() {
   const setDescription = useSetRecoilState(userDescriptionAtom);
   const setProfileUrl = useSetRecoilState(profileUrlAtom);
   const setRoom = useResetRecoilState(createroomAtom);
-  const setIsLogin = useSetRecoilState(isloginAtom);
+  const setIsLogin = useSetRecoilState(isLoginAtom);
   // history 필요할 때
   const currentURL = router.asPath;
 
