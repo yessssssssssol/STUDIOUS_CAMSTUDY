@@ -145,12 +145,14 @@ export default function Group() {
       addMessage(res.message);
       // 데이터 안에 넣기
       if (otherCameras.current.hasOwnProperty(res.id)) {
+        otherCameras.current[res.id].name = res.data.name;
         otherCameras.current[res.id].state = res.data.state;
         otherCameras.current[res.id].camera = res.data.camera;
         otherCameras.current[res.id].mute = res.data.mute;
         otherCameras.current[res.id].time = res.data.time;
       } else {
         otherCameras.current[res.id] = {
+          name : res.data.name,
           state: res.data.state,
           camera: res.data.camera,
           mute: res.data.mute,
@@ -411,6 +413,7 @@ export default function Group() {
             id: socket.id,
             message: `${user?.name}님이 입장하셨습니다.`,
             data: {
+              name : user?.name,
               state: isState,
               camera: isCamera,
               mute: isMute,
@@ -441,6 +444,7 @@ export default function Group() {
               id: socket.id,
               message: `${user?.name}님이 입장하셨습니다.`,
               data: {
+                name : user?.name,
                 state: isState,
                 camera: isCamera,
                 mute: isMute,

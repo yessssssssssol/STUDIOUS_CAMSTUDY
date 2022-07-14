@@ -66,7 +66,6 @@ const Other = forwardRef(({ userId, stream, time }, ref) => {
           className="rounded-xl"
           width="100%"
           height="100%"
-          muted
           autoPlay
           playsInline
           ref={videoRef}
