@@ -6,12 +6,16 @@ import * as API from '../../pages/api/api';
 import MyStudyRoomCard from '../../components/common/MyStudyRoomCard';
 import ScrollHorizontal from 'react-scroll-horizontal';
 
+/**
+ * @component
+ * @description 내 스터디룸 모음
+ */
 const HomeMyStudy = () => {
   const [myStudyRooms, setMyStudyRooms] = useState([]);
   const user = useRecoilValue(userAtom);
 
   /**
-   * @description 내가 생성하거나 참여중인 스터디룸
+   * @description 내가 생성하거나 참여중인 스터디룸 데이터
    */
   useEffect(() => {
     async function getMyStudyRooms() {

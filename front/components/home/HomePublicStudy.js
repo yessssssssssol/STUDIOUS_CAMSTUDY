@@ -3,11 +3,13 @@ import Link from 'next/link';
 import * as API from '../../pages/api/api';
 import PublicCard from '../common/PublicCard';
 
+/**
+ * @component
+ * @description Public Study Rooms list
+ */
 const HomePublicStudy = () => {
   const [openRooms, setOpenRooms] = useState([]);
-  /**
-   * @description Public Study Rooms list
-   */
+
   useEffect(() => {
     async function getOpenroom() {
       const res = await API.get('open/studyrooms');

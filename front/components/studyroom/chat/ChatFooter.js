@@ -1,17 +1,43 @@
 import { GoUnmute, GoMute } from 'react-icons/go';
-import { TbDeviceComputerCamera, TbDeviceComputerCameraOff } from 'react-icons/tb';
+import {
+  TbDeviceComputerCamera,
+  TbDeviceComputerCameraOff,
+} from 'react-icons/tb';
 
-const ChatFooter = ({ isCamera, isMute, CameraOnOffClick, MuteBtnClick, stopWatchRef }) => {
+/**
+ * @component
+ * @description 그룹 스터디룸에서 채팅창 하단 옵션들
+ * @param {boolean} isCamera - 카메라 on/off
+ * @param {boolean} isMute - 마이크 on/off
+ * @param {function} CameraOnOffClick - 카메라 on/off 이벤트 버튼 함수
+ * @param {function} MuteBtnClick - 마이크 on/off 이벤트 버튼 함수
+ * @param {function} rtcInit - 전역변수 초기화
+ */
+const ChatFooter = ({
+  isCamera,
+  isMute,
+  CameraOnOffClick,
+  MuteBtnClick,
+  stopWatchRef,
+  rtcInit,
+}) => {
   return (
-    //  채팅창 하단 옵션들
     <div className="flex justify-between px-3">
       <div className="flex items-center">
         {/* 카메라 on/off */}
         <button id="cameraBtn" className="mx-2" onClick={CameraOnOffClick}>
           {isCamera == true ? (
-            <TbDeviceComputerCamera color="#ea580c" size="30" style={{ marginBottom: 10 }} />
+            <TbDeviceComputerCamera
+              color="#ea580c"
+              size="30"
+              style={{ marginBottom: 10 }}
+            />
           ) : (
-            <TbDeviceComputerCameraOff color="#ea580c" size="30" style={{ marginBottom: 10 }} />
+            <TbDeviceComputerCameraOff
+              color="#ea580c"
+              size="30"
+              style={{ marginBottom: 10 }}
+            />
           )}
         </button>
         {/* 마이크 on/off */}

@@ -1,3 +1,8 @@
+/**
+ * @component
+ * @description 그룹 스터디룸에서 채팅창 메시지 작성 및 전송 버튼
+ * @param {function} sendChatHandler - 채팅 입력시 실행되는 이벤트 함수
+ */
 const ChatSendPart = ({ sendChatHandler }) => {
   return (
     // message send part
@@ -10,7 +15,7 @@ const ChatSendPart = ({ sendChatHandler }) => {
           type="text"
           className="block w-full py-2 pl-4 ml-1 mr-2 bg-gray-100 rounded-full outline-none focus:text-gray-700"
         ></input>
-        <button onClick={sendChatHandler} clssName="py-2 p-4">
+        <button onClick={sendChatHandler}>
           <svg
             className="w-5 h-5 mr-1 ml-2 text-gray-500 origin-center transform rotate-90"
             xmlns="http://www.w3.org/2000/svg"

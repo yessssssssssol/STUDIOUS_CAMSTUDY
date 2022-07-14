@@ -4,6 +4,10 @@ import { useRecoilValue } from 'recoil';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
+/**
+ * @component
+ * @description 나의 누적 공부시간과 프로필
+ */
 const HomeMyLogTime = () => {
   const useratom = useRecoilValue(userAtom);
   const [timeDatas, setTimeData] = useState(null);
