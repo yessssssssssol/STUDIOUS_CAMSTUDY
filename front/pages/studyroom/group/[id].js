@@ -428,8 +428,6 @@ export default function Group() {
         });
 
         _offer = await myPeerConnection.createOffer();
-        console.log("create offer : ", _offer);
-
         myPeerConnection.setLocalDescription(_offer);
         // 자신의 로컬 목적지에 offer 설정
 
@@ -468,7 +466,6 @@ export default function Group() {
         myPeerConnection.setRemoteDescription(_offer);
         // 상대방 목적지로 전달받은 offer를 설정
         answer = await myPeerConnection.createAnswer();
-        console.log("create answer : ", answer);
         myPeerConnection.setLocalDescription(answer);
         // 내 로컬 목적지에 answer 설정
       }
@@ -593,15 +590,13 @@ export default function Group() {
       socket.emit('answer', answer, socket.id, offersId);
     });
 
-    socket.on('answer', (answer, newUserId) => {
+    socket.on('answer', async (answer, newUserId) => {
       /**
        * @description 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
        */
-      console.log("answer envent : ", peerConnections);
-      console.log("newUserId", newUserId);
       peerConnections[newUserId].setRemoteDescription(answer);
-      
     });
+
 
     socket.on('ice', (ice, othersId) => {
       /**
