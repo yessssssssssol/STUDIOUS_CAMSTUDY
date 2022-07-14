@@ -23,13 +23,13 @@ const Loading = ({ cb }) => {
       video: true,
     };
     const cameraConstraints = {
-      audio: true,
+      audio: { deviceId: { exact: micId } },
       video: { deviceId: { exact: videoId } },
     };
     try {
       if (navigator.mediaDevices) {
         myStream = await navigator.mediaDevices.getUserMedia(
-          videoId ? cameraConstraints : initialConstraints
+          videoId && micId ? cameraConstraints : initialConstraints
         );
       } 
 

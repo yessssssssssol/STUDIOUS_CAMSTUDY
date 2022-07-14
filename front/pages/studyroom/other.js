@@ -61,7 +61,7 @@ const Other = forwardRef(({userId, stream, time}, ref) => {
                 userT={time}
             />
             <div className="w-full flex justify-center ">
-                <video className="rounded-xl" width="100%" height="100%" muted autoPlay playsInline ref={videoRef}></video>
+                <video className="rounded-xl" width="100%" height="100%" autoPlay playsInline ref={videoRef}></video>
                 {
                     isCamera ? <></>
                     : isState ? <img className="absolute w-[100%] h-[100%]" src={`/work.png`} ></img> 
