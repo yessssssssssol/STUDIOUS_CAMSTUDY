@@ -379,20 +379,13 @@ export default function Group() {
     }
   }, [isLoading]);
 
-
-  
-  /**
-   * @description 소켓 이벤트 정의
-   */
-  useEffect(() => {
-
-      /**
+    /**
      * @description 유저와 유저끼리 연결을 만들어내는 함수
      * @param {string} userId
      * @param {RTCPeerConnection} offer
      * @return {RTCPeerConnection}
      */
-    async function makeConnection(userId, offer = null) {
+     async function makeConnection(userId, offer = null) {
       if (RTCPeerConnection != undefined) {
         myPeerConnection = new RTCPeerConnection({
           iceServers: [
@@ -535,13 +528,17 @@ export default function Group() {
         return answer || _offer;
       }
     }
+  
+  /**
+   * @description 소켓 이벤트 정의
+   */
+  useEffect(() => {
 
-
-    socket.on('welcome', (userId, userName, newUserId) => {
+    socket.on('welcome', async (userId, userName, newUserId) => {
       console.log('enter user : ', userName);
       console.log('other userId : ', userId);
       console.log('other userSocketId : ', newUserId);
-      const offer = makeConnection(newUserId);
+      const offer = await makeConnection(newUserId);
       console.log('--------------------------------------');
       console.log('make - peerconnections', peerConnections);
       console.log(`${userName} send offer`, userId);
@@ -586,14 +583,14 @@ export default function Group() {
       console.log(peerConnections);
     });
 
-    socket.on('offer', (offer, offersId) => {
+    socket.on('offer', async (offer, offersId) => {
       /**
        * @description
        * peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
        * 데이터 체널에 대한 이벤트 추가
        * 서버에서 받은 초대장 설정하기.
        */
-      const answer = makeConnection(offersId, offer);
+      const answer = await makeConnection(offersId, offer);
       socket.emit('answer', answer, socket.id, offersId);
     });
 
@@ -603,22 +600,18 @@ export default function Group() {
        */
       console.log("answer envent : ", peerConnections);
       console.log("newUserId", newUserId);
-      if (peerConnections.hasOwnProperty(newUserId)) {
-        peerConnections[newUserId].setRemoteDescription(answer);
-      }
+      peerConnections[newUserId].setRemoteDescription(answer);
+      
     });
 
     socket.on('ice', (ice, othersId) => {
       /**
        * @description 다른 사람에게 온 othersId를 myPeerConnection에 등록
        */
-       if (peerConnections.hasOwnProperty(othersId)) {
-        peerConnections[othersId].addIceCandidate(ice);
-        console.log('add IceCandidate');
-        console.log('ice owner : ', othersId);
-        console.log(peerConnections);
-      }
-
+      peerConnections[othersId].addIceCandidate(ice);
+      console.log('add IceCandidate');
+      console.log('ice owner : ', othersId);
+      console.log(peerConnections);
     });
 
     /**
