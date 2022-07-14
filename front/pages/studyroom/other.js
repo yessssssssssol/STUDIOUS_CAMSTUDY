@@ -8,7 +8,7 @@ import {
 import { GoUnmute, GoMute } from 'react-icons/go';
 import StopWatch from '../../components/studyroom/StopWatch';
 
-const Other = forwardRef(({ userId, stream, time }, ref) => {
+const Other = forwardRef(({ userId, stream, time, name }, ref) => {
   const idRef = useRef(userId);
   const [isState, setIsState] = useState(true);
   const [isCamera, setIsCamera] = useState(true);
@@ -84,12 +84,16 @@ const Other = forwardRef(({ userId, stream, time }, ref) => {
           ></img>
         )}
       </div>
-      <div className="absolute bottom-[5px] left-[8px]">
+      <div className="absolute bottom-[-6px] w-[100%] h-[45px] bg-black opacity-50 rounded-b-xl"></div>
+      <div className="absolute bottom-[3px] left-[16px]">
         {isMute ? (
-          <GoMute color="#ea580c" size="30" />
+          <GoMute color="#FFFFFF" size="30" />
         ) : (
-          <GoUnmute color="#ea580c" size="30" />
+          <GoUnmute color="#FFFFFF" size="30" />
         )}
+        <p className="absolute bottom-[0px] left-[50px] py-[2px] px-1 text-lg font-semibold text-white rounded-lg ">
+          {name}
+        </p>
       </div>
     </div>
   );

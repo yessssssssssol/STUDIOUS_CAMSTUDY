@@ -697,6 +697,7 @@ export default function Group() {
                         userId={user}
                         stream={otherCameras.current[user].stream}
                         ref={otherCameras.current[user]}
+                        name={otherCameras.current[user].name}
                       ></Other>
                     </>
                   );
