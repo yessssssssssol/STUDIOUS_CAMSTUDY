@@ -152,7 +152,7 @@ export default function Group() {
         otherCameras.current[res.id].time = res.data.time;
       } else {
         otherCameras.current[res.id] = {
-          name : res.data.name,
+          name: res.data.name,
           state: res.data.state,
           camera: res.data.camera,
           mute: res.data.mute,
@@ -413,7 +413,7 @@ export default function Group() {
             id: socket.id,
             message: `${user?.name}님이 입장하셨습니다.`,
             data: {
-              name : user?.name,
+              name: user?.name,
               state: isState,
               camera: isCamera,
               mute: isMute,
@@ -444,7 +444,7 @@ export default function Group() {
               id: socket.id,
               message: `${user?.name}님이 입장하셨습니다.`,
               data: {
-                name : user?.name,
+                name: user?.name,
                 state: isState,
                 camera: isCamera,
                 mute: isMute,
@@ -649,7 +649,7 @@ export default function Group() {
           <p className="font-bold text-center text-4xl m-5 mb-10">
             {room?.roomName}
           </p>
-          <div className="grid justify-between lg:flex lg:mx-[2rem] lg:max-w-[1600px]  ">
+          <div className="grid justify-center lg:justify-between lg:flex lg:mx-[2rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[1rem] gap-y-[2.5rem]">
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">
