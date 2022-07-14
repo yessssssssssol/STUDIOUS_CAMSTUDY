@@ -1,6 +1,4 @@
-## 목차
 
-## [**GitLab으로 구경하기**](https://kdt-gitlab.elice.io/ai_track/class_04/ai_project/team4/ai_project_team4)
 
 # 1. 서비스 소개
 
