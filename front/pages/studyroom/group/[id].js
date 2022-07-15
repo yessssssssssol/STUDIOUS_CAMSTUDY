@@ -23,8 +23,8 @@ const hostname =
     ? window.location.hostname
     : '';
 
-const url = 'http://' + hostname + ':' + backendPortNumber;
-//const url = 'https://' + hostname;
+//const url = 'http://' + hostname + ':' + backendPortNumber;
+const url = 'https://' + hostname;
 
 /**
  * @description 방 url에서 roomId를 추출한다.
@@ -152,7 +152,7 @@ export default function Group() {
         otherCameras.current[res.id].time = res.data.time;
       } else {
         otherCameras.current[res.id] = {
-          name : res.data.name,
+          name: res.data.name,
           state: res.data.state,
           camera: res.data.camera,
           mute: res.data.mute,
@@ -327,6 +327,152 @@ export default function Group() {
   };
 
   // ================== socket =======================
+  /**
+   * @description 유저와 유저끼리 연결을 만들어내는 함수
+   * @param {string} userId
+   * @param {RTCPeerConnection} offer
+   * @return {RTCPeerConnection}
+   */
+   async function makeConnection(userId, offer = null) {
+    if (RTCPeerConnection != undefined) {
+      myPeerConnection = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              'stun:stun.l.google.com:19302',
+              'stun:stun1.l.google.com:19302',
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
+              'stun:stun.ekiga.net',
+              'stun:stun.ideasip.com',
+              'stun:stun.rixtelecom.se',
+              'stun:stun.schlund.de',
+              'stun:stun.stunprotocol.org:3478',
+              'stun:stun.voiparound.com',
+              'stun:stun.voipbuster.com',
+              'stun:stun.voipstunt.com',
+              'stun:stun.voxgratia.org',
+            ],
+          },
+        ],
+      });
+
+      // ice 후보를 수집합니다.
+      myPeerConnection.addEventListener('icecandidate', (data) => {
+        // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
+        console.log(`send my ice : `, data);
+        socket.emit('ice', data.candidate, userId, socket.id); // send ice candidate
+      });
+      myPeerConnection.addEventListener('iceconnectionstatechange', (data) => {
+        if (myPeerConnection.iceConnectionState === 'failed') {
+          myPeerConnection.restartIce();
+        }
+      });
+      myPeerConnection.addEventListener('track', (data) => {
+        console.log(data);
+        console.log('get otheruser stream : ', data.streams[0]);
+        console.log('get otheruser track : ', data.track);
+        console.log('video check : ', data.track.enabled);
+        console.log('mute check : ', data.track.muted);
+        console.log('userId : ', userId);
+
+        // 이작업이 끝나면 아래 화면 출력
+        if (!otherCameras.hasOwnProperty(userId)) {
+          console.log('add other camera');
+          console.log('userId : ', userId);
+          otherCameras.current[userId] = {
+            stream: data.streams[0],
+          };
+          console.log('current otherCamera : ', otherCameras.current);
+        } else {
+          otherCameras.current[userId].stream = data.streams[0];
+        }
+      });
+
+      // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
+      if (myStream !== null) {
+        myStream
+          .getTracks()
+          .forEach((track) => myPeerConnection.addTrack(track, myStream));
+      }
+
+      // 내 피어컨넥션을 추가
+      peerConnections[userId] = myPeerConnection;
+
+      let _offer = offer;
+      let answer;
+
+      if (!_offer) {
+        myDataChannel = myPeerConnection.createDataChannel('chat');
+
+        myDataChannel.addEventListener('open', (event) => {
+          const req = {
+            type: 'enter',
+            id: socket.id,
+            message: `${user?.name}님이 입장하셨습니다.`,
+            data: {
+              name: user?.name,
+              state: isState,
+              camera: isCamera,
+              mute: isMute,
+              time: stopWatchRef.current.getTime(), // 시간 가져옴
+            },
+          };
+          myDataChannel.send(JSON.stringify(req));
+        });
+
+        myDataChannel.addEventListener('message', (event) => {
+          const res = JSON.parse(event.data);
+          MessageParse(res);
+        });
+
+        _offer = await myPeerConnection.createOffer();
+        myPeerConnection.setLocalDescription(_offer);
+        // 자신의 로컬 목적지에 offer 설정
+
+        dataChannels[userId] = myDataChannel;
+        console.log('add DataChannels');
+        console.log(dataChannels);
+      } else {
+        myPeerConnection.addEventListener('datachannel', (event) => {
+          myDataChannel = event.channel;
+          myDataChannel.addEventListener('open', (event) => {
+            const req = {
+              type: 'enter',
+              id: socket.id,
+              message: `${user?.name}님이 입장하셨습니다.`,
+              data: {
+                name: user?.name,
+                state: isState,
+                camera: isCamera,
+                mute: isMute,
+                time: stopWatchRef.current.getTime(), // 시간 가져옴
+              },
+            };
+
+            myDataChannel.send(JSON.stringify(req));
+          });
+
+          myDataChannel.addEventListener('message', (event) => {
+            const res = JSON.parse(event.data);
+            MessageParse(res);
+          });
+
+          dataChannels[userId] = myDataChannel;
+          console.log('add DataChannels');
+          console.log(dataChannels);
+        });
+        myPeerConnection.setRemoteDescription(_offer);
+        // 상대방 목적지로 전달받은 offer를 설정
+        answer = await myPeerConnection.createAnswer();
+        myPeerConnection.setLocalDescription(answer);
+        // 내 로컬 목적지에 answer 설정
+      }
+
+      return answer || _offer;
+    }
+  }
 
   /**
    * @description 그룹 룸 데이터
@@ -378,164 +524,17 @@ export default function Group() {
       }
     }
   }, [isLoading]);
-
+  
   /**
    * @description 소켓 이벤트 정의
    */
   useEffect(() => {
 
-    /**
-   * @description 유저와 유저끼리 연결을 만들어내는 함수
-   * @param {string} userId
-   * @param {RTCPeerConnection} offer
-   * @return {RTCPeerConnection}
-   */
-     async function makeConnection(userId, offer = null) {
-      if (RTCPeerConnection != undefined) {
-        myPeerConnection = new RTCPeerConnection({
-          iceServers: [
-            {
-              urls: [
-                'stun:stun.l.google.com:19302',
-                'stun:stun1.l.google.com:19302',
-                'stun:stun2.l.google.com:19302',
-                'stun:stun3.l.google.com:19302',
-                'stun:stun4.l.google.com:19302',
-                'stun:stun.ekiga.net',
-                'stun:stun.ideasip.com',
-                'stun:stun.rixtelecom.se',
-                'stun:stun.schlund.de',
-                'stun:stun.stunprotocol.org:3478',
-                'stun:stun.voiparound.com',
-                'stun:stun.voipbuster.com',
-                'stun:stun.voipstunt.com',
-                'stun:stun.voxgratia.org',
-              ],
-            },
-          ],
-        });
-  
-        // ice 후보를 수집합니다.
-        myPeerConnection.addEventListener('icecandidate', (data) => {
-          // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
-          console.log(`send my ice : `, data);
-          socket.emit('ice', data.candidate, userId, socket.id); // send ice candidate
-        });
-        myPeerConnection.addEventListener('iceconnectionstatechange', (data) => {
-          if (myPeerConnection.iceConnectionState === 'failed') {
-            myPeerConnection.restartIce();
-          }
-        });
-        myPeerConnection.addEventListener('track', (data) => {
-          console.log(data);
-          console.log('get otheruser stream : ', data.streams[0]);
-          console.log('get otheruser track : ', data.track);
-          console.log('video check : ', data.track.enabled);
-          console.log('mute check : ', data.track.muted);
-          console.log('userId : ', userId);
-  
-          // 이작업이 끝나면 아래 화면 출력
-          if (!otherCameras.hasOwnProperty(userId)) {
-            console.log('add other camera');
-            console.log('userId : ', userId);
-            otherCameras.current[userId] = {
-              stream: data.streams[0],
-            };
-            console.log('current otherCamera : ', otherCameras.current);
-          } else {
-            otherCameras.current[userId].stream = data.streams[0];
-          }
-        });
-  
-        // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
-        if (myStream !== null) {
-          myStream
-            .getTracks()
-            .forEach((track) => myPeerConnection.addTrack(track, myStream));
-        }
-  
-        // 내 피어컨넥션을 추가
-        peerConnections[userId] = myPeerConnection;
-  
-        let _offer = offer;
-        let answer;
-  
-        if (!_offer) {
-          myDataChannel = myPeerConnection.createDataChannel('chat');
-  
-          myDataChannel.addEventListener('open', (event) => {
-            const req = {
-              type: 'enter',
-              id: socket.id,
-              message: `${user?.name}님이 입장하셨습니다.`,
-              data: {
-                name : user?.name,
-                state: isState,
-                camera: isCamera,
-                mute: isMute,
-                time: stopWatchRef.current.getTime(), // 시간 가져옴
-              },
-            };
-            myDataChannel.send(JSON.stringify(req));
-          });
-  
-          myDataChannel.addEventListener('message', (event) => {
-            const res = JSON.parse(event.data);
-            MessageParse(res);
-          });
-  
-          _offer = await myPeerConnection.createOffer();
-          myPeerConnection.setLocalDescription(_offer);
-          // 자신의 로컬 목적지에 offer 설정
-  
-          dataChannels[userId] = myDataChannel;
-          console.log('add DataChannels');
-          console.log(dataChannels);
-        } else {
-          myPeerConnection.addEventListener('datachannel', (event) => {
-            myDataChannel = event.channel;
-            myDataChannel.addEventListener('open', (event) => {
-              const req = {
-                type: 'enter',
-                id: socket.id,
-                message: `${user?.name}님이 입장하셨습니다.`,
-                data: {
-                  name : user?.name,
-                  state: isState,
-                  camera: isCamera,
-                  mute: isMute,
-                  time: stopWatchRef.current.getTime(), // 시간 가져옴
-                },
-              };
-  
-              myDataChannel.send(JSON.stringify(req));
-            });
-  
-            myDataChannel.addEventListener('message', (event) => {
-              const res = JSON.parse(event.data);
-              MessageParse(res);
-            });
-  
-            dataChannels[userId] = myDataChannel;
-            console.log('add DataChannels');
-            console.log(dataChannels);
-          });
-          myPeerConnection.setRemoteDescription(_offer);
-          // 상대방 목적지로 전달받은 offer를 설정
-          answer = await myPeerConnection.createAnswer();
-          myPeerConnection.setLocalDescription(answer);
-          // 내 로컬 목적지에 answer 설정
-        }
-  
-        return answer || _offer;
-      }
-    }
-
-    socket.on('welcome', (userId, userName, newUserId) => {
+    socket.on('welcome', async (userId, userName, newUserId) => {
       console.log('enter user : ', userName);
       console.log('other userId : ', userId);
       console.log('other userSocketId : ', newUserId);
-      const offer = makeConnection(newUserId);
+      const offer = await makeConnection(newUserId);
       console.log('--------------------------------------');
       console.log('make - peerconnections', peerConnections);
       console.log(`${userName} send offer`, userId);
@@ -580,14 +579,14 @@ export default function Group() {
       console.log(peerConnections);
     });
 
-    socket.on('offer', (offer, offersId) => {
+    socket.on('offer', async (offer, offersId) => {
       /**
        * @description
        * peerB에 offer이 도착하는 순간 아직 myPeerConnection이 존재하지 않음.
        * 데이터 체널에 대한 이벤트 추가
        * 서버에서 받은 초대장 설정하기.
        */
-      const answer = makeConnection(offersId, offer);
+      const answer = await makeConnection(offersId, offer);
       socket.emit('answer', answer, socket.id, offersId);
     });
 
@@ -597,6 +596,7 @@ export default function Group() {
        */
       peerConnections[newUserId].setRemoteDescription(answer);
     });
+
 
     socket.on('ice', (ice, othersId) => {
       /**
@@ -650,7 +650,7 @@ export default function Group() {
           <p className="font-bold text-center text-4xl m-5 mb-10">
             {room?.roomName}
           </p>
-          <div className="grid justify-between lg:flex lg:mx-[2rem] lg:max-w-[1600px]  ">
+          <div className="grid justify-center lg:justify-between lg:flex lg:mx-[2rem] lg:max-w-[1600px]  ">
             <div className="flex lg:w-9/12">
               <div className="h-full w-full flex flex-raw flex-wrap lg:flex justify-center gap-x-[1rem] gap-y-[2.5rem]">
                 <div className="bg-yellow-50/30 w-[500px] h-[370px] relative rounded-xl border-amber-100 border-2 shadow-2xl shadow-amber-400/10 ">

@@ -91,9 +91,9 @@ const Other = forwardRef(({ userId, stream, time, name }, ref) => {
         ) : (
           <GoUnmute color="#FFFFFF" size="30" />
         )}
-        <p className="absolute bottom-[0px] left-[50px] py-[2px] px-1 text-lg font-semibold text-white rounded-lg ">
+        <div className="absolute bottom-[0px] left-[50px] py-[2px] px-1 w-[400px] text-lg font-semibold text-white rounded-lg ">
           {name}
-        </p>
+        </div>
       </div>
     </div>
   );
