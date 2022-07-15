@@ -23,8 +23,8 @@ const hostname =
     ? window.location.hostname
     : '';
 
-const url = 'http://' + hostname + ':' + backendPortNumber;
-//const url = 'https://' + hostname;
+//const url = 'http://' + hostname + ':' + backendPortNumber;
+const url = 'https://' + hostname;
 
 /**
  * @description 방 url에서 roomId를 추출한다.
