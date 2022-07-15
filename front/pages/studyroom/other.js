@@ -8,7 +8,7 @@ import {
 import { GoUnmute, GoMute } from 'react-icons/go';
 import StopWatch from '../../components/studyroom/StopWatch';
 
-const Other = forwardRef(({ userId, stream, time, name }, ref) => {
+const Other = forwardRef(({ userId, stream, time, name, setkey }, ref) => {
   const idRef = useRef(userId);
   const [isState, setIsState] = useState(true);
   const [isCamera, setIsCamera] = useState(true);
@@ -69,6 +69,7 @@ const Other = forwardRef(({ userId, stream, time, name }, ref) => {
           autoPlay
           playsInline
           ref={videoRef}
+          key={setkey}
         ></video>
         {isCamera ? (
           <></>
