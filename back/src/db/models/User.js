@@ -77,11 +77,11 @@ class User {
         return UserModel.findOneAndUpdate(filter, changeUpdate, option);
     }
 
-    // /**
-    //  * 유저 이미지 변경
-    //  * @param {{user_id: string, toUpdate: string}} param0
-    //  * @returns {Promise<UserObj>}
-    //  */
+    /**
+     * 유저 이미지 변경
+     * @param {{user_id: string, toUpdate: string}} param0
+     * @returns {Promise<UserObj>}
+     */
     static updateImg({ user_id, toUpdate }) {
         const filter = { id: user_id };
         const update = { $set: toUpdate };

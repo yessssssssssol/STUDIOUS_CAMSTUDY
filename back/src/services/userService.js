@@ -159,13 +159,13 @@ class userAuthService {
         return user;
     }
 
-    // /**
-    //  * 프로필 이미지 저장
-    //  * @param {{user_id: string, url: string}} idAndUrl
-    //  */
+    /**
+     * 프로필 이미지 저장
+     * @param {{user_id: string, url: string}} idAndUrl
+     */
     static async updateImg({ user_id, url }) {
         const toUpdate = { profileUrl: url };
-        const updatedUser = User.updateImg({ user_id, toUpdate });
+        const updatedUser = await User.updateImg({ user_id, toUpdate });
 
         if (!updatedUser) {
             const errorMessage = '이미지 업로드에 실패 했습니다.';
