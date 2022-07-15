@@ -510,7 +510,6 @@ export default function Group() {
    */
   useEffect(() => {
     {
-      rtcInit();
       roomData();
     }
     if (isLoading) {
