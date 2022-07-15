@@ -693,7 +693,7 @@ export default function Group() {
                   return (
                     <>
                       <Other
-                        setkey={i}
+                        key={user}
                         time={otherCameras.current[user].time}
                         userId={user}
                         stream={otherCameras.current[user].stream}
