@@ -159,10 +159,10 @@ class userAuthService {
         return user;
     }
 
-    /**
-     * 프로필 이미지 저장
-     * @param {{user_id: string, url: string}} idAndUrl
-     */
+    // /**
+    //  * 프로필 이미지 저장
+    //  * @param {{user_id: string, url: string}} idAndUrl
+    //  */
     static async updateImg({ user_id, url }) {
         const toUpdate = { profileUrl: url };
         const updatedUser = User.updateImg({ user_id, toUpdate });
