@@ -170,6 +170,7 @@ export default function Group() {
       }
 
       otherCameras.current[res.id].current.setState(res.id, res.data);
+
     } else if (res.type == 'camera') {
       console.log('others id : ', res.id);
       console.log('check othersid in list : ', otherCameras);
@@ -180,6 +181,7 @@ export default function Group() {
       }
 
       otherCameras.current[res.id].current.setCamera(res.id, res.data);
+
     } else if (res.type == 'mute') {
       console.log('others id : ', res.id);
       console.log('check othersid in list : ', otherCameras);
@@ -342,33 +344,24 @@ export default function Group() {
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
               'stun:stun2.l.google.com:19302',
-              'stun:stun3.l.google.com:19302',
-              'stun:stun4.l.google.com:19302',
-              'stun:stun.ekiga.net',
-              'stun:stun.ideasip.com',
-              'stun:stun.rixtelecom.se',
-              'stun:stun.schlund.de',
-              'stun:stun.stunprotocol.org:3478',
-              'stun:stun.voiparound.com',
-              'stun:stun.voipbuster.com',
-              'stun:stun.voipstunt.com',
-              'stun:stun.voxgratia.org',
             ],
           },
         ],
       });
-
       // ice 후보를 수집합니다.
       myPeerConnection.addEventListener('icecandidate', (data) => {
         // ice 이벤트 발생 시 이를 방안의 다른 사람들에게 내껄 전달
-        console.log(`send my ice : `, data);
-        socket.emit('ice', data.candidate, userId, socket.id); // send ice candidate
+        if (data.candidate) {
+          console.log(`send my ice : `, data);
+          socket.emit('ice', data.candidate, userId, socket.id); // send ice candidate
+        }
       });
       myPeerConnection.addEventListener('iceconnectionstatechange', (data) => {
         if (myPeerConnection.iceConnectionState === 'failed') {
           myPeerConnection.restartIce();
         }
       });
+      
       myPeerConnection.addEventListener('track', (data) => {
         console.log(data);
         console.log('get otheruser stream : ', data.streams[0]);
@@ -391,11 +384,14 @@ export default function Group() {
       });
 
       // 나한테 webcam이 있으면 피어컨넥션에 추가한다.
-      if (myStream !== null) {
+      if (myStream != null) {
         myStream
           .getTracks()
           .forEach((track) => myPeerConnection.addTrack(track, myStream));
       }
+
+      console.log("add MyStream : ", myStream);
+      console.log("add MyStream : ", myPeerConnection.getSenders());
 
       // 내 피어컨넥션을 추가
       peerConnections[userId] = myPeerConnection;
@@ -428,6 +424,7 @@ export default function Group() {
         });
 
         _offer = await myPeerConnection.createOffer();
+        console.log("create offer", _offer);
         myPeerConnection.setLocalDescription(_offer);
         // 자신의 로컬 목적지에 offer 설정
 
@@ -466,6 +463,7 @@ export default function Group() {
         myPeerConnection.setRemoteDescription(_offer);
         // 상대방 목적지로 전달받은 offer를 설정
         answer = await myPeerConnection.createAnswer();
+        console.log("create answer", answer);
         myPeerConnection.setLocalDescription(answer);
         // 내 로컬 목적지에 answer 설정
       }
@@ -573,10 +571,11 @@ export default function Group() {
           console.log('delete otherCamera', otherCameras.current);
         }
       });
-
+      console.log("delete result");
       console.log(otherCameras);
       console.log(dataChannels);
       console.log(peerConnections);
+      console.log("bye event myPeerConnection : ", myPeerConnection);
     });
 
     socket.on('offer', async (offer, offersId) => {
@@ -594,7 +593,7 @@ export default function Group() {
       /**
        * @description 방에 있던 사람들은 뉴비를 위해 생성한 커섹션에 answer를 추가한다.
        */
-      peerConnections[newUserId].setRemoteDescription(answer);
+      await peerConnections[newUserId].setRemoteDescription(answer);
     });
 
 
@@ -602,10 +601,15 @@ export default function Group() {
       /**
        * @description 다른 사람에게 온 othersId를 myPeerConnection에 등록
        */
+      console.log("ice", ice);
       peerConnections[othersId].addIceCandidate(ice);
       console.log('add IceCandidate');
       console.log('ice owner : ', othersId);
       console.log(peerConnections);
+      Object.keys(peerConnections).map((id) => {
+        console.log("peer sender", peerConnections[id].getSenders());
+      })
+
     });
 
     /**
@@ -617,12 +621,7 @@ export default function Group() {
         attend: false,
       });
 
-      socket.off('welcome');
-      socket.off('refuse');
-      socket.off('bye');
-      socket.off('offer');
-      socket.off('answer');
-      socket.off('ice');
+      socket.off();
       location.reload();
       rtcInit();
     };
@@ -684,7 +683,7 @@ export default function Group() {
                 <AlertModal />
 
                 {/* 다른 사람들 웹캠 */}
-                {Object.keys(otherCameras.current).map((user) => {
+                {peerConnections && Object.keys(otherCameras.current).map((user, i) => {
                   console.log('userId : ', user);
                   console.log(
                     'usercamera : ',
@@ -694,6 +693,7 @@ export default function Group() {
                   return (
                     <>
                       <Other
+                        key={user}
                         time={otherCameras.current[user].time}
                         userId={user}
                         stream={otherCameras.current[user].stream}
