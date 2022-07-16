@@ -1,9 +1,6 @@
-
 # 1. 서비스 소개
 
-
 ## 1-1. 서비스 타이틀 및 간단 소개
-
 
 `STUDIOUS` : 공부를 열심히 하는, 학구적인
 
@@ -15,14 +12,12 @@
 
 ## 1-2. **서비스 목표**
 
-
 **웹캠 스터디 및 모집과 AI를 활용한 자동 타미어를 한번에 가능한 all-in-one 툴을 만들자!**
 
 - AI를 통한 자동 타이머 측정
 - 스터디원 모집 캠스터디 진행을 한 사이트에서 진행할 수 있다.
 
 ## 1-3. 기획의도
-
 
 **코로나 시국의 영향으로 근래 캠공족(캠을 키고 공부하는 사람들)이 많아짐**
 
@@ -44,18 +39,17 @@
 
 하지만 또 실제로 순수한 공부시간을 측정을 하고 싶긴 하다.
 
-***누가 내 공부시간 좀 대신 측정해줬으면 좋겠는데 좋은 방법이 없을까..?***
+**_누가 내 공부시간 좀 대신 측정해줬으면 좋겠는데 좋은 방법이 없을까..?_**
 
 </aside>
 
-→ 김공부씨와 같이 **캠스터디 사용과 동시에 자동 타이머를 사용**하고 싶은 사람들을 위한 
+→ 김공부씨와 같이 **캠스터디 사용과 동시에 자동 타이머를 사용**하고 싶은 사람들을 위한
 
-**AI 캠 스터디 서비스 STUDIOUS!** 
+**AI 캠 스터디 서비스 STUDIOUS!**
 
 # 2. **기술 스택**
 
 ## 파트별 기술 선정 이유
-
 
 [👀 노션으로 보러가기](https://www.notion.so/elice/4-zero-to-100-6160ce5632054929adb3531d7a9fef62)
 
@@ -63,10 +57,18 @@
 
 ## 3-1. 팀원 역할 및 담당 부분
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2d3349c0-d13b-491b-a958-3fd64547348e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T151513Z&X-Amz-Expires=86400&X-Amz-Signature=cd323da34af894a63e8513c061608120b76abdccec256e9e6876c93cdc6e67b8&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+## 3-1. 팀원 역할 및 담당 부분
+
+| 이름   | 역할                 | 담당 부분                                                                                                                                                                                                                                                                                                           |
+| ------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 이예슬 | ✨팀장, 프론트엔드   | 1. 회원가입, 로그인 기능 개발 </br> 2. 이미지 업로드 및 저장 기능 개발, gcs 연동 및 관리</br> 3. 개인 공부 페이지 개발, 타이머 기능 개발</br> 4. 스터디 신청 및 스터디원 관리 기능 개발</br> 5. 서비스 소개 페이지 개발                                                                                             |
+| 홍주완 | 프론트엔드           | 1. 마이페이지 개발</br>2. 프롤로그 페이지 스크롤 효과</br>3. 회원가입시 이메일 인증</br>4. 모달 바깥영역 누를 시 모달 닫기</br>5. 그래프 출력</br>6. 깃 그래프 개발</br>7. 목표시간 설정                                                                                                                            |
+| 박예솔 | 프론트엔드           | 1. 댓글 생성 삭제 구현</br> 2. 스터디원 모집 게시글 생성, 글쓴이 프로필 가져오기 구현</br> 3. Figma 와이어프레임 초안 작성</br> 4. 404 페이지</br> 5. Helmet 추가</br> 6. 메인페이지, 게시판, 편집페이지, 마이페이지, 개인 공부방 TailwindCSS 수정                                                                  |
+| 김상민 | 인공지능, 프론트엔드 | 1. 객체 감지 모델 선정</br> 2. 모델 테스트</br> 3. 로그인 후 Home Page</br> 4. 그룹 스터디 페이지 CSS                                                                                                                                                                                                               |
+| 윤여건 | 백엔드               | 1. DB 설계</br> 2. 유저 API 구현</br> 3. 공부시간 트래킹 및 통계 API 구현</br>4. 스터디룸(개인/공개/비공개), 게시글 API 구현</br> 5. 댓글 API 구현</br>6. 스터디 신청 API 구현</br> 7. 포스트맨 API 명세서 작성, ERD 작성</br> 8. 홈 화면 랭킹 컴포넌트 구현 및 디자인(프론트)</br> 9. 발표 피피티 및 피그마 디자인 |
+| 송연석 | 백엔드               | 1. Nginx + Docker로 서비스 배포</br> 2.WebSocket Server 구현</br> 3.그룹 스터디 페이지 구현</br> 4.유저 상태정보 공유를 위한 WebRTC 데이터채널 개발</br> 5.Media 데이터 통신을 위한 RTCPeerConnection 개발                                                                                                          |
 
 ## 3-2. 트러블 슈팅
-
 
 [👀 노션으로 보러가기](https://www.notion.so/elice/4-zero-to-100-6160ce5632054929adb3531d7a9fef62)
 
@@ -74,21 +76,17 @@
 
 ## 4-1. Service Architecture
 
-
 ![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fd7f6b17-83a0-438b-a6ad-e505bee97201/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T150014Z&X-Amz-Expires=86400&X-Amz-Signature=c0c3ff2f78827852624600ca9fcaec975bddcab420422256ae90baf5112ff830&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 ## 4-2. 와이어 프레임
-
 
 [👀 피그마로 보러가기](https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FbgTMIHRofmN0MxdmzgVpM5%2F4%25ED%258C%2580-ZERO-to-100-%25F0%259F%2592%25AF%3Fnode-id%3D0%253A1)
 
 ## 4-3. API 명세서
 
-
 [Studious API 명세서](https://documenter.getpostman.com/view/18245611/Uz5GoFyi#2646a35d-7f75-4250-be65-6ffa4b234050)
 
 ## 4-4. ER Diagram
-
 
 ![ER Diagram](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9440066b-b6c4-4189-804a-1310730fd698/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T150500Z&X-Amz-Expires=86400&X-Amz-Signature=b8997b18323ae017c3aebd31d79da5c73726e91fdcffb56aa6f7d37ec3f2a663&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
@@ -99,24 +97,22 @@
 **`WebCam을 통해 AI가 유저를 인식하여 공부시간 자동 측정`**
 
 - AI STUDY
-    - 얼굴을 인식하면 공부시간 누적
-    - 자리비울 시, 공부시간 일시정지
-    - 카메라 OFF시 스터디원에게 이모티콘으로 자신의 AI 인식 상태를 알려줌
-        
-        ( 인식 ⇒ 공부하는 이모티콘, 인식 못함 ⇒ 자는 이모티콘)
-        
-    - 채팅, 마이크 ON/OFF. 비디오 ON/OFF 표시
+  - 얼굴을 인식하면 공부시간 누적
+  - 자리비울 시, 공부시간 일시정지
+  - 카메라 OFF시 스터디원에게 이모티콘으로 자신의 AI 인식 상태를 알려줌
+    ( 인식 ⇒ 공부하는 이모티콘, 인식 못함 ⇒ 자는 이모티콘)
+  - 채팅, 마이크 ON/OFF. 비디오 ON/OFF 표시
 
 <b>`그룹 스터디룸`</b>
 
 - 공개 스터디
-    - 스더디룸에 자리가 남았다면 누구나 들어와서 함께 공부
-    - 현재 스터디방에 접속중인 스터디원 표시
+  - 스더디룸에 자리가 남았다면 누구나 들어와서 함께 공부
+  - 현재 스터디방에 접속중인 스터디원 표시
 - 비공개 스터디
-    - 원하는 사람들과 그룹지어 스터디룸 진행
-    - 스터디 방장이 방을 만들고 팀원을 구함
-    - 팀원으로 참여하고 싶은 스터디원은 해당 스터디 모집에 신청
-    - 스터디장이 신청에 대한 수락을 하면 스터디룸 입장 가능
+  - 원하는 사람들과 그룹지어 스터디룸 진행
+  - 스터디 방장이 방을 만들고 팀원을 구함
+  - 팀원으로 참여하고 싶은 스터디원은 해당 스터디 모집에 신청
+  - 스터디장이 신청에 대한 수락을 하면 스터디룸 입장 가능
 
 <b>`개인 스터디룸`</b>
 
@@ -124,7 +120,6 @@
 - 혼자서 가볍게 AI타이머 기능만을 사용하여 공부시간 측정
 
 ## 5-2. 서브 기능
-
 
 <b>`실시간 랭킹`</b>
 
