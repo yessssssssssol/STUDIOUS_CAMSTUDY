@@ -74,7 +74,7 @@
 
 ## 4-1. Service Architecture
 
-![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fd7f6b17-83a0-438b-a6ad-e505bee97201/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T150014Z&X-Amz-Expires=86400&X-Amz-Signature=c0c3ff2f78827852624600ca9fcaec975bddcab420422256ae90baf5112ff830&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+![Untitled](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffd7f6b17-83a0-438b-a6ad-e505bee97201%2FUntitled.png?table=block&id=42c87e55-3348-440f-b0c0-527a91ab75bc&spaceId=530d1033-cf9f-41a2-b140-62d3e90887dd&width=2000&userId=06d9f3cc-40dc-425a-a2c2-7926dfb6ff2c&cache=v2)
 
 ## 4-2. 와이어 프레임
 
@@ -86,7 +86,7 @@
 
 ## 4-4. ER Diagram
 
-![ER Diagram](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9440066b-b6c4-4189-804a-1310730fd698/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T150500Z&X-Amz-Expires=86400&X-Amz-Signature=b8997b18323ae017c3aebd31d79da5c73726e91fdcffb56aa6f7d37ec3f2a663&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+![ER Diagram](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0aa17e22-3d2d-4699-a1af-b1e1ae3e5b07%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-07-11_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_8.49.49.png?table=block&id=e2161e78-2512-41e7-a3d0-ae4b8ebcff29&spaceId=530d1033-cf9f-41a2-b140-62d3e90887dd&width=2000&userId=06d9f3cc-40dc-425a-a2c2-7926dfb6ff2c&cache=v2)
 
 # 5. **기능 설명**
 
