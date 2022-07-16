@@ -30,7 +30,6 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
           >
             {/* <!-- card --> */}
             <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gradient-to-r rounded-2xl shadow-lg shadow-slate-300/60 hover:shadow-amber-300/50 hover:scale-105">
-              {/* <div className="mx-auto flex h-[300px] w-[250px] flex-col justify-center bg-gray-200 rounded-2xl shadow-xl shadow-slate-300/60"> */}
               {/* <!-- img --> */}
               <img
                 className="aspect-video w-96 h-full rounded-t-2xl object-cover object-center"
@@ -39,21 +38,21 @@ export default function MyStudyRoomCard({ myStudyRoom }) {
               />
               {/* <!-- text information --> */}
               <div className="px-4">
-                <small className="text-amber-400 text-sx font-semibold">
-                  {myStudyRoom.members.length + ' / ' + myStudyRoom.membersNum}
-                </small>
-                {/* 제목 클릭하면 스터디룸 게시판(?) 연결  */}
                 {myStudyRoom.membersOnly ? (
-                  // 비공개룸
-
-                  <p className="text-xl font-bold  text-slate-600 pb-2">
-                    {myStudyRoom.roomName}
+                  /** Private Study */
+                  <p className="text-xl font-bold  text-slate-600 mt-2 pb-2">
+                    <small className="text-amber-400 text-sx font-semibold">
+                      Private
+                    </small>
+                    <p>{myStudyRoom.roomName}</p>
                   </p>
                 ) : (
-                  // 오픈룸
-
-                  <p className="text-xl font-bold text-slate-600 pb-2 ">
-                    {myStudyRoom.roomName}
+                  /** Public Study */
+                  <p className="text-xl font-bold text-slate-600 mt-2 pb-2 ">
+                    <small className="text-amber-400 text-sx font-semibold">
+                      Public
+                    </small>
+                    <p>{myStudyRoom.roomName}</p>
                   </p>
                 )}
                 <p className="text-sm font-medium text-slate-400 pb-2 ">

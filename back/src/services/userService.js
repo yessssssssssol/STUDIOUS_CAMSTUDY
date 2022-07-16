@@ -10,7 +10,23 @@ import sendMail from '../utils/sendMail';
 import { userStudyRoomsService } from './userStudyRoomsService';
 import { TotalTime } from '../db/models/TotalTime';
 
+/**
+ * 업데이트시 필요한 인자
+ * @typedef {object} UpdateUserObj
+ * @property {string} UpdateUserObj.user_id - 유저 아이디
+ * @property {object} UpdateUserObj.toUpdate - 업데이트할 항목
+ * @property {string} UpdateUserObj.toUpdate.updatedAt - 업데이트 시각
+ * @property {string} [UpdateUserObj.toUpdate.name] - 이름
+ * @property {string} [UpdateUserObj.toUpdate.email] -  이메일
+ * @property {string} [UpdateUserObj.toUpdate.password] - 비밀번호
+ * @property {string} [UpdateUserObj.toUpdate.description] - 설명
+ */
+
 class userAuthService {
+    /**
+     * 새로운 유저 생성
+     * @param {{name: string, email: string, password: string}} NewUserObj
+     */
     static async addUser({ name, email, password }) {
         // 이메일 중복 확인
         const user = await User.findByEmail({ email });
@@ -54,6 +70,10 @@ class userAuthService {
         return registerResult;
     }
 
+    /**
+     * 로그인
+     * @param {{email: string, password: string}} login
+     */
     static async getUser({ email, password }) {
         // 이메일 db에 존재 여부 확인
         const user = await User.findByEmail({ email });
@@ -95,12 +115,16 @@ class userAuthService {
     }
 
     static async getUsers() {
-        const users = await User.findAll();
+        const users = User.findAll();
         return users;
     }
 
+    /**
+     * 유저 정보 변경
+     * @param {UpdateUserObj} param0
+     */
     static async setUser({ user_id, toUpdate }) {
-        let user = await User.findById({ user_id });
+        let user = User.findById({ user_id });
         if (!user) {
             const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
             return { errorMessage };
@@ -119,53 +143,13 @@ class userAuthService {
 
         return User.update({ user_id, changeUpdate });
     }
-    // static async setUser({ user_id, toUpdate }) {
-    //     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
-    //     let user = await User.findById({ user_id });
 
-    //     // db에서 찾지 못한 경우, 에러 메시지 반환
-    //     if (!user) {
-    //         const errorMessage = '가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-    //         return { errorMessage };
-    //     }
-
-    //     // 업데이트 날짜 갱신
-    //     const date = dayjs();
-    //     const fieldToUpdate = 'updatedAt';
-    //     const newValue = date.format('YYYY-MM-DD HH:mm:ss');
-    //     user = await User.update({ user_id, fieldToUpdate, newValue });
-
-    //     // 업데이트 대상에 name이 있다면, 즉 name 값이 null 이 아니라면 업데이트 진행
-    //     if (toUpdate.name) {
-    //         const fieldToUpdate = 'name';
-    //         const newValue = toUpdate.name;
-    //         user = await User.update({ user_id, fieldToUpdate, newValue });
-    //     }
-
-    //     if (toUpdate.email) {
-    //         const fieldToUpdate = 'email';
-    //         const newValue = toUpdate.email;
-    //         user = await User.update({ user_id, fieldToUpdate, newValue });
-    //     }
-
-    //     if (toUpdate.password) {
-    //         const fieldToUpdate = 'password';
-    //         const password = toUpdate.password;
-    //         const newValue = await bcrypt.hash(password, 10);
-    //         user = await User.update({ user_id, fieldToUpdate, newValue });
-    //     }
-
-    //     if (toUpdate.description) {
-    //         const fieldToUpdate = 'description';
-    //         const newValue = toUpdate.description;
-    //         user = await User.update({ user_id, fieldToUpdate, newValue });
-    //     }
-
-    //     return user;
-    // }
-
+    /**
+     * user_id로 유저 정보 가져오기
+     * @param {{user_id: string}} user_id
+     */
     static async getUserInfo({ user_id }) {
-        const user = await User.findById({ user_id });
+        const user = User.findById({ user_id });
         // db에서 찾지 못한 경우, 에러 메시지 반환
         if (!user) {
             const errorMessage = '해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
@@ -175,6 +159,10 @@ class userAuthService {
         return user;
     }
 
+    /**
+     * 프로필 이미지 저장
+     * @param {{user_id: string, url: string}} idAndUrl
+     */
     static async updateImg({ user_id, url }) {
         const toUpdate = { profileUrl: url };
         const updatedUser = await User.updateImg({ user_id, toUpdate });
@@ -195,6 +183,10 @@ class userAuthService {
         return updatedUser;
     }
 
+    /**
+     * 임시 비밀번호 전송
+     * @param {{email: string}} param0
+     */
     static async sendNewpassword({ email }) {
         const temp_pw = uuidv4().split('-')[0];
         await sendMail(
@@ -207,10 +199,15 @@ class userAuthService {
         const user_id = await User.findByEmail({ email }).then((data) => data.id);
         const password = await bcrypt.hash(temp_pw, 10);
         const changeUpdate = { password };
-        const user = await User.update({ user_id, changeUpdate });
+        const user = User.update({ user_id, changeUpdate });
         return user;
     }
 
+    /**
+     * 삭제할 계정 관련된 데이터 전부 삭제
+     * @param {{id: string}} id - 유저 아이디
+     * @returns {void}
+     */
     static async deleteUser({ id }) {
         const roomAr = await userStudyRoomsService.getRooms({ id });
         const otherRoomAr = await userStudyRoomsService.getOtherRooms({ id });

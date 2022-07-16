@@ -167,14 +167,16 @@ wsServer.on("connection", (socket) => {
         
         // 새로고침하면 나갔다가 다시 들어감.
         console.log(`disconnect user's socketId : `, socket.id)
-        console.log(`rooms : `, socket.rooms);
         socket.to(roomId).emit("bye", socket.id, findUser?.userName);
         // 룸 리스트 내 제거
         roomList[roomId]?.splice(index, 1);
+        console.log(`rooms : `, roomList);
+        console.log(`socket rooms : `, socket.rooms);
     })
 
     socket.on("disconnect", (reason) => {
         console.log(`disconnect ${socket.id} due to ${reason}`);
+        console.log(`after rooms : `, socket.rooms);
     });
 })
 

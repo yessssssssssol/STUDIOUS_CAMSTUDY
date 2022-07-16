@@ -39,7 +39,7 @@ const CommentAddForm = ({ roomId, setComments }) => {
           <div className="mt-2">
             <img
               src={user.profileUrl}
-              alt=""
+              alt="userProfile"
               className="h-16 w-16 m-2 rounded-full"
             />
           </div>

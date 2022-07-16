@@ -1,3 +1,9 @@
+/**
+ * @component
+ * @description 그룹 스터디룸에서 채팅창 상단
+ * @param {string} roomName - 스터디룸 이름
+ * @param {string} roomImg - 스터디룸 프로필 이미지
+ */
 const ChatHeader = ({ roomName, roomImg }) => {
   return (
     <div className="border rounded-xl">

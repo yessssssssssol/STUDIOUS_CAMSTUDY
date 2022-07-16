@@ -33,18 +33,17 @@ const AIFunc = (props) => {
   };
 
   async function init() {
-      const model = await cocoSsd.load();
-      console.log(model);
-      detectFrame(props.camera.current, model);
+    const model = await cocoSsd.load();
+    console.log(model);
+    detectFrame(props.camera.current, model);
   }
 
   useEffect(() => {
     console.log(props.isGroup);
     if (props.isGroup === true) {
-      console.log("ai cameracheck :", props.camera);
+      console.log('ai cameracheck :', props.camera);
       init();
-    }
-    else {
+    } else {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const webCamPromise = navigator.mediaDevices
           .getUserMedia({
@@ -113,8 +112,7 @@ const AIFunc = (props) => {
 
   return (
     <>
-      {
-        props.isGroup === false ? 
+      {props.isGroup === false ? (
         <div className="w-full flex justify-center item-center rounded-xl border-2 border-amber-400 shadow-2xl shadow-amber-400/50">
           <video
             className="rounded-xl object-cover"
@@ -126,8 +124,14 @@ const AIFunc = (props) => {
             height="100%"
           ></video>
         </div>
-         : <FaRobot color="#ea580c" size="30" style={{ marginBottom: 10 }} />
-      }
+      ) : (
+        <>
+          <div className="absolute bottom-[-6px] w-[100%] h-[45px] bg-black opacity-50 rounded-b-xl"></div>
+          <div className="absolute bottom-[-6px] left-[16px]">
+            <FaRobot color="#FFFFFF" size="30" style={{ marginBottom: 10 }} />
+          </div>
+        </>
+      )}
     </>
   );
 };
