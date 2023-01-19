@@ -1,4 +1,6 @@
 # 1. 서비스 소개
+[📺 시연 영상으로 보기](https://youtu.be/vSN1_RzjlgA) </br>
+[👀 노션으로 보러가기](https://boatneck-echinacea-f6a.notion.site/3-STUDIOS_camstudy-605fbfec518e4b1583e475bd7dc60897)
 
 ## 1-1. 서비스 타이틀 및 간단 소개
 
@@ -61,7 +63,7 @@
 | ------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 이예슬 | ✨팀장, 프론트엔드   | 1. 회원가입, 로그인 기능 개발 </br> 2. 이미지 업로드 및 저장 기능 개발, gcs 연동 및 관리</br> 3. 개인 공부 페이지 개발, 타이머 기능 개발</br> 4. 스터디 신청 및 스터디원 관리 기능 개발</br> 5. 서비스 소개 페이지 개발                                                                                             |
 | 홍주완 | 프론트엔드           | 1. 마이페이지 개발</br>2. 프롤로그 페이지 스크롤 효과</br>3. 회원가입시 이메일 인증</br>4. 모달 바깥영역 누를 시 모달 닫기</br>5. 그래프 출력</br>6. 깃 그래프 개발</br>7. 목표시간 설정                                                                                                                            |
-| 박예솔 | 프론트엔드           | 1. 댓글 생성 삭제 구현</br> 2. 스터디원 모집 게시글 생성, 글쓴이 프로필 가져오기 구현</br> 3. Figma 와이어프레임 초안 작성</br> 4. 404 페이지</br> 5. Helmet 추가</br> 6. 메인페이지, 게시판, 편집페이지, 마이페이지, 개인 공부방 TailwindCSS 수정                                                                  |
+| 박예솔 | 프론트엔드, 최종 발표        | 1. 댓글 생성 삭제 구현</br> 2. 스터디원 모집 게시글 생성, 글쓴이 프로필 가져오기 구현</br> 3. Figma 와이어프레임 초안 작성</br> 4. 404 페이지</br> 5. Helmet 추가</br> 6. 메인페이지, 게시판, 편집페이지, 마이페이지, 개인 공부방 TailwindCSS 수정                                                                  |
 | 김상민 | 인공지능, 프론트엔드 | 1. 객체 감지 모델 선정</br> 2. 모델 테스트</br> 3. 로그인 후 Home Page</br> 4. 그룹 스터디 페이지 CSS                                                                                                                                                                                                               |
 | 윤여건 | 백엔드               | 1. DB 설계</br> 2. 유저 API 구현</br> 3. 공부시간 트래킹 및 통계 API 구현</br>4. 스터디룸(개인/공개/비공개), 게시글 API 구현</br> 5. 댓글 API 구현</br>6. 스터디 신청 API 구현</br> 7. 포스트맨 API 명세서 작성, ERD 작성</br> 8. 홈 화면 랭킹 컴포넌트 구현 및 디자인(프론트)</br> 9. 발표 피피티 및 피그마 디자인 |
 | 송연석 | 백엔드               | 1. Nginx + Docker로 서비스 배포</br> 2.WebSocket Server 구현</br> 3.그룹 스터디 페이지 구현</br> 4.유저 상태정보 공유를 위한 WebRTC 데이터채널 개발</br> 5.Media 데이터 통신을 위한 RTCPeerConnection 개발                                                                                                          |
@@ -71,22 +73,18 @@
 [👀 노션으로 보러가기](https://www.notion.so/elice/4-zero-to-100-6160ce5632054929adb3531d7a9fef62)
 
 # 4. **프로젝트 구조도**
-
 ## 4-1. Service Architecture
-
-![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fd7f6b17-83a0-438b-a6ad-e505bee97201/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220716%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220716T083601Z&X-Amz-Expires=86400&X-Amz-Signature=9592e288475901695b405bde26b9603bf5000c20390cdd052a9d220d0505db70&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
-
+![Service Architecture](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fd7f6b17-83a0-438b-a6ad-e505bee97201/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230119%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230119T085459Z&X-Amz-Expires=86400&X-Amz-Signature=804fd74bebc5a696c404e5622240b15ca15e97a338a8e3d4e2089fd8c16f7a2c&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject)
 ## 4-2. 와이어 프레임
 
 [👀 피그마로 보러가기](https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FbgTMIHRofmN0MxdmzgVpM5%2F4%25ED%258C%2580-ZERO-to-100-%25F0%259F%2592%25AF%3Fnode-id%3D0%253A1)
-
 ## 4-3. API 명세서
 
 [Studious API 명세서](https://documenter.getpostman.com/view/18245611/Uz5GoFyi#2646a35d-7f75-4250-be65-6ffa4b234050)
 
 ## 4-4. ER Diagram
 
-![ER Diagram](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0aa17e22-3d2d-4699-a1af-b1e1ae3e5b07/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-07-11_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_8.49.49.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220716%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220716T083627Z&X-Amz-Expires=86400&X-Amz-Signature=b965d3fa5e58c2e4261fcdbf11481a0c68c12fd404968711b5c7bd3a897542b1&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-07-11%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25208.49.49.png%22&x-id=GetObject)
+![ER Diagram](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0aa17e22-3d2d-4699-a1af-b1e1ae3e5b07/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-07-11_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_8.49.49.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230119%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230119T090616Z&X-Amz-Expires=86400&X-Amz-Signature=6f52b0b95ad25990f5c0344b3c80273e5f3c36562a12a19e73842d1f4daa33e7&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-07-11%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25208.49.49.png%22&x-id=GetObject)
 
 # 5. **기능 설명**
 
@@ -131,5 +129,5 @@
 - 참여중인 스터디를 한눈에 파악 가능 ( X버튼 클릭 시 탈퇴 가능 )
 
 # 6. 시연 영상 및 페이지 설명
-
-[👀 노션으로 보러가기](https://www.notion.so/elice/4-zero-to-100-6160ce5632054929adb3531d7a9fef62)
+[📺 시연 영상으로 보기](https://youtu.be/vSN1_RzjlgA) </br>
+[👀 노션으로 보러가기](https://boatneck-echinacea-f6a.notion.site/3-STUDIOS_camstudy-605fbfec518e4b1583e475bd7dc60897)
